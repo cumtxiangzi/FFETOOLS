@@ -1,0 +1,139 @@
+﻿<Window x:Class="FFETOOLS.WaterPoolForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FFETOOLS"
+        mc:Ignorable="d"
+        Title="创建水池" Height="500" Width="650" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
+    <Window.Resources>
+        <Style x:Key="TextCenter" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="550*"/>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="80*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="42*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="图示" BorderBrush="Gray" Grid.Column="0" Grid.Row="0" Margin="5,5,5,10" Grid.RowSpan="5" >
+            <Image Margin="5,5,5,5" Source="/MainWorkShop;component/Resources/水池示意图.jpg"  />
+        </GroupBox>
+
+        <GroupBox Header="水池参数" BorderBrush="Gray" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" Grid.ColumnSpan="3" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="标准水池(m3):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5"/>
+                <ComboBox  x:Name="StandardSize" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" SelectionChanged="StandardSize_SelectionChanged"/>
+
+                <TextBlock Text="水池长(mm):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="5,5,5,5"/>
+                <TextBox x:Name="PoolLength" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="水池宽(mm):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" Margin="5,5,5,5"/>
+                <TextBox x:Name="PoolWidth" Grid.Column="1" Grid.Row="2" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="水池高(mm):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Margin="5,5,5,5"/>
+                <TextBox x:Name="PoolHeight" Grid.Column="1" Grid.Row="3" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="池底标高(m):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4" Margin="5,5,5,5"/>
+                <TextBox x:Name="PoolBottomElevation" Grid.Column="1" Grid.Row="4" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="吸水坑参数" BorderBrush="Gray" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" Grid.ColumnSpan="3" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="吸水坑长(mm):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5"/>
+                <TextBox x:Name="SumpLength" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="吸水坑宽(mm):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="5,5,5,5"/>
+                <TextBox x:Name="SumpWidth" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="吸水坑深(mm):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" Margin="5,5,5,5"/>
+                <TextBox x:Name="SumpHeight" Grid.Column="1" Grid.Row="2" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="其他参数" BorderBrush="Gray" Grid.Column="1" Grid.Row="2" Margin="5,5,5,5" Grid.ColumnSpan="3" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="人孔直径(mm):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5"/>
+                <TextBox x:Name="ManHoleSize" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <CheckBox x:Name="CoolTower" Content="冷却塔(m3/h)：" Grid.Column="0" Grid.Row="2" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" Click="CoolTower_Click" />
+                <ComboBox  x:Name="CoolTowerFlow" Grid.Column="1" Grid.Row="2" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13"/>
+
+                <CheckBox x:Name="PoolColumn" Content="水池支柱" Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
+                <CheckBox x:Name="PoolShape" Content="方形水池" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" Click="PoolShape_Click" />
+
+            </Grid>
+        </GroupBox>
+
+
+        <Button x:Name="OkButton" Content="确定" Margin="10,10,10,10" FontSize="12"  Cursor="Hand" Grid.Row="3" Grid.Column="2" Click="OkButton_Click" >
+            <Button.Template >
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                        <Border.Background>LightGray</Border.Background>
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Button x:Name="CancelButton" Content="退出" Margin="10,10,10,10" FontSize="12"  Cursor="Hand" Grid.Row="4" Grid.Column="3" Click="CancelButton_Click" >
+            <Button.Template >
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                        <Border.Background>LightGray</Border.Background>
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+    </Grid>
+</Window>

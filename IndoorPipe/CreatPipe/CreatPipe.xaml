@@ -1,0 +1,235 @@
+﻿<Window x:Class="FFETOOLS.CreatPipeForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FFETOOLS"
+        mc:Ignorable="d"
+        Title="管道绘制" Name="this" Height="650" Width="200" ResizeMode="NoResize"  WindowStartupLocation="Manual"  KeyDown="this_KeyDown" Loaded="this_Loaded" Closing="this_Closing">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="60*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="管道类型" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="8,5,5,5" BorderBrush="Gray">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                </Grid.RowDefinitions>
+
+                <Button x:Name="Button1" Content="循环给水"  Grid.Column="0" Grid.Row="0" Margin="10,10,10,10" Click="Button1_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>Cyan</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button2" Content="循环回水"  Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" Click="Button2_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>Yellow</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button3" Content="生活给水"  Grid.Column="0" Grid.Row="2" Margin="10,10,10,10" Click="Button3_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGreen</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button4" Content="生活污水"  Grid.Column="0" Grid.Row="3" Margin="10,10,10,10" Click="Button4_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFA65403</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button5" Content="消防给水"  Grid.Column="0" Grid.Row="4" Margin="10,10,10,10" Click="Button5_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>Red</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button6" Content="地坑排水"  Grid.Column="0" Grid.Row="5" Margin="10,10,10,10" Click="Button6_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFA65403</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button7" Content="水源输水"  Grid.Column="0" Grid.Row="6" Margin="10,10,10,10" Click="Button7_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFBE7D</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button8" Content="中水管"  Grid.Column="0" Grid.Row="7" Margin="10,10,10,10" Click="Button8_Click" Cursor="Hand" >
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FF6C26</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button9" Content="混凝剂管"  Grid.Column="0" Grid.Row="8" Margin="10,10,10,10" Click="Button9_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+
+                    <Button.ContextMenu>
+                        <ContextMenu Name="contextMenu1">
+                            <MenuItem Name="HNPipe" Header="混凝剂管" Click="HNPipe_Click" />
+                            <MenuItem Name="StabilizerPipe1" Header="水质稳定剂" Click="StabilizerPipe1_Click" />
+                            <MenuItem Name="WastewaterPipe1" Header="废水管" Click="WastewaterPipe1_Click" />
+                            <MenuItem Name="HeatSupply1" Header="热水给水" Click="HeatSupply1_Click" />
+                            <MenuItem Name="HeatReturn1" Header="热水回水" Click="HeatReturn1_Click" />
+                            <MenuItem Name="PressureSewage1" Header="压力污水" Click="PressureSewage1_Click" />
+                            <MenuItem Name="PressureWastewater1" Header="压力废水" Click="PressureWastewater1_Click" />
+                            <MenuItem Name="RainPipe1" Header="雨水管" Click="RainPipe1_Click" />
+                            <MenuItem Name="SlugePipe1" Header="排泥管" Click="SlugePipe1_Click" />
+                            <MenuItem Name="PreActionFire1" Header="预作用消防" Click="PreActionFire1_Click" />
+                            <MenuItem Name="DryFire1" Header="干式消防" Click="DryFire1_Click" />
+                            <MenuItem Name="XJ1Pipe1" Header="熟料线循环给水" Click="XJ1Pipe1_Click" />
+                            <MenuItem Name="XH1Pipe1" Header="熟料线循环回水" Click="XH1Pipe1_Click" />
+                            <MenuItem Name="XJ2Pipe1" Header="水泥磨循环给水" Click="XJ2Pipe1_Click" />
+                            <MenuItem Name="XH2Pipe1" Header="水泥磨循环回水" Click="XH2Pipe1_Click" />
+                            <MenuItem Name="XJPipe1" Header="余热发电循环给水" Click="XJPipe1_Click" />
+                            <MenuItem Name="XHPipe1" Header="余热发电循环回水" Click="XHPipe1_Click" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+
+                <Button x:Name="Button10" Content="消毒剂管"  Grid.Column="0" Grid.Row="9" Margin="10,10,10,10" Click="Button10_Click" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+
+                    <Button.ContextMenu>
+                        <ContextMenu Name="contextMenu2">
+                            <MenuItem Name="XDPipe" Header="消毒剂管" Click="XDPipe_Click" />
+                            <MenuItem Name="StabilizerPipe2" Header="水质稳定剂" Click="StabilizerPipe2_Click" />
+                            <MenuItem Name="WastewaterPipe2" Header="废水管" Click="WastewaterPipe2_Click" />
+                            <MenuItem Name="HeatSupply2" Header="热水给水" Click="HeatSupply2_Click" />
+                            <MenuItem Name="HeatReturn2" Header="热水回水" Click="HeatReturn2_Click" />
+                            <MenuItem Name="PressureSewage2" Header="压力污水" Click="PressureSewage2_Click" />
+                            <MenuItem Name="PressureWastewater2" Header="压力废水" Click="PressureWastewater2_Click" />
+                            <MenuItem Name="RainPipe2" Header="雨水管" Click="RainPipe2_Click" />
+                            <MenuItem Name="SlugePipe2" Header="排泥管" Click="SlugePipe2_Click" />
+                            <MenuItem Name="PreActionFire2" Header="预作用消防" Click="PreActionFire2_Click" />
+                            <MenuItem Name="DryFire2" Header="干式消防" Click="DryFire2_Click" />
+                            <MenuItem Name="XJ1Pipe2" Header="熟料线循环给水" Click="XJ1Pipe2_Click" />
+                            <MenuItem Name="XH1Pipe2" Header="熟料线循环回水" Click="XH1Pipe2_Click" />
+                            <MenuItem Name="XJ2Pipe2" Header="水泥磨循环给水" Click="XJ2Pipe2_Click" />
+                            <MenuItem Name="XH2Pipe2" Header="水泥磨循环回水" Click="XH2Pipe2_Click"/>
+                            <MenuItem Name="XJPipe2" Header="余热发电循环给水" Click="XJPipe2_Click" />
+                            <MenuItem Name="XHPipe2" Header="余热发电循环回水" Click="XHPipe2_Click" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="缩写" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="3,5,8,5" BorderBrush="Gray">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="TextBlock1" Text="XJ" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock2" Text="XH" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock3" Text="J" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock4" Text="W" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock5" Text="XF" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock6" Text="W" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="5" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock7" Text="YJ" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="6" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock8" Text="ZJ" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="7" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock9" Text="HN" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="8" Margin="5,5,5,5" FontSize="13"/>
+                <TextBlock x:Name="TextBlock10" Text="XD" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="9" Margin="5,5,5,5" FontSize="13"/>
+                
+            </Grid>
+        </GroupBox>
+
+        <Button x:Name="CancelButton" Content="取消"  Grid.Column="1" Grid.Row="3" Margin="5,10,10,10" Click="CancelButton_Click" Cursor="Hand">
+            <Button.Template >
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                        <Border.Background>#FFDDDDDD</Border.Background>
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        
+        <TextBlock x:Name="Note" Text="说明：末尾两个灰色按钮右键可选择其他管道系统" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" Margin="5,0,5,5" FontSize="11.5" TextWrapping="Wrap"/>
+
+    </Grid>
+</Window>

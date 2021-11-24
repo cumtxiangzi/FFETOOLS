@@ -1,0 +1,159 @@
+﻿<Window x:Class="FFETOOLS.PumpGroupForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FFETOOLS"
+        mc:Ignorable="d"
+        Title="布置泵组" Height="700" Width="350" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="80*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="120*"/>
+            <RowDefinition Height="150*"/>
+            <RowDefinition Height="120*"/>
+            <RowDefinition Height="45*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="图示" BorderBrush="Gray" Grid.Column="0" Grid.Row="0"  Margin="5,5,5,5" Grid.RowSpan="2" >
+            <Image x:Name="PumpImage" Margin="5" />
+        </GroupBox>
+
+        <GroupBox Header="水泵样式" BorderBrush="Gray" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"  Margin="5,5,5,5" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+               
+                <RadioButton x:Name="S_HorizontalButton"  Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="卧式单吸泵" FontSize="12" Checked="S_HorizontalButton_Checked" />
+                <RadioButton x:Name="M_HorizontalButton"  Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="卧式双吸泵" FontSize="12" Checked="M_HorizontalButton_Checked" />
+                <RadioButton x:Name="VerticalButton" Grid.Column="0" Grid.Row="2" Margin="-7,5,5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="立式水泵" FontSize="12" Checked="VerticalButton_Checked" />
+                <RadioButton x:Name="GroupPumpButton"  Grid.Column="0" Grid.Row="3" Margin="-19,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="水泵组" FontSize="12" Checked="GroupPumpButton_Checked" />
+                
+            </Grid>
+        </GroupBox>
+
+        <Button x:Name="PumpSelectButton" Content="水泵选型" Margin="30,10,30,10" FontSize="12"  Cursor="Hand" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Click="PumpSelectButton_Click">
+            <Button.Template >
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                        <Border.Background>LightGray</Border.Background>
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <TextBlock Text="水泵型号:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" Margin="15,5,0,5"/>
+        <TextBox x:Name="PumpModel" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="85,5,15,5" VerticalAlignment="Center"  FontSize="13" />
+
+        <GroupBox Header="水泵参数" BorderBrush="Gray" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3"  Margin="5,5,5,5" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Text="进水口高:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5"/>
+                <TextBox x:Name="InletHeight" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="出水口高:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Margin="5,5,5,5"/>
+                <TextBox x:Name="OutletHeight" Grid.Column="3" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+                
+                <TextBlock Text="进口直径:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="5,5,5,5"/>
+                <ComboBox x:Name="InletDiameter" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
+
+                <TextBlock Text="出口直径:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="5,5,5,5"/>
+                <ComboBox x:Name="OutletDiameter" Grid.Column="3" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="BaseParameter" Header="基础参数" BorderBrush="Gray" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3"  Margin="5,5,5,5"  >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="基础长L:"   Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <TextBox x:Name="BaseLength" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="基础宽B:" Grid.Column="2" Grid.Row="0"  Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <TextBox x:Name="BaseWidth" Grid.Column="3" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="螺栓孔间距L3:" Grid.Column="0" Grid.Row="1"  Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                <TextBox x:Name="HoleLength" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+                <TextBlock Text="螺栓孔间距B1:" Grid.Column="2" Grid.Row="1"  Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                <TextBox x:Name="HoleWidth" Grid.Column="3" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+                
+                <TextBlock Text="基础孔宽:" Grid.Column="0" Grid.Row="2"  Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                <TextBox x:Name="HoleSize" Grid.Column="1" Grid.Row="2" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="13" />
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="管道设置" BorderBrush="Gray" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3"  Margin="5,5,5,10" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="进口管径:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5"/>
+                <ComboBox x:Name="InLetPipeSize" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
+
+                <TextBlock Text="出口管径:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Margin="5,5,5,5"/>
+                <ComboBox x:Name="OutLetPipeSize" Grid.Column="3" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
+
+                <TextBlock Text="管道系统:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="5,5,5,5"/>
+                <ComboBox x:Name="PipeSystemType" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" SelectionChanged="PipeSystemType_SelectionChanged" />
+
+                <TextBlock Text="管道材质:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="5,5,5,5"/>
+                <ComboBox x:Name="PipeType" Grid.Column="3" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
+
+            </Grid>
+        </GroupBox>
+
+        <Button x:Name="OkButton" Content="确定" Margin="5,5,10,10" FontSize="12"  Cursor="Hand" Click="OkButton_Click" Grid.Row="6" Grid.Column="2" >
+            <Button.Template >
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                        <Border.Background>LightGray</Border.Background>
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+</Window>

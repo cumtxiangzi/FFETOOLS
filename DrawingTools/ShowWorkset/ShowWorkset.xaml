@@ -1,0 +1,46 @@
+﻿<Window x:Class="FFETOOLS.UserMajor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FFETOOLS"
+        mc:Ignorable="d"
+        Title="隐藏外专业工作集" Height="500" Width="350" ResizeMode="NoResize"  Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="65*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="9*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="外专业工作集" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Margin="5,5,5,5" BorderBrush="Gray">
+            <Grid>
+                <ListBox x:Name="WorkSetListBox" Margin="5,5,5,5" BorderThickness="0" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected}"  Content="{Binding WorkSetName}" CommandParameter="{Binding No}" 
+                                      HorizontalAlignment="Left" VerticalAlignment="Top" 
+                                      VerticalContentAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Auto" UseLayoutRounding="False" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </GroupBox>
+
+        <Button x:Name="OkButton" Content="确定"  Grid.Column="3" Grid.Row="1" Margin="5,5,10,10" FontSize="10.5" Click="OkButton_Click" Cursor="Hand" >
+            <Button.Template >
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                        <Border.Background>LightGray</Border.Background>
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+    </Grid>
+</Window>

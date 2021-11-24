@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>给排水BIM工具集</Name>
+    <Assembly>.\Ribbon.dll</Assembly>
+    <ClientId>327DF33C-7A1D-4CC9-9255-4DEA9D0FC227</ClientId>
+    <FullClassName>FFETOOLS.Ribbon</FullClassName>
+    <Text>GPSBIM</Text>
+    <Description>""</Description>
+    <VisibilityMode>NotVisibleInFamily</VisibilityMode>
+    <VisibilityMode>NotVisibleInProject</VisibilityMode>
+    <VendorId>ADSK</VendorId>
+    <VendorDescription>GYGC, weiqixiang@sinoma-tianjin.cn</VendorDescription>
+  </AddIn>
+  
+</RevitAddIns>

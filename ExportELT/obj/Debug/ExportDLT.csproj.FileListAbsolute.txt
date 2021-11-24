@@ -1,0 +1,15 @@
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\bin\Debug\ExportELT.dll
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\bin\Debug\ExportELT.pdb
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\bin\Debug\ICSharpCode.SharpZipLib.dll
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\bin\Debug\NPOI.dll
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\bin\Debug\NPOI.OOXML.dll
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\bin\Debug\NPOI.OpenXml4Net.dll
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\bin\Debug\NPOI.OpenXmlFormats.dll
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\obj\Debug\ExportDLT.csprojResolveAssemblyReference.cache
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\obj\Debug\ExportDLT.g.cs
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\obj\Debug\ExportELT_MarkupCompile.cache
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\obj\Debug\ExportELT_MarkupCompile.lref
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\obj\Debug\ExportDLT.baml
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\obj\Debug\ExportELT.g.resources
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\obj\Debug\ExportELT.dll
+H:\FFETOOLS 2018\源码\FFETOOLS-2018.8.1-修改-自用不发布\FFETOOLS\ExportELT\obj\Debug\ExportELT.pdb

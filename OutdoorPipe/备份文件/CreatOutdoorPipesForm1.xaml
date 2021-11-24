@@ -1,0 +1,141 @@
+﻿<Window x:Class="FFETOOLS.CreatOutdoorPipesForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FFETOOLS"
+        mc:Ignorable="d"
+        Title="批量创建室外管道" Name="this" Height="480" Width="900" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen" Loaded="this_Loaded" KeyDown="this_KeyDown">
+    <Window.Resources>
+        <Style x:Key="TextCenter" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="160*"/>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="80"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="图示" BorderBrush="Gray" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Margin="5" >
+            <Image Margin="5"/>
+        </GroupBox>
+
+        <GroupBox Header="批量创建管道" BorderBrush="Gray" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="4" Margin="5" >
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="专业:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5"/>
+                <TextBlock Text="管道数量:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Margin="5"/>
+                <ComboBox x:Name="ProfessionCmb" Grid.Column="1" Grid.Row="0" Margin="5,5,30,5"/>
+                <TextBox x:Name="PipeQuantityTxt" Grid.Column="3" Grid.Row="0" Margin="5,5,30,5" TextChanged="PipeQuantityTxt_TextChanged" LostFocus="PipeQuantityTxt_LostFocus" PreviewMouseDown="PipeQuantityTxt_PreviewMouseDown" GotFocus="PipeQuantityTxt_GotFocus" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="管道设置" BorderBrush="Gray" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Margin="5">
+            <Grid Margin="0,5,0,0">
+
+                <!--AutoGenerateColumns="False"这句话告诉控件不自动生成列，是必要的，如果没有，控件会更具数据源自动生成列，这个在我们这种写法中看起来就有重复的两列数据-->
+                <DataGrid x:Name="PipeSettingGrid" ItemsSource="{Binding}" AutoGenerateColumns="False"  CanUserAddRows="False" VerticalAlignment="Top" EnableRowVirtualization="False">
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType ="DataGridColumnHeader">
+                            <Setter Property ="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property ="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <TextBlock Text ="{Binding}" TextWrapping="Wrap"   TextAlignment ="Center"   HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Height" Value="25" />
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+                        <!--管道编号-->
+                        <DataGridTextColumn Header="管道编号" Binding="{Binding PipeCode}" Width="0.8*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+ 
+                        <!--管道系统-->
+                        <DataGridTemplateColumn Header="管道系统" Width="1.9*">
+                            <!--显示模式-->
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="TextPipeSystem" Text="{Binding Path=PipeSystem ,Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <!--编辑模式-->
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox x:Name="ComboBoxPipeSystem"  DropDownClosed="PipeSystemDropDownClosed"  Loaded="PipeSystemLoaded" Text="{Binding Path=PipeSystem ,Mode=TwoWay}" DisplayMemberPath="PipeSystem" ></ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--管道类型-->
+                        <DataGridTemplateColumn Header="管道类型" Width="1.4*">
+                            <!--显示模式-->
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="TextPipeType" Text="{Binding Path=PipeType ,Mode=TwoWay}" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <!--编辑模式-->
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox x:Name="ComboBoxPipeType" DropDownClosed="PipeTypeDropDownClosed" Loaded="PipeTypeLoaded" Text="{Binding Path=PipeType,Mode=TwoWay}" DisplayMemberPath="PipeType" ></ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--管道直径-->
+                        <DataGridTemplateColumn Header="管道直径" Width="0.8*">
+                            <!--显示模式-->
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="TextPipeSize" Text="{Binding Path=PipeSize}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <!--编辑模式-->
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox x:Name="ComboBoxPipeSize"  DropDownClosed="PipeSizeDropDownClosed" Loaded="PipeSizeLoaded" Text="{Binding Path=PipeSize}" DisplayMemberPath="PipeSize" ></ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="管道高度(mm)" Binding="{Binding PipeHeight}" Width="1*" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="管道与中心线间距(mm)" Binding="{Binding PipeDistance}" Width="1*" ElementStyle="{StaticResource TextCenter}"/>
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+
+        <Button Content="确定"  Grid.Column="2" Grid.Row="2" Margin="12" Click="OK_Button_Click" />
+        <Button Content="取消"  Grid.Column="3" Grid.Row="2" Margin="12" />
+        <Button Content="间距计算"  Grid.Column="4" Grid.Row="2" Margin="12"/>
+    </Grid>
+</Window>

@@ -1,0 +1,131 @@
+﻿<Window x:Class="FFETOOLS.CreatPipeSystemForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FFETOOLS"
+        mc:Ignorable="d"
+        Title="批量生成系统图" Name="this" Height="750" Width="200" ResizeMode="NoResize" 
+        Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Closing="this_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="0.65*"/>
+            <RowDefinition Height="0.4*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Header="循环水系统" BorderBrush="Gray" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="8,5,8,5" >
+            <Grid Margin="5,10,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <CheckBox x:Name="XJChkBox" Content="循环给水系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="0" Margin="0,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="XHChkBox" Content="循环回水系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="1" Margin="0,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="生活水系统" BorderBrush="Gray" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="8,5,8,5" >
+            <Grid Margin="5,10,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <CheckBox x:Name="JChkBox" Content="生活给水系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="0" Margin="0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="WChkBox" Content="生活排水系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="1" Margin="0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="RJChkBox" Content="生活热水系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="2" Margin="0" VerticalAlignment="Bottom"  FontSize="12"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="消防系统" BorderBrush="Gray" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="8,5,8,5" >
+            <Grid Margin="5,10,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <CheckBox x:Name="XFChkBox" Content="消火栓灭火系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="0" Margin="12,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="QTChkBox" Content="气体灭火系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="1" Margin="0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="ZPChkBox" Content="自喷灭火系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="2" Margin="0" VerticalAlignment="Bottom"  FontSize="12"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="加药系统" BorderBrush="Gray" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Margin="8,5,8,5" >
+            <Grid Margin="5,10,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <CheckBox x:Name="HNChkBox" Content="混凝剂管道系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="0" Margin="11,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="XDChkBox" Content="消毒剂管道系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="1" Margin="11,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="WDChkBox" Content="水质稳定剂系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="2" Margin="11,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="其他系统" BorderBrush="Gray" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Margin="8,5,8,5" >
+            <Grid Margin="5,10,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <CheckBox x:Name="YJChkBox" Content="水源输水系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="0" Margin="0,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="ZSChkBox" Content="中水管道系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="1" Margin="0,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <CheckBox x:Name="FChkBox" Content="废水管道系统" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="2" Margin="0,0,0,0" VerticalAlignment="Bottom"  FontSize="12"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="系统图方向" BorderBrush="Gray" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Margin="8,5,8,5" >
+            <Grid Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <RadioButton x:Name="SouthEastButton" Content="东南视角" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="0" Grid.Row="0" Margin="0" VerticalAlignment="Bottom"  FontSize="12"/>
+                <RadioButton x:Name="NorthWestButton" Content="西北视角" HorizontalAlignment="Center"  Height="25" 
+                          Grid.Column="1" Grid.Row="0" Margin="0" VerticalAlignment="Bottom"  FontSize="12"/>
+            </Grid>
+        </GroupBox>
+
+        <TextBlock Text="数量:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="6" Margin="-35,5,5,5" FontSize="12" Visibility="Hidden"/>
+        <TextBox x:Name="QuantityTxt" Grid.Column="0" Grid.Row="6" Margin="45,10,0,13" FontSize="12"
+                        VerticalContentAlignment="Center" Visibility="Hidden"/>
+
+        <Button x:Name="OkButton" Content="确定"  Grid.Column="1" Grid.Row="6" Margin="20,5,10,10" Click="OkButton_Click" >
+            <Button.Template >
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                        <Border.Background>#FFDDDDDD</Border.Background>
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+    </Grid>
+</Window>
