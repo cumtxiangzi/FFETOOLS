@@ -170,7 +170,7 @@ namespace FFETOOLS
                     {
                         //int num = SystemNum(doc, "循环给水");
                         int num = 3;
-                        List <string> systemCode = SystemCode(doc, "循环给水");
+                        List<string> systemCode = SystemCode(doc, "循环给水");
                         for (int i = 0; i < num; i++)
                         {
                             CreatPipeSystemMethod(doc, "给排水_循环给水管道系统图" + (i + 1).ToString(), "循环给水管道系统图",
@@ -312,7 +312,8 @@ namespace FFETOOLS
                     }
                     if (pipeSystemName == "废水")
                     {
-                        int num = SystemNum(doc, "废水");
+                        //int num = SystemNum(doc, "废水");
+                        int num = 8;
                         List<string> systemCode = SystemCode(doc, "废水");
                         for (int i = 0; i < num; i++)
                         {

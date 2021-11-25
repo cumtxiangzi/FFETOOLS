@@ -4,7 +4,7 @@
 library
 C#
 .cs
-D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\DrawingTools\obj\Debug\
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\DrawingTools\obj\Debug\
 DrawingTools
 none
 false
@@ -13,7 +13,7 @@ DEBUG;TRACE
 81580715497
 
 271645816978
-24-469355983
+24-1298605263
 CreatDrawing\CreatDrawing.xaml;CreatPipeSystem\CreatPipeSystemForm.xaml;CreatPipeTag\CreatPipeTag.xaml;ExportDLT\ExportDLT.xaml;BatchExport\BatchExportForm.xaml;ExportELT\ExportELT.xaml;ShowWorkset\ShowWorkset.xaml;ViewDuplicate\ViewDuplicateForm.xaml;
 
 False

@@ -4,7 +4,7 @@
 library
 C#
 .cs
-D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\MainWorkShop\obj\Debug\
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\MainWorkShop\obj\Debug\
 MainWorkShop
 none
 false
@@ -13,7 +13,7 @@ DEBUG;TRACE
 41763102749
 
 14-1016236815
-19-1900746188
+191921653313
 WaterPool\WaterPool.xaml;PumpGroup\PumpSelectForm.xaml;PumpStation\PumpStationForm.xaml;PumpGroup\PumpGroupForm.xaml;
 
 True
