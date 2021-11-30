@@ -202,7 +202,8 @@ namespace FFETOOLS
                     }
                     if (pipeSystemName == "污水")
                     {
-                        int num = SystemNum(doc, "污水");
+                        //int num = SystemNum(doc, "污水");
+                        int num = 6;
                         List<string> systemCode = SystemCode(doc, "污水");
                         for (int i = 0; i < num; i++)
                         {
@@ -301,7 +302,8 @@ namespace FFETOOLS
                     }
                     if (pipeSystemName == "中水")
                     {
-                        int num = SystemNum(doc, "中水");
+                        //int num = SystemNum(doc, "中水");
+                        int num =1;
                         List<string> systemCode = SystemCode(doc, "中水");
                         for (int i = 0; i < num; i++)
                         {
