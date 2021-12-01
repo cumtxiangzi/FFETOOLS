@@ -22,6 +22,7 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.DB.Architecture;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace FFETOOLS
 {
@@ -68,22 +69,51 @@ namespace FFETOOLS
                             excelWorksheet.HeaderFooter.OddFooter.LeftAlignedText = excelFooterName;
                             excelWorksheet.HeaderFooter.OddFooter.RightAlignedText = footPage;
 
-                            excelWorksheet.Cells[1, 3].Value = projectName;
-                            excelWorksheet.Cells[2, 3].Value = subProjectName;
-                            excelWorksheet.Cells[3, 3].Value = "施工图";
+                            excelWorksheet.Cells[1, 4].Value = projectName;
+                            excelWorksheet.Cells[2, 4].Value = subProjectName;
+                            excelWorksheet.Cells[3, 4].Value = "施工图";
+                            excelWorksheet.Cells[1, 4].Style.Font.Name = "Arial";
+                            excelWorksheet.Cells[2, 4].Style.Font.Name = "Arial";
+                            excelWorksheet.Cells[3, 4].Style.Font.Name = "Arial";
 
-                            int index = 7;
+                            int rowNum = 7;
+                            int valveNameIndex = 0;
+                            int valveCode = 1;
                             List<string> pipeSystemList = GetPipeSystemType(uidoc, "给排水");
                             //string ss = String.Join("\n", pipeSystemList.ToArray());
                             //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            List<PipeValveInfo> valveList = new List<PipeValveInfo>();
 
                             foreach (string item in pipeSystemList)
                             {
-                                GetPipeSystemValve(doc, item, subproNum.AsString(), 1);
-                            }
+                                rowNum++;
+                                int[,] mergeRowIndexs = { { rowNum - 2, 1, 11 }, { rowNum - 2, 1, 11 } };  //合并单元格
+                                ExcelHelper.MergeRowCells(excelWorksheet, 1, mergeRowIndexs);
+                                excelWorksheet.Cells[rowNum - 1, 1].Value = item;
+                                excelWorksheet.Cells[rowNum - 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                excelWorksheet.Cells[rowNum - 1, 1].Style.Font.Bold = true;
 
-                            int[,] mergeRowIndexs = { { 6, 1, 11 }, { 6, 1, 11 } };
-                            ExcelHelper.MergeRowCells(excelWorksheet, 1, mergeRowIndexs);
+                                valveList = GetPipeSystemValve(doc, item, subproNum.AsString(), valveCode);
+                                foreach (PipeValveInfo valveInfo in valveList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
+                                    excelWorksheet.Cells[rowNum, 2].Value = valveInfo.ValveAbb;
+                                    excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
+                                    excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
+                                    excelWorksheet.Cells[rowNum, 9].Value = valveInfo.ValveNote;
+                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "型号:" + valveInfo.ValveModel;
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + valveInfo.ValvePressure;
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;                                  
+                                    valveNameIndex++;
+                                    rowNum++;
+                                    valveCode++;
+                                }
+
+                            }
 
                             string localFilePath, fileName, newFileName, filePath;
                             string dltName = proNum.AsString() + "-" + subproNum.AsString().Replace("/", " ") + "-" + "WD" + "-" + "ELT" + "." + "xlsx";
@@ -107,7 +137,7 @@ namespace FFETOOLS
                                 sfd.FileName.Insert(1, "abc");//在文件名里插入字符 
 
                                 helper.saveExcel(package, localFilePath);
-                                System.Windows.Forms.MessageBox.Show("设备表导出成功!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                System.Windows.Forms.MessageBox.Show("设备表导出成功!", "GPSBIM", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 Process.Start(localFilePath);//打开设备表
                             }
                         }
@@ -196,7 +226,7 @@ namespace FFETOOLS
 
             foreach (ViewSchedule v in viewScheduleList)
             {
-                if (v.Name.Contains("管路附件") && v.Name.Contains(pipeSystemName.Replace("系统", "")))
+                if (v.Name.Contains("管路附件") && v.Name.Contains(pipeSystemName.Replace("系统", "")) && !(v.Name.Contains("污水")))
                 {
                     TableData td = v.GetTableData();
                     TableSectionData tdb = td.GetSectionData(SectionType.Header);
@@ -217,16 +247,19 @@ namespace FFETOOLS
                         }
                         string[] sArray = valveTable.ElementAt(3).Split('-');
 
-                        PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "VA" + valveCode.ToString().PadLeft(2, '0'), StringHelper.FilterCH(valveTable.ElementAt(1).Replace("给排水_阀门_", "")),
-                            StringHelper.FilterEN(valveTable.ElementAt(1).Replace("给排水_阀门_", "")), "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), valveTable.ElementAt(5));
-                        valveNameList.Add(valveInfo);
-                        valveTable.Clear();
-                        string ss = valveInfo.ValvePipeSystem + "\n" + valveInfo.ProjectNum + "\n" + valveInfo.ValveAbb + "\n" + valveInfo.ValveName + "\n" + valveInfo.ValveModel
-                            + "\n" + valveInfo.ValveSize + "\n" + valveInfo.ValvePressure + "\n" + valveInfo.ValveQulity + "\n" + valveInfo.ValveNote;
-                        //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        valveCode++;
-                    }
+                        if (valveTable.ElementAt(1).Contains("阀门"))
+                        {
+                            PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "VA" + valveCode.ToString().PadLeft(2, '0'), StringHelper.FilterCH(valveTable.ElementAt(1).Replace("给排水_阀门_", "")),
+                          StringHelper.FilterEN(valveTable.ElementAt(1).Replace("给排水_阀门_", "")), "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), valveTable.ElementAt(5));
+                            valveNameList.Add(valveInfo);
 
+                            //string ss = valveInfo.ValvePipeSystem + "\n" + valveInfo.ProjectNum + "\n" + valveInfo.ValveAbb + "\n" + valveInfo.ValveName + "\n" + valveInfo.ValveModel
+                            //+ "\n" + valveInfo.ValveSize + "\n" + valveInfo.ValvePressure + "\n" + valveInfo.ValveQulity + "\n" + valveInfo.ValveNote;
+                            //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            valveCode++;
+                        }
+                        valveTable.Clear();
+                    }
                 }
             }
             return valveNameList;
