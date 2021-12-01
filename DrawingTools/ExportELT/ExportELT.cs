@@ -77,12 +77,12 @@ namespace FFETOOLS
                             excelWorksheet.Cells[3, 4].Style.Font.Name = "Arial";
 
                             int rowNum = 7;
-                            int valveNameIndex = 0;
-                            int valveCode = 1;
+                            int valveCode = 1;  //设备编号计数
                             List<string> pipeSystemList = GetPipeSystemType(uidoc, "给排水");
                             //string ss = String.Join("\n", pipeSystemList.ToArray());
                             //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             List<PipeValveInfo> valveList = new List<PipeValveInfo>();
+                            List<PipeInfo> pipeList = new List<PipeInfo>();
 
                             foreach (string item in pipeSystemList)
                             {
@@ -94,6 +94,8 @@ namespace FFETOOLS
                                 excelWorksheet.Cells[rowNum - 1, 1].Style.Font.Bold = true;
 
                                 valveList = GetPipeSystemValve(doc, item, subproNum.AsString(), valveCode);
+                                pipeList = GetPipeSystemPipe(doc, item, subproNum.AsString(), 1);
+
                                 foreach (PipeValveInfo valveInfo in valveList)
                                 {
                                     excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
@@ -107,11 +109,48 @@ namespace FFETOOLS
                                     rowNum++;
                                     excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + valveInfo.ValvePressure;
                                     rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;                                  
-                                    valveNameIndex++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
                                     rowNum++;
                                     valveCode++;
                                 }
+
+                                foreach (PipeInfo pipeInfo in pipeList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 1].Value = pipeInfo.ProjectNum;
+                                    excelWorksheet.Cells[rowNum, 2].Value = "PP" + valveCode.ToString().PadLeft(2, '0');
+                                    excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeSystem + "管道及管件";
+                                    rowNum++;
+                                    valveCode++;
+                                    break;
+                                }
+                                foreach (PipeInfo pipeInfo in pipeList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeInfo.PipeAbb;
+                                    if (pipeInfo.PipeName.Contains("镀锌"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "双面热浸镀锌钢管";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeName;
+                                    }
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeInfo pipeInfo in pipeList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeInfo.PipePressure;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeInfo pipeInfo in pipeList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeInfo.PipeSize;
+                                    excelWorksheet.Cells[rowNum, 6].Value = pipeInfo.PipeQulity;
+                                    rowNum++;
+                                }
+
+
 
                             }
 
@@ -149,7 +188,7 @@ namespace FFETOOLS
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("请在平面或三维视图中进行操作!", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    System.Windows.Forms.MessageBox.Show("请在平面或三维视图中进行操作!", "GPSBIM", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 return Result.Succeeded;
             }
@@ -264,6 +303,51 @@ namespace FFETOOLS
             }
             return valveNameList;
         }
+        public static List<PipeInfo> GetPipeSystemPipe(Document doc, string pipeSystemName, string subProjectNum, int pipeCode)
+        {
+            FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
+            viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
+            IList<Element> viewScheduleList = viewCollector.ToElements();
+            List<PipeInfo> pipeNameList = new List<PipeInfo>();
+
+            foreach (ViewSchedule v in viewScheduleList)
+            {
+                if (v.Name.Contains("管道") && v.Name.Contains(pipeSystemName.Replace("系统", "")))
+                {
+                    TableData td = v.GetTableData();
+                    TableSectionData tdb = td.GetSectionData(SectionType.Header);
+                    string head = v.GetCellText(SectionType.Header, 0, 0);
+
+                    TableSectionData tdd = td.GetSectionData(SectionType.Body);
+                    int c = tdd.NumberOfColumns;
+                    int r = tdd.NumberOfRows;
+                    List<string> pipeTable = new List<string>();
+
+                    for (int i = 1; i < r; i++)
+                    {
+                        for (int j = 0; j < c; j++)
+                        {
+                            CellType ctype = tdd.GetCellType(i, j);
+                            string str = v.GetCellText(SectionType.Body, i, j);
+                            pipeTable.Add(str);
+                        }
+                        //string[] sArray = pipeTable.ElementAt(3).Split('-');
+
+                        PipeInfo pipeInfo = new PipeInfo(pipeTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "QX" + pipeCode.ToString().PadLeft(2, '0'), pipeTable.ElementAt(1).Replace("给排水_", ""),
+                                                                         pipeTable.ElementAt(3), pipeTable.ElementAt(2), pipeTable.ElementAt(6), pipeTable.ElementAt(7));
+                        pipeNameList.Add(pipeInfo);
+
+                        string ss = pipeInfo.PipeSystem + "\n" + pipeInfo.ProjectNum + "\n" + pipeInfo.PipeAbb + "\n" + pipeInfo.PipeName
+                                        + "\n" + pipeInfo.PipeSize + "\n" + pipeInfo.PipePressure + "\n" + pipeInfo.PipeQulity + "\n" + pipeInfo.PipeNote;
+                        //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        pipeCode++;
+
+                        pipeTable.Clear();
+                    }
+                }
+            }
+            return pipeNameList;
+        }
     }
     public class PipeValveInfo
     {
@@ -292,6 +376,33 @@ namespace FFETOOLS
             ValvePressure = valvePressure;
             ValveQulity = valveQulity;
             ValveNote = valveNote;
+        }
+    }
+    public class PipeInfo
+    {
+        public string ProjectNum { get; set; }
+        public string PipeSystem { get; set; }
+        public string PipeAbb { get; set; }//管道缩写
+        public string PipeName { get; set; }
+        public string PipeSize { get; set; }
+        public string PipePressure { get; set; }
+        public string PipeQulity { get; set; }
+        public string PipeNote { get; set; }
+        public PipeInfo()
+        {
+
+        }
+        public PipeInfo(string pipeSystem, string projectNum, string pipeAbb, string pipeName,
+                              string pipeSize, string pipePressure, string pipeQulity, string pipeNote)
+        {
+            ProjectNum = projectNum;
+            PipeSystem = pipeSystem;
+            PipeAbb = pipeAbb;
+            PipeName = pipeName;
+            PipeSize = pipeSize;
+            PipePressure = pipePressure;
+            PipeQulity = pipeQulity;
+            PipeNote = pipeNote;
         }
     }
 
