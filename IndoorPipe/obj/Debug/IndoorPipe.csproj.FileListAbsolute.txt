@@ -122,3 +122,16 @@ D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\F
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.g.resources
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.dll
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.pdb
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\bin\Debug\IndoorPipe.dll
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\bin\Debug\IndoorPipe.pdb
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\bin\Debug\Gma.System.MouseKeyHook.dll
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.csproj.AssemblyReference.cache
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\CreatPipe\CreatPipe.g.cs
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe_MarkupCompile.cache
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe_MarkupCompile.lref
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\CreatPipe\CreatPipe.baml
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.g.resources
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.csproj.CoreCompileInputs.cache
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.csproj.CopyComplete
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.dll
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\IndoorPipe\obj\Debug\IndoorPipe.pdb

@@ -47,3 +47,16 @@ D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\F
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\FireProtection\obj\Debug\FireProtection.g.resources
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\FireProtection\obj\Debug\FireProtection.dll
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\FireProtection\obj\Debug\FireProtection.pdb
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\bin\Debug\FireProtection.dll
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\bin\Debug\FireProtection.pdb
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\bin\Debug\Gma.System.MouseKeyHook.dll
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\FireProtection.csproj.AssemblyReference.cache
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\HydrantConnect\HydrantConnectForm.g.cs
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\FireProtection_MarkupCompile.cache
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\FireProtection_MarkupCompile.lref
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\HydrantConnect\HydrantConnectForm.baml
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\FireProtection.g.resources
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\FireProtection.csproj.CoreCompileInputs.cache
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\FireProtection.csproj.CopyComplete
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\FireProtection.dll
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\FireProtection\obj\Debug\FireProtection.pdb

@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "0a5e1f8e-d90b-4589-b413-d268859432dc": {
+      "ProjectGuid": "0a5e1f8e-d90b-4589-b413-d268859432dc",
+      "DisplayName": "DrawingTools",
+      "ColorIndex": 0
+    },
+    "2994cc2b-37e2-46af-8c5d-b4a2ff602ee7": {
+      "ProjectGuid": "2994cc2b-37e2-46af-8c5d-b4a2ff602ee7",
+      "DisplayName": "BatchTools",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}

@@ -4,16 +4,16 @@
 library
 C#
 .cs
-D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-2021.11.18\FFETOOLS-2021.11.18-修改\FFETOOLS\OutdoorPipe\obj\Debug\
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\
 OutdoorPipe
 none
 false
 DEBUG;TRACE
 
-6-759201429
+6-319889268
 
-27721189488
-25-1224746456
+27-734859362
+25-1064546660
 CreatOutdoorPipes\CreatOutdoorPipesForm.xaml;CreatOutdoorPipes\CalculateWindow.xaml;RaisePipes\RaisePipesForm.xaml;PipeAvoid\PipeAvoidForm.xaml;RaiseTeeBranch\RaiseTeeBranchForm.xaml;WellPoint.xaml;
 
 False
