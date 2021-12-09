@@ -96,6 +96,7 @@ namespace FFETOOLS
                                 valveList = GetPipeSystemValve(doc, item, subproNum.AsString(), valveCode);
                                 pipeList = GetPipeSystemPipe(doc, item, subproNum.AsString(), 1);
 
+                                //阀门写入
                                 foreach (PipeValveInfo valveInfo in valveList)
                                 {
                                     excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
@@ -114,6 +115,7 @@ namespace FFETOOLS
                                     valveCode++;
                                 }
 
+                                //管道写入
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
                                     excelWorksheet.Cells[rowNum, 1].Value = pipeInfo.ProjectNum;
@@ -149,6 +151,188 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 6].Value = pipeInfo.PipeQulity;
                                     rowNum++;
                                 }
+
+                                //90°弯头写入
+                                int elbowNum = 2;
+                                List<PipeElbowInfo> pipeElbowList90 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "90");
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "90°镀锌弯头";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeElbowInfo.PipeElbowName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    rowNum++;
+                                }
+
+                                //60°弯头写入
+                                List<PipeElbowInfo> pipeElbowList60 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "60");
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "60°镀锌弯头";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeElbowInfo.PipeElbowName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    rowNum++;
+                                }
+
+                                //45°弯头写入
+                                List<PipeElbowInfo> pipeElbowList45 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "45");
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "45°镀锌弯头";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeElbowInfo.PipeElbowName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    rowNum++;
+                                }
+
+                                //30°弯头写入
+                                List<PipeElbowInfo> pipeElbowList30 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "30");
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "30°镀锌弯头";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeElbowInfo.PipeElbowName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    rowNum++;
+                                }
+
+                                //22.5°弯头写入
+                                List<PipeElbowInfo> pipeElbowList225 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "22");
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "22.5°镀锌弯头";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeElbowInfo.PipeElbowName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    rowNum++;
+                                }
+
+                                //三通写入
+                                List<PipeTeeInfo> pipeTeeList = GetPipeSystemPipeTee(doc, item, subproNum.AsString(), elbowNum);
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeTeeInfo.PipeTeeAbb;
+                                    if (pipeTeeInfo.PipeTeeName.Contains("镀锌"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "镀锌三通";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeTeeInfo.PipeTeeName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeTeeInfo.PipeTeePressure;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "规格:" + pipeTeeInfo.PipeTeeSize;
+                                    excelWorksheet.Cells[rowNum, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                    rowNum++;
+                                }
+
 
 
 
@@ -197,7 +381,7 @@ namespace FFETOOLS
                 return Result.Failed;
             }
         }
-        public static List<string> GetPipeSystemType(UIDocument uiDoc, string profession)
+        public List<string> GetPipeSystemType(UIDocument uiDoc, string profession)
         {
             // 获取当前视图管道系统名称列表
             FilteredElementCollector viewCollector = new FilteredElementCollector(uiDoc.Document, uiDoc.ActiveView.Id);
@@ -256,7 +440,7 @@ namespace FFETOOLS
             }
             return orderedList;
         }
-        public static List<PipeValveInfo> GetPipeSystemValve(Document doc, string pipeSystemName, string subProjectNum, int valveCode)
+        public List<PipeValveInfo> GetPipeSystemValve(Document doc, string pipeSystemName, string subProjectNum, int valveCode)
         {
             FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
             viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
@@ -303,7 +487,7 @@ namespace FFETOOLS
             }
             return valveNameList;
         }
-        public static List<PipeInfo> GetPipeSystemPipe(Document doc, string pipeSystemName, string subProjectNum, int pipeCode)
+        public List<PipeInfo> GetPipeSystemPipe(Document doc, string pipeSystemName, string subProjectNum, int pipeCode)
         {
             FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
             viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
@@ -347,6 +531,98 @@ namespace FFETOOLS
                 }
             }
             return pipeNameList;
+        }
+        public List<PipeElbowInfo> GetPipeSystemPipeElbow(Document doc, string pipeSystemName, string subProjectNum, int pipeElbowCode, string pipeElbowAngle)
+        {
+            FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
+            viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
+            IList<Element> viewScheduleList = viewCollector.ToElements();
+            List<PipeElbowInfo> pipeElbowNameList = new List<PipeElbowInfo>();
+
+            foreach (ViewSchedule v in viewScheduleList)
+            {
+                if (v.Name.Contains("管件") && v.Name.Contains(pipeSystemName.Replace("系统", "")))
+                {
+                    TableData td = v.GetTableData();
+                    TableSectionData tdb = td.GetSectionData(SectionType.Header);
+                    string head = v.GetCellText(SectionType.Header, 0, 0);
+
+                    TableSectionData tdd = td.GetSectionData(SectionType.Body);
+                    int c = tdd.NumberOfColumns;
+                    int r = tdd.NumberOfRows;
+                    List<string> pipeElbowTable = new List<string>();
+
+                    for (int i = 1; i < r; i++)
+                    {
+                        for (int j = 0; j < c; j++)
+                        {
+                            CellType ctype = tdd.GetCellType(i, j);
+                            string str = v.GetCellText(SectionType.Body, i, j);
+                            pipeElbowTable.Add(str);
+                        }
+
+                        if (pipeElbowTable.ElementAt(1).Contains("弯头") && pipeElbowTable.ElementAt(2).Contains(pipeElbowAngle))
+                        {
+                            string[] sArray = pipeElbowTable.ElementAt(4).Split('-');
+                            string[] sAngle = pipeElbowTable.ElementAt(2).Split('.');
+
+                            PipeElbowInfo pipeElbowInfo = new PipeElbowInfo(pipeElbowTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeElbowCode.ToString().PadLeft(2, '0'),
+                                                                      sAngle.ElementAt(0) + "°" + pipeElbowTable.ElementAt(1).Replace("给排水_管件_", ""), "DN" + sArray.ElementAt(0), pipeElbowTable.ElementAt(3), pipeElbowTable.ElementAt(5));
+                            pipeElbowNameList.Add(pipeElbowInfo);
+                            pipeElbowCode++;
+                        }
+
+                        //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);                    
+                        pipeElbowTable.Clear();
+                    }
+                }
+            }
+            return pipeElbowNameList;
+        }
+        public List<PipeTeeInfo> GetPipeSystemPipeTee(Document doc, string pipeSystemName, string subProjectNum, int pipeTeeCode)
+        {
+            FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
+            viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
+            IList<Element> viewScheduleList = viewCollector.ToElements();
+            List<PipeTeeInfo> pipeTeeNameList = new List<PipeTeeInfo>();
+
+            foreach (ViewSchedule v in viewScheduleList)
+            {
+                if (v.Name.Contains("管件") && v.Name.Contains(pipeSystemName.Replace("系统", "")))
+                {
+                    TableData td = v.GetTableData();
+                    TableSectionData tdb = td.GetSectionData(SectionType.Header);
+                    string head = v.GetCellText(SectionType.Header, 0, 0);
+
+                    TableSectionData tdd = td.GetSectionData(SectionType.Body);
+                    int c = tdd.NumberOfColumns;
+                    int r = tdd.NumberOfRows;
+                    List<string> pipeTeeTable = new List<string>();
+
+                    for (int i = 1; i < r; i++)
+                    {
+                        for (int j = 0; j < c; j++)
+                        {
+                            CellType ctype = tdd.GetCellType(i, j);
+                            string str = v.GetCellText(SectionType.Body, i, j);
+                            pipeTeeTable.Add(str);
+                        }
+
+                        if (pipeTeeTable.ElementAt(1).Contains("三通"))
+                        {
+                            string[] sArray = pipeTeeTable.ElementAt(4).Split('-');
+                            PipeTeeInfo pipeTeeInfo = new PipeTeeInfo(pipeTeeTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeTeeCode.ToString().PadLeft(2, '0'),
+                                                                   pipeTeeTable.ElementAt(1).Replace("给排水_管件_", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(2), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
+                            pipeTeeNameList.Add(pipeTeeInfo);
+                            pipeTeeCode++;
+                        }
+
+                        //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);                    
+                        pipeTeeTable.Clear();
+                    }
+                }
+            }
+            return pipeTeeNameList;
         }
     }
     public class PipeValveInfo
@@ -405,7 +681,56 @@ namespace FFETOOLS
             PipeNote = pipeNote;
         }
     }
+    public class PipeElbowInfo
+    {
+        public string ProjectNum { get; set; }
+        public string PipeElbowSystem { get; set; }
+        public string PipeElbowAbb { get; set; }//弯头缩写
+        public string PipeElbowName { get; set; }
+        public string PipeElbowSize { get; set; }
+        public string PipeElbowPressure { get; set; }
+        public string PipeElbowQulity { get; set; }
+        public PipeElbowInfo()
+        {
 
+        }
+        public PipeElbowInfo(string pipeElbowSystem, string projectNum, string pipeElbowAbb, string pipeElbowName,
+                              string pipeElbowSize, string pipeElbowPressure, string pipeElbowQulity)
+        {
+            ProjectNum = projectNum;
+            PipeElbowSystem = pipeElbowSystem;
+            PipeElbowAbb = pipeElbowAbb;
+            PipeElbowName = pipeElbowName;
+            PipeElbowSize = pipeElbowSize;
+            PipeElbowPressure = pipeElbowPressure;
+            PipeElbowQulity = pipeElbowQulity;
+        }
+    }
+    public class PipeTeeInfo
+    {
+        public string ProjectNum { get; set; }
+        public string PipeTeeSystem { get; set; }
+        public string PipeTeeAbb { get; set; }//三通缩写
+        public string PipeTeeName { get; set; }
+        public string PipeTeeSize { get; set; }
+        public string PipeTeePressure { get; set; }
+        public string PipeTeeQulity { get; set; }
+        public PipeTeeInfo()
+        {
+
+        }
+        public PipeTeeInfo(string pipeTeeSystem, string projectNum, string pipeTeeAbb, string pipeTeeName,
+                              string pipeTeeSize, string pipeTeePressure, string pipeTeeQulity)
+        {
+            ProjectNum = projectNum;
+            PipeTeeSystem = pipeTeeSystem;
+            PipeTeeAbb = pipeTeeAbb;
+            PipeTeeName = pipeTeeName;
+            PipeTeeSize = pipeTeeSize;
+            PipeTeePressure = pipeTeePressure;
+            PipeTeeQulity = pipeTeeQulity;
+        }
+    }
     /// <summary>
     /// 基于EPPlus的excel操作类,仅支持xlsx格式的excel文件
     /// </summary>
