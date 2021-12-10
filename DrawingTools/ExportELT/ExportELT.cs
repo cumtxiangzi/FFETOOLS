@@ -23,6 +23,7 @@ using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.DB.Architecture;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using System.Collections.ObjectModel;
 
 namespace FFETOOLS
 {
@@ -42,6 +43,7 @@ namespace FFETOOLS
                 Parameter proName = pro.LookupParameter("工程名称");
                 Parameter subproNum = pro.LookupParameter("子项代号");
                 Parameter subproName = pro.LookupParameter("子项名称");
+                Parameter name = pro.LookupParameter("作者");
 
                 string projectName = proNum.AsString() + "-" + proName.AsString();
                 string subProjectName = subproNum.AsString() + "-" + subproName.AsString();
@@ -50,6 +52,7 @@ namespace FFETOOLS
 
                 ExportELTWindow mainfrm = new ExportELTWindow();
                 mainfrm.ShowDialog();
+                ReplaceViewSchedule(doc, name);
 
                 if (uidoc.ActiveView is ViewPlan || uidoc.ActiveView is View3D)
                 {
@@ -132,6 +135,10 @@ namespace FFETOOLS
                                     {
                                         excelWorksheet.Cells[rowNum, 4].Value = "双面热浸镀锌钢管";
                                     }
+                                    else if (pipeInfo.PipeName.Contains("HDPE"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "HDPE双壁波纹管";
+                                    }
                                     else
                                     {
                                         excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeName;
@@ -141,8 +148,20 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeInfo.PipePressure;
-                                    rowNum++;
+                                    if (pipeInfo.PipeName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else if(pipeInfo.PipeName.Contains("HDPE"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "环刚度:≥8kN/m2";
+                                        rowNum++;
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeInfo.PipePressure;
+                                        rowNum++;
+                                    }
                                     break;
                                 }
                                 foreach (PipeInfo pipeInfo in pipeList)
@@ -172,8 +191,15 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
-                                    rowNum++;
+                                    if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        rowNum++;
+                                    }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
@@ -202,8 +228,15 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
-                                    rowNum++;
+                                    if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        rowNum++;
+                                    }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
@@ -232,8 +265,16 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
-                                    rowNum++;
+
+                                    if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        rowNum++;
+                                    }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
@@ -262,8 +303,16 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
-                                    rowNum++;
+
+                                    if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        rowNum++;
+                                    }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
@@ -292,8 +341,17 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
-                                    rowNum++;
+
+                                    if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        rowNum++;
+                                    }
+
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
@@ -322,8 +380,15 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeTeeInfo.PipeTeePressure;
-                                    rowNum++;
+                                    if (pipeTeeInfo.PipeTeeName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeTeeInfo.PipeTeePressure;
+                                        rowNum++;
+                                    }
                                     break;
                                 }
                                 foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
@@ -332,6 +397,44 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 6].Value = pipeTeeInfo.PipeTeeQulity;
                                     rowNum++;
                                 }
+
+                                //异径写入
+                                List<PipeReduceInfo> pipeReduceList = GetPipeSystemPipeReduce(doc, item, subproNum.AsString(), elbowNum);
+                                foreach (PipeReduceInfo pipeReduceInfo in pipeReduceList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeReduceInfo.PipeReduceAbb;
+                                    if (pipeReduceInfo.PipeReduceName.Contains("镀锌"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "镀锌异径";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeReduceInfo.PipeReduceName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeReduceInfo pipeReduceInfo in pipeReduceList)
+                                {
+                                    if (pipeReduceInfo.PipeReduceName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeReduceInfo.PipeReducePressure;
+                                        rowNum++;
+                                    }
+                                    break;
+                                }
+                                foreach (PipeReduceInfo pipeReduceInfo in pipeReduceList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 4].Value = "规格:" + pipeReduceInfo.PipeReduceSize;
+                                    excelWorksheet.Cells[rowNum, 6].Value = pipeReduceInfo.PipeReduceQulity;
+                                    rowNum++;
+                                }
+
 
 
 
@@ -379,6 +482,61 @@ namespace FFETOOLS
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
                 return Result.Failed;
+            }
+        }
+        public void ReplaceViewSchedule(Document doc, Parameter name)
+        {
+            //Transaction trans = new Transaction(doc, "传递项目标准实例");
+            //trans.Start();
+            //实例化复制粘贴选项,这里实例化就行
+            //CopyPasteOptions option = new CopyPasteOptions();
+            //由于材料信息与位移无关,所以位移为null,如果是族实例或者其他与位置有关的,这个地方就需要思考下设置了
+            //ElementTransformUtils.CopyElements(document, copyIds, doc, null, option);
+            //trans.Commit();
+            //保存关闭修改后的文档
+            // doc.Save();
+            // doc.Close(false);
+            // 在后台打开文件，UI上不会显示，并且把文件中墙的数量显示出来。
+            if (name.AsString() != "1")
+            {
+                using (Transaction trans = new Transaction(doc, "明细表替换"))
+                {
+                    trans.Start();
+                    name.Set("1");
+
+                    FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
+                    viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
+                    IList<Element> viewScheduleList = viewCollector.ToElements();
+                    ICollection<ElementId> deletIds = new Collection<ElementId>();
+                    foreach (ViewSchedule v in viewScheduleList)
+                    {
+                        if (v.Name.Contains("给排水"))
+                        {
+                            deletIds.Add(v.Id);
+                        }
+                    }
+                    doc.Delete(deletIds);
+
+                    string filepath = @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\给排水项目标准.rvt";
+                    Document newdoc = doc.Application.OpenDocumentFile(filepath);
+                    FilteredElementCollector fec = new FilteredElementCollector(newdoc);
+                    fec.OfCategory(BuiltInCategory.OST_Schedules);
+                    IList<Element> fecList = fec.ToElements();
+                    ICollection<ElementId> copyIds = new Collection<ElementId>();
+                    foreach (ViewSchedule v in fecList)
+                    {
+                        if (v.Name.Contains("给排水"))
+                        {
+                            copyIds.Add(v.Id);
+                        }
+                    }
+                    CopyPasteOptions option = new CopyPasteOptions();
+                    ElementTransformUtils.CopyElements(newdoc, copyIds, doc, null, option);
+                    newdoc.Save();
+                    newdoc.Close(false);
+
+                    trans.Commit();
+                }
             }
         }
         public List<string> GetPipeSystemType(UIDocument uiDoc, string profession)
@@ -470,7 +628,7 @@ namespace FFETOOLS
                         }
                         string[] sArray = valveTable.ElementAt(3).Split('-');
 
-                        if (valveTable.ElementAt(1).Contains("阀门"))
+                        if (valveTable.ElementAt(1).Contains("阀门")&& !(valveTable.ElementAt(1).Contains("便器")))
                         {
                             PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "VA" + valveCode.ToString().PadLeft(2, '0'), StringHelper.FilterCH(valveTable.ElementAt(1).Replace("给排水_阀门_", "")),
                           StringHelper.FilterEN(valveTable.ElementAt(1).Replace("给排水_阀门_", "")), "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), valveTable.ElementAt(5));
@@ -624,6 +782,51 @@ namespace FFETOOLS
             }
             return pipeTeeNameList;
         }
+        public List<PipeReduceInfo> GetPipeSystemPipeReduce(Document doc, string pipeSystemName, string subProjectNum, int pipeReduceCode)
+        {
+            FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
+            viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
+            IList<Element> viewScheduleList = viewCollector.ToElements();
+            List<PipeReduceInfo> pipeReduceNameList = new List<PipeReduceInfo>();
+
+            foreach (ViewSchedule v in viewScheduleList)
+            {
+                if (v.Name.Contains("管件") && v.Name.Contains(pipeSystemName.Replace("系统", "")))
+                {
+                    TableData td = v.GetTableData();
+                    TableSectionData tdb = td.GetSectionData(SectionType.Header);
+                    string head = v.GetCellText(SectionType.Header, 0, 0);
+
+                    TableSectionData tdd = td.GetSectionData(SectionType.Body);
+                    int c = tdd.NumberOfColumns;
+                    int r = tdd.NumberOfRows;
+                    List<string> pipeReduceTable = new List<string>();
+
+                    for (int i = 1; i < r; i++)
+                    {
+                        for (int j = 0; j < c; j++)
+                        {
+                            CellType ctype = tdd.GetCellType(i, j);
+                            string str = v.GetCellText(SectionType.Body, i, j);
+                            pipeReduceTable.Add(str);
+                        }
+
+                        if (pipeReduceTable.ElementAt(1).Contains("异径"))
+                        {
+                            string[] sArray = pipeReduceTable.ElementAt(4).Split('-');
+                            PipeReduceInfo pipeReduceInfo = new PipeReduceInfo(pipeReduceTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeReduceCode.ToString().PadLeft(2, '0'),
+                                                                   pipeReduceTable.ElementAt(1).Replace("给排水_管件_", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(1), pipeReduceTable.ElementAt(3), pipeReduceTable.ElementAt(5));
+                            pipeReduceNameList.Add(pipeReduceInfo);
+                            pipeReduceCode++;
+                        }
+
+                        //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);                    
+                        pipeReduceTable.Clear();
+                    }
+                }
+            }
+            return pipeReduceNameList;
+        }
     }
     public class PipeValveInfo
     {
@@ -729,6 +932,56 @@ namespace FFETOOLS
             PipeTeeSize = pipeTeeSize;
             PipeTeePressure = pipeTeePressure;
             PipeTeeQulity = pipeTeeQulity;
+        }
+    }
+    public class PipeReduceInfo
+    {
+        public string ProjectNum { get; set; }
+        public string PipeReduceSystem { get; set; }
+        public string PipeReduceAbb { get; set; }//异径缩写
+        public string PipeReduceName { get; set; }
+        public string PipeReduceSize { get; set; }
+        public string PipeReducePressure { get; set; }
+        public string PipeReduceQulity { get; set; }
+        public PipeReduceInfo()
+        {
+
+        }
+        public PipeReduceInfo(string pipeReduceSystem, string projectNum, string pipeReduceAbb, string pipeReduceName,
+                              string pipeReduceSize, string pipeReducePressure, string pipeReduceQulity)
+        {
+            ProjectNum = projectNum;
+            PipeReduceSystem = pipeReduceSystem;
+            PipeReduceAbb = pipeReduceAbb;
+            PipeReduceName = pipeReduceName;
+            PipeReduceSize = pipeReduceSize;
+            PipeReducePressure = pipeReducePressure;
+            PipeReduceQulity = pipeReduceQulity;
+        }
+    }
+    public class PipeAccessoryInfo
+    {
+        public string ProjectNum { get; set; }
+        public string PipeReduceSystem { get; set; }
+        public string PipeReduceAbb { get; set; }//异径缩写
+        public string PipeReduceName { get; set; }
+        public string PipeReduceSize { get; set; }
+        public string PipeReducePressure { get; set; }
+        public string PipeReduceQulity { get; set; }
+        public PipeAccessoryInfo()
+        {
+
+        }
+        public PipeAccessoryInfo(string pipeReduceSystem, string projectNum, string pipeReduceAbb, string pipeReduceName,
+                              string pipeReduceSize, string pipeReducePressure, string pipeReduceQulity)
+        {
+            ProjectNum = projectNum;
+            PipeReduceSystem = pipeReduceSystem;
+            PipeReduceAbb = pipeReduceAbb;
+            PipeReduceName = pipeReduceName;
+            PipeReduceSize = pipeReduceSize;
+            PipeReducePressure = pipeReducePressure;
+            PipeReduceQulity = pipeReduceQulity;
         }
     }
     /// <summary>

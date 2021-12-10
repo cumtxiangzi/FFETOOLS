@@ -10,7 +10,12 @@
       "ProjectGuid": "2994cc2b-37e2-46af-8c5d-b4a2ff602ee7",
       "DisplayName": "BatchTools",
       "ColorIndex": 1
+    },
+    "355e2c0a-7677-48f3-b967-319e3c4651cf": {
+      "ProjectGuid": "355e2c0a-7677-48f3-b967-319e3c4651cf",
+      "DisplayName": "IndoorPipe",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 2
+  "NextColorIndex": 3
 }
