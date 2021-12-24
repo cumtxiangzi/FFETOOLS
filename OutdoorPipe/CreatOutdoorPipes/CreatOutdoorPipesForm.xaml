@@ -70,7 +70,8 @@
 
                 <!--AutoGenerateColumns="False"这句话告诉控件不自动生成列，是必要的，如果没有，控件会更具数据源自动生成列，这个在我们这种写法中看起来就有重复的两列数据-->
                 <DataGrid x:Name="PipeSettingGrid" ItemsSource="{Binding}" AutoGenerateColumns="False"  CanUserAddRows="False" VerticalAlignment="Top" CanUserReorderColumns="False" 
-                          CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False" CurrentCellChanged="PipeSettingGrid_CurrentCellChanged" PreparingCellForEdit="PipeSettingGrid_PreparingCellForEdit" >
+                          CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False" CurrentCellChanged="PipeSettingGrid_CurrentCellChanged" PreparingCellForEdit="PipeSettingGrid_PreparingCellForEdit" 
+                          HorizontalScrollBarVisibility="Hidden" >
 
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType ="DataGridColumnHeader">

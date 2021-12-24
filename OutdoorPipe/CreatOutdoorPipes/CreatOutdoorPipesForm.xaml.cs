@@ -191,6 +191,7 @@ namespace FFETOOLS
         private void this_Loaded(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
+            PipeSettingGrid.Visibility = Visibility.Hidden;
             PipeQuantityTxt.Text = "2";
             DistanceTxt.Text = "5000";
 
@@ -199,6 +200,12 @@ namespace FFETOOLS
 
             excCreatOutdoorPipes = new ExecuteEventCreatOutdoorPipes();
             eventHandlerCreatOutdoorPipes = Autodesk.Revit.UI.ExternalEvent.Create(excCreatOutdoorPipes);
+
+            Task.Delay(100).ContinueWith(t => LoadWithDelay(), TaskScheduler.FromCurrentSynchronizationContext()); //控件延时显示
+        }
+        private void LoadWithDelay()
+        {
+            PipeSettingGrid.Visibility = Visibility.Visible;
         }
 
         private void OK_Button_Click(object sender, RoutedEventArgs e)

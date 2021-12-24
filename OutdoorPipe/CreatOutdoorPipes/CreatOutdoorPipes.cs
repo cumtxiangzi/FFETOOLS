@@ -278,7 +278,11 @@ namespace FFETOOLS
                 PipingSystemType ps = e as PipingSystemType;
                 if (ps.Name.Contains(profession))
                 {
-                    pipesystemname.Add(ps.Name);
+                    if (ps.Name.Contains("生活") || ps.Name.Contains("消防给水") || ps.Name.Contains("循环") || ps.Name.Contains("水源")
+                       || ps.Name.Contains("中水") || ps.Name.Contains("废水") || ps.Name.Contains("压力") )
+                    {
+                        pipesystemname.Add(ps.Name);
+                    }               
                 }
             }
             return pipesystemname;
@@ -294,7 +298,10 @@ namespace FFETOOLS
                 PipeType ps = e as PipeType;
                 if (ps.Name.Contains(profession))
                 {
-                    pipetypename.Add(ps.Name);
+                    if (!ps.Name.Contains("HDPE"))
+                    {
+                        pipetypename.Add(ps.Name);
+                    }                
                 }
             }
             return pipetypename;

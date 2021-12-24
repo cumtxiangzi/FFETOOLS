@@ -15,7 +15,12 @@
       "ProjectGuid": "355e2c0a-7677-48f3-b967-319e3c4651cf",
       "DisplayName": "IndoorPipe",
       "ColorIndex": 2
+    },
+    "9a703cb5-4333-4d7b-9963-f87e5695e4ab": {
+      "ProjectGuid": "9a703cb5-4333-4d7b-9963-f87e5695e4ab",
+      "DisplayName": "OutdoorPipe",
+      "ColorIndex": 3
     }
   },
-  "NextColorIndex": 3
+  "NextColorIndex": 4
 }
