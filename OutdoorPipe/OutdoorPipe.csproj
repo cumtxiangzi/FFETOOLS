@@ -85,6 +85,10 @@
     <Compile Include="AdjustHeightWell.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Class2.cs" />
+    <Compile Include="PipeSupportSection\PipeSupportSectionForm.xaml.cs">
+      <DependentUpon>PipeSupportSectionForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PipeSupportSection\PipeSupportSection.cs" />
     <Compile Include="明细表导出测试3.cs" />
     <Compile Include="CommonClass\CommonClass.cs" />
     <Compile Include="CreatPipeValve\CreatPipeValve.cs" />
@@ -130,6 +134,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CreatOutdoorPipes\CalculateWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PipeSupportSection\PipeSupportSectionForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

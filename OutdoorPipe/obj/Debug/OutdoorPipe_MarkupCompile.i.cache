@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 
-6-319889268
+7-27513464
 
-281186918759
+301732169297
 25-1064546660
-CreatOutdoorPipes\CreatOutdoorPipesForm.xaml;CreatOutdoorPipes\CalculateWindow.xaml;RaisePipes\RaisePipesForm.xaml;PipeAvoid\PipeAvoidForm.xaml;RaiseTeeBranch\RaiseTeeBranchForm.xaml;WellPoint.xaml;
+CreatOutdoorPipes\CreatOutdoorPipesForm.xaml;CreatOutdoorPipes\CalculateWindow.xaml;PipeSupportSection\PipeSupportSectionForm.xaml;RaisePipes\RaisePipesForm.xaml;PipeAvoid\PipeAvoidForm.xaml;RaiseTeeBranch\RaiseTeeBranchForm.xaml;WellPoint.xaml;
 
 False
 

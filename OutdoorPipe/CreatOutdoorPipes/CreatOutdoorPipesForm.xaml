@@ -155,7 +155,7 @@
 
         <TextBlock Text="管道高度批量修改为:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Margin="-70,5,5,5"/>
         <TextBox x:Name="DistanceTxt" Grid.Column="1" Grid.Row="2" Margin="130,12,5,12"  VerticalContentAlignment="Center"/>
-        <Button x:Name="ModifyDistance" Content="高度修改"  Grid.Column="2" Grid.Row="3" Margin="12" Click="ModifyDistance_Click" >
+        <Button x:Name="ModifyDistance" Content="高度修改"  Grid.Column="2" Grid.Row="3" Margin="12" Click="ModifyDistance_Click" Cursor="Hand">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -166,7 +166,7 @@
             </Button.Template>
         </Button>
 
-        <Button Content="确定"  Grid.Column="4" Grid.Row="2" Margin="12" Click="OK_Button_Click" >
+        <Button Content="确定"  Grid.Column="4" Grid.Row="2" Margin="12" Click="OK_Button_Click"  Cursor="Hand">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -176,7 +176,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="取消"  Grid.Column="5" Grid.Row="2" Margin="12" Click="Cancel_Button_Click" >
+        <Button Content="取消"  Grid.Column="5" Grid.Row="2" Margin="12" Click="Cancel_Button_Click" Cursor="Hand">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -186,7 +186,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="间距计算"  Grid.Column="6" Grid.Row="2" Margin="12" Click="Caculate_Button_Click">
+        <Button Content="间距计算"  Grid.Column="6" Grid.Row="2" Margin="12" Click="Caculate_Button_Click" Cursor="Hand">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
