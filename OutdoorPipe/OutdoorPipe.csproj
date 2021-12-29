@@ -39,22 +39,6 @@
     <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MouseKeyHook.5.6.0\lib\net40\Gma.System.MouseKeyHook.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI">
-      <HintPath>..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\NPOI.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\NPOI.OOXML.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\NPOI.OpenXml4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\NPOI.OpenXmlFormats.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
@@ -83,13 +67,11 @@
     <Compile Include="AdjustHeight.cs" />
     <Compile Include="3DMeasure.cs" />
     <Compile Include="AdjustHeightWell.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Class2.cs" />
     <Compile Include="PipeSupportSection\PipeSupportSectionForm.xaml.cs">
       <DependentUpon>PipeSupportSectionForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="PipeSupportSection\PipeSupportSection.cs" />
-    <Compile Include="明细表导出测试3.cs" />
     <Compile Include="CommonClass\CommonClass.cs" />
     <Compile Include="CreatPipeValve\CreatPipeValve.cs" />
     <Compile Include="RaisePipes\RaisePipesForm.xaml.cs">
@@ -165,12 +147,19 @@
     <Resource Include="Resources\室外管道参数图示.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="CommonClass\app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\C型支架两层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\C型支架一层.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

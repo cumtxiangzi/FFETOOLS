@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
-        Title="管道支架剖面" Name="MainWindow" Height="550" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Loaded="MainWindow_Loaded" KeyDown="MainWindow_KeyDown">
+        Title="管道支架剖面" Name="MainWindow" Height="550" Width="820" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Loaded="MainWindow_Loaded" KeyDown="MainWindow_KeyDown">
+
     <Grid>
         <Grid.ColumnDefinitions>
-       
             <ColumnDefinition Width="85"/>
             <ColumnDefinition Width="85"/>
             <ColumnDefinition Width="85"/>
@@ -25,8 +25,9 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
-        <GroupBox Header="图示" BorderBrush="Gray" Grid.Column="6" Grid.Row="0" Grid.RowSpan="4" Margin="5,5,5,5" >
-            <Image Margin="5" Source="/OutdoorPipe;component/Resources/室外管道参数图示.jpg" />
+        <GroupBox Header="图示" BorderBrush="Gray" Grid.Column="6" Grid.Row="0" Grid.RowSpan="4" Margin="5,5,5,5" UseLayoutRounding="True"  >
+            <Image x:Name="PipeSectionImage" Margin="0" Source="/OutdoorPipe;component/Resources/C型支架两层.jpg" 
+                        UseLayoutRounding="True" Stretch="Uniform" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"   />
         </GroupBox>
 
         <GroupBox Header="管道支架类型" BorderBrush="Gray" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="6" Margin="5" >
@@ -71,8 +72,6 @@
             </Grid>
         </GroupBox>
 
-
-
         <GroupBox x:Name="OneFloorGroupBox" Header="一层管道参数" BorderBrush="Gray" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" Margin="5" >
             <Grid Margin="0">
                 <Grid.ColumnDefinitions>
@@ -88,10 +87,10 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox x:Name="OneFloorPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Click="OneFloorPipe1_Click"/>
-                <CheckBox x:Name="OneFloorPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Click="OneFloorPipe2_Click"/>
-                <CheckBox x:Name="OneFloorPipe3" Grid.Column="3" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道3" Click="OneFloorPipe3_Click"/>
-                <CheckBox x:Name="OneFloorPipe4"  Grid.Column="4" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道4" Click="OneFloorPipe4_Click"/>
+                <CheckBox x:Name="OneFloorPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="OneFloorPipe1_Checked" Unchecked="OneFloorPipe1_Unchecked" />
+                <CheckBox x:Name="OneFloorPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="OneFloorPipe2_Checked" Unchecked="OneFloorPipe2_Unchecked" />
+                <CheckBox x:Name="OneFloorPipe3" Grid.Column="3" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道3" Checked="OneFloorPipe3_Checked" Unchecked="OneFloorPipe3_Unchecked" />
+                <CheckBox x:Name="OneFloorPipe4"  Grid.Column="4" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道4" Checked="OneFloorPipe4_Checked" Unchecked="OneFloorPipe4_Unchecked" />
                 <ComboBox x:Name="OneFloorPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="15,5,15,5" />
                 <ComboBox x:Name="OneFloorPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="15,5,15,5" />
                 <ComboBox x:Name="OneFloorPipe3_Size"  Grid.Column="3" Grid.Row="1" Margin="15,5,15,5"/>
@@ -131,10 +130,10 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox x:Name="TwoFloorPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1"/>
-                <CheckBox x:Name="TwoFloorPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2"/>
-                <CheckBox x:Name="TwoFloorPipe3" Grid.Column="3" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道3"/>
-                <CheckBox x:Name="TwoFloorPipe4"  Grid.Column="4" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道4"/>
+                <CheckBox x:Name="TwoFloorPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="TwoFloorPipe1_Checked" Unchecked="TwoFloorPipe1_Unchecked"/>
+                <CheckBox x:Name="TwoFloorPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="TwoFloorPipe2_Checked" Unchecked="TwoFloorPipe2_Unchecked"/>
+                <CheckBox x:Name="TwoFloorPipe3" Grid.Column="3" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道3" Checked="TwoFloorPipe3_Checked" Unchecked="TwoFloorPipe3_Unchecked"/>
+                <CheckBox x:Name="TwoFloorPipe4"  Grid.Column="4" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道4" Checked="TwoFloorPipe4_Checked" Unchecked="TwoFloorPipe4_Unchecked"/>
                 <ComboBox x:Name="TwoFloorPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="15,5,15,5" />
                 <ComboBox x:Name="TwoFloorPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="15,5,15,5" />
                 <ComboBox x:Name="TwoFloorPipe3_Size"  Grid.Column="3" Grid.Row="1" Margin="15,5,15,5"/>
@@ -173,8 +172,8 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox x:Name="ThreeFloorPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1"/>
-                <CheckBox x:Name="ThreeFloorPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2"/>
+                <CheckBox x:Name="ThreeFloorPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="ThreeFloorPipe1_Checked" Unchecked="ThreeFloorPipe1_Unchecked"/>
+                <CheckBox x:Name="ThreeFloorPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="ThreeFloorPipe2_Checked" Unchecked="ThreeFloorPipe2_Unchecked"/>
 
                 <ComboBox x:Name="ThreeFloorPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
                 <ComboBox x:Name="ThreeFloorPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
@@ -212,8 +211,8 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox x:Name="FourFloorPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1"/>
-                <CheckBox x:Name="FourFloorPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2"/>
+                <CheckBox x:Name="FourFloorPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="FourFloorPipe1_Checked" Unchecked="FourFloorPipe1_Unchecked"/>
+                <CheckBox x:Name="FourFloorPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="FourFloorPipe2_Checked" Unchecked="FourFloorPipe2_Unchecked"/>
 
                 <ComboBox x:Name="FourFloorPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
                 <ComboBox x:Name="FourFloorPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
@@ -249,8 +248,14 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <Button x:Name="OK_Button" Content="确定"  Grid.Column="1" Grid.Row="2" Margin="15,5,15,8" Cursor="Hand">
+
+            <TextBlock Text="支架底部标高：" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="15,8,10,10"/>
+            <TextBox x:Name="LevelValue"  Text="高出室外地面3.50m" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,8,10,10" VerticalContentAlignment="Center"/>
+            <TextBlock Text="车间柱网名称：" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,8,10,10"/>
+            <TextBox x:Name="WorkshopGridName" Text="煤粉制备结构柱"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,8,10,10" VerticalContentAlignment="Center"/>
+            <CheckBox x:Name="Insulation"  Content="管道保温" Grid.Column="0" Grid.Row="2" Margin="25,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+            <Button x:Name="OK_Button" Content="确定"  Grid.Column="1" Grid.Row="2" Margin="18,8,18,10" Cursor="Hand" Click="OK_Button_Click">
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -260,7 +265,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button x:Name="Cancel_Button" Content="取消"  Grid.Column="6" Grid.Row="5" Margin="15,5,15,8"  Cursor="Hand" Click="Cancel_Button_Click" >
+            <Button x:Name="Cancel_Button" Content="取消"  Grid.Column="6" Grid.Row="5" Margin="18,8,18,10"  Cursor="Hand" Click="Cancel_Button_Click" >
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">

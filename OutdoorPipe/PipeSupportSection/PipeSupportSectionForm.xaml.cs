@@ -25,6 +25,9 @@ namespace FFETOOLS
                                                                        "DN400", "DN450"};
         List<string> pipeAbbList = new List<string> { "YJ","XJ","XJ1","XJ2", "XH", "XH1", "XH2", "J" ,
                                                                         "XF", "W", "ZJ", "SJ","F" ,"ZS","ZJ", "YW", "YF" };
+
+        ExecuteEventPipeSupportSection excCreatPipeSupportSection = null;
+        Autodesk.Revit.UI.ExternalEvent eventHandlerPipeSupportSection = null;
         public PipeSupportSectionForm()
         {
             InitializeComponent();
@@ -33,7 +36,7 @@ namespace FFETOOLS
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             TypeC_Button.IsChecked = true;
-            OneFloor.IsChecked = true;
+            TwoFloor.IsChecked = true;
             ThreeFloorGroupBox.IsEnabled = false;
             FourFloorGroupBox.IsEnabled = false;
             OneFloorPipe1.IsChecked = true;
@@ -46,6 +49,10 @@ namespace FFETOOLS
             OneFloorPipe4_Size.IsEnabled = false;
             OneFloorPipe3_Abb.IsEnabled = false;
             OneFloorPipe4_Abb.IsEnabled = false;
+            TwoFloorPipe3_Size.IsEnabled = false;
+            TwoFloorPipe4_Size.IsEnabled = false;
+            TwoFloorPipe3_Abb.IsEnabled=false;
+            TwoFloorPipe4_Abb.IsEnabled = false;
 
             OneFloorPipe1_Size.ItemsSource = pipeSizeList;
             OneFloorPipe1_Abb.ItemsSource = pipeAbbList;
@@ -99,7 +106,25 @@ namespace FFETOOLS
             FourFloorPipe2_Size.SelectedIndex = 13;
             FourFloorPipe2_Abb.SelectedIndex = 1;
 
+            excCreatPipeSupportSection = new ExecuteEventPipeSupportSection();
+            eventHandlerPipeSupportSection = Autodesk.Revit.UI.ExternalEvent.Create(excCreatPipeSupportSection);
+        }
+        private void OK_Button_Click(object sender, RoutedEventArgs e)
+        {
+            eventHandlerPipeSupportSection.Raise();
+            Hide();
+        }
+        private void Cancel_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
 
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)//Esc键  
+            {
+                Close();
+            }
         }
 
         private void OneFloor_Click(object sender, RoutedEventArgs e)
@@ -110,6 +135,7 @@ namespace FFETOOLS
                 TwoFloorGroupBox.IsEnabled = false;
                 ThreeFloorGroupBox.IsEnabled = false;
                 FourFloorGroupBox.IsEnabled = false;
+                PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架一层.jpg", UriKind.Relative));
             }
         }
 
@@ -121,6 +147,7 @@ namespace FFETOOLS
                 TwoFloorGroupBox.IsEnabled = true;
                 ThreeFloorGroupBox.IsEnabled = false;
                 FourFloorGroupBox.IsEnabled = false;
+                PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架两层.jpg", UriKind.Relative));
             }
         }
 
@@ -174,37 +201,150 @@ namespace FFETOOLS
             FourFloorPipe2.IsChecked = true;
         }
 
-        private void Cancel_Button_Click(object sender, RoutedEventArgs e)
+        private void OneFloorPipe1_Checked(object sender, RoutedEventArgs e)
         {
-            Close();
+            OneFloorPipe1_Size.IsEnabled = true;
+            OneFloorPipe1_Abb.IsEnabled = true;
         }
 
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        private void OneFloorPipe2_Checked(object sender, RoutedEventArgs e)
         {
-            if (e.Key == Key.Escape)//Esc键  
-            {
-                Close();
-            }
+            OneFloorPipe2_Size.IsEnabled = true;
+            OneFloorPipe2_Abb.IsEnabled = true;
         }
 
-        private void OneFloorPipe1_Click(object sender, RoutedEventArgs e)
+        private void OneFloorPipe3_Checked(object sender, RoutedEventArgs e)
         {
-
+            OneFloorPipe3_Size.IsEnabled = true;
+            OneFloorPipe3_Abb.IsEnabled = true;
         }
 
-        private void OneFloorPipe2_Click(object sender, RoutedEventArgs e)
+        private void OneFloorPipe4_Checked(object sender, RoutedEventArgs e)
         {
-
+            OneFloorPipe4_Size.IsEnabled = true;
+            OneFloorPipe4_Abb.IsEnabled = true;
         }
 
-        private void OneFloorPipe3_Click(object sender, RoutedEventArgs e)
+        private void OneFloorPipe1_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            OneFloorPipe1_Size.IsEnabled = false;
+            OneFloorPipe1_Abb.IsEnabled = false;
         }
 
-        private void OneFloorPipe4_Click(object sender, RoutedEventArgs e)
+        private void OneFloorPipe2_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            OneFloorPipe2_Size.IsEnabled = false;
+            OneFloorPipe2_Abb.IsEnabled = false;
         }
+
+        private void OneFloorPipe3_Unchecked(object sender, RoutedEventArgs e)
+        {
+            OneFloorPipe3_Size.IsEnabled = false;
+            OneFloorPipe3_Abb.IsEnabled = false;
+        }
+
+        private void OneFloorPipe4_Unchecked(object sender, RoutedEventArgs e)
+        {
+            OneFloorPipe4_Size.IsEnabled = false;
+            OneFloorPipe4_Abb.IsEnabled = false;
+        }
+
+        private void TwoFloorPipe1_Checked(object sender, RoutedEventArgs e)
+        {
+            TwoFloorPipe1_Size.IsEnabled=true;
+            TwoFloorPipe1_Abb.IsEnabled=true;
+        }
+
+        private void TwoFloorPipe2_Checked(object sender, RoutedEventArgs e)
+        {
+            TwoFloorPipe2_Size.IsEnabled = true;
+            TwoFloorPipe2_Abb.IsEnabled = true;
+        }
+
+        private void TwoFloorPipe3_Checked(object sender, RoutedEventArgs e)
+        {
+            TwoFloorPipe3_Size.IsEnabled = true;
+            TwoFloorPipe3_Abb.IsEnabled = true;
+        }
+
+        private void TwoFloorPipe4_Checked(object sender, RoutedEventArgs e)
+        {
+            TwoFloorPipe4_Size.IsEnabled = true;
+            TwoFloorPipe4_Abb.IsEnabled = true;
+        }
+
+        private void TwoFloorPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TwoFloorPipe1_Size.IsEnabled =false;
+            TwoFloorPipe1_Abb.IsEnabled = false;
+        }
+
+        private void TwoFloorPipe2_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TwoFloorPipe2_Size.IsEnabled = false;
+            TwoFloorPipe2_Abb.IsEnabled = false;
+        }
+
+        private void TwoFloorPipe3_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TwoFloorPipe3_Size.IsEnabled = false;
+            TwoFloorPipe3_Abb.IsEnabled = false;
+        }
+
+        private void TwoFloorPipe4_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TwoFloorPipe4_Size.IsEnabled = false;
+            TwoFloorPipe4_Abb.IsEnabled = false;
+        }
+
+        private void ThreeFloorPipe1_Checked(object sender, RoutedEventArgs e)
+        {
+            ThreeFloorPipe1_Size.IsEnabled=true;
+            ThreeFloorPipe1_Abb.IsEnabled=true;
+        }
+
+        private void ThreeFloorPipe2_Checked(object sender, RoutedEventArgs e)
+        {
+            ThreeFloorPipe2_Size.IsEnabled = true;
+            ThreeFloorPipe2_Abb.IsEnabled = true;
+        }
+
+        private void ThreeFloorPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ThreeFloorPipe1_Size.IsEnabled = false;
+            ThreeFloorPipe1_Abb.IsEnabled = false;
+        }
+
+        private void ThreeFloorPipe2_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ThreeFloorPipe1_Size.IsEnabled = false;
+            ThreeFloorPipe1_Abb.IsEnabled = false;
+        }
+
+        private void FourFloorPipe1_Checked(object sender, RoutedEventArgs e)
+        {
+            FourFloorPipe1_Size.IsEnabled = true;
+            FourFloorPipe1_Abb.IsEnabled = true;
+        }
+
+        private void FourFloorPipe2_Checked(object sender, RoutedEventArgs e)
+        {
+            FourFloorPipe2_Size.IsEnabled = true;
+            FourFloorPipe2_Abb.IsEnabled = true;
+        }
+
+        private void FourFloorPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+            FourFloorPipe1_Size.IsEnabled =false;
+            FourFloorPipe1_Abb.IsEnabled = false;
+        }
+
+        private void FourFloorPipe2_Unchecked(object sender, RoutedEventArgs e)
+        {
+            FourFloorPipe2_Size.IsEnabled = false;
+            FourFloorPipe2_Abb.IsEnabled = false;
+        }
+
+       
     }
 }
