@@ -22,7 +22,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2.1*"/>
         </Grid.RowDefinitions>
 
         <GroupBox Header="图示" BorderBrush="Gray" Grid.Column="6" Grid.Row="0" Grid.RowSpan="4" Margin="5,5,5,5" UseLayoutRounding="True"  >
@@ -247,15 +247,20 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="支架底部标高：" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="15,8,10,10"/>
-            <TextBox x:Name="LevelValue"  Text="高出室外地面3.50m" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,8,10,10" VerticalContentAlignment="Center"/>
-            <TextBlock Text="车间柱网名称：" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,8,10,10"/>
-            <TextBox x:Name="WorkshopGridName" Text="煤粉制备结构柱"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,8,10,10" VerticalContentAlignment="Center"/>
-            <CheckBox x:Name="Insulation"  Content="管道保温" Grid.Column="0" Grid.Row="2" Margin="25,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <TextBlock Text="支架底部标高：" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="15,5,10,5"/>
+            <TextBox x:Name="LevelValue"  Text="高出室外地面3.50m" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,5,10,5" VerticalContentAlignment="Center"/>
+            <TextBlock Text="车间柱网名称：" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,5,10,5"/>
+            <TextBox x:Name="WorkshopGridName" Text="煤粉制备结构柱"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,5,10,5" VerticalContentAlignment="Center"/>
+            <TextBlock Text="支架编号：" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,5,10,5"/>
+            <TextBox x:Name="SupportCode" Text="C1详图"  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,10,5" VerticalContentAlignment="Center"/>
 
-            <Button x:Name="OK_Button" Content="确定"  Grid.Column="1" Grid.Row="2" Margin="18,8,18,10" Cursor="Hand" Click="OK_Button_Click">
+            <CheckBox x:Name="Insulation"  Content="管道保温" Grid.Column="0" Grid.Row="3" Margin="25,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <CheckBox x:Name="CableTray"  Content="电缆桥架" Grid.Column="1" Grid.Row="3" Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+            <Button x:Name="OK_Button" Content="确定"  Grid.Column="2" Grid.Row="3" Margin="17,2,17,5" Cursor="Hand" Click="OK_Button_Click">
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -265,17 +270,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button x:Name="Cancel_Button" Content="取消"  Grid.Column="6" Grid.Row="5" Margin="18,8,18,10"  Cursor="Hand" Click="Cancel_Button_Click" >
-                <Button.Template >
-                    <ControlTemplate TargetType="{x:Type Button}" >
-                        <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
-                            <Border.Background>#FFDDDDDD</Border.Background>
-                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-
+           
         </Grid>
 
     </Grid>

@@ -113,12 +113,7 @@ namespace FFETOOLS
         {
             eventHandlerPipeSupportSection.Raise();
             Hide();
-        }
-        private void Cancel_Button_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
+        }     
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)//Esc键  

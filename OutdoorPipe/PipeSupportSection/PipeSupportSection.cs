@@ -92,6 +92,7 @@ namespace FFETOOLS
             {
                 trans.Start();
                 DetailDrawingFamilyLoad(doc, "C型支架");
+                DetailDrawingTitleLoad(doc, "图名");
 
                 trans.Commit();
             }
@@ -106,60 +107,35 @@ namespace FFETOOLS
                     typeC_Section = doc.Create.NewFamilyInstance(pickpoint, typeC_SectionSymbol, doc.ActiveView);
                     ModifyParameter(typeC_Section);
                 }
+
                 trans.Commit();
             }
-            using (Transaction trans = new Transaction(doc, "修改支架详图族参数"))
+            using (Transaction trans = new Transaction(doc, "创建图名"))
             {
                 trans.Start();
-
-
+                CreatTitle(doc, pickpoint, typeC_Section);             
 
                 trans.Commit();
             }
+            using (Transaction trans = new Transaction(doc, "创建尺寸标注"))
+            {
+                trans.Start();
+                CreatDimension(doc, typeC_Section);
+
+                trans.Commit();
+            }
+
 
 
             tg.Assimilate();
             PipeSupportSection.mainfrm.Show();
         }
-        public void DetailDrawingFamilyLoad(Document doc, string categoryName)
-        {
-            IList<Element> familyCollect = new FilteredElementCollector(doc).OfClass(typeof(Family)).ToElements();
-            Family family = null;
-            foreach (Family item in familyCollect)
-            {
-                if (item.Name.Contains(categoryName) && item.Name.Contains("给排水"))
-                {
-                    family = item;
-                    break;
-                }
-            }
-            if (family == null)
-            {
-                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_详图项目_" + categoryName + ".rfa");
-            }
-        }
-        public FamilySymbol PipeSupportSectionSymbol(Document doc, string symbolName)
-        {
-            FamilySymbol symbol = null;
-            FilteredElementCollector sectionCollector = new FilteredElementCollector(doc);
-            sectionCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_DetailComponents);
-
-            IList<Element> sections = sectionCollector.ToElements();
-            foreach (FamilySymbol item in sections)
-            {
-                if (item.Family.Name.Contains("给排水") && item.Family.Name.Contains(symbolName))
-                {
-                    symbol = item;
-                    break;
-                }
-            }
-            return symbol;
-        }
-        public void ModifyParameter(FamilyInstance sectionInstance)
+        public void ModifyParameter(FamilyInstance sectionInstance) //修改参数
         {
             sectionInstance.LookupParameter("支柱名称").Set(PipeSupportSection.mainfrm.WorkshopGridName.Text);
             sectionInstance.LookupParameter("支架底部标高").Set(PipeSupportSection.mainfrm.LevelValue.Text);
             sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+            sectionInstance.LookupParameter("支柱名称下划线长度L").SetValueString((PipeSupportSection.mainfrm.WorkshopGridName.Text.Length * 3.57 + 10).ToString());
 
             if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
             {
@@ -170,6 +146,7 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("二层管道3可见性").Set(0);
                 sectionInstance.LookupParameter("二层管道4可见性").Set(0);
                 OneFloorPipeSection(sectionInstance);
+
             }
             else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
             {
@@ -177,7 +154,7 @@ namespace FFETOOLS
                 TwoFloorPipeSection(sectionInstance);
             }
         }
-        public void OneFloorPipeSection(FamilyInstance sectionInstance)
+        public void OneFloorPipeSection(FamilyInstance sectionInstance) //修改一层管道参数
         {
             string oneFloorPipe1_Size = PipeSupportSection.mainfrm.OneFloorPipe1_Size.SelectedItem.ToString().Replace("DN", "");
             string oneFloorPipe2_Size = PipeSupportSection.mainfrm.OneFloorPipe2_Size.SelectedItem.ToString().Replace("DN", "");
@@ -203,11 +180,12 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("一层管道2可见性").Set(0);
                 sectionInstance.LookupParameter("一层管道3可见性").Set(0);
                 sectionInstance.LookupParameter("一层管道4可见性").Set(0);
-                sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistanceUnwarm(oneFloorPipe1_Size).Item1.ToString());
-                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistanceUnwarm(oneFloorPipe1_Size).Item1 + PipeDistanceUnwarm(oneFloorPipe1_Size).Item3).ToString());
+                sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3).ToString());
+                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 - 100).ToString());
                 if (HaveBrace(oneFloorPipe1_Size))
                 {
-                    sectionInstance.LookupParameter("斜撑净宽B").SetValueString((PipeDistanceUnwarm(oneFloorPipe1_Size).Item1 + PipeDistanceUnwarm(oneFloorPipe1_Size).Item3 - 250).ToString());
+                    sectionInstance.LookupParameter("斜撑净宽B").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 - 250).ToString());
                 }
             }
             else if (oneFloorPipe1_Check && oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
@@ -224,14 +202,16 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("一层管道直径D2").SetValueString(oneFloorPipe2_Size);
                 sectionInstance.LookupParameter("一层管道3可见性").Set(0);
                 sectionInstance.LookupParameter("一层管道4可见性").Set(0);
-                sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistanceUnwarm(oneFloorPipe1_Size).Item1.ToString());
-                sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistanceUnwarm(oneFloorPipe1_Size).Item2 / 2 + PipeDistanceUnwarm(oneFloorPipe2_Size).Item2 / 2).ToString());
-                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistanceUnwarm(oneFloorPipe1_Size).Item1 + PipeDistanceUnwarm(oneFloorPipe1_Size).Item2 / 2 +
-                                                              PipeDistanceUnwarm(oneFloorPipe2_Size).Item2 / 2 + PipeDistanceUnwarm(oneFloorPipe2_Size).Item3).ToString());
+                sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistance(oneFloorPipe1_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item2 / 2).ToString());
+                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                              PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3).ToString());
+                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                             PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 - 100).ToString());
                 if (HaveBrace(oneFloorPipe1_Size, oneFloorPipe2_Size))
                 {
-                    sectionInstance.LookupParameter("斜撑净宽B").SetValueString((PipeDistanceUnwarm(oneFloorPipe1_Size).Item1 + PipeDistanceUnwarm(oneFloorPipe1_Size).Item2 / 2 +
-                                                              PipeDistanceUnwarm(oneFloorPipe2_Size).Item2 / 2 + PipeDistanceUnwarm(oneFloorPipe2_Size).Item3 - 250).ToString());
+                    sectionInstance.LookupParameter("斜撑净宽B").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                              PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 - 250).ToString());
                 }
             }
             else if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && !oneFloorPipe4_Check)
@@ -248,19 +228,21 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("一层管道直径D2").SetValueString(oneFloorPipe2_Size);
                 sectionInstance.LookupParameter("一层管道直径D3").SetValueString(oneFloorPipe3_Size);
                 sectionInstance.LookupParameter("一层管道4可见性").Set(0);
-                sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistanceUnwarm(oneFloorPipe1_Size).Item1.ToString());
-                sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistanceUnwarm(oneFloorPipe1_Size).Item2 / 2 + PipeDistanceUnwarm(oneFloorPipe2_Size).Item2 / 2).ToString());
-                sectionInstance.LookupParameter("一层管道2与管道3中心间距").SetValueString((PipeDistanceUnwarm(oneFloorPipe2_Size).Item2 / 2 + PipeDistanceUnwarm(oneFloorPipe3_Size).Item2 / 2).ToString());
-                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistanceUnwarm(oneFloorPipe1_Size).Item1 + PipeDistanceUnwarm(oneFloorPipe1_Size).Item2 / 2 +
-                                                              PipeDistanceUnwarm(oneFloorPipe2_Size).Item2 + PipeDistanceUnwarm(oneFloorPipe3_Size).Item2 / 2 + PipeDistanceUnwarm(oneFloorPipe3_Size).Item3).ToString());
+                sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistance(oneFloorPipe1_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item2 / 2).ToString());
+                sectionInstance.LookupParameter("一层管道2与管道3中心间距").SetValueString((PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2).ToString());
+                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                              PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3).ToString());
+                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                             PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 - 100).ToString());
                 if (HaveBrace(oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size))
                 {
-                    sectionInstance.LookupParameter("斜撑净宽B").SetValueString((PipeDistanceUnwarm(oneFloorPipe1_Size).Item1 + PipeDistanceUnwarm(oneFloorPipe1_Size).Item2 / 2 +
-                                                              PipeDistanceUnwarm(oneFloorPipe2_Size).Item2 + PipeDistanceUnwarm(oneFloorPipe3_Size).Item2 / 2 + PipeDistanceUnwarm(oneFloorPipe3_Size).Item3 - 250).ToString());
+                    sectionInstance.LookupParameter("斜撑净宽B").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                              PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 - 250).ToString());
                 }
             }
         }
-        public void TwoFloorPipeSection(FamilyInstance sectionInstance) //二层管道设置
+        public void TwoFloorPipeSection(FamilyInstance sectionInstance) //修改二层管道参数
         {
             string oneFloorPipe1_Size = PipeSupportSection.mainfrm.OneFloorPipe1_Size.SelectedItem.ToString().Replace("DN", "");
             string oneFloorPipe2_Size = PipeSupportSection.mainfrm.OneFloorPipe2_Size.SelectedItem.ToString().Replace("DN", "");
@@ -282,22 +264,24 @@ namespace FFETOOLS
             bool twoFloorPipe3_Check = (bool)PipeSupportSection.mainfrm.TwoFloorPipe3.IsChecked;
             bool twoFloorPipe4_Check = (bool)PipeSupportSection.mainfrm.TwoFloorPipe4.IsChecked;
 
-
-
             if (twoFloorPipe1_Check && !twoFloorPipe2_Check && !twoFloorPipe3_Check && !twoFloorPipe4_Check)
             {
                 sectionInstance.LookupParameter("二层管道直径D1").SetValueString(twoFloorPipe1_Size);
                 sectionInstance.LookupParameter("二层管道2可见性").Set(0);
                 sectionInstance.LookupParameter("二层管道3可见性").Set(0);
                 sectionInstance.LookupParameter("二层管道4可见性").Set(0);
-                sectionInstance.LookupParameter("二层管道1距墙净距L1").SetValueString(PipeDistanceUnwarm(twoFloorPipe1_Size).Item1.ToString());
-                if (oneFloorPipe1_Check && !oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
+                sectionInstance.LookupParameter("二层管道1距墙净距L1").SetValueString(PipeDistance(twoFloorPipe1_Size).Item1.ToString());
+
+                if (HaveBrace(twoFloorPipe1_Size))
                 {
-                    if (!HaveBrace(oneFloorPipe1_Size) && !HaveBrace(twoFloorPipe1_Size))
-                    {
-                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
-                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistanceUnwarm(twoFloorPipe1_Size).Item1 + PipeDistanceUnwarm(twoFloorPipe1_Size).Item3).ToString());
-                    }
+                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                    TwoFloorPipeSet(sectionInstance, oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size, oneFloorPipe4_Size,
+                                             oneFloorPipe1_Check, oneFloorPipe2_Check, oneFloorPipe3_Check, oneFloorPipe4_Check);
+                }
+                else
+                {
+                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                    sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3).ToString());
                 }
             }
             else if (twoFloorPipe1_Check && twoFloorPipe2_Check && !twoFloorPipe3_Check && !twoFloorPipe4_Check)
@@ -306,8 +290,22 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("二层管道直径D2").SetValueString(twoFloorPipe2_Size);
                 sectionInstance.LookupParameter("二层管道3可见性").Set(0);
                 sectionInstance.LookupParameter("二层管道4可见性").Set(0);
-                sectionInstance.LookupParameter("二层管道1距墙净距L1").SetValueString(PipeDistanceUnwarm(twoFloorPipe1_Size).Item1.ToString());
-                sectionInstance.LookupParameter("二层管道1与管道2中心间距").SetValueString((PipeDistanceUnwarm(twoFloorPipe1_Size).Item2 / 2 + PipeDistanceUnwarm(twoFloorPipe2_Size).Item2 / 2).ToString());
+                sectionInstance.LookupParameter("二层管道1距墙净距L1").SetValueString(PipeDistance(twoFloorPipe1_Size).Item1.ToString());
+                sectionInstance.LookupParameter("二层管道1与管道2中心间距").SetValueString((PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2).ToString());
+
+                if (HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size))
+                {
+                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                    TwoFloorPipeSet(sectionInstance, oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size, oneFloorPipe4_Size,
+                                            oneFloorPipe1_Check, oneFloorPipe2_Check, oneFloorPipe3_Check, oneFloorPipe4_Check);
+                }
+                else
+                {
+                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                    sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
+                                                                                                                      PipeDistance(twoFloorPipe2_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item3).ToString());
+                }
+
             }
             else if (twoFloorPipe1_Check && twoFloorPipe2_Check && twoFloorPipe3_Check && !twoFloorPipe4_Check)
             {
@@ -315,9 +313,51 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("二层管道直径D2").SetValueString(twoFloorPipe2_Size);
                 sectionInstance.LookupParameter("二层管道直径D3").SetValueString(twoFloorPipe3_Size);
                 sectionInstance.LookupParameter("二层管道4可见性").Set(0);
-                sectionInstance.LookupParameter("二层管道1距墙净距L1").SetValueString(PipeDistanceUnwarm(twoFloorPipe1_Size).Item1.ToString());
-                sectionInstance.LookupParameter("二层管道1与管道2中心间距").SetValueString((PipeDistanceUnwarm(twoFloorPipe1_Size).Item2 / 2 + PipeDistanceUnwarm(twoFloorPipe2_Size).Item2 / 2).ToString());
-                sectionInstance.LookupParameter("二层管道2与管道3中心间距").SetValueString((PipeDistanceUnwarm(twoFloorPipe2_Size).Item2 / 2 + PipeDistanceUnwarm(twoFloorPipe3_Size).Item2 / 2).ToString());
+                sectionInstance.LookupParameter("二层管道1距墙净距L1").SetValueString(PipeDistance(twoFloorPipe1_Size).Item1.ToString());
+                sectionInstance.LookupParameter("二层管道1与管道2中心间距").SetValueString((PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2).ToString());
+                sectionInstance.LookupParameter("二层管道2与管道3中心间距").SetValueString((PipeDistance(twoFloorPipe2_Size).Item2 / 2 + PipeDistance(twoFloorPipe3_Size).Item2 / 2).ToString());
+
+                if (HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size, twoFloorPipe3_Size))
+                {
+                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                    TwoFloorPipeSet(sectionInstance, oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size, oneFloorPipe4_Size,
+                                            oneFloorPipe1_Check, oneFloorPipe2_Check, oneFloorPipe3_Check, oneFloorPipe4_Check);
+                }
+                else
+                {
+                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                    sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
+                                                                                                                     PipeDistance(twoFloorPipe2_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item3).ToString());
+                }
+            }
+        }
+        public void TwoFloorPipeSet(FamilyInstance sectionInstance, string oneFloorPipe1_Size, string oneFloorPipe2_Size, string oneFloorPipe3_Size, string oneFloorPipe4_Size,
+                                                 bool oneFloorPipe1_Check, bool oneFloorPipe2_Check, bool oneFloorPipe3_Check, bool oneFloorPipe4_Check) // 二层管道时一层管道支架长度设置
+        {
+
+            if (oneFloorPipe1_Check && !oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 + 100).ToString());
+                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 + 100).ToString());
+                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 - 100).ToString());
+            }
+            if (oneFloorPipe1_Check && oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                      PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 + 100).ToString());
+                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                      PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 + 100).ToString());
+                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                      PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 - 100).ToString());
+            }
+            if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                      PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 + 100).ToString());
+                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                      PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 + 100).ToString());
+                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                     PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 - 100).ToString());
             }
         }
         public bool HaveBrace(string nominal_Diameter) //单管是否有斜撑
@@ -367,117 +407,352 @@ namespace FFETOOLS
 
             return haveBrace;
         }
-        public Tuple<int, int, int> PipeDistanceUnwarm(string nominal_Diameter) //不保温间距
+        public void CreatTitle(Document doc, XYZ pickpoint, FamilyInstance typeC_Section) //创建图名
+        {
+            XYZ titlePosition = new XYZ(pickpoint.X + typeC_Section.LookupParameter("一层支架长L1").AsDouble() / 2,
+                    pickpoint.Y - typeC_Section.LookupParameter("支架底部膨胀螺栓定位H1").AsDouble() - 600 / 304.8, 0);
+
+            FamilySymbol typeC_TitleSymbol = null;
+            FamilyInstance typeC_Title = null;
+            typeC_TitleSymbol = TitleSymbol(doc, "图名");
+            typeC_TitleSymbol.Activate();
+            typeC_Title = doc.Create.NewFamilyInstance(titlePosition, typeC_TitleSymbol, doc.ActiveView);
+            typeC_Title.LookupParameter("标题名称").Set(PipeSupportSection.mainfrm.SupportCode.Text);
+            typeC_Title.LookupParameter("横线长度").SetValueString((PipeSupportSection.mainfrm.SupportCode.Text.Length * 5 + 10).ToString());
+        }
+        public void CreatDimension(Document doc, FamilyInstance section) //创建尺寸标注
+        {
+            Options options = new Options()
+            {
+                ComputeReferences = true,
+                DetailLevel = ViewDetailLevel.Fine
+            };
+            Reference ref1 = null;
+            Reference ref2 = null;
+            GeometryElement geometry = section.get_Geometry(options);
+            //MessageBox.Show("ss");
+            GeometryInstance geometryInstance = (GeometryInstance)geometry.FirstOrDefault();//此处有问题
+            //MessageBox.Show(geometry.ToString());
+
+            //foreach (GeometryObject item in geometry)
+            //{
+            //    GeometryInstance geometryInstance = item as GeometryInstance;                                   
+            //    if (geometryInstance != null)
+            //    {
+            //        GeometryElement geoEle = geometryInstance.GetInstanceGeometry();
+
+            //        //foreach (GeometryObject obj in geoEle)
+            //        //{
+            //        //    Arc arc = obj as Arc;
+
+            //        //    if (arc == null)
+            //        //    {
+            //        //        break;
+            //        //    }
+            //        //    Line line = obj as Line;
+            //        //    if (line != null)
+            //        //    {
+            //        //        ref1 = line.Reference;
+            //        //        ref2 = arc.Reference;
+            //        //        break;
+            //        //    }
+            //        //}
+            //    }
+            //    break;
+            //}
+
+            //ReferenceArray referenceArray = new ReferenceArray();
+            //referenceArray.Append(ref1);
+            //referenceArray.Append(ref2);
+            //doc.Create.NewDimension(doc.ActiveView, Line.CreateBound(new XYZ(), XYZ.BasisY), referenceArray);
+        }
+        public Tuple<int, int, int> PipeDistance(string nominal_Diameter) //管道间距
         {
             int distance1 = 0; //  距墙间距L1
             int distance2 = 0; //  管道之间间距L2
             int distance3 = 0; //  距支架边缘间距L3
-            if (nominal_Diameter == "15")
+            if (PipeSupportSection.mainfrm.Insulation.IsChecked == true)
             {
-                distance1 = 70;
-                distance2 = 100;
-                distance3 = 40;
+                if (nominal_Diameter == "15")
+                {
+                    distance1 = 130;
+                    distance2 = 190;
+                    distance3 = 100;
+                }
+                else if (nominal_Diameter == "20")
+                {
+                    distance1 = 140;
+                    distance2 = 190;
+                    distance3 = 100;
+                }
+                else if (nominal_Diameter == "25")
+                {
+                    distance1 = 140;
+                    distance2 = 200;
+                    distance3 = 110;
+                }
+                else if (nominal_Diameter == "32")
+                {
+                    distance1 = 150;
+                    distance2 = 210;
+                    distance3 = 110;
+                }
+                else if (nominal_Diameter == "40")
+                {
+                    distance1 = 160;
+                    distance2 = 210;
+                    distance3 = 110;
+                }
+                else if (nominal_Diameter == "50")
+                {
+                    distance1 = 160;
+                    distance2 = 230;
+                    distance3 = 120;
+                }
+                else if (nominal_Diameter == "65")
+                {
+                    distance1 = 170;
+                    distance2 = 250;
+                    distance3 = 130;
+                }
+                else if (nominal_Diameter == "80")
+                {
+                    distance1 = 190;
+                    distance2 = 260;
+                    distance3 = 140;
+                }
+                else if (nominal_Diameter == "100")
+                {
+                    distance1 = 200;
+                    distance2 = 300;
+                    distance3 = 150;
+                }
+                else if (nominal_Diameter == "125")
+                {
+                    distance1 = 220;
+                    distance2 = 320;
+                    distance3 = 170;
+                }
+                else if (nominal_Diameter == "150")
+                {
+                    distance1 = 230;
+                    distance2 = 350;
+                    distance3 = 180;
+                }
+                else if (nominal_Diameter == "200")
+                {
+                    distance1 = 260;
+                    distance2 = 400;
+                    distance3 = 210;
+                }
+                else if (nominal_Diameter == "250")
+                {
+                    distance1 = 290;
+                    distance2 = 470;
+                    distance3 = 250;
+                }
+                else if (nominal_Diameter == "300")
+                {
+                    distance1 = 330;
+                    distance2 = 520;
+                    distance3 = 270;
+                }
+                else if (nominal_Diameter == "350")
+                {
+                    distance1 = 360;
+                    distance2 = 580;
+                    distance3 = 300;
+                }
+                else if (nominal_Diameter == "400")
+                {
+                    distance1 = 390;
+                    distance2 = 640;
+                    distance3 = 330;
+                }
+                else if (nominal_Diameter == "450")
+                {
+                    distance1 = 420;
+                    distance2 = 700;
+                    distance3 = 360;
+                }
             }
-            else if (nominal_Diameter == "20")
+            else
             {
-                distance1 = 80;
-                distance2 = 110;
-                distance3 = 40;
-            }
-            else if (nominal_Diameter == "25")
-            {
-                distance1 = 80;
-                distance2 = 120;
-                distance3 = 50;
-            }
-            else if (nominal_Diameter == "32")
-            {
-                distance1 = 90;
-                distance2 = 140;
-                distance3 = 50;
-            }
-            else if (nominal_Diameter == "40")
-            {
-                distance1 = 100;
-                distance2 = 150;
-                distance3 = 50;
-            }
-            else if (nominal_Diameter == "50")
-            {
-                distance1 = 100;
-                distance2 = 170;
-                distance3 = 60;
-            }
-            else if (nominal_Diameter == "65")
-            {
-                distance1 = 110;
-                distance2 = 190;
-                distance3 = 70;
-            }
-            else if (nominal_Diameter == "80")
-            {
-                distance1 = 130;
-                distance2 = 210;
-                distance3 = 80;
-            }
-            else if (nominal_Diameter == "100")
-            {
-                distance1 = 140;
-                distance2 = 240;
-                distance3 = 90;
-            }
-            else if (nominal_Diameter == "125")
-            {
-                distance1 = 160;
-                distance2 = 260;
-                distance3 = 110;
-            }
-            else if (nominal_Diameter == "150")
-            {
-                distance1 = 170;
-                distance2 = 300;
-                distance3 = 120;
-            }
-            else if (nominal_Diameter == "200")
-            {
-                distance1 = 200;
-                distance2 = 350;
-                distance3 = 150;
-            }
-            else if (nominal_Diameter == "250")
-            {
-                distance1 = 230;
-                distance2 = 410;
-                distance3 = 190;
-            }
-            else if (nominal_Diameter == "300")
-            {
-                distance1 = 270;
-                distance2 = 460;
-                distance3 = 210;
-            }
-            else if (nominal_Diameter == "350")
-            {
-                distance1 = 300;
-                distance2 = 530;
-                distance3 = 240;
-            }
-            else if (nominal_Diameter == "400")
-            {
-                distance1 = 330;
-                distance2 = 590;
-                distance3 = 270;
-            }
-            else if (nominal_Diameter == "450")
-            {
-                distance1 = 360;
-                distance2 = 650;
-                distance3 = 300;
+                if (nominal_Diameter == "15")
+                {
+                    distance1 = 70;
+                    distance2 = 100;
+                    distance3 = 40;
+                }
+                else if (nominal_Diameter == "20")
+                {
+                    distance1 = 80;
+                    distance2 = 110;
+                    distance3 = 40;
+                }
+                else if (nominal_Diameter == "25")
+                {
+                    distance1 = 80;
+                    distance2 = 120;
+                    distance3 = 50;
+                }
+                else if (nominal_Diameter == "32")
+                {
+                    distance1 = 90;
+                    distance2 = 140;
+                    distance3 = 50;
+                }
+                else if (nominal_Diameter == "40")
+                {
+                    distance1 = 100;
+                    distance2 = 150;
+                    distance3 = 50;
+                }
+                else if (nominal_Diameter == "50")
+                {
+                    distance1 = 100;
+                    distance2 = 170;
+                    distance3 = 60;
+                }
+                else if (nominal_Diameter == "65")
+                {
+                    distance1 = 110;
+                    distance2 = 190;
+                    distance3 = 70;
+                }
+                else if (nominal_Diameter == "80")
+                {
+                    distance1 = 130;
+                    distance2 = 210;
+                    distance3 = 80;
+                }
+                else if (nominal_Diameter == "100")
+                {
+                    distance1 = 140;
+                    distance2 = 240;
+                    distance3 = 90;
+                }
+                else if (nominal_Diameter == "125")
+                {
+                    distance1 = 160;
+                    distance2 = 260;
+                    distance3 = 110;
+                }
+                else if (nominal_Diameter == "150")
+                {
+                    distance1 = 170;
+                    distance2 = 300;
+                    distance3 = 120;
+                }
+                else if (nominal_Diameter == "200")
+                {
+                    distance1 = 200;
+                    distance2 = 350;
+                    distance3 = 150;
+                }
+                else if (nominal_Diameter == "250")
+                {
+                    distance1 = 230;
+                    distance2 = 410;
+                    distance3 = 190;
+                }
+                else if (nominal_Diameter == "300")
+                {
+                    distance1 = 270;
+                    distance2 = 460;
+                    distance3 = 210;
+                }
+                else if (nominal_Diameter == "350")
+                {
+                    distance1 = 300;
+                    distance2 = 530;
+                    distance3 = 240;
+                }
+                else if (nominal_Diameter == "400")
+                {
+                    distance1 = 330;
+                    distance2 = 590;
+                    distance3 = 270;
+                }
+                else if (nominal_Diameter == "450")
+                {
+                    distance1 = 360;
+                    distance2 = 650;
+                    distance3 = 300;
+                }
             }
 
             Tuple<int, int, int> tup = new Tuple<int, int, int>(distance1, distance2, distance3);
             return tup;
         }
+        public void DetailDrawingFamilyLoad(Document doc, string categoryName)
+        {
+            IList<Element> familyCollect = new FilteredElementCollector(doc).OfClass(typeof(Family)).ToElements();
+            Family family = null;
+            foreach (Family item in familyCollect)
+            {
+                if (item.Name.Contains(categoryName) && item.Name.Contains("给排水"))
+                {
+                    family = item;
+                    break;
+                }
+            }
+            if (family == null)
+            {
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_详图项目_" + categoryName + ".rfa");
+            }
+        }
+        public FamilySymbol PipeSupportSectionSymbol(Document doc, string symbolName)
+        {
+            FamilySymbol symbol = null;
+            FilteredElementCollector sectionCollector = new FilteredElementCollector(doc);
+            sectionCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_DetailComponents);
 
+            IList<Element> sections = sectionCollector.ToElements();
+            foreach (FamilySymbol item in sections)
+            {
+                if (item.Family.Name.Contains("给排水") && item.Family.Name.Contains(symbolName))
+                {
+                    symbol = item;
+                    break;
+                }
+            }
+            return symbol;
+        }
+        public void DetailDrawingTitleLoad(Document doc, string categoryName)
+        {
+            IList<Element> titleCollect = new FilteredElementCollector(doc).OfClass(typeof(Family)).ToElements();
+            Family title = null;
+
+            foreach (Family item in titleCollect)
+            {
+                if (item.Name.Contains(categoryName) && item.Name.Contains("给排水"))
+                {
+                    title = item;
+                    break;
+                }
+            }
+            if (title == null)
+            {
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_注释符号_" + categoryName + ".rfa");
+            }
+        }
+        public FamilySymbol TitleSymbol(Document doc, string symbolName)
+        {
+            FamilySymbol symbol = null;
+            FilteredElementCollector sectionCollector = new FilteredElementCollector(doc);
+            sectionCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_GenericAnnotation);
+
+            IList<Element> sections = sectionCollector.ToElements();
+            foreach (FamilySymbol item in sections)
+            {
+                if (item.Family.Name.Contains("给排水") && item.Family.Name.Contains(symbolName))
+                {
+                    symbol = item;
+                    break;
+                }
+            }
+            return symbol;
+        }
     }
 }
