@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
-        Title="管道支架剖面" Name="MainWindow" Height="550" Width="820" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Loaded="MainWindow_Loaded" KeyDown="MainWindow_KeyDown">
+        Title="管道支架剖面" Name="MainWindow" Height="550" Width="820" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
+        Loaded="MainWindow_Loaded" KeyDown="MainWindow_KeyDown" Closed="MainWindow_Closed">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -255,7 +256,7 @@
             <TextBlock Text="车间柱网名称：" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,5,10,5"/>
             <TextBox x:Name="WorkshopGridName" Text="煤粉制备结构柱"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,5,10,5" VerticalContentAlignment="Center"/>
             <TextBlock Text="支架编号：" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,5,10,5"/>
-            <TextBox x:Name="SupportCode" Text="C1详图"  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,10,5" VerticalContentAlignment="Center"/>
+            <TextBox x:Name="SupportCode" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,10,5" VerticalContentAlignment="Center"/>
 
             <CheckBox x:Name="Insulation"  Content="管道保温" Grid.Column="0" Grid.Row="3" Margin="25,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
             <CheckBox x:Name="CableTray"  Content="电缆桥架" Grid.Column="1" Grid.Row="3" Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />

@@ -113,19 +113,52 @@ namespace FFETOOLS
             using (Transaction trans = new Transaction(doc, "创建图名"))
             {
                 trans.Start();
-                CreatTitle(doc, pickpoint, typeC_Section);             
+                CreatTitle(doc, pickpoint, typeC_Section);
 
                 trans.Commit();
             }
             using (Transaction trans = new Transaction(doc, "创建尺寸标注"))
             {
                 trans.Start();
-                CreatDimension(doc, typeC_Section);
+                if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
+                {
+                    if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+                    {
+                        double height = MaximumDiameter(doc, typeC_Section, doc.ActiveView, "一层管道");
+                        XYZ dimPosition = new XYZ(pickpoint.X, pickpoint.Y + height + 100 / 304.8, pickpoint.Z);
+                        CreatDimensionX(doc, typeC_Section, "一层支架边界线", "一层管道中心线", dimPosition);
+                    }
+                    else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+                    {
+                        double height1 = MaximumDiameter(doc, typeC_Section, doc.ActiveView, "一层管道");
+                        typeC_Section.LookupParameter("一层支架净高H1").SetValueString((height1 * 304.8 + 150).ToString());
+
+                        XYZ dimPosition1 = new XYZ(pickpoint.X, pickpoint.Y - 250 / 304.8, pickpoint.Z);
+                        CreatDimensionX(doc, typeC_Section, "一层支架边界线", "一层管道中心线", dimPosition1);
+
+                        double height2 = MaximumDiameter(doc, typeC_Section, doc.ActiveView, "二层管道");
+                        XYZ dimPosition2 = new XYZ(pickpoint.X, pickpoint.Y + height1 + height2 + 600 / 304.8, pickpoint.Z); //此处有BUG，小直径管道尺寸线位置不准确
+                        CreatDimensionX(doc, typeC_Section, "二层支架边界线", "二层管道中心线", dimPosition2);
+
+                        double width = 0;
+                        double width1 = typeC_Section.LookupParameter("一层支架长L1").AsDouble();
+                        double width2 = typeC_Section.LookupParameter("二层支架长L2").AsDouble();
+                        if (width1 > width2)
+                        {
+                            width = width1;
+                        }
+                        else
+                        {
+                            width = width2;
+                        }
+                        XYZ dimPosition3 = new XYZ(pickpoint.X + width + 100 / 304.8, pickpoint.Y, pickpoint.Z);
+                        CreatDimensionY(doc, typeC_Section, "一层支架边界线", dimPosition3);
+                    }
+                }
+
 
                 trans.Commit();
             }
-
-
 
             tg.Assimilate();
             PipeSupportSection.mainfrm.Show();
@@ -420,52 +453,196 @@ namespace FFETOOLS
             typeC_Title.LookupParameter("标题名称").Set(PipeSupportSection.mainfrm.SupportCode.Text);
             typeC_Title.LookupParameter("横线长度").SetValueString((PipeSupportSection.mainfrm.SupportCode.Text.Length * 5 + 10).ToString());
         }
-        public void CreatDimension(Document doc, FamilyInstance section) //创建尺寸标注
+        public void CreatDimensionX(Document doc, FamilyInstance section, string supportBoundary, string pipeCenterLine, XYZ pickPoint) //创建X方向尺寸标注
         {
-            Options options = new Options()
+            List<Line> lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, supportBoundary, pipeCenterLine);
+            ReferenceArray refArray = new ReferenceArray();
+            foreach (Line item in lineList)
             {
-                ComputeReferences = true,
-                DetailLevel = ViewDetailLevel.Fine
-            };
-            Reference ref1 = null;
-            Reference ref2 = null;
-            GeometryElement geometry = section.get_Geometry(options);
-            //MessageBox.Show("ss");
-            GeometryInstance geometryInstance = (GeometryInstance)geometry.FirstOrDefault();//此处有问题
-            //MessageBox.Show(geometry.ToString());
+                refArray.Append(item.Reference);
+            }
+            Line tempLine = lineList.FirstOrDefault();
+            tempLine.MakeUnbound();
+            pickPoint = new XYZ(pickPoint.X, pickPoint.Y, 0);
+            XYZ targetPoint = tempLine.Project(pickPoint).XYZPoint;
+            XYZ direction = (targetPoint - pickPoint).Normalize();
+            Line dimLine = Line.CreateUnbound(pickPoint, direction);
 
-            //foreach (GeometryObject item in geometry)
-            //{
-            //    GeometryInstance geometryInstance = item as GeometryInstance;                                   
-            //    if (geometryInstance != null)
-            //    {
-            //        GeometryElement geoEle = geometryInstance.GetInstanceGeometry();
+            DimensionType dimType = null;
+            FilteredElementCollector dimTypeCollector = new FilteredElementCollector(doc);
+            dimTypeCollector.OfClass(typeof(DimensionType));
+            IList<Element> dimTypes = dimTypeCollector.ToElements();
+            foreach (DimensionType item in dimTypes)
+            {
+                if (item.Name.Contains("工艺")) //给排水标注样式调用有问题
+                {
+                    dimType = item;
+                    break;
+                }
+            }
 
-            //        //foreach (GeometryObject obj in geoEle)
-            //        //{
-            //        //    Arc arc = obj as Arc;
-
-            //        //    if (arc == null)
-            //        //    {
-            //        //        break;
-            //        //    }
-            //        //    Line line = obj as Line;
-            //        //    if (line != null)
-            //        //    {
-            //        //        ref1 = line.Reference;
-            //        //        ref2 = arc.Reference;
-            //        //        break;
-            //        //    }
-            //        //}
-            //    }
-            //    break;
-            //}
-
-            //ReferenceArray referenceArray = new ReferenceArray();
-            //referenceArray.Append(ref1);
-            //referenceArray.Append(ref2);
-            //doc.Create.NewDimension(doc.ActiveView, Line.CreateBound(new XYZ(), XYZ.BasisY), referenceArray);
+            doc.Create.NewDimension(doc.ActiveView, dimLine, refArray, dimType);
         }
+        public void CreatDimensionY(Document doc, FamilyInstance section, string supportBoundary, XYZ pickPoint) //创建Y方向尺寸标注
+        {
+            List<Line> lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, supportBoundary);
+            ReferenceArray refArray = new ReferenceArray();
+            foreach (Line item in lineList)
+            {
+                refArray.Append(item.Reference);
+            }
+            Line tempLine = lineList.FirstOrDefault();
+            tempLine.MakeUnbound();
+            pickPoint = new XYZ(pickPoint.X, pickPoint.Y, 0);
+            XYZ targetPoint = tempLine.Project(pickPoint).XYZPoint;
+            XYZ direction = (targetPoint - pickPoint).Normalize();
+            Line dimLine = Line.CreateUnbound(pickPoint, direction);
+
+            DimensionType dimType = null;
+            FilteredElementCollector dimTypeCollector = new FilteredElementCollector(doc);
+            dimTypeCollector.OfClass(typeof(DimensionType));
+            IList<Element> dimTypes = dimTypeCollector.ToElements();
+            foreach (DimensionType item in dimTypes)
+            {
+                if (item.Name.Contains("工艺")) //给排水标注样式调用有问题
+                {
+                    dimType = item;
+                    break;
+                }
+            }
+
+            doc.Create.NewDimension(doc.ActiveView, dimLine, refArray, dimType);
+        }
+        private static List<Line> GetReferenceOfDetailComponent(Document doc
+            , Element element, View view, string supportBoundary, string pipeCenterLine) //获取详图项目尺寸标注参照
+        {
+            List<Line> lineList = new List<Line>();
+            Options options = new Options();
+            options.ComputeReferences = true;
+            options.IncludeNonVisibleObjects = false;
+            if (view != null)
+            {
+                options.View = view;
+            }
+            else
+            {
+                options.DetailLevel = ViewDetailLevel.Fine;
+            }
+
+            var geoElem = element.get_Geometry(options);
+            foreach (var item in geoElem)
+            {
+                GeometryInstance geoInst = item as GeometryInstance;
+                if (geoInst != null)
+                {
+                    GeometryElement geoElemTmp = geoInst.GetSymbolGeometry();
+                    foreach (GeometryObject geomObjTmp in geoElemTmp)
+                    {
+                        Line line = geomObjTmp as Line;
+                        if (line != null)
+                        {
+                            if (line.Direction.Y == -1 || line.Direction.Y == 1)
+                            {
+                                ElementId styleID = line.GraphicsStyleId;
+                                GraphicsStyle style = doc.GetElement(styleID) as GraphicsStyle;
+                                if (style.Name == supportBoundary || style.Name == pipeCenterLine)
+                                {
+                                    lineList.Add(line);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return lineList;
+        }
+        private static List<Line> GetReferenceOfDetailComponent(Document doc
+            , Element element, View view, string supportBoundary) //获取详图项目尺寸标注参照
+        {
+            List<Line> lineList = new List<Line>();
+            Options options = new Options();
+            options.ComputeReferences = true;
+            options.IncludeNonVisibleObjects = false;
+            if (view != null)
+            {
+                options.View = view;
+            }
+            else
+            {
+                options.DetailLevel = ViewDetailLevel.Fine;
+            }
+
+            var geoElem = element.get_Geometry(options);
+            foreach (var item in geoElem)
+            {
+                GeometryInstance geoInst = item as GeometryInstance;
+                if (geoInst != null)
+                {
+                    GeometryElement geoElemTmp = geoInst.GetSymbolGeometry();
+                    foreach (GeometryObject geomObjTmp in geoElemTmp)
+                    {
+                        Line line = geomObjTmp as Line;
+                        if (line != null)
+                        {
+                            if (line.Direction.X == -1 || line.Direction.X == 1)
+                            {
+                                ElementId styleID = line.GraphicsStyleId;
+                                GraphicsStyle style = doc.GetElement(styleID) as GraphicsStyle;
+                                if (style.Name == supportBoundary)
+                                {
+                                    lineList.Add(line);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return lineList;
+        }
+        public double MaximumDiameter(Document doc, Element element, View view, string pipeOutline) //获取每层直径最大的管道
+        {
+            double max = 0;
+            List<double> arcList = new List<double>();
+
+            Options options = new Options();
+            options.ComputeReferences = true;
+            options.IncludeNonVisibleObjects = false;
+            if (view != null)
+            {
+                options.View = view;
+            }
+            else
+            {
+                options.DetailLevel = ViewDetailLevel.Fine;
+            }
+
+            var geoElem = element.get_Geometry(options);
+            foreach (var item in geoElem)
+            {
+                GeometryInstance geoInst = item as GeometryInstance;
+                if (geoInst != null)
+                {
+                    GeometryElement geoElemTmp = geoInst.GetSymbolGeometry();
+                    foreach (GeometryObject geomObjTmp in geoElemTmp)
+                    {
+                        Arc arc = geomObjTmp as Arc;
+                        if (arc != null)
+                        {
+                            ElementId styleID = arc.GraphicsStyleId;
+                            GraphicsStyle style = doc.GetElement(styleID) as GraphicsStyle;
+                            if (style.Name.Contains(pipeOutline))
+                            {
+                                arcList.Add(arc.Radius);
+                            }
+                        }
+                    }
+                }
+            }
+            arcList.Sort();
+
+            return max = arcList.ElementAt(arcList.Count - 1) * 2;
+        }
+
         public Tuple<int, int, int> PipeDistance(string nominal_Diameter) //管道间距
         {
             int distance1 = 0; //  距墙间距L1

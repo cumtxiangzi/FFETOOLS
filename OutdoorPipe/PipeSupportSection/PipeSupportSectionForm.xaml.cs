@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OutdoorPipe.Properties;
 
 namespace FFETOOLS
 {
@@ -25,6 +26,7 @@ namespace FFETOOLS
                                                                        "DN400", "DN450"};
         List<string> pipeAbbList = new List<string> { "YJ","XJ","XJ1","XJ2", "XH", "XH1", "XH2", "J" ,
                                                                         "XF", "W", "ZJ", "SJ","F" ,"ZS","ZJ", "YW", "YF" };
+        int clickNum = 0;
 
         ExecuteEventPipeSupportSection excCreatPipeSupportSection = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerPipeSupportSection = null;
@@ -51,7 +53,7 @@ namespace FFETOOLS
             OneFloorPipe4_Abb.IsEnabled = false;
             TwoFloorPipe3_Size.IsEnabled = false;
             TwoFloorPipe4_Size.IsEnabled = false;
-            TwoFloorPipe3_Abb.IsEnabled=false;
+            TwoFloorPipe3_Abb.IsEnabled = false;
             TwoFloorPipe4_Abb.IsEnabled = false;
 
             OneFloorPipe1_Size.ItemsSource = pipeSizeList;
@@ -106,14 +108,25 @@ namespace FFETOOLS
             FourFloorPipe2_Size.SelectedIndex = 13;
             FourFloorPipe2_Abb.SelectedIndex = 1;
 
+            if (TypeC_Button.IsChecked == true)
+            {
+                SupportCode.Text = "C1详图";
+                clickNum = Convert.ToInt32(SupportCode.Text.Replace("C","").Replace("详图",""));          
+            }
+
             excCreatPipeSupportSection = new ExecuteEventPipeSupportSection();
             eventHandlerPipeSupportSection = Autodesk.Revit.UI.ExternalEvent.Create(excCreatPipeSupportSection);
         }
         private void OK_Button_Click(object sender, RoutedEventArgs e)
         {
-            eventHandlerPipeSupportSection.Raise();
+            eventHandlerPipeSupportSection.Raise();        
+            if (TypeC_Button.IsChecked == true)
+            {
+                SupportCode.Text = "C" + clickNum.ToString() + "详图";
+            }
+            clickNum++;
             Hide();
-        }     
+        }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)//Esc键  
@@ -121,7 +134,10 @@ namespace FFETOOLS
                 Close();
             }
         }
-
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+        
+        }
         private void OneFloor_Click(object sender, RoutedEventArgs e)
         {
             if (OneFloor.IsChecked == true)
@@ -246,8 +262,8 @@ namespace FFETOOLS
 
         private void TwoFloorPipe1_Checked(object sender, RoutedEventArgs e)
         {
-            TwoFloorPipe1_Size.IsEnabled=true;
-            TwoFloorPipe1_Abb.IsEnabled=true;
+            TwoFloorPipe1_Size.IsEnabled = true;
+            TwoFloorPipe1_Abb.IsEnabled = true;
         }
 
         private void TwoFloorPipe2_Checked(object sender, RoutedEventArgs e)
@@ -270,7 +286,7 @@ namespace FFETOOLS
 
         private void TwoFloorPipe1_Unchecked(object sender, RoutedEventArgs e)
         {
-            TwoFloorPipe1_Size.IsEnabled =false;
+            TwoFloorPipe1_Size.IsEnabled = false;
             TwoFloorPipe1_Abb.IsEnabled = false;
         }
 
@@ -294,8 +310,8 @@ namespace FFETOOLS
 
         private void ThreeFloorPipe1_Checked(object sender, RoutedEventArgs e)
         {
-            ThreeFloorPipe1_Size.IsEnabled=true;
-            ThreeFloorPipe1_Abb.IsEnabled=true;
+            ThreeFloorPipe1_Size.IsEnabled = true;
+            ThreeFloorPipe1_Abb.IsEnabled = true;
         }
 
         private void ThreeFloorPipe2_Checked(object sender, RoutedEventArgs e)
@@ -330,7 +346,7 @@ namespace FFETOOLS
 
         private void FourFloorPipe1_Unchecked(object sender, RoutedEventArgs e)
         {
-            FourFloorPipe1_Size.IsEnabled =false;
+            FourFloorPipe1_Size.IsEnabled = false;
             FourFloorPipe1_Abb.IsEnabled = false;
         }
 
@@ -339,7 +355,5 @@ namespace FFETOOLS
             FourFloorPipe2_Size.IsEnabled = false;
             FourFloorPipe2_Abb.IsEnabled = false;
         }
-
-       
     }
 }
