@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
         Title="管道支架剖面" Name="MainWindow" Height="550" Width="820" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
-        Loaded="MainWindow_Loaded" KeyDown="MainWindow_KeyDown" Closed="MainWindow_Closed">
+        Loaded="MainWindow_Loaded" KeyDown="MainWindow_KeyDown" >
 
     <Grid>
         <Grid.ColumnDefinitions>

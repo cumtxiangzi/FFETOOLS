@@ -93,6 +93,7 @@ namespace FFETOOLS
                 trans.Start();
                 DetailDrawingFamilyLoad(doc, "C型支架");
                 DetailDrawingTitleLoad(doc, "图名");
+                DetailDrawingTitleLoad(doc, "支架剖面管道标注");
 
                 trans.Commit();
             }
@@ -110,10 +111,25 @@ namespace FFETOOLS
 
                 trans.Commit();
             }
-            using (Transaction trans = new Transaction(doc, "创建图名"))
+            using (Transaction trans = new Transaction(doc, "创建图名及管道信息标注"))
             {
                 trans.Start();
-                CreatTitle(doc, pickpoint, typeC_Section);
+                if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
+                {
+                    CreatTitle(doc, pickpoint, typeC_Section);
+                    if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+                    {
+                        CreatOneFloorPipeNote(doc,typeC_Section);
+                    }
+                    else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+                    {
+                        CreatOneFloorPipeNote(doc, typeC_Section);
+                    }
+                }
+
+
+
+
 
                 trans.Commit();
             }
@@ -161,6 +177,7 @@ namespace FFETOOLS
             }
 
             tg.Assimilate();
+            PipeSupportSection.mainfrm.SupportCode.Text = PipeSupportSection.mainfrm.name.Insert(1, PipeSupportSection.mainfrm.clickNum.ToString());
             PipeSupportSection.mainfrm.Show();
         }
         public void ModifyParameter(FamilyInstance sectionInstance) //修改参数
@@ -393,6 +410,60 @@ namespace FFETOOLS
                                                      PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 - 100).ToString());
             }
         }
+        public void CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //创建一层全部管道信息标注
+        {
+
+            string oneFloorPipe1_Size = PipeSupportSection.mainfrm.OneFloorPipe1_Size.SelectedItem.ToString();
+            string oneFloorPipe2_Size = PipeSupportSection.mainfrm.OneFloorPipe2_Size.SelectedItem.ToString();
+            string oneFloorPipe3_Size = PipeSupportSection.mainfrm.OneFloorPipe3_Size.SelectedItem.ToString();
+            string oneFloorPipe4_Size = PipeSupportSection.mainfrm.OneFloorPipe4_Size.SelectedItem.ToString();
+
+            string oneFloorPipe1_Abb = PipeSupportSection.mainfrm.OneFloorPipe1_Abb.SelectedItem.ToString();
+            string oneFloorPipe2_Abb = PipeSupportSection.mainfrm.OneFloorPipe2_Abb.SelectedItem.ToString();
+            string oneFloorPipe3_Abb = PipeSupportSection.mainfrm.OneFloorPipe3_Abb.SelectedItem.ToString();
+            string oneFloorPipe4_Abb = PipeSupportSection.mainfrm.OneFloorPipe4_Abb.SelectedItem.ToString();
+
+            bool oneFloorPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorPipe1.IsChecked;
+            bool oneFloorPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorPipe2.IsChecked;
+            bool oneFloorPipe3_Check = (bool)PipeSupportSection.mainfrm.OneFloorPipe3.IsChecked;
+            bool oneFloorPipe4_Check = (bool)PipeSupportSection.mainfrm.OneFloorPipe4.IsChecked;
+
+            string oneFloorPipe1_Weight = PipeWeight(oneFloorPipe1_Size);
+            string oneFloorPipe2_Weight = PipeWeight(oneFloorPipe2_Size);
+            string oneFloorPipe3_Weight = PipeWeight(oneFloorPipe3_Size);
+            string oneFloorPipe4_Weight = PipeWeight(oneFloorPipe4_Size);
+
+            if (oneFloorPipe1_Check && !oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层管道");
+                double length = typeC_Section.LookupParameter("一层管道1距墙净距L1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorPipe1_Abb + "-" + oneFloorPipe1_Size, PipeWeight(oneFloorPipe1_Size));
+            }
+            else if (oneFloorPipe1_Check && oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层管道");
+                double length1 = typeC_Section.LookupParameter("一层管道1距墙净距L1").AsDouble();
+                double length2 = typeC_Section.LookupParameter("一层管道1与管道2中心间距").AsDouble();
+                XYZ instancePoint1 = new XYZ(positionList.ElementAt(0).X + length2, positionList.ElementAt(0).Y - length2 * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                XYZ instancePoint2 = new XYZ(positionList.ElementAt(1).X + length2, positionList.ElementAt(1).Y - length2 * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint1, typeC_Section, oneFloorPipe1_Abb + "-" + oneFloorPipe1_Size, PipeWeight(oneFloorPipe1_Size));
+                CreatPipeNote(doc, positionList.ElementAt(1), instancePoint2, typeC_Section, oneFloorPipe2_Abb + "-" + oneFloorPipe2_Size, PipeWeight(oneFloorPipe2_Size));
+            }
+            else if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层管道");
+                double length1 = typeC_Section.LookupParameter("一层管道1距墙净距L1").AsDouble();
+                double length2 = typeC_Section.LookupParameter("一层管道1与管道2中心间距").AsDouble();
+                double length3 = typeC_Section.LookupParameter("一层管道2与管道3中心间距").AsDouble();
+                XYZ instancePoint1 = new XYZ(positionList.ElementAt(0).X + length2, positionList.ElementAt(0).Y - length2 * Math.Tan(60 * Math.PI / 180) - 240 / 304.8, 0);
+                XYZ instancePoint2 = new XYZ(positionList.ElementAt(1).X + length2, positionList.ElementAt(1).Y - length2 * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                XYZ instancePoint3 = new XYZ(positionList.ElementAt(2).X + length3, positionList.ElementAt(2).Y - length3 * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint1, typeC_Section, oneFloorPipe1_Abb + "-" + oneFloorPipe1_Size, PipeWeight(oneFloorPipe1_Size));
+                CreatPipeNote(doc, positionList.ElementAt(1), instancePoint2, typeC_Section, oneFloorPipe2_Abb + "-" + oneFloorPipe2_Size, PipeWeight(oneFloorPipe2_Size));
+                CreatPipeNote(doc, positionList.ElementAt(2), instancePoint3, typeC_Section, oneFloorPipe3_Abb + "-" + oneFloorPipe3_Size, PipeWeight(oneFloorPipe3_Size));
+            }
+        }
         public bool HaveBrace(string nominal_Diameter) //单管是否有斜撑
         {
             bool haveBrace = false;
@@ -452,6 +523,20 @@ namespace FFETOOLS
             typeC_Title = doc.Create.NewFamilyInstance(titlePosition, typeC_TitleSymbol, doc.ActiveView);
             typeC_Title.LookupParameter("标题名称").Set(PipeSupportSection.mainfrm.SupportCode.Text);
             typeC_Title.LookupParameter("横线长度").SetValueString((PipeSupportSection.mainfrm.SupportCode.Text.Length * 5 + 10).ToString());
+        }
+        public void CreatPipeNote(Document doc, XYZ leaderPoint, XYZ instancePoint, FamilyInstance typeC_Section, string pipeAbb, string pipeWeight)//创建管道信息标注
+        {
+            FamilySymbol typeC_NoteSymbol = null;
+            AnnotationSymbol typeC_Note = null;
+            typeC_NoteSymbol = TitleSymbol(doc, "支架剖面管道标注");
+            typeC_NoteSymbol.Activate();
+            typeC_Note = doc.Create.NewFamilyInstance(instancePoint, typeC_NoteSymbol, doc.ActiveView) as AnnotationSymbol;
+            typeC_Note.LookupParameter("管道类型及尺寸").Set(pipeAbb);
+            typeC_Note.LookupParameter("管道重量").Set(pipeWeight);
+            typeC_Note.addLeader();
+            IList<Leader> leadList = typeC_Note.GetLeaders();
+            Leader lead = leadList[0];
+            lead.End = leaderPoint;
         }
         public void CreatDimensionX(Document doc, FamilyInstance section, string supportBoundary, string pipeCenterLine, XYZ pickPoint) //创建X方向尺寸标注
         {
@@ -642,7 +727,49 @@ namespace FFETOOLS
 
             return max = arcList.ElementAt(arcList.Count - 1) * 2;
         }
+        public List<XYZ> PipeCenterPosition(Document doc, FamilyInstance element, View view, string pipeOutline)//获取管道中心定位
+        {
 
+            List<XYZ> arcList = new List<XYZ>();
+
+            Options options = new Options();
+            options.ComputeReferences = true;
+            options.IncludeNonVisibleObjects = false;
+            if (view != null)
+            {
+                options.View = view;
+            }
+            else
+            {
+                options.DetailLevel = ViewDetailLevel.Fine;
+            }
+
+            var geoElem = element.get_Geometry(options);
+            foreach (var item in geoElem)
+            {
+                GeometryInstance geoInst = item as GeometryInstance;
+                if (geoInst != null)
+                {
+                    GeometryElement geoElemTmp = geoInst.GetSymbolGeometry();
+                    foreach (GeometryObject geomObjTmp in geoElemTmp)
+                    {
+                        Arc arc = geomObjTmp as Arc;
+                        if (arc != null)
+                        {
+                            ElementId styleID = arc.GraphicsStyleId;
+                            GraphicsStyle style = doc.GetElement(styleID) as GraphicsStyle;
+                            if (style.Name.Contains(pipeOutline))
+                            {
+                                Transform trans = element.GetTransform();
+                                arcList.Add(trans.OfPoint(arc.Center));
+                            }
+                        }
+                    }
+                }
+            }
+            //arcList.Sort();
+            return arcList;
+        }
         public Tuple<int, int, int> PipeDistance(string nominal_Diameter) //管道间距
         {
             int distance1 = 0; //  距墙间距L1
@@ -930,6 +1057,153 @@ namespace FFETOOLS
                 }
             }
             return symbol;
+        }
+        public string PipeWeight(string nominal_Diameter) //管道重量
+        {
+            string weight = null;
+            if (PipeSupportSection.mainfrm.Insulation.IsChecked == true)
+            {
+                if (nominal_Diameter == "DN15")
+                {
+                    weight = "3.3";
+                }
+                else if (nominal_Diameter == "DN20")
+                {
+                    weight = "4.0";
+                }
+                else if (nominal_Diameter == "DN25")
+                {
+                    weight = "5.3";
+                }
+                else if (nominal_Diameter == "DN32")
+                {
+                    weight = "6.7";
+                }
+                else if (nominal_Diameter == "DN40")
+                {
+                    weight = "7.9";
+                }
+                else if (nominal_Diameter == "DN50")
+                {
+                    weight = "10.3";
+                }
+                else if (nominal_Diameter == "DN65")
+                {
+                    weight = "14.2";
+                }
+                else if (nominal_Diameter == "DN80")
+                {
+                    weight = "17.8";
+                }
+                else if (nominal_Diameter == "DN100")
+                {
+                    weight = "25.3";
+                }
+                else if (nominal_Diameter == "DN125")
+                {
+                    weight = "34.0";
+                }
+                else if (nominal_Diameter == "DN150")
+                {
+                    weight = "45.3";
+                }
+                else if (nominal_Diameter == "DN200")
+                {
+                    weight = "77.6";
+                }
+                else if (nominal_Diameter == "DN250")
+                {
+                    weight = "112.4";
+                }
+                else if (nominal_Diameter == "DN300")
+                {
+                    weight = "155.7";
+                }
+                else if (nominal_Diameter == "DN350")
+                {
+                    weight = "211.0";
+                }
+                else if (nominal_Diameter == "DN400")
+                {
+                    weight = "255.8";
+                }
+                else if (nominal_Diameter == "DN450")
+                {
+                    weight = "295.7";
+                }
+            }
+            else
+            {
+                if (nominal_Diameter == "DN15")
+                {
+                    weight = "1.7";
+                }
+                else if (nominal_Diameter == "DN20")
+                {
+                    weight = "2.2";
+                }
+                else if (nominal_Diameter == "DN25")
+                {
+                    weight = "3.3";
+                }
+                else if (nominal_Diameter == "DN32")
+                {
+                    weight = "4.6";
+                }
+                else if (nominal_Diameter == "DN40")
+                {
+                    weight = "5.7";
+                }
+                else if (nominal_Diameter == "DN50")
+                {
+                    weight = "7.8";
+                }
+                else if (nominal_Diameter == "DN65")
+                {
+                    weight = "11.3";
+                }
+                else if (nominal_Diameter == "DN80")
+                {
+                    weight = "14.8";
+                }
+                else if (nominal_Diameter == "DN100")
+                {
+                    weight = "21.7";
+                }
+                else if (nominal_Diameter == "DN125")
+                {
+                    weight = "29.9";
+                }
+                else if (nominal_Diameter == "DN150")
+                {
+                    weight = "40.7";
+                }
+                else if (nominal_Diameter == "DN200")
+                {
+                    weight = "71.8";
+                }
+                else if (nominal_Diameter == "DN250")
+                {
+                    weight = "105.5";
+                }
+                else if (nominal_Diameter == "DN300")
+                {
+                    weight = "147.7";
+                }
+                else if (nominal_Diameter == "DN350")
+                {
+                    weight = "201.9";
+                }
+                else if (nominal_Diameter == "DN400")
+                {
+                    weight = "245.7";
+                }
+                else if (nominal_Diameter == "DN450")
+                {
+                    weight = "284.8";
+                }
+            }
+            return weight;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +27,8 @@ namespace FFETOOLS
                                                                        "DN400", "DN450"};
         List<string> pipeAbbList = new List<string> { "YJ","XJ","XJ1","XJ2", "XH", "XH1", "XH2", "J" ,
                                                                         "XF", "W", "ZJ", "SJ","F" ,"ZS","ZJ", "YW", "YF" };
-        int clickNum = 0;
+        public int clickNum = 1;
+        public string name = null;
 
         ExecuteEventPipeSupportSection excCreatPipeSupportSection = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerPipeSupportSection = null;
@@ -111,7 +113,6 @@ namespace FFETOOLS
             if (TypeC_Button.IsChecked == true)
             {
                 SupportCode.Text = "C1详图";
-                clickNum = Convert.ToInt32(SupportCode.Text.Replace("C","").Replace("详图",""));          
             }
 
             excCreatPipeSupportSection = new ExecuteEventPipeSupportSection();
@@ -119,10 +120,13 @@ namespace FFETOOLS
         }
         private void OK_Button_Click(object sender, RoutedEventArgs e)
         {
-            eventHandlerPipeSupportSection.Raise();        
+            eventHandlerPipeSupportSection.Raise();
             if (TypeC_Button.IsChecked == true)
             {
-                SupportCode.Text = "C" + clickNum.ToString() + "详图";
+                string result = Regex.Replace(SupportCode.Text, @"[^0-9]+", ""); //只保留数字
+                name = SupportCode.Text.Replace(result, "");
+                clickNum = Convert.ToInt32(result);
+                SupportCode.Text = name.Insert(1, clickNum.ToString());
             }
             clickNum++;
             Hide();
@@ -133,10 +137,6 @@ namespace FFETOOLS
             {
                 Close();
             }
-        }
-        private void MainWindow_Closed(object sender, EventArgs e)
-        {
-        
         }
         private void OneFloor_Click(object sender, RoutedEventArgs e)
         {
@@ -355,5 +355,7 @@ namespace FFETOOLS
             FourFloorPipe2_Size.IsEnabled = false;
             FourFloorPipe2_Abb.IsEnabled = false;
         }
+
+
     }
 }
