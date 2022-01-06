@@ -111,28 +111,6 @@ namespace FFETOOLS
 
                 trans.Commit();
             }
-            using (Transaction trans = new Transaction(doc, "创建图名及管道信息标注"))
-            {
-                trans.Start();
-                if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
-                {
-                    CreatTitle(doc, pickpoint, typeC_Section);
-                    if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
-                    {
-                        CreatOneFloorPipeNote(doc,typeC_Section);
-                    }
-                    else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
-                    {
-                        CreatOneFloorPipeNote(doc, typeC_Section);
-                    }
-                }
-
-
-
-
-
-                trans.Commit();
-            }
             using (Transaction trans = new Transaction(doc, "创建尺寸标注"))
             {
                 trans.Start();
@@ -171,7 +149,24 @@ namespace FFETOOLS
                         CreatDimensionY(doc, typeC_Section, "一层支架边界线", dimPosition3);
                     }
                 }
-
+                trans.Commit();
+            }
+            using (Transaction trans = new Transaction(doc, "创建图名及管道信息标注"))
+            {
+                trans.Start();
+                if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
+                {
+                    CreatTitle(doc, pickpoint, typeC_Section);
+                    if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+                    {
+                        CreatOneFloorPipeNote(doc, typeC_Section);
+                    }
+                    else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+                    {
+                        CreatOneFloorPipeNote(doc, typeC_Section);
+                        CreatTwoFloorPipeNote(doc, typeC_Section);
+                    }
+                }
 
                 trans.Commit();
             }
@@ -196,11 +191,9 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("二层管道3可见性").Set(0);
                 sectionInstance.LookupParameter("二层管道4可见性").Set(0);
                 OneFloorPipeSection(sectionInstance);
-
             }
             else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
             {
-                OneFloorPipeSection(sectionInstance);
                 TwoFloorPipeSection(sectionInstance);
             }
         }
@@ -322,16 +315,113 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("二层管道4可见性").Set(0);
                 sectionInstance.LookupParameter("二层管道1距墙净距L1").SetValueString(PipeDistance(twoFloorPipe1_Size).Item1.ToString());
 
-                if (HaveBrace(twoFloorPipe1_Size))
+                if (oneFloorPipe1_Check && !oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
                 {
-                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
-                    TwoFloorPipeSet(sectionInstance, oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size, oneFloorPipe4_Size,
-                                             oneFloorPipe1_Check, oneFloorPipe2_Check, oneFloorPipe3_Check, oneFloorPipe4_Check);
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道2可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道3可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+
+                    if (HaveBrace(oneFloorPipe1_Size) || HaveBrace(twoFloorPipe1_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3).ToString());
+                    }
                 }
-                else
+
+                if (oneFloorPipe1_Check && oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
                 {
-                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
-                    sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3).ToString());
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道直径D2").SetValueString(oneFloorPipe2_Size);
+                    sectionInstance.LookupParameter("一层管道3可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                    sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistance(oneFloorPipe1_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item2 / 2).ToString());
+
+                    if (HaveBrace(oneFloorPipe1_Size, oneFloorPipe2_Size) || HaveBrace(twoFloorPipe1_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3).ToString());
+                    }
+                }
+
+                if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && !oneFloorPipe4_Check)
+                {
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道直径D2").SetValueString(oneFloorPipe2_Size);
+                    sectionInstance.LookupParameter("一层管道直径D3").SetValueString(oneFloorPipe3_Size);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                    sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistance(oneFloorPipe1_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item2 / 2).ToString());
+                    sectionInstance.LookupParameter("一层管道2与管道3中心间距").SetValueString((PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2).ToString());
+
+                    if (HaveBrace(oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size) || HaveBrace(twoFloorPipe1_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3).ToString());
+                    }
                 }
             }
             else if (twoFloorPipe1_Check && twoFloorPipe2_Check && !twoFloorPipe3_Check && !twoFloorPipe4_Check)
@@ -343,17 +433,119 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("二层管道1距墙净距L1").SetValueString(PipeDistance(twoFloorPipe1_Size).Item1.ToString());
                 sectionInstance.LookupParameter("二层管道1与管道2中心间距").SetValueString((PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2).ToString());
 
-                if (HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size))
+                if (oneFloorPipe1_Check && !oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
                 {
-                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
-                    TwoFloorPipeSet(sectionInstance, oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size, oneFloorPipe4_Size,
-                                            oneFloorPipe1_Check, oneFloorPipe2_Check, oneFloorPipe3_Check, oneFloorPipe4_Check);
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道2可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道3可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+
+                    if (HaveBrace(oneFloorPipe1_Size) || HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item3).ToString());
+                    }
                 }
-                else
+
+                if (oneFloorPipe1_Check && oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
                 {
-                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
-                    sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
-                                                                                                                      PipeDistance(twoFloorPipe2_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item3).ToString());
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道直径D2").SetValueString(oneFloorPipe2_Size);
+                    sectionInstance.LookupParameter("一层管道3可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                    sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistance(oneFloorPipe1_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item2 / 2).ToString());
+
+                    if (HaveBrace(oneFloorPipe1_Size, oneFloorPipe2_Size) || HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item3).ToString());
+                    }
+                }
+
+                if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && !oneFloorPipe4_Check)
+                {
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道直径D2").SetValueString(oneFloorPipe2_Size);
+                    sectionInstance.LookupParameter("一层管道直径D3").SetValueString(oneFloorPipe3_Size);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                    sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistance(oneFloorPipe1_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item2 / 2).ToString());
+                    sectionInstance.LookupParameter("一层管道2与管道3中心间距").SetValueString((PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2).ToString());
+
+                    if (HaveBrace(oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size) || HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item3).ToString());
+                    }
                 }
 
             }
@@ -367,47 +559,120 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("二层管道1与管道2中心间距").SetValueString((PipeDistance(twoFloorPipe1_Size).Item2 / 2 + PipeDistance(twoFloorPipe2_Size).Item2 / 2).ToString());
                 sectionInstance.LookupParameter("二层管道2与管道3中心间距").SetValueString((PipeDistance(twoFloorPipe2_Size).Item2 / 2 + PipeDistance(twoFloorPipe3_Size).Item2 / 2).ToString());
 
-                if (HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size, twoFloorPipe3_Size))
+                if (oneFloorPipe1_Check && !oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
                 {
-                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
-                    TwoFloorPipeSet(sectionInstance, oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size, oneFloorPipe4_Size,
-                                            oneFloorPipe1_Check, oneFloorPipe2_Check, oneFloorPipe3_Check, oneFloorPipe4_Check);
-                }
-                else
-                {
-                    sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
-                    sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
-                                                                                                                     PipeDistance(twoFloorPipe2_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item3).ToString());
-                }
-            }
-        }
-        public void TwoFloorPipeSet(FamilyInstance sectionInstance, string oneFloorPipe1_Size, string oneFloorPipe2_Size, string oneFloorPipe3_Size, string oneFloorPipe4_Size,
-                                                 bool oneFloorPipe1_Check, bool oneFloorPipe2_Check, bool oneFloorPipe3_Check, bool oneFloorPipe4_Check) // 二层管道时一层管道支架长度设置
-        {
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道2可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道3可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
 
-            if (oneFloorPipe1_Check && !oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
-            {
-                sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 + 100).ToString());
-                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 + 100).ToString());
-                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 - 100).ToString());
-            }
-            if (oneFloorPipe1_Check && oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
-            {
-                sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
-                                                      PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 + 100).ToString());
-                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
-                                                      PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 + 100).ToString());
-                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
-                                                      PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 - 100).ToString());
-            }
-            if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && !oneFloorPipe4_Check)
-            {
-                sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
-                                                      PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 + 100).ToString());
-                sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
-                                                      PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 + 100).ToString());
-                sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
-                                                     PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 - 100).ToString());
+                    if (HaveBrace(oneFloorPipe1_Size) || HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size, twoFloorPipe3_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item2 / 2 + PipeDistance(twoFloorPipe3_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item2 / 2 + PipeDistance(twoFloorPipe3_Size).Item3).ToString());
+                    }
+                }
+
+                if (oneFloorPipe1_Check && oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
+                {
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道直径D2").SetValueString(oneFloorPipe2_Size);
+                    sectionInstance.LookupParameter("一层管道3可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                    sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistance(oneFloorPipe1_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item2 / 2).ToString());
+
+                    if (HaveBrace(oneFloorPipe1_Size, oneFloorPipe2_Size) || HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size, twoFloorPipe3_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item2 / 2 + PipeDistance(twoFloorPipe3_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item2 / 2 + PipeDistance(twoFloorPipe3_Size).Item3).ToString());
+                    }
+                }
+
+                if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && !oneFloorPipe4_Check)
+                {
+                    sectionInstance.LookupParameter("一层管道直径D1").SetValueString(oneFloorPipe1_Size);
+                    sectionInstance.LookupParameter("一层管道直径D2").SetValueString(oneFloorPipe2_Size);
+                    sectionInstance.LookupParameter("一层管道直径D3").SetValueString(oneFloorPipe3_Size);
+                    sectionInstance.LookupParameter("一层管道4可见性").Set(0);
+                    sectionInstance.LookupParameter("一层管道1距墙净距L1").SetValueString(PipeDistance(oneFloorPipe1_Size).Item1.ToString());
+                    sectionInstance.LookupParameter("一层管道1与管道2中心间距").SetValueString((PipeDistance(oneFloorPipe1_Size).Item2 / 2 + PipeDistance(oneFloorPipe2_Size).Item2 / 2).ToString());
+                    sectionInstance.LookupParameter("一层管道2与管道3中心间距").SetValueString((PipeDistance(oneFloorPipe2_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2).ToString());
+
+                    if (HaveBrace(oneFloorPipe1_Size, oneFloorPipe2_Size, oneFloorPipe3_Size) || HaveBrace(twoFloorPipe1_Size, twoFloorPipe2_Size, twoFloorPipe3_Size))
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(1);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(1);
+
+                        double width1 = PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3;
+                        double width2 = PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item2 / 2 + PipeDistance(twoFloorPipe3_Size).Item3;
+                        double width = width1 > width2 ? width1 : width2;
+
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((width + 100).ToString());
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((width - 0).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString((width - 150).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((width + 100).ToString());
+
+                    }
+                    else
+                    {
+                        sectionInstance.LookupParameter("二层支架竖撑显隐").Set(0);
+                        sectionInstance.LookupParameter("斜撑显隐").Set(0);
+                        sectionInstance.LookupParameter("支架底部膨胀螺栓定位H1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3 - 100).ToString());
+                        sectionInstance.LookupParameter("斜撑净宽B").SetValueString("400");
+                        sectionInstance.LookupParameter("一层支架长L1").SetValueString((PipeDistance(oneFloorPipe1_Size).Item1 + PipeDistance(oneFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(oneFloorPipe2_Size).Item2 + PipeDistance(oneFloorPipe3_Size).Item2 / 2 + PipeDistance(oneFloorPipe3_Size).Item3).ToString());
+                        sectionInstance.LookupParameter("二层支架长L2").SetValueString((PipeDistance(twoFloorPipe1_Size).Item1 + PipeDistance(twoFloorPipe1_Size).Item2 / 2 +
+                                                PipeDistance(twoFloorPipe2_Size).Item2 + PipeDistance(twoFloorPipe3_Size).Item2 / 2 + PipeDistance(twoFloorPipe3_Size).Item3).ToString());
+                    }
+                }
             }
         }
         public void CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //创建一层全部管道信息标注
@@ -462,6 +727,59 @@ namespace FFETOOLS
                 CreatPipeNote(doc, positionList.ElementAt(0), instancePoint1, typeC_Section, oneFloorPipe1_Abb + "-" + oneFloorPipe1_Size, PipeWeight(oneFloorPipe1_Size));
                 CreatPipeNote(doc, positionList.ElementAt(1), instancePoint2, typeC_Section, oneFloorPipe2_Abb + "-" + oneFloorPipe2_Size, PipeWeight(oneFloorPipe2_Size));
                 CreatPipeNote(doc, positionList.ElementAt(2), instancePoint3, typeC_Section, oneFloorPipe3_Abb + "-" + oneFloorPipe3_Size, PipeWeight(oneFloorPipe3_Size));
+            }
+        }
+        public void CreatTwoFloorPipeNote(Document doc, FamilyInstance typeC_Section) //创建二层全部管道信息标注
+        {
+            string twoFloorPipe1_Size = PipeSupportSection.mainfrm.TwoFloorPipe1_Size.SelectedItem.ToString();
+            string twoFloorPipe2_Size = PipeSupportSection.mainfrm.TwoFloorPipe2_Size.SelectedItem.ToString();
+            string twoFloorPipe3_Size = PipeSupportSection.mainfrm.TwoFloorPipe3_Size.SelectedItem.ToString();
+            string twoFloorPipe4_Size = PipeSupportSection.mainfrm.TwoFloorPipe4_Size.SelectedItem.ToString();
+
+            string twoFloorPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorPipe1_Abb.SelectedItem.ToString();
+            string twoFloorPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorPipe2_Abb.SelectedItem.ToString();
+            string twoFloorPipe3_Abb = PipeSupportSection.mainfrm.TwoFloorPipe3_Abb.SelectedItem.ToString();
+            string twoFloorPipe4_Abb = PipeSupportSection.mainfrm.TwoFloorPipe4_Abb.SelectedItem.ToString();
+
+            bool twoFloorPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorPipe1.IsChecked;
+            bool twoFloorPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorPipe2.IsChecked;
+            bool twoFloorPipe3_Check = (bool)PipeSupportSection.mainfrm.TwoFloorPipe3.IsChecked;
+            bool twoFloorPipe4_Check = (bool)PipeSupportSection.mainfrm.TwoFloorPipe4.IsChecked;
+
+            string twoFloorPipe1_Weight = PipeWeight(twoFloorPipe1_Size);
+            string twoFloorPipe2_Weight = PipeWeight(twoFloorPipe2_Size);
+            string twoFloorPipe3_Weight = PipeWeight(twoFloorPipe3_Size);
+            string twoFloorPipe4_Weight = PipeWeight(twoFloorPipe4_Size);
+
+            if (twoFloorPipe1_Check && !twoFloorPipe2_Check && !twoFloorPipe3_Check && !twoFloorPipe4_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层管道");
+                double length = typeC_Section.LookupParameter("二层管道1距墙净距L1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorPipe1_Abb + "-" + twoFloorPipe1_Size, PipeWeight(twoFloorPipe1_Size));
+            }
+            else if (twoFloorPipe1_Check && twoFloorPipe2_Check && !twoFloorPipe3_Check && !twoFloorPipe4_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层管道");
+                double length1 = typeC_Section.LookupParameter("二层管道1距墙净距L1").AsDouble();
+                double length2 = typeC_Section.LookupParameter("二层管道1与管道2中心间距").AsDouble();
+                XYZ instancePoint1 = new XYZ(positionList.ElementAt(0).X + length2, positionList.ElementAt(0).Y + length2 * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                XYZ instancePoint2 = new XYZ(positionList.ElementAt(1).X + length2, positionList.ElementAt(1).Y + length2 * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint1, typeC_Section, twoFloorPipe1_Abb + "-" + twoFloorPipe1_Size, PipeWeight(twoFloorPipe1_Size));
+                CreatPipeNote(doc, positionList.ElementAt(1), instancePoint2, typeC_Section, twoFloorPipe2_Abb + "-" + twoFloorPipe2_Size, PipeWeight(twoFloorPipe2_Size));
+            }
+            else if (twoFloorPipe1_Check && twoFloorPipe2_Check && twoFloorPipe3_Check && !twoFloorPipe4_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层管道");
+                double length1 = typeC_Section.LookupParameter("二层管道1距墙净距L1").AsDouble();
+                double length2 = typeC_Section.LookupParameter("二层管道1与管道2中心间距").AsDouble();
+                double length3 = typeC_Section.LookupParameter("二层管道2与管道3中心间距").AsDouble();
+                XYZ instancePoint1 = new XYZ(positionList.ElementAt(0).X + length2, positionList.ElementAt(0).Y + length2 * Math.Tan(60 * Math.PI / 180) + 240 / 304.8, 0);
+                XYZ instancePoint2 = new XYZ(positionList.ElementAt(1).X + length2, positionList.ElementAt(1).Y + length2 * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                XYZ instancePoint3 = new XYZ(positionList.ElementAt(2).X + length3, positionList.ElementAt(2).Y + length3 * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint1, typeC_Section, twoFloorPipe1_Abb + "-" + twoFloorPipe1_Size, PipeWeight(twoFloorPipe1_Size));
+                CreatPipeNote(doc, positionList.ElementAt(1), instancePoint2, typeC_Section, twoFloorPipe2_Abb + "-" + twoFloorPipe2_Size, PipeWeight(twoFloorPipe2_Size));
+                CreatPipeNote(doc, positionList.ElementAt(2), instancePoint3, typeC_Section, twoFloorPipe3_Abb + "-" + twoFloorPipe3_Size, PipeWeight(twoFloorPipe3_Size));
             }
         }
         public bool HaveBrace(string nominal_Diameter) //单管是否有斜撑
@@ -541,6 +859,11 @@ namespace FFETOOLS
         public void CreatDimensionX(Document doc, FamilyInstance section, string supportBoundary, string pipeCenterLine, XYZ pickPoint) //创建X方向尺寸标注
         {
             List<Line> lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, supportBoundary, pipeCenterLine);
+            if (section.LookupParameter("二层支架竖撑显隐").AsInteger() == 1)
+            {
+                lineList.RemoveAt(0);
+            }
+
             ReferenceArray refArray = new ReferenceArray();
             foreach (Line item in lineList)
             {
