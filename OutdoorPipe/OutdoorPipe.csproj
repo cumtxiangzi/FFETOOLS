@@ -68,12 +68,15 @@
     <Compile Include="3DMeasure.cs" />
     <Compile Include="AdjustHeightWell.cs" />
     <Compile Include="Class2.cs" />
+    <Compile Include="CreatWaterFamily\CreatWaterFamilyForm.xaml.cs">
+      <DependentUpon>CreatWaterFamilyForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PipeSupportSection\PipeSupportSectionForm.xaml.cs">
       <DependentUpon>PipeSupportSectionForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="PipeSupportSection\PipeSupportSection.cs" />
     <Compile Include="CommonClass\CommonClass.cs" />
-    <Compile Include="CreatPipeValve\CreatPipeValve.cs" />
+    <Compile Include="CreatWaterFamily\CreatWaterFamily.cs" />
     <Compile Include="RaisePipes\RaisePipesForm.xaml.cs">
       <DependentUpon>RaisePipesForm.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="CreatWaterFamily\CreatWaterFamilyForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="PipeSupportSection\PipeSupportSectionForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -160,6 +167,54 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\C型支架一层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Y型过滤器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\闸阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\止回阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\自动排气阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\电动蝶阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\电动闸阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\蝶阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\减压阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\截止阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\球阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\水力液位控制阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\泄压阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\信号蝶阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\旋塞阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\遥控信号阀.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

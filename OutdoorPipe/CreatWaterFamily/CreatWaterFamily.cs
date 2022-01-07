@@ -17,12 +17,14 @@ using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.DB.Architecture;
+using System.Windows.Interop;
 
 namespace FFETOOLS
 {
     [Transaction(TransactionMode.Manual)]
-    public class CreatPipeValve : IExternalCommand
+    public class CreatWaterFamily : IExternalCommand
     {
+        public static CreatWaterFamilyForm mainfrm;
         public Result Execute(ExternalCommandData commandData, ref string messages, ElementSet elements)
         {
             try
@@ -30,36 +32,65 @@ namespace FFETOOLS
                 UIApplication uiapp = commandData.Application;
                 UIDocument uidoc = uiapp.ActiveUIDocument;
                 Document doc = uidoc.Document;
+                Selection sel = uidoc.Selection;
 
+                mainfrm = new CreatWaterFamilyForm();
+                IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
+                WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
+                helper.Owner = rvtPtr;
+                mainfrm.Show();
+
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+
+            }
+            return Result.Succeeded;
+        }
+    }
+    public class ExecuteCreatWaterFamily : IExternalEventHandler
+    {
+        public void Execute(UIApplication app)
+        {
+            try
+            {
+                UIDocument uidoc = app.ActiveUIDocument;
+                Document doc = app.ActiveUIDocument.Document;
+                Selection sel = app.ActiveUIDocument.Selection;
+                FamilySymbol symbol = null;
                 //TransactionGroup tg = new TransactionGroup(doc, "添加管道附件");
                 //tg.Start();未完成
-
-                FamilySymbol pipeAccessory = null;
-                Pipe p = null;
-
-                using (Transaction trans = new Transaction(doc, "管道附件"))
+                using (Transaction trans = new Transaction(doc, "布置给排水族"))
                 {
                     trans.Start();
-                    ValveFamilyLoad(doc, "蝶形止回阀H77X-10");
-                    ValveFamilyLoad(doc, "微阻缓闭式止回阀HH44X-10");
-                    ValveFamilyLoad(doc, "电动蝶阀D97A1X-10");
-                    ValveFamilyLoad(doc, "蝶阀D97A1X-10");
-
-                    pipeAccessory = PipeAccessorySymbol(doc, "DN200", "蝶阀D37A1X");
-                    pipeAccessory.Activate();
+                    symbol = CreatWaterFamilyMethod(doc, uidoc, sel);
+                    symbol.Activate();
 
                     trans.Commit();
                 }
-                uidoc.PostRequestForElementTypePlacement(pipeAccessory);
-            
-                //tg.Assimilate();
+                uidoc.PostRequestForElementTypePlacement(symbol);
+                //tg.Assimilate();                
             }
-            catch (Exception e)
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
-                messages = e.Message;
-                return Result.Failed;
+
             }
-            return Result.Succeeded;
+        }
+        public string GetName()
+        {
+            return "布置给排水族";
+        }
+        public FamilySymbol CreatWaterFamilyMethod(Document doc, UIDocument uidoc, Selection sel)
+        {
+            ValveFamilyLoad(doc, "蝶形止回阀H77X-10");
+            ValveFamilyLoad(doc, "微阻缓闭式止回阀HH44X-10");
+            ValveFamilyLoad(doc, "电动蝶阀D97A1X-10");
+            ValveFamilyLoad(doc, "蝶阀D97A1X-10");
+
+            FamilySymbol pipeAccessory = null;
+            Pipe p = null;
+            pipeAccessory = PipeAccessorySymbol(doc, "DN50", "蝶阀D37A1X");
+            return pipeAccessory;
         }
         public FamilySymbol PipeAccessorySymbol(Document doc, string dn, string accessoryName)
         {
@@ -86,7 +117,6 @@ namespace FFETOOLS
             }
             return valve;
         }
-
         public void ValveFamilyLoad(Document doc, string categoryName)
         {
             IList<Element> familyCollect = new FilteredElementCollector(doc).OfClass(typeof(Family)).ToElements();
@@ -103,7 +133,6 @@ namespace FFETOOLS
             {
                 doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_阀门_" + categoryName + ".rfa");
             }
-
         }
         public PipeType GetPipeType(Document doc, UIDocument uidoc, string pipeType)
         {
@@ -132,6 +161,5 @@ namespace FFETOOLS
             }
             return pt;
         }
-
     }
 }

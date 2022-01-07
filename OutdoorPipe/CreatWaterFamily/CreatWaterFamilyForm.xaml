@@ -1,0 +1,108 @@
+﻿<Window x:Class="FFETOOLS.CreatWaterFamilyForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FFETOOLS"
+        mc:Ignorable="d"
+        Title="布置给排水族" Name="MainForm" Height="600" Width="435" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen" Loaded="MainForm_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.1*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="族类别" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.8*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <RadioButton x:Name="ValveButton"  Grid.Column="0" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="阀门" Click="ValveButton_Click"  />
+                <RadioButton x:Name="MeterButton" Grid.Column="1" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="仪表" Click="MeterButton_Click"  />
+                <RadioButton x:Name="J_AccessoriesButton"  Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="给水附件"  />
+                <RadioButton x:Name="W_AccessoriesButton" Grid.Column="3" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="排水附件"  />
+                <RadioButton x:Name="PumpButton"  Grid.Column="0" Grid.Row="1" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="水泵"  />
+                <RadioButton x:Name="WaterTreatButton" Grid.Column="1" Grid.Row="1" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="给水处理设备"  />
+                <RadioButton x:Name="SewageTreatButton"  Grid.Column="2" Grid.Row="1" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="污水处理设备"  />
+                <RadioButton x:Name="FireProtectionButton" Grid.Column="3" Grid.Row="1" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="消防设备"  />
+                <RadioButton x:Name="LiftButton" Grid.Column="0" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="提升检修设备"  />
+                <RadioButton x:Name="CoolingButton" Grid.Column="1" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="冷却设备"  />
+                <RadioButton x:Name="NoteButton" Grid.Column="2" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="注释符号"  />
+            </Grid>
+        </GroupBox>
+
+        <ListView Name="ValveList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="ButterflyValve"  Source="/OutdoorPipe;component/Resources/蝶阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="ButterflyValve_MouseMove" MouseDown="ButterflyValve_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="GateValve" Source="/OutdoorPipe;component/Resources/闸阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="GateValve_MouseMove" MouseDown="GateValve_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="StopValve" Source="/OutdoorPipe;component/Resources/截止阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="StopValve_MouseMove" MouseDown="StopValve_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image  x:Name="E_ButterflyValve" Source="/OutdoorPipe;component/Resources/电动蝶阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="E_ButterflyValve_MouseMove" MouseDown="E_ButterflyValve_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="E_GateValve"  Source="/OutdoorPipe;component/Resources/电动闸阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="E_GateValve_MouseMove" MouseDown="E_GateValve_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image  x:Name="CheckValve" Source="/OutdoorPipe;component/Resources/止回阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="CheckValve_MouseMove" MouseDown="CheckValve_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image  x:Name="VentValve"  Source="/OutdoorPipe;component/Resources/自动排气阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="VentValve_MouseMove" MouseDown="VentValve_MouseDown"/>
+            </ListViewItem>
+
+
+        </ListView>
+
+        <TextBlock x:Name="FamilyName" Text="族名称" Grid.Row="2" Grid.Column="0" Margin="20,10,10,10" FontSize="13" />
+
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="CancelButton" Content="取消" Grid.Row="0" Grid.Column="2" Margin="7"  Cursor="Hand" Click="CancelButton_Click">
+                <Button.Template >
+                    <ControlTemplate TargetType="{x:Type Button}" >
+                        <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                            <Border.Background>LightGray</Border.Background>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+
+    </Grid>
+</Window>
