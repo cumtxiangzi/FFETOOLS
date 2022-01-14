@@ -216,5 +216,119 @@
   <ItemGroup>
     <Resource Include="Resources\遥控信号阀.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PH值传感器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\电磁流量计.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\电接点压力表.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\温度传感器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\压力表.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\压力传感器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\余氯传感器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\真空表.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\转子流量计.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\水流视镜.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\水流指示器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\水表.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\微阻缓闭止回阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\潜水泵.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\温度计.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\涡轮传动蝶阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\螺翼式水表.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\存水弯.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\法兰闸阀.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\管道泵.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\可曲挠橡胶接头.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\水嘴.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\通气帽.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\吸水喇叭口.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\溢流喇叭口.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\圆形地漏.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\检查口.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\清扫口.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\柴油泵.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\单吸泵.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\定压补水.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\管网叠压.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\恒压变频.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\立式泵.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\潜水泵固定式.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\双吸泵.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\长轴泵.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\自吸泵.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

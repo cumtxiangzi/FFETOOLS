@@ -63,7 +63,7 @@ namespace FFETOOLS
                 using (Transaction trans = new Transaction(doc, "布置给排水族"))
                 {
                     trans.Start();
-                    symbol = CreatWaterFamilyMethod(doc, uidoc, sel);
+                    symbol = CreatWaterFamilyMethod(doc, uidoc, sel, CreatWaterFamily.mainfrm.FamilyName.Text);
                     symbol.Activate();
 
                     trans.Commit();
@@ -80,7 +80,7 @@ namespace FFETOOLS
         {
             return "布置给排水族";
         }
-        public FamilySymbol CreatWaterFamilyMethod(Document doc, UIDocument uidoc, Selection sel)
+        public FamilySymbol CreatWaterFamilyMethod(Document doc, UIDocument uidoc, Selection sel, string valveName)
         {
             ValveFamilyLoad(doc, "蝶形止回阀H77X-10");
             ValveFamilyLoad(doc, "微阻缓闭式止回阀HH44X-10");
@@ -89,7 +89,7 @@ namespace FFETOOLS
 
             FamilySymbol pipeAccessory = null;
             Pipe p = null;
-            pipeAccessory = PipeAccessorySymbol(doc, "DN50", "蝶阀D37A1X");
+            pipeAccessory = PipeAccessorySymbol(doc, "DN100", valveName);
             return pipeAccessory;
         }
         public FamilySymbol PipeAccessorySymbol(Document doc, string dn, string accessoryName)

@@ -32,15 +32,13 @@
                 </Grid.RowDefinitions>
                 <RadioButton x:Name="ValveButton"  Grid.Column="0" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="阀门" Click="ValveButton_Click"  />
                 <RadioButton x:Name="MeterButton" Grid.Column="1" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="仪表" Click="MeterButton_Click"  />
-                <RadioButton x:Name="J_AccessoriesButton"  Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="给水附件"  />
-                <RadioButton x:Name="W_AccessoriesButton" Grid.Column="3" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="排水附件"  />
-                <RadioButton x:Name="PumpButton"  Grid.Column="0" Grid.Row="1" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="水泵"  />
-                <RadioButton x:Name="WaterTreatButton" Grid.Column="1" Grid.Row="1" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="给水处理设备"  />
-                <RadioButton x:Name="SewageTreatButton"  Grid.Column="2" Grid.Row="1" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="污水处理设备"  />
-                <RadioButton x:Name="FireProtectionButton" Grid.Column="3" Grid.Row="1" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="消防设备"  />
-                <RadioButton x:Name="LiftButton" Grid.Column="0" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="提升检修设备"  />
-                <RadioButton x:Name="CoolingButton" Grid.Column="1" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="冷却设备"  />
-                <RadioButton x:Name="NoteButton" Grid.Column="2" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="注释符号"  />
+                <RadioButton x:Name="AccessoriesButton"  Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="给排水附件"  Click="AccessoriesButton_Click"/>
+                <RadioButton x:Name="PumpButton"  Grid.Column="3" Grid.Row="0" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="供水设备" Click="PumpButton_Click" />
+                <RadioButton x:Name="WaterTreatButton" Grid.Column="0" Grid.Row="1" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="给水处理设备" Click="WaterTreatButton_Click" />
+                <RadioButton x:Name="SewageTreatButton"  Grid.Column="1" Grid.Row="1" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="污水处理设备" Click="SewageTreatButton_Click" />
+                <RadioButton x:Name="WaterComponentsButton"  Grid.Column="2" Grid.Row="1" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="给排水构件" Click="WaterComponentsButton_Click" />
+                <RadioButton x:Name="FireProtectionButton" Grid.Column="3" Grid.Row="1" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="消防设备" Click="FireProtectionButton_Click"/>
+                <RadioButton x:Name="NoteButton" Grid.Column="0" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="注释符号" Click="NoteButton_Click" />
             </Grid>
         </GroupBox>
 
@@ -51,6 +49,10 @@
                     <WrapPanel/>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="ButterflyValveWoLun"  Source="/OutdoorPipe;component/Resources/涡轮传动蝶阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="ButterflyValveWoLun_MouseMove"  MouseDown="ButterflyValveWoLun_MouseDown" />
+            </ListViewItem>
 
             <ListViewItem Margin="3" >
                 <Image x:Name="ButterflyValve"  Source="/OutdoorPipe;component/Resources/蝶阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="ButterflyValve_MouseMove" MouseDown="ButterflyValve_MouseDown" />
@@ -79,6 +81,216 @@
             <ListViewItem Margin="3" >
                 <Image  x:Name="VentValve"  Source="/OutdoorPipe;component/Resources/自动排气阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="VentValve_MouseMove" MouseDown="VentValve_MouseDown"/>
             </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image  x:Name="PressureValve"  Source="/OutdoorPipe;component/Resources/泄压阀.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="PressureValve_MouseMove" MouseDown="PressureValve_MouseDown"/>
+            </ListViewItem>
+
+
+        </ListView>
+
+        <ListView Name="MeterList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="WaterMeterXuanYi" Source="/OutdoorPipe;component/Resources/水表.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="WaterMeterXuanYi_MouseMove"  MouseDown="WaterMeterXuanYi_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="WaterMeterLuoYi" Source="/OutdoorPipe;component/Resources/螺翼式水表.jpg"  Width="65" Height="65" Stretch="Fill" MouseMove="WaterMeterLuoYi_MouseMove"  MouseDown="WaterMeterLuoYi_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="FlowMeter"  Source="/OutdoorPipe;component/Resources/电磁流量计.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="FlowMeter_MouseMove"  MouseDown="FlowMeter_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="PressureGauge"  Source="/OutdoorPipe;component/Resources/真空表.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="PressureGauge_MouseMove"  MouseDown="PressureGauge_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="VacuumMeter"  Source="/OutdoorPipe;component/Resources/压力表.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="VacuumMeter_MouseMove"  MouseDown="VacuumMeter_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="Thermometer"  Source="/OutdoorPipe;component/Resources/温度计.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="Thermometer_MouseMove"  MouseDown="Thermometer_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="PressureSensor"  Source="/OutdoorPipe;component/Resources/压力传感器.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="PressureSensor_MouseMove"  MouseDown="PressureSensor_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="TemperatureSensor"  Source="/OutdoorPipe;component/Resources/温度传感器.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="TemperatureSensor_MouseMove"  MouseDown="TemperatureSensor_MouseDown"/>
+            </ListViewItem>
+
+        </ListView>
+
+        <ListView Name="AccessoriesList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="RubberJoint" Source="/OutdoorPipe;component/Resources/可曲挠橡胶接头.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="RubberJoint_MouseMove"  MouseDown="RubberJoint_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="TypeYFilter" Source="/OutdoorPipe;component/Resources/Y型过滤器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="TypeYFilter_MouseMove"  MouseDown="TypeYFilter_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="WaterTap" Source="/OutdoorPipe;component/Resources/水嘴.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="WaterTap_MouseMove"  MouseDown="WaterTap_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="SuctionBell" Source="/OutdoorPipe;component/Resources/吸水喇叭口.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SuctionBell_MouseMove"  MouseDown="SuctionBell_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="OverFlowBell" Source="/OutdoorPipe;component/Resources/溢流喇叭口.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="OverFlowBell_MouseMove"  MouseDown="OverFlowBell_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="FloorDrain" Source="/OutdoorPipe;component/Resources/圆形地漏.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="FloorDrain_MouseMove"  MouseDown="FloorDrain_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="VentTap" Source="/OutdoorPipe;component/Resources/通气帽.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="VentTap_MouseMove"  MouseDown="VentTap_MouseDown"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="CleanOut" Source="/OutdoorPipe;component/Resources/清扫口.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="CleanOut_MouseMove"  MouseDown="CleanOut_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="CheckOut" Source="/OutdoorPipe;component/Resources/检查口.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="CheckOut_MouseMove"  MouseDown="CheckOut_MouseDown" />
+            </ListViewItem>
+
+        </ListView>
+
+        <ListView Name="WaterSupplyEquipment" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            
+            <ListViewItem Margin="3" >
+                <Image x:Name="SinglePump" Source="/OutdoorPipe;component/Resources/单吸泵.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SinglePump_MouseMove"  MouseDown="SinglePump_MouseDown" />
+            </ListViewItem>
+            
+            <ListViewItem Margin="3" >
+                <Image x:Name="DoublePump" Source="/OutdoorPipe;component/Resources/双吸泵.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="DoublePump_MouseMove"  MouseDown="DoublePump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="VerticalPump" Source="/OutdoorPipe;component/Resources/立式泵.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="VerticalPump_MouseMove"  MouseDown="VerticalPump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="LongShaftPump" Source="/OutdoorPipe;component/Resources/长轴泵.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SinglePump_MouseMove"  MouseDown="SinglePump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="ChaiYouPump" Source="/OutdoorPipe;component/Resources/柴油泵.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ChaiYouPump_MouseMove"  MouseDown="ChaiYouPump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="ZiXiPump" Source="/OutdoorPipe;component/Resources/自吸泵.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ChaiYouPump_MouseMove"  MouseDown="ChaiYouPump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="HengYaPump" Source="/OutdoorPipe;component/Resources/恒压变频.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="HengYaPump_MouseMove"  MouseDown="HengYaPump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="DieYaPump" Source="/OutdoorPipe;component/Resources/管网叠压.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="DieYaPump_MouseMove"  MouseDown="DieYaPump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="DingYaPump" Source="/OutdoorPipe;component/Resources/定压补水.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ChaiYouPump_MouseMove"  MouseDown="ChaiYouPump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="QianShuiPump" Source="/OutdoorPipe;component/Resources/潜水泵.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="QianShuiPump_MouseMove"  MouseDown="QianShuiPump_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="GuDingPump" Source="/OutdoorPipe;component/Resources/潜水泵固定式.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="GuDingPump_MouseMove"  MouseDown="GuDingPump_MouseDown"/>
+            </ListViewItem>
+            
+            <ListViewItem Margin="3" >
+                <Image x:Name="PipePump" Source="/OutdoorPipe;component/Resources/管道泵.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="PipePump_MouseMove"  MouseDown="PipePump_MouseDown"/>
+            </ListViewItem>
+            
+        </ListView>
+
+        <ListView Name="WaterSupplyTreat" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+
+
+        </ListView>
+
+        <ListView Name="SewageTreat" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+
+
+        </ListView>
+
+        <ListView Name="WaterSupplyComponent" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            
+            
+            
+        </ListView>
+
+        <ListView Name="FireEquipment" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+
+
+        </ListView>
+
+        <ListView Name="AnnotationSymbol" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
 
 
         </ListView>
