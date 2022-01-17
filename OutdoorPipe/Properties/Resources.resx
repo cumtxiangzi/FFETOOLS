@@ -118,17 +118,56 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="10T污水处理" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\10T污水处理.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="15T污水处理" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\15T污水处理.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="1T污水处理" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1T污水处理.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="3T污水处理" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3T污水处理.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="5T污水处理" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5T污水处理.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="90弯头" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\90弯头.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="COD检测仪" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\COD检测仪.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="C型支架一层" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\C型支架一层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="C型支架两层" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\C型支架两层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IG541瓶组" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IG541瓶组.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NFPAⅢ消火栓" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NFPAⅢ消火栓.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NPFAⅡ消火栓" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NPFAⅡ消火栓.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="PH值传感器" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PH值传感器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Y型过滤器" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Y型过滤器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="七氟丙烷柜式" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\七氟丙烷柜式.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="七氟丙烷瓶组" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\七氟丙烷瓶组.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="三段式水处理" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\三段式水处理.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="余氯传感器" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\余氯传感器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -138,6 +177,9 @@
   </data>
   <data name="减压阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\减压阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="刚性防水套管" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\刚性防水套管.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="单吸泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\单吸泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -151,6 +193,9 @@
   <data name="双吸泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\双吸泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="双管淋浴器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\双管淋浴器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="可曲挠橡胶接头" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\可曲挠橡胶接头.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -160,14 +205,50 @@
   <data name="圆形地漏" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\圆形地漏.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="土壤符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\土壤符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="地上式接合器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\地上式接合器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="地上式消火栓" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\地上式消火栓.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="地下式接合器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\地下式接合器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="地下式消火栓" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\地下式消火栓.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="地面符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\地面符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="墙壁式接合器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\墙壁式接合器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="大便器自闭式冲洗阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\大便器自闭式冲洗阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="存水弯" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\存水弯.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="定压补水" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\定压补水.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="室内排水沟" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\室内排水沟.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="室内明装消火栓" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\室内明装消火栓.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="室外管道参数图示" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\室外管道参数图示.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="小便器冲洗阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\小便器冲洗阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="左右三通" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\左右三通.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="微阻缓闭止回阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\微阻缓闭止回阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -178,17 +259,59 @@
   <data name="截止阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\截止阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="手提式灭火器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\手提式灭火器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="折断线符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\折断线符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="指北针" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\指北针.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="推车式灭火器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\推车式灭火器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="插板阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\插板阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="断管符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\断管符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="旋塞阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\旋塞阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="无阀过滤器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\无阀过滤器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="柴油泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\柴油泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="柴油泵油箱" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\柴油泵油箱.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="标高符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\标高符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="检查口" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\检查口.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="次氯酸钠发生器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\次氯酸钠发生器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="止回阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\止回阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="气体喷头上喷" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\气体喷头上喷.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="气体喷头下喷" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\气体喷头下喷.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="气浮溶气装置" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\气浮溶气装置.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="氨氮检测仪" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\氨氮检测仪.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="水力液位控制阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\水力液位控制阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -205,14 +328,44 @@
   <data name="水表" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\水表.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="汇合三通" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\汇合三通.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="汇合四通" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\汇合四通.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="泄压阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\泄压阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="法兰闸阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\法兰闸阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="洗眼器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\洗眼器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="浅层砂过滤器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\浅层砂过滤器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="浊度仪" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\浊度仪.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="浮球阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\浮球阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="消毒剂加药装置" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\消毒剂加药装置.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="涡轮传动蝶阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\涡轮传动蝶阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="混凝剂加药装置" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\混凝剂加药装置.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="混凝土化粪池" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\混凝土化粪池.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="混凝土阀门井" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\混凝土阀门井.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="清扫口" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\清扫口.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -244,11 +397,38 @@
   <data name="电接点压力表" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\电接点压力表.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="电控箱符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\电控箱符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="电磁流量计" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\电磁流量计.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="电磁阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\电磁阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="盘式过滤器" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\盘式过滤器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="直立90弯头" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\直立90弯头.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="直通式" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\直通式.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="真空表" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\真空表.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="矩形水箱" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\矩形水箱.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="砖砌检查井" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\砖砌检查井.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="砖砌阀门井" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\砖砌阀门井.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="稳压装置" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\稳压装置.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="立式泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\立式泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -258,6 +438,15 @@
   </data>
   <data name="管道泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\管道泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="箭头" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\箭头.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="箭头带坡度" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\箭头带坡度.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="纯箭头" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\纯箭头.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="自动排气阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\自动排气阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -271,8 +460,14 @@
   <data name="螺翼式水表" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\螺翼式水表.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="角阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\角阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="转子流量计" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\转子流量计.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="轴线符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\轴线符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="通气帽" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\通气帽.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -285,5 +480,8 @@
   </data>
   <data name="闸阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\闸阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="阻垢剂加药装置" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\阻垢剂加药装置.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
