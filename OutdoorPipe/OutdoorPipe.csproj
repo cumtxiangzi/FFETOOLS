@@ -391,142 +391,151 @@
     <Resource Include="Resources\三段式水处理.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\消毒剂加药装置.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\阻垢剂加药装置.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\无阀过滤器.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\90弯头.jpg" />
+    <Resource Include="Resources\90弯头.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\汇合三通.jpg" />
+    <Resource Include="Resources\汇合三通.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\汇合四通.jpg" />
+    <Resource Include="Resources\汇合四通.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\混凝土阀门井.jpg" />
+    <Resource Include="Resources\混凝土阀门井.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\混凝土化粪池.jpg" />
+    <Resource Include="Resources\混凝土化粪池.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\矩形水箱.jpg" />
+    <Resource Include="Resources\矩形水箱.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\室内排水沟.jpg" />
+    <Resource Include="Resources\室内排水沟.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\直立90弯头.jpg" />
+    <Resource Include="Resources\直立90弯头.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\直通式.jpg" />
+    <Resource Include="Resources\直通式.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\砖砌阀门井.jpg" />
+    <Resource Include="Resources\砖砌阀门井.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\砖砌检查井.jpg" />
+    <Resource Include="Resources\砖砌检查井.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\左右三通.jpg" />
+    <Resource Include="Resources\左右三通.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IG541瓶组.jpg" />
+    <Resource Include="Resources\IG541瓶组.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\NFPAⅢ消火栓.jpg" />
+    <Resource Include="Resources\NFPAⅢ消火栓.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\NPFAⅡ消火栓.jpg" />
+    <Resource Include="Resources\NPFAⅡ消火栓.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\柴油泵油箱.jpg" />
+    <Resource Include="Resources\柴油泵油箱.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\地上式接合器.jpg" />
+    <Resource Include="Resources\地上式接合器.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\地上式消火栓.jpg" />
+    <Resource Include="Resources\地上式消火栓.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\地下式接合器.jpg" />
+    <Resource Include="Resources\地下式接合器.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\地下式消火栓.jpg" />
+    <Resource Include="Resources\地下式消火栓.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\七氟丙烷柜式.jpg" />
+    <Resource Include="Resources\七氟丙烷柜式.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\七氟丙烷瓶组.jpg" />
+    <Resource Include="Resources\七氟丙烷瓶组.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\气体喷头上喷.jpg" />
+    <Resource Include="Resources\气体喷头上喷.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\气体喷头下喷.jpg" />
+    <Resource Include="Resources\气体喷头下喷.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\墙壁式接合器.jpg" />
+    <Resource Include="Resources\墙壁式接合器.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\室内明装消火栓.jpg" />
+    <Resource Include="Resources\室内明装消火栓.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\手提式灭火器.jpg" />
+    <Resource Include="Resources\手提式灭火器.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\推车式灭火器.jpg" />
+    <Resource Include="Resources\推车式灭火器.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\稳压装置.jpg" />
+    <Resource Include="Resources\稳压装置.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\洗眼器.jpg" />
+    <Resource Include="Resources\洗眼器.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\双管淋浴器.jpg" />
+    <Resource Include="Resources\双管淋浴器.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\标高符号.jpg" />
+    <Resource Include="Resources\标高符号.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\纯箭头.jpg" />
+    <Resource Include="Resources\纯箭头.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\地面符号.jpg" />
+    <Resource Include="Resources\地面符号.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\电控箱符号.jpg" />
+    <Resource Include="Resources\电控箱符号.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\断管符号.jpg" />
+    <Resource Include="Resources\断管符号.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\刚性防水套管.jpg" />
+    <Resource Include="Resources\刚性防水套管.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\箭头.jpg" />
+    <Resource Include="Resources\箭头.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\箭头带坡度.jpg" />
+    <Resource Include="Resources\箭头带坡度.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\折断线符号.jpg" />
+    <Resource Include="Resources\折断线符号.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\指北针.jpg" />
+    <Resource Include="Resources\指北针.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\轴线符号.jpg" />
+    <Resource Include="Resources\轴线符号.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\土壤符号.jpg" />
+    <Resource Include="Resources\土壤符号.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\剖面符号.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\水位符号.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\杀菌剂加药装置.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\漏氯报警仪.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

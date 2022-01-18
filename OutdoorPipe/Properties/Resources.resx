@@ -181,6 +181,9 @@
   <data name="刚性防水套管" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\刚性防水套管.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="剖面符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\剖面符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="单吸泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\单吸泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -283,6 +286,9 @@
   <data name="无阀过滤器" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\无阀过滤器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="杀菌剂加药装置" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\杀菌剂加药装置.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="柴油泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\柴油泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -312,6 +318,9 @@
   </data>
   <data name="氨氮检测仪" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\氨氮检测仪.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="水位符号" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\水位符号.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="水力液位控制阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\水力液位控制阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -352,9 +361,6 @@
   <data name="浮球阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\浮球阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="消毒剂加药装置" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\消毒剂加药装置.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="涡轮传动蝶阀" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\涡轮传动蝶阀.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -378,6 +384,9 @@
   </data>
   <data name="溢流喇叭口" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\溢流喇叭口.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="漏氯报警仪" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\漏氯报警仪.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="潜水泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\潜水泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
