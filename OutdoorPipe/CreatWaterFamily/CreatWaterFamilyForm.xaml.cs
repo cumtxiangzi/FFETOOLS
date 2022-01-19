@@ -196,23 +196,23 @@ namespace FFETOOLS
         }
         private void E_ButterflyValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "电动蝶阀";
+            FamilyName.Text = "电动蝶阀D97A1X-10";
         }
         private void E_GateValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "电动闸阀";
+            FamilyName.Text = "电动闸阀Z945W-10";
         }
         private void CheckValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "止回阀";
+            FamilyName.Text = "蝶形止回阀H77X-10";
         }
         private void CheckValveWeiZu_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "微阻缓闭式止回阀";
+            FamilyName.Text = "微阻缓闭式止回阀HH44X-10";
         }
         private void VentValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "自动排气阀";
+            FamilyName.Text = "自动排气阀ARVX-10";
         }
         private void PressureValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -232,7 +232,7 @@ namespace FFETOOLS
         }
         private void DaBianValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "大便器自闭式冲洗阀";
+            FamilyName.Text = "大便器自闭冲洗阀";
         }
         private void XiaoBianValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -300,7 +300,7 @@ namespace FFETOOLS
         }
         private void OverFlowBell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "溢流喇叭口";
+            FamilyName.Text = "溢流管喇叭口";
         }
         private void FloorDrain_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -564,7 +564,7 @@ namespace FFETOOLS
         }
         private void GroundNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "地面符号";
+            FamilyName.Text = "室内地坪符号";
         }
         private void SoilNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -1655,7 +1655,6 @@ namespace FFETOOLS
                 e.Handled = true;
             }
         }
-
         private void BreakLineNote_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)

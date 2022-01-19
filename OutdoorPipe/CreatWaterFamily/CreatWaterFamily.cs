@@ -56,14 +56,13 @@ namespace FFETOOLS
             {
                 UIDocument uidoc = app.ActiveUIDocument;
                 Document doc = app.ActiveUIDocument.Document;
-                Selection sel = app.ActiveUIDocument.Selection;
                 FamilySymbol symbol = null;
                 //TransactionGroup tg = new TransactionGroup(doc, "添加管道附件");
                 //tg.Start();未完成
                 using (Transaction trans = new Transaction(doc, "布置给排水族"))
                 {
                     trans.Start();
-                    symbol = CreatWaterFamilyMethod(doc, uidoc, sel, CreatWaterFamily.mainfrm.FamilyName.Text);
+                    symbol = CreatWaterFamilyMethod(doc);
                     symbol.Activate();
 
                     trans.Commit();
@@ -80,50 +79,456 @@ namespace FFETOOLS
         {
             return "布置给排水族";
         }
-        public FamilySymbol CreatWaterFamilyMethod(Document doc, UIDocument uidoc, Selection sel, string valveName)
+        public FamilySymbol CreatWaterFamilyMethod(Document doc)
         {
-            ValveFamilyLoad(doc, "蝶形止回阀H77X-10");
-            ValveFamilyLoad(doc, "微阻缓闭式止回阀HH44X-10");
-            ValveFamilyLoad(doc, "电动蝶阀D97A1X-10");
-            ValveFamilyLoad(doc, "蝶阀D97A1X-10");
-
-            FamilySymbol pipeAccessory = null;
-            Pipe p = null;
-            pipeAccessory = PipeAccessorySymbol(doc, "DN100", valveName);
-            return pipeAccessory;
+            int index = CreatWaterFamily.mainfrm.index;
+            string familyName = CreatWaterFamily.mainfrm.FamilyName.Text;
+            FamilySymbol familySymbol = null;
+            switch (index)
+            {
+                case 1:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 2:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 3:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 4:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 5:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 6:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 7:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 8:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 9:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 10:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 11:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 12:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 13:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 14:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 15:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 16:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 17:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 18:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 19:
+                    FamilyLoad(doc, "阀门", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "阀门", familyName);
+                    break;
+                case 20:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 21:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 22:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 23:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 24:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 25:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 26:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 27:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 28:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 29:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 30:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 31:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 111:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 112:
+                    FamilyLoad(doc, "仪表", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "仪表", familyName);
+                    break;
+                case 32:
+                    FamilyLoad(doc, "给水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "给水设备附件", familyName);
+                    break;
+                case 33:
+                    FamilyLoad(doc, "给水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "给水设备附件", familyName);
+                    break;
+                case 34:
+                    FamilyLoad(doc, "给水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "给水设备附件", familyName);
+                    break;
+                case 35:
+                    FamilyLoad(doc, "给水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "给水设备附件", familyName);
+                    break;
+                case 36:
+                    FamilyLoad(doc, "排水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "排水设备附件", familyName);
+                    break;
+                case 37:
+                    FamilyLoad(doc, "排水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "排水设备附件", familyName);
+                    break;
+                case 38:
+                    FamilyLoad(doc, "排水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "排水设备附件", familyName);
+                    break;
+                case 39:
+                    FamilyLoad(doc, "排水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "排水设备附件", familyName);
+                    break;
+                case 40:
+                    FamilyLoad(doc, "排水设备附件", familyName);
+                    familySymbol = PipeAccessorySymbol(doc, "排水设备附件", familyName);
+                    break;
+                case 41:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 42:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 43:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 44:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 45:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 46:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 47:
+                    FamilyLoad(doc, "给水设备", familyName);
+                    break;
+                case 48:
+                    FamilyLoad(doc, "给水设备", familyName);
+                    break;
+                case 49:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 50:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 51:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 52:
+                    FamilyLoad(doc, "水泵", familyName);
+                    break;
+                case 53:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 54:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 55:
+                    FamilyLoad(doc, "给水处理设备", familyName);
+                    break;
+                case 56:
+                    FamilyLoad(doc, "给水处理设备", familyName);
+                    break;
+                case 57:
+                    FamilyLoad(doc, "给水处理设备", familyName);
+                    break;
+                case 58:
+                    FamilyLoad(doc, "给水处理设备", familyName);//三段式水处理器代码待修改
+                    break;
+                case 59:
+                    FamilyLoad(doc, "给水处理设备", familyName);
+                    break;
+                case 60:
+                    FamilyLoad(doc, "给水处理设备", familyName);
+                    break;
+                case 61:
+                    FamilyLoad(doc, "给水处理设备", familyName);
+                    break;
+                case 62:
+                    FamilyLoad(doc, "给水处理设备", familyName);
+                    break;
+                case 63:
+                    FamilyLoad(doc, "给水处理设备", familyName);
+                    break;
+                case 64:
+                    FamilyLoad(doc, "污水处理设备", familyName);
+                    break;
+                case 65:
+                    FamilyLoad(doc, "污水处理设备", familyName);
+                    break;
+                case 66:
+                    FamilyLoad(doc, "污水处理设备", familyName);
+                    break;
+                case 67:
+                    FamilyLoad(doc, "污水处理设备", familyName);
+                    break;
+                case 68:
+                    FamilyLoad(doc, "污水处理设备", familyName);
+                    break;
+                case 69:
+                    FamilyLoad(doc, "卫生设备", familyName);
+                    break;
+                case 70:
+                    FamilyLoad(doc, "给水构件", familyName);
+                    break;
+                case 71:
+                    StructureFamilyLoad(doc, "排水构筑物", familyName);
+                    break;
+                case 72:
+                    StructureFamilyLoad(doc, "给水构筑物", familyName);
+                    break;
+                case 73:
+                    StructureFamilyLoad(doc, "排水构筑物", familyName);
+                    break;
+                case 74:
+                    StructureFamilyLoad(doc, "排水构筑物", familyName);
+                    break;
+                case 75:
+                    StructureFamilyLoad(doc, "排水构筑物", familyName);
+                    break;
+                case 76:
+                    FamilyLoad(doc, "排水构件", familyName);
+                    break;
+                case 77:
+                    FamilyLoad(doc, "排水构件", familyName);
+                    break;
+                case 78:
+                    FamilyLoad(doc, "排水构件", familyName);
+                    break;
+                case 79:
+                    FamilyLoad(doc, "排水构件", familyName);
+                    break;
+                case 80:
+                    FamilyLoad(doc, "排水构件", familyName);
+                    break;
+                case 81:
+                    FamilyLoad(doc, "排水构件", familyName);
+                    break;
+                case 82:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 83:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 84:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 85:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 86:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 87:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 88:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 89:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 90:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 91:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 92:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 93:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 94:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 95:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 96:
+                    FamilyLoad(doc, "消防设备", familyName);
+                    break;
+                case 97:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 98:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 99:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 100:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 101:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 102:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 103:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 104:
+                    FamilyLoad(doc, "详图项目", familyName);
+                    break;
+                case 105:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 106:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 107:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 108:
+                    FamilyLoad(doc, "详图项目", familyName);
+                    break;
+                case 109:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                case 110:
+                    FamilyLoad(doc, "注释符号", familyName);
+                    break;
+                default:
+                    break;
+            }
+            return familySymbol;
         }
-        public FamilySymbol PipeAccessorySymbol(Document doc, string dn, string accessoryName)
+        public FamilySymbol PipeAccessorySymbol(Document doc, string categoryName, string familyName) //管道附件
         {
-            FilteredElementCollector valveCollector = new FilteredElementCollector(doc);
-            valveCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_PipeAccessory);
-            List<FamilySymbol> valveSymbolList = new List<FamilySymbol>();
-            FamilySymbol valve = null;
+            FilteredElementCollector accessoryCollector = new FilteredElementCollector(doc);
+            accessoryCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_PipeAccessory);
+            List<FamilySymbol> accessorySymbolList = new List<FamilySymbol>();
+            FamilySymbol accessory = null;
+            string fullname = "给排水" + "_" + categoryName + "_" + familyName;
 
-            IList<Element> pumps = valveCollector.ToElements();
+            IList<Element> accessorys = accessoryCollector.ToElements();
+            foreach (FamilySymbol item in accessorys)
+            {
+                if (item.Family.Name == fullname)
+                {
+                    accessorySymbolList.Add(item);
+                }
+            }
+            if (familyName.Contains("电动蝶阀"))
+            {
+                foreach (FamilySymbol item in accessorySymbolList)
+                {
+                    if (item.Name.Contains("DN100"))
+                    {
+                        accessory = item;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                accessory = accessorySymbolList.FirstOrDefault();
+            }
+            return accessory;
+        }
+        public FamilySymbol EquipmentSymbol(Document doc, string categoryName, string familyName) //机械设备
+        {
+            FilteredElementCollector equipmentCollector = new FilteredElementCollector(doc);
+            equipmentCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_MechanicalEquipment);
+            List<FamilySymbol> equipmentSymbolList = new List<FamilySymbol>();
+            FamilySymbol equipment = null;
+            string fullname = "给排水" + "_" + categoryName + "_" + familyName;
+
+            IList<Element> pumps = equipmentCollector.ToElements();
             foreach (FamilySymbol item in pumps)
             {
-                if (item.Family.Name.Contains("给排水") && item.Family.Name.Contains(accessoryName))
+                if (item.Family.Name == fullname)
                 {
-                    valveSymbolList.Add(item);
+                    equipmentSymbolList.Add(item);
                 }
             }
-            foreach (FamilySymbol item in valveSymbolList)
-            {
-                if (item.Name.Contains(dn))
-                {
-                    valve = item;
-                    break;
-                }
-            }
-            return valve;
+            equipment = equipmentSymbolList.FirstOrDefault();
+            return equipment;
         }
-        public void ValveFamilyLoad(Document doc, string categoryName)
+        public void FamilyLoad(Document doc, string categoryName, string familyName)
         {
             IList<Element> familyCollect = new FilteredElementCollector(doc).OfClass(typeof(Family)).ToElements();
             Family family = null;
+            string fullname = "给排水" + "_" + categoryName + "_" + familyName;
             foreach (Family item in familyCollect)
             {
-                if (item.Name.Contains(categoryName) && item.Name.Contains("给排水"))
+                if (item.Name == fullname)
                 {
                     family = item;
                     break;
@@ -131,7 +536,24 @@ namespace FFETOOLS
             }
             if (family == null)
             {
-                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_阀门_" + categoryName + ".rfa");
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水" + "_" + categoryName + "_" + familyName + ".rfa");
+            }
+        }
+        public void StructureFamilyLoad(Document doc, string categoryName, string familyName)
+        {
+            IList<Element> familyCollect = new FilteredElementCollector(doc).OfClass(typeof(Family)).ToElements();
+            Family family = null;
+            foreach (Family item in familyCollect)
+            {
+                if (item.Name.Contains(familyName) && item.Name.Contains("结构"))
+                {
+                    family = item;
+                    break;
+                }
+            }
+            if (family == null)
+            {
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "结构" + "_" + categoryName + "_" + familyName + ".rfa");
             }
         }
         public PipeType GetPipeType(Document doc, UIDocument uidoc, string pipeType)
@@ -160,6 +582,20 @@ namespace FFETOOLS
                 }
             }
             return pt;
+        }
+    }
+    public class FamLoadOption : IFamilyLoadOptions //载入并覆盖现有族
+    {
+        bool IFamilyLoadOptions.OnFamilyFound(bool familyInUse, out bool overwriteParameterValues)
+        {
+            overwriteParameterValues = true;
+            return true;
+        }
+        bool IFamilyLoadOptions.OnSharedFamilyFound(Family sharedFamily, bool familyInUse, out FamilySource source, out bool overwriteParameterValues)
+        {
+            source = FamilySource.Project;
+            overwriteParameterValues = true;
+            return true;
         }
     }
 }
