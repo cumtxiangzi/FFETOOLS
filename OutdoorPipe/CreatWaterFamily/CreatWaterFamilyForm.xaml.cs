@@ -392,7 +392,7 @@ namespace FFETOOLS
         }
         private void WuFaFilter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "重力式无阀过滤器";
+            FamilyName.Text = "钢制重力式无阀过滤器";
         }
         private void QiFuEquipment_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -448,27 +448,27 @@ namespace FFETOOLS
         }
         private void HuiHeTee_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "90°汇合三通井座";
+            FamilyName.Text = "塑料排水检查井(90°汇合三通井座)";
         }
         private void HuiHeCross_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "90°汇合四通井座";
+            FamilyName.Text = "塑料排水检查井(90°汇合四通井座)";
         }
         private void ZhiLiElbow_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "直立90°弯头井座";
+            FamilyName.Text = "塑料排水检查井(直立90°弯头井座)";
         }
         private void ElbowWell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "90°弯头井座";
+            FamilyName.Text = "塑料排水检查井(90°弯头井座)";
         }
         private void ZuoYouTee_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "90°左(右)三通井座";
+            FamilyName.Text = "塑料排水检查井(90°左(右)三通井座)";
         }
         private void ZhiTongTee_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "直通式井座";
+            FamilyName.Text = "塑料排水检查井(直通式井座)";
         }
         private void ZhuanQiValveWell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
