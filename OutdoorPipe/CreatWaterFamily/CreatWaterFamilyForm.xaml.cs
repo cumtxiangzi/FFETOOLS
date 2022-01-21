@@ -51,6 +51,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden; 
         }
         private void MainForm_Loaded(object sender, RoutedEventArgs e)
         {
@@ -64,6 +65,8 @@ namespace FFETOOLS
         {
             Close();
         }
+
+        #region 族类别切换     
         private void ValveButton_Click(object sender, RoutedEventArgs e)
         {
             ValveList.Visibility = Visibility.Visible;
@@ -75,6 +78,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void MeterButton_Click(object sender, RoutedEventArgs e)
         {
@@ -87,6 +91,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void AccessoriesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -99,6 +104,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void PumpButton_Click(object sender, RoutedEventArgs e)
         {
@@ -111,6 +117,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void WaterTreatButton_Click(object sender, RoutedEventArgs e)
         {
@@ -123,6 +130,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void SewageTreatButton_Click(object sender, RoutedEventArgs e)
         {
@@ -135,6 +143,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void WaterComponentsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -147,6 +156,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Visible;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void FireProtectionButton_Click(object sender, RoutedEventArgs e)
         {
@@ -159,6 +169,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Visible;
             AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void NoteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -171,7 +182,22 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Visible;
+            OtherSymbol.Visibility = Visibility.Hidden;    
         }
+        private void OtherButton_Click(object sender, RoutedEventArgs e)
+        {
+            ValveList.Visibility = Visibility.Hidden;
+            MeterList.Visibility = Visibility.Hidden;
+            AccessoriesList.Visibility = Visibility.Hidden;
+            WaterSupplyEquipment.Visibility = Visibility.Hidden;
+            WaterSupplyTreat.Visibility = Visibility.Hidden;
+            SewageTreat.Visibility = Visibility.Hidden;
+            WaterSupplyComponent.Visibility = Visibility.Hidden;
+            FireEquipment.Visibility = Visibility.Hidden;
+            AnnotationSymbol.Visibility = Visibility.Hidden;
+            OtherSymbol.Visibility = Visibility.Visible;
+        }
+        #endregion
 
         #region 族名称显示
         private void ButterflyValveWoLun_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -400,7 +426,7 @@ namespace FFETOOLS
         }
         private void SanDuanShiFilter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            FamilyName.Text = "三段式给水处理设备";
+            FamilyName.Text = "三段式给水处理设备200T";
         }
         private void HunNingJi_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -621,6 +647,30 @@ namespace FFETOOLS
         private void WaterFlowGlass_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             FamilyName.Text = "水流视镜";
+        }
+        private void PipeMixer_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FamilyName.Text = "管道混合器";
+        }
+        private void SteelBlindFlange_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FamilyName.Text = "钢盲法兰";
+        }
+        private void DanGuanShower_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FamilyName.Text = "单柄混合阀淋浴器";
+        }
+        private void DSEHeater_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FamilyName.Text = "DSE商用电热水炉";
+        }
+        private void DVEHeater_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FamilyName.Text = "DVE商用电热水炉";
+        }
+        private void WallHeater_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FamilyName.Text = "挂壁式电热水器";
         }
         #endregion
         private void ButterflyValveWoLun_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1740,6 +1790,66 @@ namespace FFETOOLS
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
             {
                 index = 112;
+                Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
+                eventHandlerCreatWaterFamily.Raise();
+                e.Handled = true;
+            }
+        }      
+        private void PipeMixer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
+            {
+                index = 113;
+                Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
+                eventHandlerCreatWaterFamily.Raise();
+                e.Handled = true;
+            }
+        }      
+        private void SteelBlindFlange_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
+            {
+                index = 114;
+                Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
+                eventHandlerCreatWaterFamily.Raise();
+                e.Handled = true;
+            }
+        }
+        private void DanGuanShower_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
+            {
+                index = 115;
+                Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
+                eventHandlerCreatWaterFamily.Raise();
+                e.Handled = true;
+            }
+        }       
+        private void DSEHeater_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
+            {
+                index = 116;
+                Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
+                eventHandlerCreatWaterFamily.Raise();
+                e.Handled = true;
+            }
+        }      
+        private void DVEHeater_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
+            {
+                index = 117;
+                Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
+                eventHandlerCreatWaterFamily.Raise();
+                e.Handled = true;
+            }
+        }      
+        private void WallHeater_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
+            {
+                index = 118;
                 Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;

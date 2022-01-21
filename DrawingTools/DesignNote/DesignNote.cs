@@ -17,12 +17,14 @@ using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.DB.Architecture;
+using System.Windows.Interop;
 
 namespace FFETOOLS
 {
     [Transaction(TransactionMode.Manual)]
     public class DesignNote : IExternalCommand
     {
+        public static DesignNoteForm mainfrm;
         public Result Execute(ExternalCommandData commandData, ref string messages, ElementSet elements)
         {
             try
@@ -31,35 +33,52 @@ namespace FFETOOLS
                 UIDocument uidoc = uiapp.ActiveUIDocument;
                 Document doc = uidoc.Document;
                 Selection sel = uidoc.Selection;
-                XYZ pickpoint = sel.PickPoint("请选择插入点");           
 
-                IList<Element> col = new FilteredElementCollector(doc).OfClass(typeof(TextNoteType)).ToElements();
-                TextNoteType noteType = null;
-                foreach (var item in col)
-                {
-                    TextNoteType type = item as TextNoteType;
-                    if (type.Name.Contains("3.5") && type.Name.Contains("给排水"))
-                    {
-                        noteType = type;
-                        break;
-                    }
-                }
+                mainfrm = new DesignNoteForm();
+                IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
+                WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
+                helper.Owner = rvtPtr;
+                mainfrm.Show();
 
-                using (Transaction trans = new Transaction(doc, "创建设计说明"))
-                {
-                    trans.Start();
-
-                    TextNote.Create(doc, doc.ActiveView.Id, pickpoint, "test"+"\n"+"你好", noteType.Id);
-
-                    trans.Commit();
-                }
             }
-            catch (Exception e)
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
-                messages = e.Message;
                 
             }
             return Result.Succeeded;
+        }
+    }
+    public class ExecuteEventDesignNote : IExternalEventHandler
+    {
+        public void Execute(UIApplication app)
+        {
+            try
+            {
+                UIDocument uidoc = app.ActiveUIDocument;
+                Document doc = app.ActiveUIDocument.Document;
+                Selection sel = app.ActiveUIDocument.Selection;
+                XYZ pickpoint = sel.PickPoint("请选择插入点");
+
+                using (Transaction trans = new Transaction(doc, "给排水设计说明"))
+                {
+                    trans.Start();
+
+
+
+
+
+                    trans.Commit();
+                }
+
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+
+            }
+        }
+        public string GetName()
+        {
+            return "给排水设计说明";
         }
     }
 }

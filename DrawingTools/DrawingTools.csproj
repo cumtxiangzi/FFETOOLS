@@ -81,6 +81,10 @@
     <Compile Include="CreatDrawing\CreatDrawing.xaml.cs">
       <DependentUpon>CreatDrawing.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesignNote\DesignNoteForm.xaml.cs">
+      <DependentUpon>DesignNoteForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DesignNote\WorkShopNamwInfo.cs" />
     <Compile Include="ExportDLT\ExportDLT.cs" />
     <Compile Include="ExportDLT\ExportDLT.xaml.cs">
       <DependentUpon>ExportDLT.xaml</DependentUpon>
@@ -130,6 +134,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CreatPipeTag\CreatPipeTag.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DesignNote\DesignNoteForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

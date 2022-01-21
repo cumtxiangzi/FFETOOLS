@@ -537,5 +537,26 @@
   <ItemGroup>
     <Resource Include="Resources\漏氯报警仪.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\三段式水处理200T.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\单管淋浴器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\钢盲法兰.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\管道混合器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\DSE商用热水器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\DVE商用热水器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\壁挂式电热水器.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

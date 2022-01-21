@@ -39,6 +39,7 @@
                 <RadioButton x:Name="WaterComponentsButton"  Grid.Column="2" Grid.Row="1" Margin="1" VerticalAlignment="Center" HorizontalAlignment="Left" Content="给排水构件" Click="WaterComponentsButton_Click" />
                 <RadioButton x:Name="FireProtectionButton" Grid.Column="3" Grid.Row="1" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="消防设备" Click="FireProtectionButton_Click"/>
                 <RadioButton x:Name="NoteButton" Grid.Column="0" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="注释符号" Click="NoteButton_Click" />
+                <RadioButton x:Name="OtherButton" Grid.Column="1" Grid.Row="2" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Left" Content="其他设备" Click="OtherButton_Click" />
             </Grid>
         </GroupBox>
 
@@ -160,7 +161,7 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="Thermometer"  Source="/OutdoorPipe;component/Resources/温度计.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="Thermometer_MouseMove"  MouseDown="Thermometer_MouseDown"/>
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="WaterFlowGlass"  Source="/OutdoorPipe;component/Resources/水流视镜.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="WaterFlowGlass_MouseMove"  MouseDown="WaterFlowGlass_MouseDown"/>
             </ListViewItem>
@@ -188,7 +189,7 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="NH3Sensor"  Source="/OutdoorPipe;component/Resources/氨氮检测仪.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="NH3Sensor_MouseMove"  MouseDown="NH3Sensor_MouseDown"/>
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="LouLvAlarm"  Source="/OutdoorPipe;component/Resources/漏氯报警仪.jpg" Width="65" Height="65" Stretch="Fill" MouseMove="LouLvAlarm_MouseMove"  MouseDown="LouLvAlarm_MouseDown"/>
             </ListViewItem>
@@ -236,6 +237,10 @@
 
             <ListViewItem Margin="3" >
                 <Image x:Name="CheckOut" Source="/OutdoorPipe;component/Resources/检查口.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="CheckOut_MouseMove"  MouseDown="CheckOut_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="SteelBlindFlange" Source="/OutdoorPipe;component/Resources/钢盲法兰.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SteelBlindFlange_MouseMove"  MouseDown="SteelBlindFlange_MouseDown" />
             </ListViewItem>
 
         </ListView>
@@ -299,11 +304,11 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="WenYaPump" Source="/OutdoorPipe;component/Resources/稳压装置.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="WenYaPump_MouseMove"  MouseDown="WenYaPump_MouseDown"/>
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="OilTank" Source="/OutdoorPipe;component/Resources/柴油泵油箱.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="OilTank_MouseMove"  MouseDown="OilTank_MouseDown" />
             </ListViewItem>
-            
+
         </ListView>
 
         <ListView Name="WaterSupplyTreat" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
@@ -318,7 +323,7 @@
                 <Image x:Name="ShaGangFilter" Source="/OutdoorPipe;component/Resources/浅层砂过滤器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ShaGangFilter_MouseMove"  MouseDown="ShaGangFilter_MouseDown"
                       UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="PanShiFilter" Source="/OutdoorPipe;component/Resources/盘式过滤器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="PanShiFilter_MouseMove"  MouseDown="PanShiFilter_MouseDown" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -328,11 +333,11 @@
                 <Image x:Name="WuFaFilter" Source="/OutdoorPipe;component/Resources/无阀过滤器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="WuFaFilter_MouseMove"  MouseDown="WuFaFilter_MouseDown" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
-                <Image x:Name="SanDuanShiFilter" Source="/OutdoorPipe;component/Resources/三段式水处理.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SanDuanShiFilter_MouseMove"  MouseDown="SanDuanShiFilter_MouseDown" />
+                <Image x:Name="SanDuanShiFilter" Source="/OutdoorPipe;component/Resources/三段式水处理200T.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SanDuanShiFilter_MouseMove"  MouseDown="SanDuanShiFilter_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="QiFuEquipment" Source="/OutdoorPipe;component/Resources/气浮溶气装置.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="QiFuEquipment_MouseMove"  MouseDown="QiFuEquipment_MouseDown" />
             </ListViewItem>
@@ -352,7 +357,7 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="ZuGouJi" Source="/OutdoorPipe;component/Resources/阻垢剂加药装置.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ZuGouJi_MouseMove"  MouseDown="ZuGouJi_MouseDown" />
             </ListViewItem>
-            
+
         </ListView>
 
         <ListView Name="SewageTreat" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
@@ -366,7 +371,7 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="SewageTreat1T" Source="/OutdoorPipe;component/Resources/1T污水处理.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SewageTreat1T_MouseMove"  MouseDown="SewageTreat1T_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="SewageTreat3T" Source="/OutdoorPipe;component/Resources/3T污水处理.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SewageTreat3T_MouseMove"  MouseDown="SewageTreat3T_MouseDown" />
             </ListViewItem>
@@ -378,9 +383,13 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="SewageTreat10T" Source="/OutdoorPipe;component/Resources/10T污水处理.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SewageTreat10T_MouseMove"  MouseDown="SewageTreat10T_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="SewageTreat15T" Source="/OutdoorPipe;component/Resources/15T污水处理.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SewageTreat15T_MouseMove"  MouseDown="SewageTreat15T_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="PipeMixer" Source="/OutdoorPipe;component/Resources/管道混合器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="PipeMixer_MouseMove"  MouseDown="PipeMixer_MouseDown" />
             </ListViewItem>
 
         </ListView>
@@ -395,6 +404,10 @@
 
             <ListViewItem Margin="3" >
                 <Image x:Name="EyeWasher" Source="/OutdoorPipe;component/Resources/洗眼器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="EyeWasher_MouseMove"  MouseDown="EyeWasher_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="DanGuanShower" Source="/OutdoorPipe;component/Resources/单管淋浴器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="DanGuanShower_MouseMove"  MouseDown="DanGuanShower_MouseDown" />
             </ListViewItem>
 
             <ListViewItem Margin="3" >
@@ -435,7 +448,7 @@
                 <Image x:Name="HuiHeTee" Source="/OutdoorPipe;component/Resources/汇合三通.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="HuiHeTee_MouseMove"  MouseDown="HuiHeTee_MouseDown"
                        UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="HuiHeCross" Source="/OutdoorPipe;component/Resources/汇合四通.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="HuiHeCross_MouseMove"  MouseDown="HuiHeCross_MouseDown"
                        UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -476,11 +489,11 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="GroundAdapter" Source="/OutdoorPipe;component/Resources/地上式接合器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="GroundAdapter_MouseMove"  MouseDown="GroundAdapter_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="UnderGroundAdapter" Source="/OutdoorPipe;component/Resources/地下式接合器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="UnderGroundAdapter_MouseMove"  MouseDown="UnderGroundAdapter_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="WallAdapter" Source="/OutdoorPipe;component/Resources/墙壁式接合器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="WallAdapter_MouseMove"  MouseDown="WallAdapter_MouseDown"/>
             </ListViewItem>
@@ -492,7 +505,7 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="FM200Cylinder" Source="/OutdoorPipe;component/Resources/七氟丙烷瓶组.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="FM200Cylinder_MouseMove"  MouseDown="FM200Cylinder_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="UpGasNozzle" Source="/OutdoorPipe;component/Resources/气体喷头上喷.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="UpGasNozzle_MouseMove"  MouseDown="UpGasNozzle_MouseDown" />
             </ListViewItem>
@@ -500,19 +513,19 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="DownGasNozzle" Source="/OutdoorPipe;component/Resources/气体喷头下喷.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="DownGasNozzle_MouseMove"  MouseDown="DownGasNozzle_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="IG541Cylinder" Source="/OutdoorPipe;component/Resources/IG541瓶组.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="IG541Cylinder_MouseMove"  MouseDown="IG541Cylinder_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="NFPAⅢHydrant" Source="/OutdoorPipe;component/Resources/NFPAⅢ消火栓.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="NFPAⅢHydrant_MouseMove"  MouseDown="NFPAⅢHydrant_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="NPFAⅡHydrant" Source="/OutdoorPipe;component/Resources/NPFAⅡ消火栓.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="NPFAⅡHydrant_MouseMove"  MouseDown="NPFAⅡHydrant_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="GroundHydrant" Source="/OutdoorPipe;component/Resources/地上式消火栓.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="GroundHydrant_MouseMove"  MouseDown="GroundHydrant_MouseDown" />
             </ListViewItem>
@@ -530,7 +543,7 @@
                     <WrapPanel/>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="ElevationNote" Source="/OutdoorPipe;component/Resources/标高符号.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ElevationNote_MouseMove"  MouseDown="ElevationNote_MouseDown" />
             </ListViewItem>
@@ -538,16 +551,16 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="GroundNote" Source="/OutdoorPipe;component/Resources/地面符号.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="GroundNote_MouseMove"  MouseDown="GroundNote_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="SoilNote" Source="/OutdoorPipe;component/Resources/土壤符号.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SoilNote_MouseMove"  MouseDown="SoilNote_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="WaterLevelNote" Source="/OutdoorPipe;component/Resources/水位符号.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="WaterLevelNote_MouseMove"  MouseDown="WaterLevelNote_MouseDown" 
                      UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"  />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="OnlyArrowNote" Source="/OutdoorPipe;component/Resources/纯箭头.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="OnlyArrowNote_MouseMove"  MouseDown="OnlyArrowNote_MouseDown" />
             </ListViewItem>
@@ -555,7 +568,7 @@
             <ListViewItem Margin="3" >
                 <Image x:Name="ArrowNote" Source="/OutdoorPipe;component/Resources/箭头.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ArrowNote_MouseMove"  MouseDown="ArrowNote_MouseDown" />
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="ArrowSlopeNote" Source="/OutdoorPipe;component/Resources/箭头带坡度.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ArrowSlopeNote_MouseMove"  MouseDown="ArrowSlopeNote_MouseDown"/>
             </ListViewItem>
@@ -583,7 +596,7 @@
                 <Image x:Name="SleeveNote" Source="/OutdoorPipe;component/Resources/刚性防水套管.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SleeveNote_MouseMove"  MouseDown="SleeveNote_MouseDown"
                        UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
             </ListViewItem>
-            
+
             <ListViewItem Margin="3" >
                 <Image x:Name="SectionNote" Source="/OutdoorPipe;component/Resources/剖面符号.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SectionNote_MouseMove"  MouseDown="SectionNote_MouseDown"
                        UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -591,6 +604,31 @@
 
             <ListViewItem Margin="3" >
                 <Image x:Name="ElectricBoxNote" Source="/OutdoorPipe;component/Resources/电控箱符号.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="ElectricBoxNote_MouseMove"  MouseDown="ElectricBoxNote_MouseDown"/>
+            </ListViewItem>
+
+        </ListView>
+
+        <ListView Name="OtherSymbol" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="DSEHeater" Source="/OutdoorPipe;component/Resources/DSE商用热水器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="DSEHeater_MouseMove"  MouseDown="DSEHeater_MouseDown"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="DVEHeater" Source="/OutdoorPipe;component/Resources/DVE商用热水器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="DVEHeater_MouseMove"  MouseDown="DVEHeater_MouseDown"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="WallHeater" Source="/OutdoorPipe;component/Resources/壁挂式电热水器.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="WallHeater_MouseMove"  MouseDown="WallHeater_MouseDown"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True"  RenderOptions.BitmapScalingMode="HighQuality"/>
             </ListViewItem>
 
         </ListView>

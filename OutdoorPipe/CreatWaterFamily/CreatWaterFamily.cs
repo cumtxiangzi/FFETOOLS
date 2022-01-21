@@ -57,18 +57,30 @@ namespace FFETOOLS
                 UIDocument uidoc = app.ActiveUIDocument;
                 Document doc = app.ActiveUIDocument.Document;
                 FamilySymbol symbol = null;
-                //TransactionGroup tg = new TransactionGroup(doc, "添加管道附件");
-                //tg.Start();未完成
-                using (Transaction trans = new Transaction(doc, "布置给排水族"))
-                {
-                    trans.Start();
-                    symbol = CreatWaterFamilyMethod(doc);
-                    symbol.Activate();
+                GroupType groupType = null;
+                int index = CreatWaterFamily.mainfrm.index;
 
-                    trans.Commit();
+                if (index == 58)
+                {
+                    using (Transaction trans = new Transaction(doc, "布置给排水组"))
+                    {
+                        trans.Start();
+                        groupType = GetGroupTypeMethod(doc);
+                        trans.Commit();
+                    }
+                    uidoc.PostRequestForElementTypePlacement(groupType);
                 }
-                uidoc.PostRequestForElementTypePlacement(symbol);
-                //tg.Assimilate();                
+                else
+                {
+                    using (Transaction trans = new Transaction(doc, "布置给排水族"))
+                    {
+                        trans.Start();
+                        symbol = CreatWaterFamilyMethod(doc);
+                        symbol.Activate();
+                        trans.Commit();
+                    }
+                    uidoc.PostRequestForElementTypePlacement(symbol);
+                }
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
@@ -322,9 +334,6 @@ namespace FFETOOLS
                     FamilyLoad(doc, "给水处理设备", familyName);
                     familySymbol = EquipmentSymbol(doc, "给水处理设备", familyName);
                     break;
-                case 58:
-                    FamilyLoad(doc, "给水处理设备", familyName);//三段式水处理器代码待修改
-                    break;
                 case 59:
                     FamilyLoad(doc, "给水处理设备", familyName);
                     familySymbol = EquipmentSymbol(doc, "给水处理设备", familyName);
@@ -533,10 +542,53 @@ namespace FFETOOLS
                     FamilyLoad(doc, "注释符号", familyName);
                     familySymbol = GenericAnnotationSymbol(doc, "注释符号", familyName);
                     break;
+                case 113:
+                    FamilyLoad(doc, "污水处理设备", familyName);
+                    familySymbol = EquipmentSymbol(doc, "污水处理设备", familyName);
+                    break;
+                case 114:
+                    FamilyLoad(doc, "管件", familyName);
+                    familySymbol = PipeFittingSymbol(doc, "管件", familyName);
+                    break;
+                case 115:
+                    FamilyLoad(doc, "卫生设备", familyName);
+                    familySymbol = PlumbingFixtureSymbol(doc, "卫生设备", familyName);
+                    break;
+                case 116:
+                    FamilyLoad(doc, "加热设备", familyName);
+                    familySymbol = EquipmentSymbol(doc, "加热设备", familyName);
+                    break;
+                case 117:
+                    FamilyLoad(doc, "加热设备", familyName);
+                    familySymbol = EquipmentSymbol(doc, "加热设备", familyName);
+                    break;
+                case 118:
+                    FamilyLoad(doc, "加热设备", familyName);
+                    familySymbol = EquipmentSymbol(doc, "加热设备", familyName);
+                    break;
                 default:
                     break;
             }
             return familySymbol;
+        }
+        public GroupType GetGroupTypeMethod(Document doc) //获取模型组类型
+        {
+            string groupName = CreatWaterFamily.mainfrm.FamilyName.Text;
+            string fullname = "给排水" + "_" + "模型组" + "_" + groupName;
+
+            FilteredElementCollector groupCollector = new FilteredElementCollector(doc);
+            groupCollector.OfClass(typeof(GroupType)).OfCategory(BuiltInCategory.OST_IOSModelGroups);
+            GroupType groupType = null;
+            IList<Element> groups = groupCollector.ToElements();
+            foreach (GroupType item in groups)
+            {
+                if (item.Name == fullname)
+                {
+                    groupType = item;
+                    break;
+                }
+            }
+            return groupType;
         }
         public FamilySymbol PipeAccessorySymbol(Document doc, string categoryName, string familyName) //管道附件
         {
@@ -570,6 +622,25 @@ namespace FFETOOLS
                 accessory = accessorySymbolList.FirstOrDefault();
             }
             return accessory;
+        }
+        public FamilySymbol PipeFittingSymbol(Document doc, string categoryName, string familyName) //管件
+        {
+            FilteredElementCollector pipeFittingCollector = new FilteredElementCollector(doc);
+            pipeFittingCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_PipeFitting);
+            List<FamilySymbol> pipeFittingSymbolList = new List<FamilySymbol>();
+            FamilySymbol pipeFitting = null;
+            string fullname = "给排水" + "_" + categoryName + "_" + familyName;
+
+            IList<Element> pipeFittings = pipeFittingCollector.ToElements();
+            foreach (FamilySymbol item in pipeFittings)
+            {
+                if (item.Family.Name == fullname)
+                {
+                    pipeFittingSymbolList.Add(item);
+                }
+            }
+            pipeFitting = pipeFittingSymbolList.FirstOrDefault();
+            return pipeFitting;
         }
         public FamilySymbol EquipmentSymbol(Document doc, string categoryName, string familyName) //机械设备
         {
