@@ -13,6 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TextBox = System.Windows.Controls.TextBox;
+using Binding = System.Windows.Data.Binding;
+
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 
 namespace FFETOOLS
 {
@@ -22,28 +27,18 @@ namespace FFETOOLS
     public partial class DesignNoteForm : Window
     {
         ExecuteEventDesignNote excDesignNote = null;
-        Autodesk.Revit.UI.ExternalEvent eventHandlerDesignNote = null;
-        private ObservableCollection<WorkShopNameInfo> items = new ObservableCollection<WorkShopNameInfo>();
-        public List<string> SelectWorkShopNameList = new List<string>();
-        public DesignNoteForm(List<string> workShopNameList)
+        ExternalEvent eventHandlerDesignNote = null;
+        public DesignNoteForm()
         {
             InitializeComponent();
-            foreach (string info in workShopNameList)
-            {
-                items.Add(new WorkShopNameInfo(info, false));
-            }
-            WorkShopNameListBox.ItemsSource = items;         
+            excDesignNote = new ExecuteEventDesignNote();
+            eventHandlerDesignNote = ExternalEvent.Create(excDesignNote);
         }
         private void this_Loaded(object sender, RoutedEventArgs e)
         {
             Cement_Button.IsChecked = true;
             CH_Button.IsChecked = true;
-            excDesignNote = new ExecuteEventDesignNote();
-            eventHandlerDesignNote = Autodesk.Revit.UI.ExternalEvent.Create(excDesignNote);
-        }
-        private void this_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            eventHandlerDesignNote.Dispose();
+            WorkShopText.Visibility = System.Windows.Visibility.Hidden;
         }
         private void this_KeyDown(object sender, KeyEventArgs e)
         {
@@ -55,20 +50,7 @@ namespace FFETOOLS
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             eventHandlerDesignNote.Raise();
-            SelectWorkShopNameList = SelectWorkShopName(items);
-            Close();
-        }
-        private List<string> SelectWorkShopName(ObservableCollection<WorkShopNameInfo> items)
-        {
-            List<string> selectWorkShopName = new List<string>();
-            foreach (var item in items)
-            {
-                if (item.IsSelected == true)
-                {
-                    selectWorkShopName.Add(item.WorkShopName);
-                }
-            }
-            return selectWorkShopName;
+            Hide();
         }
     }
 }

@@ -532,7 +532,7 @@ namespace FFETOOLS
                     }
                     CopyPasteOptions option = new CopyPasteOptions();
                     ElementTransformUtils.CopyElements(newdoc, copyIds, doc, null, option);
-                    newdoc.Save();
+                    //newdoc.Save();
                     newdoc.Close(false);
 
                     trans.Commit();

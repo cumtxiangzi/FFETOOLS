@@ -84,7 +84,8 @@
     <Compile Include="DesignNote\DesignNoteForm.xaml.cs">
       <DependentUpon>DesignNoteForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DesignNote\WorkShopNamwInfo.cs" />
+    <Compile Include="DesignNote\DuplicateViewUtils.cs" />
+    <Compile Include="DesignNote\PreviewControlModel.cs" />
     <Compile Include="ExportDLT\ExportDLT.cs" />
     <Compile Include="ExportDLT\ExportDLT.xaml.cs">
       <DependentUpon>ExportDLT.xaml</DependentUpon>

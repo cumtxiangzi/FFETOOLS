@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
-        Title="给排水设计说明" Name="this" Height="650" Width="650" ResizeMode="NoResize"  WindowStartupLocation="Manual"  
-        KeyDown="this_KeyDown"  Loaded="this_Loaded"  Closing="this_Closing">
+        Title="给排水设计说明" Name="this" Height="650" Width="650" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen"
+        KeyDown="this_KeyDown"  Loaded="this_Loaded" >
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -33,7 +34,7 @@
                 <RadioButton x:Name="WeiFei_Button"  Grid.Column="2" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="危废项目"/>
             </Grid>
         </GroupBox>
-        
+
         <GroupBox Header="语言类型" Grid.Column="0" Grid.Row="1"  Margin="6,5,6,5" BorderBrush="Gray">
             <Grid >
                 <Grid.ColumnDefinitions>
@@ -41,36 +42,27 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <RadioButton x:Name="CH_Button"  Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="中文"/>
                 <RadioButton x:Name="EN_Button"  Grid.Column="1" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="英文"/>
                 <RadioButton x:Name="CHEN_Button"  Grid.Column="2" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="中英文"/>
             </Grid>
         </GroupBox>
-        
+
         <GroupBox Header="车间列表" Grid.Column="0" Grid.Row="2"  Margin="6,5,6,5" BorderBrush="Gray">
             <Grid >
-                <ListBox x:Name="WorkShopNameListBox" Margin="5,5,5,5" BorderThickness="0" >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsSelected}"  Content="{Binding DrawingName}" CommandParameter="{Binding No}" 
-                                      HorizontalAlignment="Left" VerticalAlignment="Top" 
-                                      VerticalContentAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Auto" UseLayoutRounding="False" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
+                <ListBox x:Name="WorkShopNameListBox" Margin="5,5,5,5" BorderThickness="0" DisplayMemberPath="Name">
+                   
                 </ListBox>
             </Grid>
         </GroupBox>
-        
+
+        <TextBox Height="25" Name="WorkShopText"  Grid.Column="0" Grid.Row="3"  VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Name}"/>
+
         <GroupBox Header="设计说明预览" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"  Margin="6,5,6,5" BorderBrush="Gray">
-            <Grid >
-
-
-
-
+            <Grid x:Name="PreviewGrid" Margin="0,5,0,0" >
             </Grid>
         </GroupBox>
-
 
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>
