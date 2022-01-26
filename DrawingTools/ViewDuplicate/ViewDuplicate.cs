@@ -108,16 +108,18 @@ namespace FFETOOLS
 
                 using (Transaction trans = new Transaction(doc, "批量复制建筑视图"))
                 {
-                    var failure = new ViewDuplicateFailureHandler();
-                    //ViewDuplicateFailureHandler.SetFailedHandlerBeforeTransaction(failure, trans);
                     ViewPlan viewCopy = null;
                     trans.Start();
+                    // Set handler to skip the duplicate types dialog
+                    CopyPasteOptions options = new CopyPasteOptions();
+                    options.SetDuplicateTypeNamesHandler(new HideAndAcceptDuplicateTypeNamesHandler());
+
                     foreach (ViewPlan view in newViews)
                     {
                         viewCopy = CreateViewCopy(view, doc);
                         if (ViewDuplicate.mainfrm.DetailCheckBox.IsChecked == false)
                         {
-                            ElementTransformUtils.CopyElements(view, GetDimension(doc, view), viewCopy, Transform.Identity, new CopyPasteOptions());
+                            ElementTransformUtils.CopyElements(view, GetDimension(doc, view), viewCopy, Transform.Identity, options);
                         }
                     }
 
@@ -126,10 +128,14 @@ namespace FFETOOLS
                         viewCopy = CreateViewCopy(view, doc);
                         if (ViewDuplicate.mainfrm.DetailCheckBox.IsChecked == false)
                         {
-                            ElementTransformUtils.CopyElements(view, GetDimension(doc, view), viewCopy, Transform.Identity, new CopyPasteOptions());
+                            ElementTransformUtils.CopyElements(view, GetDimension(doc, view), viewCopy, Transform.Identity, options);
                         }
                     }
-                    trans.Commit();
+
+                    // Set failure handler to skip any duplicate types warnings that are posted.
+                    FailureHandlingOptions failureOptions = trans.GetFailureHandlingOptions();
+                    failureOptions.SetFailuresPreprocessor(new HidePasteDuplicateTypesPreprocessor());
+                    trans.Commit(failureOptions);
                     uidoc.ActiveView = viewCopy;
                 }
             }

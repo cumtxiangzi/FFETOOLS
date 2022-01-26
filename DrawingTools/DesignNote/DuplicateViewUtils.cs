@@ -178,7 +178,7 @@ namespace FFETOOLS
         /// <param name="fromView">The source view.</param>
         /// <param name="toView">The target view.</param>
         /// <returns>The number of new elements created during the copy operation.</returns>
-        private static int DuplicateDetailingAcrossViews(View fromView,
+        public static int DuplicateDetailingAcrossViews(View fromView,
                                                         View toView)
         {
             // Collect view-specific elements in source view
@@ -269,7 +269,28 @@ namespace FFETOOLS
             foreach (FailureMessageAccessor failure in failuresAccessor.GetFailureMessages())
             {
                 // Delete any "Can't paste duplicate types.  Only non duplicate types will be pasted." warnings
+                // 把警告对话框中的内容翻译成英文 然后在API帮助文档中搜索BuiltInFailures 然后看后面英文描述与之匹配的项目
                 if (failure.GetFailureDefinitionId() == BuiltInFailures.CopyPasteFailures.CannotCopyDuplicates)
+                {
+                    failuresAccessor.DeleteWarning(failure);
+                }
+                else if (failure.GetFailureDefinitionId() == BuiltInFailures.CopyPasteFailures.FinalizedElementsWillBeDeleted)
+                {
+                    failuresAccessor.DeleteWarning(failure);
+                }
+                else if (failure.GetFailureDefinitionId() == BuiltInFailures.CopyPasteFailures.FinalizedElementsWillBeDeletedWarn)
+                {
+                    failuresAccessor.DeleteWarning(failure);
+                }
+                else if (failure.GetFailureDefinitionId() == BuiltInFailures.EditingFailures.ElementsDeleted)
+                {
+                   failuresAccessor.DeleteWarning(failure);
+                }
+                else if (failure.GetFailureDefinitionId() == BuiltInFailures.EditingFailures.CannotEditElements)
+                {
+                    failuresAccessor.DeleteWarning(failure);
+                }
+                else if (failure.GetFailureDefinitionId() == BuiltInFailures.EditingFailures.OwnedByOther)
                 {
                     failuresAccessor.DeleteWarning(failure);
                 }

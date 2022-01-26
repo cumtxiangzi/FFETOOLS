@@ -108,7 +108,6 @@
     <Compile Include="ShowWorkset\ShowWorkset.xaml.cs">
       <DependentUpon>ShowWorkset.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewDuplicate\ViewDuplicateFailureHandler.cs" />
     <Compile Include="ViewDuplicate\ArcDrawingNameInfo.cs" />
     <Compile Include="CreatPipeSystem\CreatPipeSystem.cs" />
     <Compile Include="CreatPipeSystem\CreatPipeSystemForm.xaml.cs">
