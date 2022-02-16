@@ -31,6 +31,8 @@ namespace FFETOOLS
         public List<string> Ypoints = new List<string>();
         public List<string> Zpoints = new List<string>();
         public List<XYZ> Wellpoints = new List<XYZ>();
+        public List<double> wellBottomValue = new List<double>();
+        public List<DataTable> Results = new List<DataTable>();
         public WellPointWindow()
         {
             InitializeComponent();
@@ -66,7 +68,7 @@ namespace FFETOOLS
                 List<string> st = new List<string>();
                 for (int j = 0; j < dt.Rows.Count; j++)
                 {
-                    PS_List.Items.Add(new WellInfo(dt.Rows[j][1].ToString(), dt.Rows[j][2].ToString(), dt.Rows[j][3].ToString(), dt.Rows[j][4].ToString()
+                    PS_List.Items.Add(new WellInfo(dt.Rows[j][0].ToString(), dt.Rows[j][1].ToString(), dt.Rows[j][2].ToString(), dt.Rows[j][3].ToString(), dt.Rows[j][4].ToString()
                     , dt.Rows[j][5].ToString(), dt.Rows[j][7].ToString()));
                 }
             }
@@ -106,24 +108,30 @@ namespace FFETOOLS
                     newTB.Rows.Add(row);
                 }
 
-                DataTable distTable = newTB.DefaultView.ToTable(true, "排水井编号", "A坐标", "B坐标", "井面标高(m)", "井底标高(m)", "井深(m)");
+                DataTable copyTB = newTB.Copy();
+                copyTB.Columns.Remove("分组号");
+                DataTable distTable = copyTB.DefaultView.ToTable(true, "排水井编号", "A坐标", "B坐标", "井面标高(m)", "井底标高(m)", "井深(m)"); //去除重复行
 
-                Wellname = DataGridVaule(distTable, 0);
+                Wellname = RemoveNull(DataGridVaule(distTable, 0));
                 Xpoints = RemoveNull(DataGridVaule(distTable, 1));
                 Ypoints = RemoveNull(DataGridVaule(distTable, 2));
                 Zpoints = RemoveNull(DataGridVaule(distTable, 3));
+                List<string> wellBottom = RemoveNull(DataGridVaule(distTable, 5));//井深数据
+
                 for (int i = 0; i < Xpoints.Count; i++)
                 {
-                    Wellpoints.Add(new XYZ(Convert.ToDouble(Xpoints.ElementAt(i)) * 3.2808, Convert.ToDouble(Ypoints.ElementAt(i)) * 3.2808, Convert.ToDouble(Zpoints.ElementAt(i)) * 3.2808));
+                    Wellpoints.Add(new XYZ(Convert.ToDouble(Ypoints.ElementAt(i)) * 3.28083989501312, Convert.ToDouble(Xpoints.ElementAt(i)) * 3.28083989501312,
+                        Convert.ToDouble(Zpoints.ElementAt(i)) * 3.28083989501312));
                 }
-                MessageBox.Show(Zpoints.ElementAt(20) + "\n" + Wellname.Count.ToString());
+                for (int i = 0; i < Xpoints.Count; i++)
+                {
+                    wellBottomValue.Add((Convert.ToDouble(wellBottom.ElementAt(i))) * 3.28083989501312);
+                }
 
-
-
+                RemoveEmpty(newTB);//去除空行
+                Results = newTB.AsEnumerable().GroupBy(row => row.Field<string>("分组号")).Select(g => g.CopyToDataTable()).ToList();//根据分组号分组         
 
                 eventHandlerWellPoint.Raise();
-
-
                 Close();
             }
         }
@@ -182,6 +190,29 @@ namespace FFETOOLS
                 }
             }
             return lt;
+        }
+        protected void RemoveEmpty(DataTable dt)
+        {
+            List<DataRow> removelist = new List<DataRow>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                bool IsNull = true;
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    if (!string.IsNullOrEmpty(dt.Rows[i][j].ToString().Trim()))
+                    {
+                        IsNull = false;
+                    }
+                }
+                if (IsNull)
+                {
+                    removelist.Add(dt.Rows[i]);
+                }
+            }
+            for (int i = 0; i < removelist.Count; i++)
+            {
+                dt.Rows.Remove(removelist[i]);
+            }
         }
         protected DataTable DataTableRemoveEmptyRow(DataTable dt)
         {
@@ -289,19 +320,6 @@ namespace FFETOOLS
             }
             return dt;
         }
-        public static void ChangePipeSize(Pipe pipe, string diameter)
-        {
-            Parameter pdiameter = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM);
-            pdiameter.SetValueString(diameter);
-        }
-        public static XYZ ChangePoint(XYZ point, double z)
-        {
-            double zz = z / 304.8;
-            XYZ pt = new XYZ(point.X, point.Y, point.Z + zz);
-            return pt;
-        }
-
-
         private string SelectPath()
         {
             string path = string.Empty;
@@ -389,6 +407,7 @@ namespace FFETOOLS
     }
     public class WellInfo
     {
+        public string Code { set; get; }
         public string Name { set; get; }
         public string Aaxis { set; get; }
         public string Baxis { set; get; }
@@ -398,7 +417,6 @@ namespace FFETOOLS
         public string Diameter { set; get; }
         public string Slope { set; get; }
         public string Type { set; get; }
-        public string Code { set; get; }
         public WellInfo(string name, string aaxis, string baxis, string depth, string diamter, string slope, string type, string code)
         {
             Name = name;
@@ -410,8 +428,9 @@ namespace FFETOOLS
             Type = type;
             Code = code;
         }
-        public WellInfo(string name, string aaxis, string baxis, string uplevel, string downlevel, string depth)
+        public WellInfo(string code, string name, string aaxis, string baxis, string uplevel, string downlevel, string depth)
         {
+            Code = code;//分组号
             Name = name; //排水井编号
             Aaxis = aaxis; //A坐标
             Baxis = baxis;//B坐标

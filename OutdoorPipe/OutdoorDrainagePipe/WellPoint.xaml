@@ -64,6 +64,7 @@
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
                     <DataGrid.Columns>
+                        <DataGridTextColumn Header="分组号" Width="0.5*" Binding="{Binding Code}"/>
                         <DataGridTextColumn Header="排水井编号" Width="1*" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="A坐标" Width="1*" Binding="{Binding Aaxis}"/>
                         <DataGridTextColumn Header="B坐标" Width="1*" Binding="{Binding Baxis}"/>
