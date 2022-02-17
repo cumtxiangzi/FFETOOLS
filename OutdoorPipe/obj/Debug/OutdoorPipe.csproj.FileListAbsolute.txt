@@ -541,3 +541,5 @@ D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\F
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\OutdoorDrainagePipe\WellPoint.g.cs
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\OutdoorDrainagePipe\WellPoint.baml
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\bin\Debug\EPPlus.dll
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\OutdoorDrainagePipe\OutdoorDrangePipe.g.cs
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\OutdoorDrainagePipe\OutdoorDrangePipe.baml

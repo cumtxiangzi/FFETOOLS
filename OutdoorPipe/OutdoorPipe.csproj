@@ -74,6 +74,10 @@
     <Compile Include="CreatWaterFamily\CreatWaterFamilyForm.xaml.cs">
       <DependentUpon>CreatWaterFamilyForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OutdoorDrainagePipe\OutdoorDrangePipe.xaml.cs">
+      <DependentUpon>OutdoorDrangePipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OutdoorDrainagePipe\OutdoorDrangePipe.cs" />
     <Compile Include="PipeSupportSection\PipeSupportSectionForm.xaml.cs">
       <DependentUpon>PipeSupportSectionForm.xaml</DependentUpon>
     </Compile>
@@ -126,6 +130,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CreatWaterFamily\CreatWaterFamilyForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OutdoorDrainagePipe\OutdoorDrangePipe.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
