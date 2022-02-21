@@ -72,10 +72,10 @@ namespace FFETOOLS
             var eleref = sel.PickObject(ObjectType.Element, doc.GetSelectionFilter(m => m is MEPCurve), "拾取管线打断点");
             var pickpoint = eleref.GlobalPoint;
 
-            Subscribe();
+            //Subscribe();
             IList<Reference> refList = sel.PickObjects(ObjectType.Element, new PipeSelectionFilter(), "请选要要批量打断的管道");         
-            CompleteMultiSelection();         
-            Unsubscribe();
+            //CompleteMultiSelection();         
+            //Unsubscribe();
 
             if (refList.Count == 0)
             {
@@ -131,7 +131,7 @@ namespace FFETOOLS
             // 32 represent Space
             if (e.KeyValue == 32) { CompleteMultiSelection(); }
         }
-        private void CompleteMultiSelection()
+        public void CompleteMultiSelection()
         {
             var rvtwindow = Autodesk.Windows.ComponentManager.ApplicationWindow;
             var list = new List<IntPtr>();

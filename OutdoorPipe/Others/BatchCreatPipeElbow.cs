@@ -42,14 +42,16 @@ namespace FFETOOLS
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
-                
+
             }
             return Result.Succeeded;
         }
         public void CreatPipeElbowMain(Document doc, UIDocument uidoc)
         {
             Selection sel = uidoc.Selection;
+
             IList<Reference> refList = sel.PickObjects(ObjectType.Element, new PipeSelectionFilter(), "请选要互连的管道");
+
             List<Pipe> pipeList = new List<Pipe>();
             List<string> pipeSystemList = new List<string>();
 
@@ -114,7 +116,7 @@ namespace FFETOOLS
             {
                 foreach (var con20 in conList2)
                 {
-                    if (con10.Origin.DistanceTo(con20.Origin)== minDistance)
+                    if (con10.Origin.DistanceTo(con20.Origin) == minDistance)
                     {
                         con1 = con10;
                         con2 = con20;
@@ -199,5 +201,5 @@ namespace FFETOOLS
             return newlevel;
         }
     }
-    
+
 }

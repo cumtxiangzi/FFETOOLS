@@ -122,12 +122,39 @@ namespace FFETOOLS
                 }
             }
 
-            foreach (DetailLine line in lines)
+            foreach (DetailLine item in lines)
             {
+                double length = Convert.ToInt32(UnitUtils.Convert(item.GeometryCurve.Length, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS));
+                Line line = item.GeometryCurve as Line;
+                XYZ startPoint = LineExtension.StartPoint(line);
+                XYZ endPoint = LineExtension.EndPoint(line);
 
+                if (length > 40000)
+                {
+                    double num = Math.Floor(length / 40000);
+                    int mod = Convert.ToInt32(length % 40000);
 
+                    if (mod == 0)
+                    {
+
+                        for (int i = 1; i < num; i++)
+                        {
+                            XYZ point = new XYZ(((num - i) * startPoint.X + i * endPoint.X) / num, ((num - i) * startPoint.Y + i * endPoint.Y) / num, startPoint.Z);//n等分点坐标公式
+                            Points.Add(point);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 1; i < num + 1; i++)
+                        {
+                            double k =num + 1;
+                            XYZ point = new XYZ(((k - i) * startPoint.X + i * endPoint.X) / k, ((k - i) * startPoint.Y + i * endPoint.Y) / k, startPoint.Z);
+
+                            Points.Add(point);
+                        }
+                    }
+                }
             }
-
             return Points;
         }
         public bool CheckPoint(List<XYZ> points, XYZ point)
@@ -212,4 +239,5 @@ namespace FFETOOLS
             return "创建室外排水管网";
         }
     }
+
 }
