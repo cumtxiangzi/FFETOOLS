@@ -39,17 +39,7 @@ namespace FFETOOLS
                 WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
                 helper.Owner = rvtPtr;
                 //mainfrm.Show();
-                using (Transaction trans = new Transaction(doc, "创建室外排水管网"))
-                {
-                    trans.Start();
-                    AutoCreatWells(doc, uidoc);
-
-
-
-
-                    trans.Commit();
-                }
-
+                AutoCreatWells(doc, uidoc);
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
@@ -60,7 +50,7 @@ namespace FFETOOLS
         public void AutoCreatWells(Document doc, UIDocument uidoc)
         {
             Selection selection = uidoc.Selection;
-            IList<Reference> refList = selection.PickObjects(ObjectType.Element, new DetailineSelectionFilter(), "请选择详图线");
+            IList<Reference> refList = selection.PickObjects(ObjectType.Element, new PipeSelectionFilter(), "请选择详图线");
             if (refList.Count == 0)
             {
                 TaskDialog.Show("警告", "您没有选择任何元素，请重新选择");
@@ -71,36 +61,180 @@ namespace FFETOOLS
                 CreatWells(doc, refList);
             }
         }
+
         public void CreatWells(Document doc, IList<Reference> referenceList)
         {
             // 创建排水检查井主函数
-            StructureFamilyLoad(doc, "排水构筑物", "砖砌排水检查井");
-            FamilySymbol familySymbol = WaterStructureSymbol(doc, "排水构筑物", "砖砌排水检查井");
-            familySymbol.Activate();
-            FamilyInstance wellinstance = null;
-
-            Options opts = new Options { DetailLevel = ViewDetailLevel.Fine, ComputeReferences = true };
             List<XYZ> wellPoints = new List<XYZ>();
-            List<DetailLine> lineList = new List<DetailLine>();
+            List<Pipe> pipeList = new List<Pipe>();
+            List<Pipe> newPipes = new List<Pipe>();
+            List<Pipe> allPipes = new List<Pipe>();
 
-            foreach (Reference reference in referenceList)
+            TransactionGroup tg = new TransactionGroup(doc, "创建室外排水管网");
+            tg.Start();
+
+            using (Transaction trans = new Transaction(doc, "批量打断含三通的管道"))
             {
-                DetailLine detailLine = doc.GetElement(reference.ElementId) as DetailLine;
-                //var geometry = detailLine.get_Geometry(opts);
-                //Line centerline = geometry.First() as Line;
-                lineList.Add(detailLine);
+                trans.Start();
+
+                Options opts = new Options { DetailLevel = ViewDetailLevel.Fine, ComputeReferences = true };
+                foreach (Reference reference in referenceList)
+                {
+                    Pipe detailLine = doc.GetElement(reference.ElementId) as Pipe;
+                    //var geometry = detailLine.get_Geometry(opts);
+                    //Line centerline = geometry.First() as Line;
+                    pipeList.Add(detailLine);
+                }
+
+                foreach (Pipe item in pipeList)
+                {
+                    ConnectorSet conset = item.ConnectorManager.Connectors;
+                    ElementId sys = item.MEPSystem.GetTypeId();
+                    ElementId type = item.PipeType.Id;
+                    ElementId level = item.ReferenceLevel.Id;
+
+                    List<XYZ> breakPoints = new List<XYZ>();
+                    Line line = item.LocationLine();
+                    XYZ startPoint = LineExtension.StartPoint(line);
+                    XYZ endPoint = LineExtension.EndPoint(line);
+
+                    double length = Convert.ToInt32(UnitUtils.Convert(line.Length, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS));
+                    if (length > 40000 && conset.Size <= 2)
+                    {
+                        newPipes.Add(item);
+                    }
+
+                    if (length <= 40000 && conset.Size <= 2)
+                    {
+                        allPipes.Add(item);
+                    }
+
+                    if (conset.Size > 2)
+                    {
+                        foreach (Connector con in conset)
+                        {
+                            XYZ position = con.Origin;
+                            breakPoints.Add(position);
+                        }
+
+                        breakPoints.Sort((a, b) => a.X.CompareTo(b.X));//排序只考虑管线垂直情况
+                        breakPoints.Sort((a, b) => a.Y.CompareTo(b.Y));
+
+                        for (int i = 0; i < breakPoints.Count - 1; i++)
+                        {
+                            Pipe p = Pipe.CreatePlaceholder(doc, sys, type, level, breakPoints.ElementAt(i), breakPoints.ElementAt(i + 1));
+                            newPipes.Add(p);
+                            allPipes.Add(p);
+                        }
+
+                        //for (int i = 0; i < newPipes.Count - 1; i++)
+                        //{
+                        //    Connector con1 = PipeExtension.EndCon(newPipes.ElementAt(i));
+                        //    Connector con2 = PipeExtension.StartCon(newPipes.ElementAt(i + 1));
+                        //    con1.ConnectTo(con2);
+                        //}
+                        doc.Delete(item.Id);
+                    }
+                }
+                trans.Commit();
             }
 
-            wellPoints = GetCrosspoint(lineList);
-            foreach (XYZ item in wellPoints)
+            using (Transaction trans = new Transaction(doc, "批量打断大于40米的管道"))
             {
-                wellinstance = doc.Create.NewFamilyInstance(item, familySymbol, doc.ActiveView.GenLevel, StructuralType.NonStructural);
+                trans.Start();
+                foreach (Pipe pipe in newPipes)
+                {
+                    Line newLine = pipe.LocationLine();
+                    double newLength = Convert.ToInt32(UnitUtils.Convert(newLine.Length, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS));
+                    XYZ newStartPoint = LineExtension.StartPoint(newLine);
+                    XYZ newEndPoint = LineExtension.EndPoint(newLine);
+
+                    ElementId sys = pipe.MEPSystem.GetTypeId();
+                    ElementId type = pipe.PipeType.Id;
+                    ElementId level = pipe.ReferenceLevel.Id;
+
+                    if (newLength > 40000)
+                    {
+                        allPipes.Remove(pipe);
+                        List<XYZ> points = new List<XYZ>();
+                        double num = Math.Floor(newLength / 40000);
+                        int mod = Convert.ToInt32(newLength % 40000);
+
+                        points.Add(newStartPoint);
+
+                        if (mod == 0)
+                        {
+                            for (int i = 1; i < num; i++)
+                            {
+                                XYZ point = new XYZ(((num - i) * newStartPoint.X + i * newEndPoint.X) / num, ((num - i) * newStartPoint.Y + i * newEndPoint.Y) / num, newStartPoint.Z);//n等分点坐标公式
+                                points.Add(point);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 1; i < num + 1; i++)
+                            {
+                                double k = num + 1;
+                                XYZ point = new XYZ(((k - i) * newStartPoint.X + i * newEndPoint.X) / k, ((k - i) * newStartPoint.Y + i * newEndPoint.Y) / k, newStartPoint.Z);
+                                points.Add(point);
+                            }
+                        }
+
+                        points.Add(newEndPoint);
+
+                        for (int i = 0; i < points.Count - 1; i++)
+                        {
+                            Pipe p = Pipe.CreatePlaceholder(doc, sys, type, level, points.ElementAt(i), points.ElementAt(i + 1));
+                            allPipes.Add(p);
+                        }
+
+                        doc.Delete(pipe.Id);
+                    }
+                }
+                trans.Commit();
             }
 
+            using (Transaction trans = new Transaction(doc, "批量生成排水检查井"))
+            {
+                trans.Start();
+
+
+
+                StructureFamilyLoad(doc, "排水构筑物", "砖砌排水检查井");
+                FamilySymbol familySymbol = WaterStructureSymbol(doc, "排水构筑物", "砖砌排水检查井");
+                familySymbol.Activate();
+                FamilyInstance wellinstance = null;
+
+                foreach (XYZ item in wellPoints)
+                {
+                    wellinstance = doc.Create.NewFamilyInstance(item, familySymbol, doc.ActiveView.GenLevel, StructuralType.NonStructural);
+                }
+
+                trans.Commit();
+            }
+
+            tg.Assimilate();
+
+        }
+
+        //public void BreakPipeMethod(Document doc, Pipe pipe, XYZ point)
+        //{
+        //    var mep = pipe as MEPCurve;
+        //    PlumbingUtils.BreakCurve(doc, mep.Id, point);
+        //}
+
+        public bool EqualPoint(XYZ point1, XYZ point2)
+        {
+            bool equal = false;
+            if (point1.X == point2.X && point1.Y == point2.Y && point1.Z == point2.Z)
+            {
+                equal = true;
+            }
+            return equal;
         }
         public List<XYZ> GetCrosspoint(List<DetailLine> lines)
         {
-            //获详图线所有交点
+            //获取详图线所有交点
             List<XYZ> Points = new List<XYZ>();
             foreach (DetailLine line in lines)
             {
@@ -121,36 +255,28 @@ namespace FFETOOLS
                     }
                 }
             }
+            return Points;
+        }
+        public List<XYZ> GetCrosspoint(List<Pipe> pipes)
+        {
+            //获取管线占位符所有交点
+            List<XYZ> Points = new List<XYZ>();
 
-            foreach (DetailLine item in lines)
+            foreach (Pipe pipe in pipes)
             {
-                double length = Convert.ToInt32(UnitUtils.Convert(item.GeometryCurve.Length, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS));
-                Line line = item.GeometryCurve as Line;
-                XYZ startPoint = LineExtension.StartPoint(line);
-                XYZ endPoint = LineExtension.EndPoint(line);
-
-                if (length > 40000)
+                Pipe currentPipe = pipe;
+                foreach (Pipe line1 in pipes)
                 {
-                    double num = Math.Floor(length / 40000);
-                    int mod = Convert.ToInt32(length % 40000);
-
-                    if (mod == 0)
+                    IntersectionResultArray ira = null;
+                    SetComparisonResult scr = currentPipe.LocationLine().Intersect(line1.LocationLine(), out ira);
+                    if (ira != null)
                     {
+                        IntersectionResult ir = ira.get_Item(0);
 
-                        for (int i = 1; i < num; i++)
+                        // 判断点是否重复
+                        if (!CheckPoint(Points, ir.XYZPoint))
                         {
-                            XYZ point = new XYZ(((num - i) * startPoint.X + i * endPoint.X) / num, ((num - i) * startPoint.Y + i * endPoint.Y) / num, startPoint.Z);//n等分点坐标公式
-                            Points.Add(point);
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 1; i < num + 1; i++)
-                        {
-                            double k =num + 1;
-                            XYZ point = new XYZ(((k - i) * startPoint.X + i * endPoint.X) / k, ((k - i) * startPoint.Y + i * endPoint.Y) / k, startPoint.Z);
-
-                            Points.Add(point);
+                            Points.Add(ir.XYZPoint);
                         }
                     }
                 }
