@@ -830,6 +830,23 @@ namespace FFETOOLS
             return true;
         }
     }
+    //排水管的过滤条件
+    public class DrainagePipeSelectionFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element e)
+        {
+            if (e.Category.Name == "管道占位符")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool AllowReference(Reference r, XYZ p)
+        {
+            return true;
+        }
+    }
     #endregion
 
 }

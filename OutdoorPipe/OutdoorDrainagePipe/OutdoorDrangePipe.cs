@@ -39,7 +39,19 @@ namespace FFETOOLS
                 WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
                 helper.Owner = rvtPtr;
                 //mainfrm.Show();
-                AutoCreatWells(doc, uidoc);
+
+                View view = uidoc.ActiveView;
+                if (view is View3D)
+                {
+                    AutoCreatWells(doc, uidoc);
+                }
+                else
+                {
+                    TaskDialog.Show("警告", "请在三维视图中进行操作");
+                    //PipeSupportSection.mainfrm.Show();
+                    //mainfrm.Show();
+                }
+
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
@@ -50,7 +62,7 @@ namespace FFETOOLS
         public void AutoCreatWells(Document doc, UIDocument uidoc)
         {
             Selection selection = uidoc.Selection;
-            IList<Reference> refList = selection.PickObjects(ObjectType.Element, new PipeSelectionFilter(), "请选择详图线");
+            IList<Reference> refList = selection.PickObjects(ObjectType.Element, new DrainagePipeSelectionFilter(), "请选择排水管定位线(管道占位符)");
             if (refList.Count == 0)
             {
                 TaskDialog.Show("警告", "您没有选择任何元素，请重新选择");
@@ -198,8 +210,7 @@ namespace FFETOOLS
             {
                 trans.Start();
 
-
-
+                wellPoints = GetCrosspoint(allPipes);
                 StructureFamilyLoad(doc, "排水构筑物", "砖砌排水检查井");
                 FamilySymbol familySymbol = WaterStructureSymbol(doc, "排水构筑物", "砖砌排水检查井");
                 familySymbol.Activate();
@@ -208,13 +219,19 @@ namespace FFETOOLS
                 foreach (XYZ item in wellPoints)
                 {
                     wellinstance = doc.Create.NewFamilyInstance(item, familySymbol, doc.ActiveView.GenLevel, StructuralType.NonStructural);
+                    Line line = CalculateHeight(doc, item);
+                    double lgh = UnitUtils.Convert(line.Length, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS);
+                    Parameter height = wellinstance.LookupParameter("偏移");
+                    height.SetValueString(lgh.ToString());
+
+                    //Parameter code = wellinstance.LookupParameter("标记");
+                    //code.Set("P" + i.ToString());                 
                 }
 
                 trans.Commit();
             }
 
             tg.Assimilate();
-
         }
 
         //public void BreakPipeMethod(Document doc, Pipe pipe, XYZ point)
@@ -222,7 +239,40 @@ namespace FFETOOLS
         //    var mep = pipe as MEPCurve;
         //    PlumbingUtils.BreakCurve(doc, mep.Id, point);
         //}
+        public Line CalculateHeight(Document doc, XYZ center)
+        {
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            Func<View3D, bool> isNotTemplate = v3 => !(v3.IsTemplate);
+            View3D view3D = collector.OfClass(typeof(View3D)).Cast<View3D>().First<View3D>(isNotTemplate);
 
+            FilteredElementCollector TopographCollector = new FilteredElementCollector(doc).OfClass(typeof(TopographySurface)).OfCategory(BuiltInCategory.OST_Topography);
+            IList<Element> topographs = TopographCollector.ToElements();
+            TopographySurface topography = topographs.ElementAt(0) as TopographySurface;
+
+            // Project in the negative Z direction down to the floor.特别注意Z值,决定了射线的方向,-1向下,1向上
+            XYZ rayDirection = new XYZ(0, 0, 1);
+
+            // Look for references to faces where the element is the floor element id.
+            ReferenceIntersector referenceIntersector = new ReferenceIntersector(topography.Id, FindReferenceTarget.Mesh, view3D);
+            IList<ReferenceWithContext> references = referenceIntersector.Find(center, rayDirection);
+
+            double distance = Double.PositiveInfinity;
+            XYZ intersection = null;
+            foreach (ReferenceWithContext referenceWithContext in references)
+            {
+                Reference reference = referenceWithContext.GetReference();
+                // Keep the closest matching reference (using the proximity parameter to determine closeness).
+                double proximity = referenceWithContext.Proximity;
+                if (proximity < distance)
+                {
+                    distance = proximity;
+                    intersection = reference.GlobalPoint;
+                }
+            }
+            // Create line segment from the start point and intersection point.
+            Line result = Line.CreateBound(center, intersection);
+            return result;
+        }
         public bool EqualPoint(XYZ point1, XYZ point2)
         {
             bool equal = false;
