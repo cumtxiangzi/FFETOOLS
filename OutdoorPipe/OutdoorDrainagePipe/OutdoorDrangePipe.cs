@@ -34,10 +34,10 @@ namespace FFETOOLS
                 Document doc = uidoc.Document;
                 Selection sel = uidoc.Selection;
 
-                mainfrm = new OutdoorDrangePipeForm();
-                IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
-                WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
-                helper.Owner = rvtPtr;
+                //mainfrm = new OutdoorDrangePipeForm(); //保留窗体，为后续计算使用
+                //IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
+                //WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
+               // helper.Owner = rvtPtr;
                 //mainfrm.Show();
 
                 View view = uidoc.ActiveView;
@@ -215,7 +215,8 @@ namespace FFETOOLS
                 FamilySymbol familySymbol = WaterStructureSymbol(doc, "排水构筑物", "砖砌排水检查井");
                 familySymbol.Activate();
                 FamilyInstance wellinstance = null;
-
+               
+                int num = 1;
                 foreach (XYZ item in wellPoints)
                 {
                     wellinstance = doc.Create.NewFamilyInstance(item, familySymbol, doc.ActiveView.GenLevel, StructuralType.NonStructural);
@@ -223,14 +224,113 @@ namespace FFETOOLS
                     double lgh = UnitUtils.Convert(line.Length, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS);
                     Parameter height = wellinstance.LookupParameter("偏移");
                     height.SetValueString(lgh.ToString());
+                    Parameter depth = wellinstance.LookupParameter("管中心高");
+                    depth.SetValueString("1500");
+                   
+                    Parameter code = wellinstance.LookupParameter("标记");
+                    code.Set("P" + num.ToString());
+                   num++;
+                }
 
-                    //Parameter code = wellinstance.LookupParameter("标记");
-                    //code.Set("P" + i.ToString());                 
+                List<Pipe> pipesHDPE = new List<Pipe>();
+                List<Pipe> pipesUPVC=new List<Pipe>();
+            
+                foreach (Pipe pipe in allPipes)
+                {
+                    bool oneEqual = false;
+                    bool twoEqual=false;
+                    Line newLine = pipe.LocationLine();
+                    XYZ newStartPoint = LineExtension.StartPoint(newLine);
+                    XYZ newEndPoint = LineExtension.EndPoint(newLine);
+                    
+                    foreach (XYZ point in wellPoints)
+                    {
+                        if (newStartPoint.IsAlmostEqualTo(point))
+                        {
+                            oneEqual = true;
+                            break;
+                        }
+                    }
+                    foreach (XYZ point in wellPoints)
+                    {
+                        if (newEndPoint.IsAlmostEqualTo(point))
+                        {
+                            twoEqual = true;
+                            break;
+                        }
+                    }
+
+                    if (oneEqual && twoEqual)
+                    {
+                        pipesHDPE.Add(pipe);
+                    }
+                    else
+                    {
+                        pipesUPVC.Add(pipe);
+                    }
+                }             
+
+                ElementId sys = GetPipeSystemType(doc, "给排水", "污水管道").Id;
+                ElementId typeHDPE = GetPipeType(doc, "给排水", "HDPE管").Id;
+                ElementId typeUPVC = GetPipeType(doc, "给排水", "UPVC管").Id;
+                ElementId level = GetPipeLevel(doc,"0.000").Id;
+
+              foreach (Pipe pipe in pipesHDPE)
+                {
+                    Line newLine = pipe.LocationLine();
+                    XYZ newStartPoint = LineExtension.StartPoint(newLine);
+                    XYZ newEndPoint = LineExtension.EndPoint(newLine);
+
+                    Line startline = CalculateHeight(doc, newStartPoint);
+                    Line endline = CalculateHeight(doc,newEndPoint);
+
+                    XYZ realStartPoint= new XYZ(newStartPoint.X,newStartPoint.Y,newStartPoint.Z + startline.Length - 1500 / 304.8);
+                    XYZ realEndPoint = new XYZ(newEndPoint.X, newEndPoint.Y, newEndPoint.Z + endline.Length - 1500 / 304.8);
+
+                    Pipe p = Pipe.Create(doc, sys, typeHDPE, level, realStartPoint, realEndPoint);
+                    ChangePipeSize(p, "300");
+                }
+
+                foreach (Pipe pipe in pipesUPVC)
+                {
+                    Line newLine = pipe.LocationLine();
+                    XYZ newStartPoint = LineExtension.StartPoint(newLine);
+                    XYZ newEndPoint = LineExtension.EndPoint(newLine);
+
+                    Line startline = CalculateHeight(doc, newStartPoint);
+                    Line endline = CalculateHeight(doc, newEndPoint);
+
+                    XYZ realStartPoint = new XYZ(newStartPoint.X, newStartPoint.Y, newStartPoint.Z + startline.Length - 1000 / 304.8);
+                    XYZ realEndPoint = new XYZ(newEndPoint.X, newEndPoint.Y, newEndPoint.Z + endline.Length - 1000 / 304.8);
+
+                    Pipe p = Pipe.Create(doc, sys, typeUPVC, level, realStartPoint, realEndPoint);
+                    ChangePipeSize(p, "100");
                 }
 
                 trans.Commit();
             }
+          
+            //using (Transaction trans = new Transaction(doc, "删除管道系统"))
+            //{
+            //    trans.Start();
 
+            //    List<ElementId> elements = new List<ElementId>();
+            //    foreach (Pipe item in allPipes)
+            //    {
+            //        if (item.MEPSystem != null)
+            //        {
+            //            //elements.Add(item.MEPSystem.Id);
+            //        }
+            //    }
+
+            //    if (elements.Count > 0)
+            //    {
+            //        //doc.Delete(elements);
+            //    }
+
+            //    trans.Commit();
+            //}
+            MessageBox.Show("排水管网生成完成", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             tg.Assimilate();
         }
 
@@ -345,6 +445,63 @@ namespace FFETOOLS
                 }
             }
             return flag;
+        }
+        public static PipeType GetPipeType(Document doc, string profession, string pipetype)
+        {
+            // 获取管道类型
+            FilteredElementCollector collector = new FilteredElementCollector(doc).OfClass(typeof(PipeType));
+            IList<Element> pipetypes = collector.ToElements();
+            PipeType pt = null;
+            foreach (Element e in pipetypes)
+            {
+                PipeType ps = e as PipeType;
+                if (ps.Name.Contains(profession) && ps.Name.Contains(pipetype))
+                {
+                    pt = ps;
+                    break;
+                }
+            }
+            return pt;
+        }
+        public static PipingSystemType GetPipeSystemType(Document doc, string profession, string pipesystemtype)
+        {
+            // 获取管道系统
+            FilteredElementCollector collector = new FilteredElementCollector(doc).OfClass(typeof(PipingSystemType));
+            IList<Element> pipesystems = collector.ToElements();
+            PipingSystemType pipesys = null;
+            foreach (Element e in pipesystems)
+            {
+                PipingSystemType ps = e as PipingSystemType;
+                if (ps.Name.Contains(profession) && ps.Name.Contains(pipesystemtype))
+                {
+                    pipesys = ps;
+                    break;
+                }
+            }
+            return pipesys;
+        }      
+        public static void ChangePipeSize(Pipe pipe, string dn)
+        {
+            //改变管道尺寸
+            Parameter diameter = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM);
+            diameter.SetValueString(dn);
+        }
+        public static Level GetPipeLevel(Document doc, string Levelname)
+        {
+            // 获取标高
+            Level newlevel = null;
+            var levelFilter = new ElementClassFilter(typeof(Level));
+            FilteredElementCollector levels = new FilteredElementCollector(doc);
+            levels = levels.WherePasses(levelFilter);
+            foreach (Level level in levels)
+            {
+                if (level.Name == Levelname)
+                {
+                    newlevel = level;
+                    break;
+                }
+            }
+            return newlevel;
         }
         public void StructureFamilyLoad(Document doc, string categoryName, string familyName)
         {
