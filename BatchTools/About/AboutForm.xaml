@@ -9,7 +9,7 @@
     <Grid>
         <Image x:Name="TCDRIImage" HorizontalAlignment="Left" Height="54" Margin="20,23,0,0" VerticalAlignment="Top" Width="457" Source="/BatchTools;component/Resources/TCDRI.png"  />
         <Button Content="确定" HorizontalAlignment="Left" Height="29" Margin="210,208,0,0" VerticalAlignment="Top" Width="61" Click="Button_Click" FontSize="14"/>
-        <Label Content="版本：V1.0    公用工程所 魏祺祥 编制&#xA;&#xA;邮箱 ：weiqixiang@sinoma-tianjin.cn" HorizontalAlignment="Left" Height="82" Margin="87,106,0,0" VerticalAlignment="Top" Width="396" FontSize="16"/>
+        <Label Content="版本：V1.0  公用工程所 给排水专业 编制&#xA;&#xA;邮箱 ：weiqixiang@sinoma-tianjin.cn" HorizontalAlignment="Left" Height="82" Margin="87,106,0,0" VerticalAlignment="Top" Width="396" FontSize="16"/>
 
     </Grid>
 </Window>

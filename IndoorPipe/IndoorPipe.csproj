@@ -79,7 +79,10 @@
     </Compile>
     <Compile Include="Others\CreatTeeFitting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Others\UpPipe.cs" />
+    <Compile Include="UpPipe\UpPipe.xaml.cs">
+      <DependentUpon>UpPipe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpPipe\UpPipe.cs" />
     <Compile Include="RevitClass1.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,9 +90,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UpPipe\UpPipe.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

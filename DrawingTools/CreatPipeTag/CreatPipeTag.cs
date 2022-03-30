@@ -18,6 +18,8 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.DB.Architecture;
 using System.Windows.Interop;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace FFETOOLS
 {
@@ -58,72 +60,22 @@ namespace FFETOOLS
                 Document doc = app.ActiveUIDocument.Document;
                 Selection sel = app.ActiveUIDocument.Selection;
 
-                using (Transaction trans = new Transaction(doc, "给排水标注"))
+                Autodesk.Revit.DB.View view = uidoc.ActiveView;
+                if (view is View3D)
                 {
-                    trans.Start();
-                    if (CreatPipeTag.mainfrm.clicked == 1)
+                    View3D aView = view as View3D;
+                    if (aView.IsLocked == true)
                     {
-                        CreatEquipmentTagMethod(doc, uidoc);
-                        CreatPipeTag.mainfrm.clicked = 0;
+                        CreatTagMain(doc, uidoc, app);
                     }
-
-                    if (CreatPipeTag.mainfrm.clicked == 2)
+                    else
                     {
-                        CreatPipeTagMethod(doc, uidoc, "管道公称直径");
-                        CreatPipeTag.mainfrm.clicked = 0;
+                        TaskDialog.Show("警告", "请将三维视图锁定后再进行操作");
                     }
-
-                    if (CreatPipeTag.mainfrm.clicked == 3)
-                    {
-                        CreatPipeTagMethod(doc, uidoc, "管道系统缩写");
-                        CreatPipeTag.mainfrm.clicked = 0;
-                    }
-
-                    if (CreatPipeTag.mainfrm.clicked == 4)
-                    {
-                        CreatPipeTagMethod(doc, uidoc, "进出户管编号");
-                        CreatPipeTag.mainfrm.clicked = 0;
-                    }
-
-                    if (CreatPipeTag.mainfrm.clicked == 5)
-                    {
-                        CreatPipeTagWithLine(doc, uidoc, "立管编号");
-                        CreatPipeTag.mainfrm.clicked = 0;
-                    }
-
-                    //if (CreatPipeTag.mainfrm.clicked == 6)
-                    //{
-                    //    CreatPipeTagMethod(doc, uidoc, app, "污水");
-                    //    CreatPipeTag.mainfrm.clicked = 0;
-                    //}
-
-                    //if (CreatPipeTag.mainfrm.clicked == 7)
-                    //{
-                    //    CreatPipeTagMethod(doc, uidoc, app, CreatPipeTag.mainfrm.Button7.Content.ToString());
-                    //    CreatPipeTag.mainfrm.clicked = 0;
-                    //}
-
-                    //if (CreatPipeTag.mainfrm.clicked == 8)
-                    //{
-                    //    CreatPipeTagMethod(doc, uidoc, app, CreatPipeTag.mainfrm.Button9.Content.ToString());
-                    //    CreatPipeTag.mainfrm.clicked = 0;
-                    //}
-
-                    if (CreatPipeTag.mainfrm.clicked == 9)
-                    {
-
-                        RevitCommandId cmdId = RevitCommandId.LookupPostableCommandId(PostableCommand.SpotElevation);
-                        app.PostCommand(cmdId);
-                        CreatPipeTag.mainfrm.clicked = 0;
-                    }
-
-                    if (CreatPipeTag.mainfrm.clicked == 10)
-                    {
-                        CreatPipeAccessoryTagMethod(doc, uidoc);
-                        CreatPipeTag.mainfrm.clicked = 0;
-                    }
-
-                    trans.Commit();
+                }
+                else
+                {
+                    CreatTagMain(doc, uidoc, app);
                 }
 
             }
@@ -136,13 +88,84 @@ namespace FFETOOLS
         {
             return "管道绘制";
         }
+        public void CreatTagMain(Document doc, UIDocument uidoc, UIApplication app)
+        {
+            using (Transaction trans = new Transaction(doc, "给排水标注"))
+            {
+                trans.Start();
+                if (CreatPipeTag.mainfrm.clicked == 1)
+                {
+                    CreatEquipmentTagMethod(doc, uidoc);
+                    //CreatPipeTag.mainfrm.clicked = 0;
+                }
+
+                if (CreatPipeTag.mainfrm.clicked == 2)
+                {
+                    CreatPipeTagMethod(doc, uidoc, "管道公称直径");
+                    //CreatPipeTag.mainfrm.clicked = 0;
+                }
+
+                if (CreatPipeTag.mainfrm.clicked == 3)
+                {
+                    CreatPipeTagMethod(doc, uidoc, "管道系统缩写");
+                    //CreatPipeTag.mainfrm.clicked = 0;
+                }
+
+                if (CreatPipeTag.mainfrm.clicked == 4)
+                {
+                    CreatPipeTagMethod(doc, uidoc, "进出户管编号");
+                    //CreatPipeTag.mainfrm.clicked = 0;
+                }
+
+                if (CreatPipeTag.mainfrm.clicked == 5)
+                {
+                    CreatPipeTagWithLine(doc, uidoc, "立管编号");
+                    //CreatPipeTag.mainfrm.clicked = 0;
+                }
+
+                //if (CreatPipeTag.mainfrm.clicked == 6)
+                //{
+                //    CreatPipeTagMethod(doc, uidoc, app, "污水");
+                //    CreatPipeTag.mainfrm.clicked = 0;
+                //}
+
+                //if (CreatPipeTag.mainfrm.clicked == 7)
+                //{
+                //    CreatPipeTagMethod(doc, uidoc, app, CreatPipeTag.mainfrm.Button7.Content.ToString());
+                //    CreatPipeTag.mainfrm.clicked = 0;
+                //}
+
+                //if (CreatPipeTag.mainfrm.clicked == 8)
+                //{
+                //    CreatPipeTagMethod(doc, uidoc, app, CreatPipeTag.mainfrm.Button9.Content.ToString());
+                //    CreatPipeTag.mainfrm.clicked = 0;
+                //}
+
+                if (CreatPipeTag.mainfrm.clicked == 9)
+                {
+
+                    RevitCommandId cmdId = RevitCommandId.LookupPostableCommandId(PostableCommand.SpotElevation);
+                    app.PostCommand(cmdId);
+                    //CreatPipeTag.mainfrm.clicked = 0;
+                }
+
+                if (CreatPipeTag.mainfrm.clicked == 10)
+                {
+                    CreatPipeAccessoryTagMethod(doc, uidoc);
+                    //CreatPipeTag.mainfrm.clicked = 0;
+                }
+                //CreatPipeTag.mainfrm.clicked = 0;
+                trans.Commit();
+            }
+        }
+
         public bool CreatPipeTagWithLine(Document doc, UIDocument uidoc, string tagName)
         {
             try
             {
-                TagFamilyLoad(doc,"立管编号");
+                TagFamilyLoad(doc, "立管编号");
                 Selection sel = uidoc.Selection;
-                Reference reference = sel.PickObject(ObjectType.Element);
+                Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter());
                 Pipe pipe = doc.GetElement(reference) as Pipe;
                 LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
 
@@ -201,7 +224,7 @@ namespace FFETOOLS
                 TagFamilyLoad(doc, "进出户管编号");
 
                 Selection sel = uidoc.Selection;
-                Reference reference = sel.PickObject(ObjectType.Element);
+                Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter());
                 Pipe pipe = doc.GetElement(reference) as Pipe;
                 LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
 
@@ -336,9 +359,9 @@ namespace FFETOOLS
         {
             try
             {
-                TagFamilyLoad(doc,"设备编号");
+                TagFamilyLoad(doc, "设备编号");
                 Selection sel = uidoc.Selection;
-                Reference reference = sel.PickObject(ObjectType.Element);
+                Reference reference = sel.PickObject(ObjectType.Element, new MechanicalSelectionFilter());
                 FamilyInstance equipment = doc.GetElement(reference) as FamilyInstance;
                 LocationPoint equipmentLocation = equipment.Location as LocationPoint;
                 XYZ projectPickPoint = equipmentLocation.Point;
@@ -377,7 +400,7 @@ namespace FFETOOLS
             {
                 TagFamilyLoad(doc, "管道附件编号");
                 Selection sel = uidoc.Selection;
-                Reference reference = sel.PickObject(ObjectType.Element);
+                Reference reference = sel.PickObject(ObjectType.Element, new PipeAccessorySelectionFilter());
                 FamilyInstance accessory = doc.GetElement(reference) as FamilyInstance;
                 LocationPoint accessoryLocation = accessory.Location as LocationPoint;
                 XYZ projectPickPoint = accessoryLocation.Point;
@@ -453,8 +476,35 @@ namespace FFETOOLS
             }
             if (family == null)
             {
-                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_注释符号_" + categoryName + ".rfa");              
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_注释符号_" + categoryName + ".rfa");
             }
+        }
+    }
+    public static class Helper
+    {
+        [DllImport("user32.dll")]
+        private static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern void keybd_event(Keys bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+
+        /// <summary>
+        /// 发送键盘消息
+        /// </summary>
+        /// <param name="proc"></param>
+        /// <param name="key"></param>
+        public static void SendKeys(IntPtr proc, Keys key)
+        {
+            SetActiveWindow(proc);
+            SetForegroundWindow(proc);
+            keybd_event(key, 0, 0, 0);
+            keybd_event(key, 0, 2, 0);
+            keybd_event(key, 0, 0, 0);
+            keybd_event(key, 0, 2, 0);
         }
     }
 }

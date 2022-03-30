@@ -861,8 +861,9 @@ namespace FFETOOLS
             List<Line> lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, supportBoundary, pipeCenterLine);
             if (section.LookupParameter("¶ş²ãÖ§¼ÜÊú³ÅÏÔÒş").AsInteger() == 1)
             {
-                lineList.RemoveAt(0);
+                //lineList.RemoveAt(0);
             }
+            //MessageBox.Show(lineList.Count.ToString());
 
             ReferenceArray refArray = new ReferenceArray();
             foreach (Line item in lineList)

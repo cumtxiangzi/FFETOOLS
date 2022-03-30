@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AdWindows">
+      <HintPath>C:\Program Files\Autodesk\Revit 2018\AdWindows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="EPPlus">
       <HintPath>..\..\..\..\..\Revit二开常用DLL\EPPlus.dll</HintPath>
     </Reference>
@@ -77,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatchExport\WaterDrawingNameInfo.cs" />
+    <Compile Include="CommonClass\CommonClass.cs" />
     <Compile Include="CreatDrawing\CreatDrawing.cs" />
     <Compile Include="CreatDrawing\CreatDrawing.xaml.cs">
       <DependentUpon>CreatDrawing.xaml</DependentUpon>
@@ -97,7 +102,10 @@
     <Compile Include="ExportELT\ExportELT.xaml.cs">
       <DependentUpon>ExportELT.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Others\NotePipes.cs" />
+    <Compile Include="NotePipes\NotePipes.xaml.cs">
+      <DependentUpon>NotePipes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NotePipes\NotePipes.cs" />
     <Compile Include="Others\PipeShowBold.cs" />
     <Compile Include="BatchExport\BatchExport.cs" />
     <Compile Include="BatchExport\PrintMgr.cs" />
@@ -150,6 +158,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ExportELT\ExportELT.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NotePipes\NotePipes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

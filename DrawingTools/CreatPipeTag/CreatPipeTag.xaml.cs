@@ -48,58 +48,67 @@ namespace FFETOOLS
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             clicked = 1;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
-
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             clicked = 2;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
 
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
             clicked = 3;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
 
         private void Button4_Click(object sender, RoutedEventArgs e)
         {
             clicked = 4;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
 
         private void Button5_Click(object sender, RoutedEventArgs e)
         {
             clicked = 5;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
 
         private void Button6_Click(object sender, RoutedEventArgs e)
         {
             clicked = 6;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
 
         private void Button7_Click(object sender, RoutedEventArgs e)
         {
             clicked = 7;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
         private void Button8_Click(object sender, RoutedEventArgs e)
         {
             clicked = 8;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
         private void Button9_Click(object sender, RoutedEventArgs e)
         {
             clicked = 9;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
         private void Button10_Click(object sender, RoutedEventArgs e)
         {
             clicked = 10;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
         private void this_Closing(object sender, System.ComponentModel.CancelEventArgs e)

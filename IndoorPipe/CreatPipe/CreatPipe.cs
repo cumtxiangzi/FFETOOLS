@@ -209,8 +209,9 @@ namespace FFETOOLS
                     break;
                 }
             }
-
-            Pipe p = Pipe.Create(doc, pipesys.Id, pt.Id, doc.ActiveView.GenLevel.Id, new XYZ(0, 0, 0), new XYZ(3 / 304.8, 0, 0));
+           
+            ElementId level = GetPipeLevel(doc, "0.000").Id;
+            Pipe p = Pipe.Create(doc, pipesys.Id, pt.Id, level, new XYZ(0, 0, 0), new XYZ(3 / 304.8, 0, 0));
             IList<ElementId> list = new List<ElementId>();
             list.Add(p.Id);
             uidoc.Selection.SetElementIds(list);
@@ -261,6 +262,23 @@ namespace FFETOOLS
                 }
             }
             return pt;
+        }
+        public static Level GetPipeLevel(Document doc, string Levelname)
+        {
+            // 获取标高
+            Level newlevel = null;
+            var levelFilter = new ElementClassFilter(typeof(Level));
+            FilteredElementCollector levels = new FilteredElementCollector(doc);
+            levels = levels.WherePasses(levelFilter);
+            foreach (Level level in levels)
+            {
+                if (level.Name == Levelname)
+                {
+                    newlevel = level;
+                    break;
+                }
+            }
+            return newlevel;
         }
     }
     public static class Helper

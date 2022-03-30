@@ -1,39 +1,77 @@
-using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.Attributes;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Plumbing;
-using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Selection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Windows;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.Attributes;
+using Autodesk.Revit.DB.Mechanical;
+using Autodesk.Revit.UI.Selection;
+using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB.Structure;
+using Autodesk.Revit.DB.ExtensibleStorage;
+using Autodesk.Revit.DB.Plumbing;
+using Autodesk.Revit.DB.Architecture;
+using System.Windows.Interop;
 
 namespace FFETOOLS
 {
     [Transaction(TransactionMode.Manual)]
     public class UpPipe : IExternalCommand
     {
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        public static UpPipeForm mainfrm;
+        public Result Execute(ExternalCommandData commandData, ref string messages, ElementSet elements)
         {
-
-            UIApplication uiapp = commandData.Application;
-            UIDocument uidoc = uiapp.ActiveUIDocument;
-            Document doc = uidoc.Document;
-
             try
             {
-                MakeUpPipeMethod(doc,uidoc); 
+                UIApplication uiapp = commandData.Application;
+                UIDocument uidoc = uiapp.ActiveUIDocument;
+                Document doc = uidoc.Document;
+                Selection sel = uidoc.Selection;
+
+                mainfrm = new UpPipeForm();
+                IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
+                WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
+                helper.Owner = rvtPtr;
+                mainfrm.Show();
+
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
-               
+
             }
             return Result.Succeeded;
         }
-        public void MakeUpPipeMethod(Document doc,UIDocument uidoc)
+    }
+    public class ExecuteEventUpPipe : IExternalEventHandler
+    {
+        public void Execute(UIApplication app)
         {
-            double num = UnitUtils.Convert(Convert.ToDouble(10000), DisplayUnitType.DUT_MILLIMETERS, DisplayUnitType.DUT_DECIMAL_FEET);
+            try
+            {
+                UIDocument uidoc = app.ActiveUIDocument;
+                Document doc = app.ActiveUIDocument.Document;
+                Selection sel = app.ActiveUIDocument.Selection;
+               
+                MakeUpPipeMethod(doc, uidoc);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+
+            }
+        }
+        public string GetName()
+        {
+            return "生成立管";
+        }
+        public void MakeUpPipeMethod(Document doc, UIDocument uidoc)
+        {    
+            double num = UnitUtils.Convert(Convert.ToDouble(UpPipe.mainfrm.LengthValue.Text), DisplayUnitType.DUT_MILLIMETERS, DisplayUnitType.DUT_DECIMAL_FEET);
             Reference reference = uidoc.Selection.PickObject(ObjectType.Element, doc.GetSelectionFilter(m => m is MEPCurve), "请选择需要末端绘制立管的管道");
             XYZ point = reference.GlobalPoint;
             Pipe pipe = doc.GetElement(reference) as Pipe;
@@ -77,7 +115,7 @@ namespace FFETOOLS
         }
         private void ChangeLine(Element elem, Line line)
         {
-            (elem.Location as LocationCurve).Curve=line;
+            (elem.Location as LocationCurve).Curve = line;
         }
         private Connector GetConnector(Element elem, XYZ xyz)
         {
@@ -94,6 +132,5 @@ namespace FFETOOLS
             }
             return result;
         }
-
     }
 }

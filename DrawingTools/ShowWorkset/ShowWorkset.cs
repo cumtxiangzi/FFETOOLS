@@ -98,7 +98,7 @@ namespace FFETOOLS
 
             foreach (Workset sets in worksets)
             {
-                if (!(sets.Name.Contains("给排水") || sets.Name.Contains("工作集") || sets.Name.Contains("共享标高") || sets.Name.Contains("轴网")))
+                if (!(sets.Name.Contains("给排水") || sets.Name.Contains("建筑") || sets.Name.Contains("工作集") || sets.Name.Contains("共享标高") || sets.Name.Contains("轴网")))
                 {
                     workSetNameList.Add(sets.Name);
                 }

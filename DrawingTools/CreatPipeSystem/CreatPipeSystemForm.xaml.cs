@@ -29,6 +29,10 @@ namespace FFETOOLS
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             SouthEastButton.IsChecked = true;
+            QuantityTxt.Text = "3";
+            NoteLengthTxt.Text = "800";
+            NoteLengthTxt.IsEnabled = false;
+            NotePipeChkBox.IsChecked = false;
 
             excCreatPipeSystem = new ExecuteEventCreatPipeSystem();
             eventHandlerCreatPipeSystem = Autodesk.Revit.UI.ExternalEvent.Create(excCreatPipeSystem);
@@ -41,6 +45,18 @@ namespace FFETOOLS
         private void this_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
+        }
+
+        private void NotePipeChkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            NoteLengthTxt.IsEnabled= true;
+            QuantityTxt.Text = "1";
+        }
+
+        private void NotePipeChkBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            NoteLengthTxt.IsEnabled =false;
+            QuantityTxt.Text = "3";
         }
     }
 }
