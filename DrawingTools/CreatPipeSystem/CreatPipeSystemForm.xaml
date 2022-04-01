@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
         Title="批量生成系统图" Name="this" Height="800" Width="190" ResizeMode="NoResize" 
-        Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Closing="this_Closing">
+        Loaded="Window_Loaded" WindowStartupLocation="CenterOwner"  Closing="this_Closing" KeyDown="this_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

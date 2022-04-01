@@ -35,7 +35,12 @@
       "ProjectGuid": "46835515-3cf9-4751-a89d-0c52fe712278",
       "DisplayName": "MainWorkShop",
       "ColorIndex": 5
+    },
+    "d9e47387-ff8e-4fa2-bf61-3b4e0fae236f": {
+      "ProjectGuid": "d9e47387-ff8e-4fa2-bf61-3b4e0fae236f",
+      "DisplayName": "Ribbon",
+      "ColorIndex": 6
     }
   },
-  "NextColorIndex": 6
+  "NextColorIndex": 7
 }

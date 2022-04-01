@@ -92,6 +92,11 @@ namespace FFETOOLS
                 button170.LargeImage = new BitmapImage(new Uri(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Icon\RaiseTeeBranch.ico"));
                 P_TabName1.AddItem(button170);
 
+                PushButtonData button180 = new PushButtonData("布置给排水族", "布置族", @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\OutdoorPipe.dll", "FFETOOLS.CreatWaterFamily");
+                button180.ToolTip = "快速布置给排水族";
+                button180.LargeImage = new BitmapImage(new Uri(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Icon\RaiseTeeBranch.ico"));
+                P_TabName1.AddItem(button180);
+
 
                 PushButtonData button210 = new PushButtonData("创建管道", "创建\n管道", @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\IndoorPipe.dll", "FFETOOLS.CreatPipe");
                 button210.ToolTip = "快速创建管道，管材及管道系统无需设置";

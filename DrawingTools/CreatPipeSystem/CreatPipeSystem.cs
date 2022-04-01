@@ -39,12 +39,116 @@ namespace FFETOOLS
                 WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
                 helper.Owner = rvtPtr;
                 mainfrm.Show();
+                UnableCheckBox(doc);
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
 
             }
             return Result.Succeeded;
+        }
+        public void UnableCheckBox(Document doc)
+        {
+            List<string> pipesysName = new List<string>();
+
+            IList<Pipe> allPipes = CollectorHelper.TCollector<Pipe>(doc);
+
+            foreach (Pipe pipe in allPipes)
+            {
+                if (pipe.Name.Contains("给排水"))
+                {
+                    pipesysName.Add(pipe.LookupParameter("系统类型").AsValueString());
+                }
+            }
+
+            List<string> sysList = pipesysName.Distinct().ToList();
+            foreach (string sys in sysList)
+            {
+                if (sys.Contains("循环给水"))
+                {
+                    mainfrm.XJChkBox.IsEnabled = true;
+                    mainfrm.XJChkBox.IsChecked = true;
+                }             
+
+                if (sys.Contains("循环回水"))
+                {
+                    mainfrm.XHChkBox.IsEnabled = true;
+                    mainfrm.XHChkBox.IsChecked = true;
+                }          
+
+                if (sys.Contains("生活给水"))
+                {
+                    mainfrm.JChkBox.IsEnabled = true;
+                    mainfrm.JChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("污水"))
+                {
+                    mainfrm.WChkBox.IsEnabled = true;
+                    mainfrm.WChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("热水给水"))
+                {
+                    mainfrm.RJChkBox.IsEnabled = true;
+                    mainfrm.RJChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("消防给水"))
+                {
+                    mainfrm.XFChkBox.IsEnabled = true;
+                    mainfrm.XFChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("干式消防"))
+                {
+                    mainfrm.QTChkBox.IsEnabled = true;
+                    mainfrm.QTChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("消防给水"))
+                {
+                    mainfrm.ZPChkBox.IsEnabled = true;
+                    mainfrm.ZPChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("混凝剂"))
+                {
+                    mainfrm.HNChkBox.IsEnabled = true;
+                    mainfrm.HNChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("消毒剂"))
+                {
+                    mainfrm.XDChkBox.IsEnabled = true;
+                    mainfrm.XDChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("水质稳定剂"))
+                {
+                    mainfrm.WDChkBox.IsEnabled = true;
+                    mainfrm.WDChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("水源输水"))
+                {
+                    mainfrm.YJChkBox.IsEnabled = true;
+                    mainfrm.YJChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("中水"))
+                {
+                    mainfrm.ZSChkBox.IsEnabled = true;
+                    mainfrm.ZSChkBox.IsChecked = true;
+                }
+
+                if (sys.Contains("废水"))
+                {
+                    mainfrm.FChkBox.IsEnabled = true;
+                    mainfrm.FChkBox.IsChecked = true;
+                }
+            }
+
         }
     }
     public class ExecuteEventCreatPipeSystem : IExternalEventHandler

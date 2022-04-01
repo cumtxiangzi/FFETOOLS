@@ -34,6 +34,25 @@ namespace FFETOOLS
             NoteLengthTxt.IsEnabled = false;
             NotePipeChkBox.IsChecked = false;
 
+            XJChkBox.IsEnabled = false;
+            XHChkBox.IsEnabled = false;
+
+            JChkBox.IsEnabled = false;
+            WChkBox.IsEnabled = false;
+            RJChkBox.IsEnabled = false;
+
+            XFChkBox.IsEnabled = false;
+            QTChkBox.IsEnabled = false;
+            ZPChkBox.IsEnabled = false;
+
+            HNChkBox.IsEnabled = false;
+            XDChkBox.IsEnabled = false;
+            WDChkBox.IsEnabled = false;
+
+            YJChkBox.IsEnabled = false;
+            ZSChkBox.IsEnabled = false;
+            FChkBox.IsEnabled = false;
+
             excCreatPipeSystem = new ExecuteEventCreatPipeSystem();
             eventHandlerCreatPipeSystem = Autodesk.Revit.UI.ExternalEvent.Create(excCreatPipeSystem);
         }
@@ -57,6 +76,14 @@ namespace FFETOOLS
         {
             NoteLengthTxt.IsEnabled =false;
             QuantityTxt.Text = "3";
+        }
+
+        private void this_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)//Esc键  
+            {
+                Close();
+            }
         }
     }
 }

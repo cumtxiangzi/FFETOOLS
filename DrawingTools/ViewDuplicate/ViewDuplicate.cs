@@ -117,6 +117,11 @@ namespace FFETOOLS
                     foreach (ViewPlan view in newViews)
                     {
                         viewCopy = CreateViewCopy(view, doc);
+                        if (ViewDuplicate.mainfrm.DetailCheckBox.IsChecked == true)
+                        {
+                            HideDemision(doc, viewCopy);
+                        }
+
                         if (ViewDuplicate.mainfrm.DetailCheckBox.IsChecked == false)
                         {
                             ElementTransformUtils.CopyElements(view, GetDimension(doc, view), viewCopy, Transform.Identity, options);
@@ -126,6 +131,11 @@ namespace FFETOOLS
                     foreach (ViewPlan view in noArcViews)
                     {
                         viewCopy = CreateViewCopy(view, doc);
+                        if (ViewDuplicate.mainfrm.DetailCheckBox.IsChecked ==true)
+                        {
+                            HideDemision(doc, viewCopy);
+                        }                   
+
                         if (ViewDuplicate.mainfrm.DetailCheckBox.IsChecked == false)
                         {
                             ElementTransformUtils.CopyElements(view, GetDimension(doc, view), viewCopy, Transform.Identity, options);
@@ -148,6 +158,32 @@ namespace FFETOOLS
         public string GetName()
         {
             return "建筑图批量复制";
+        }
+        public void HideDemision(Document doc, ViewPlan view)
+        {
+            List<ElementId> list = new List<ElementId>();
+
+            FilteredElementCollector dimensionCollector = new FilteredElementCollector(doc, view.Id);
+            dimensionCollector.OfClass(typeof(Dimension)).OfCategory(BuiltInCategory.OST_Dimensions);
+            IList<Element> dimensions = dimensionCollector.ToElements();
+            foreach (Dimension item in dimensions)
+            {
+                int num = 0;
+                ReferenceArray refList = item.References;
+                foreach (Reference reference in refList)
+                {
+                    Grid grid = doc.GetElement(reference.ElementId) as Grid;
+                    if (!(grid == null))
+                    {
+                        num = num + 1;
+                    }
+                }
+                if (!(num == refList.Size))
+                {
+                    list.Add(item.Id);
+                }
+            }
+            view.HideElements(list);
         }
         public ViewPlan CreateViewCopy(ViewPlan view, Document doc)
         {
@@ -247,9 +283,9 @@ namespace FFETOOLS
 
             foreach (ViewPlan view in views)
             {
-                if ((view.ViewType == ViewType.FloorPlan && view.Name.Contains("建筑")) || (view.ViewType == ViewType.FloorPlan && view.get_Parameter(BuiltInParameter.VIEW_DISCIPLINE).AsValueString().Contains("建筑")))
+                if (view.ViewType == ViewType.FloorPlan)
                 {
-                    if (view.IsTemplate == false)
+                    if (view.IsTemplate == false && view.LookupParameter("图纸编号").AsString().Contains("B"))
                     {
                         arcDrawingNameList.Add(view.Name);
                     }
