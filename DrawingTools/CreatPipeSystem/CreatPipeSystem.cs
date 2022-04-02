@@ -68,13 +68,13 @@ namespace FFETOOLS
                 {
                     mainfrm.XJChkBox.IsEnabled = true;
                     mainfrm.XJChkBox.IsChecked = true;
-                }             
+                }
 
                 if (sys.Contains("循环回水"))
                 {
                     mainfrm.XHChkBox.IsEnabled = true;
                     mainfrm.XHChkBox.IsChecked = true;
-                }          
+                }
 
                 if (sys.Contains("生活给水"))
                 {
@@ -109,7 +109,7 @@ namespace FFETOOLS
                 if (sys.Contains("消防给水"))
                 {
                     mainfrm.ZPChkBox.IsEnabled = true;
-                    mainfrm.ZPChkBox.IsChecked = true;
+                    mainfrm.ZPChkBox.IsChecked = false;
                 }
 
                 if (sys.Contains("混凝剂"))
@@ -456,7 +456,7 @@ namespace FFETOOLS
             view3D.DisplayStyle = DisplayStyle.HLR;
             view3D.DetailLevel = ViewDetailLevel.Fine;
             view3D.OrientTo(orientation);
-            //view3D.CropBox = BoundSize(doc, view3D, systemShortName);//裁剪视图
+            view3D.CropBox = BoundSize(doc, view3D, systemShortName);//裁剪视图
 
             view3D.Name = systemName;
             view3D.get_Parameter(BuiltInParameter.VIEW_DESCRIPTION).Set(drawingName);//设置图纸上的标题
@@ -557,17 +557,61 @@ namespace FFETOOLS
         public BoundingBoxXYZ BoundSize(Document doc, View3D view3d, string systemShortName)
         {
             BoundingBoxXYZ bs = new BoundingBoxXYZ();
-            FilteredElementCollector col = new FilteredElementCollector(doc, view3d.Id);
-            col.OfClass(typeof(PipingSystem));
-            IList<Element> pipesys = col.ToElements();
-            foreach (PipingSystem item in pipesys)
+
+            //FilteredElementCollector col = new FilteredElementCollector(doc, view3d.Id);//此部分代码是按整个系统的BoundingBox来进行裁剪视图
+            //col.OfClass(typeof(PipingSystem));
+            //IList<Element> pipesys = col.ToElements();
+            //foreach (PipingSystem item in pipesys)
+            //{
+            //    if (item.Name == systemShortName)
+            //    {
+            //        bs = item.get_BoundingBox(view3d);
+            //        break;
+            //    }
+            //}
+            List<Pipe> selectPipes = new List<Pipe>();
+            IList<Pipe> allPipes = CollectorHelper.TCollector<Pipe>(doc); //此部分代码是按全部管道的最大与最小坐标来进行裁剪视图
+
+            foreach (Pipe item in allPipes)
             {
-                if (item.Name == systemShortName)
+                if (item.IsPlaceholder == false && item.MEPSystem != null && item.MEPSystem.Name.Contains(FilterEN(systemShortName)))
                 {
-                    bs = item.get_BoundingBox(view3d);
-                    break;
+                    selectPipes.Add(item);
                 }
             }
+
+            List<XYZ> points = new List<XYZ>();
+            foreach (Pipe item in selectPipes)
+            {
+                //Line line = item.LocationLine();
+                //XYZ startPoint = LineExtension.StartPoint(line);
+                //XYZ endPoint = LineExtension.EndPoint(line);
+                BoundingBoxXYZ box = item.get_BoundingBox(view3d);
+                XYZ maxPoint = box.Max;
+                XYZ minPoint = box.Min;
+
+                points.Add(maxPoint);
+                points.Add(minPoint);
+            }
+
+            points.Sort((a, b) => a.X.CompareTo(b.X));//排序           
+            double x1 = points.ElementAt(0).X;
+            double x2 = points.ElementAt(points.Count - 1).X;
+
+            points.Sort((a, b) => a.Y.CompareTo(b.Y));
+            double y1 = points.ElementAt(0).Y;
+            double y2 = points.ElementAt(points.Count - 1).Y;
+
+            points.Sort((a, b) => a.Z.CompareTo(b.Z));
+            double z1 = points.ElementAt(0).Z;
+            double z2 = points.ElementAt(points.Count - 1).Z;
+
+            XYZ boxMin = new XYZ(x1, y1, z1);
+            XYZ boxMax = new XYZ(x2, y2, z2);
+
+            bs.Min = boxMin;
+            bs.Max = boxMax;
+
             if (CreatPipeSystem.mainfrm.SouthEastButton.IsChecked == true)
             {
                 //元素Element的BoundingBox是模型（世界）坐标系，三维视图3DView的CropBox及BoundingBox是视图坐标系
@@ -622,6 +666,14 @@ namespace FFETOOLS
                 return box;
             }
         }
+        public static string FilterEN(string inputValue)
+        {
+            if (Regex.IsMatch(inputValue, "[A-Za-z0-9\u9fa5-]+"))
+            {
+                return Regex.Match(inputValue, "[A-Za-z0-9\u9fa5-]+").Value;
+            }
+            return "";
+        }
         public int SystemNum(Document doc, string systemName)
         {
             int num = 0;
@@ -639,7 +691,7 @@ namespace FFETOOLS
             }
             return num;
         }
-        public List<string> SystemCode(Document doc, string systemName)
+        public List<string> SystemCode(Document doc, string systemName) //获取系统类型名称
         {
             List<string> systemCode = new List<string>();
             FilteredElementCollector col = new FilteredElementCollector(doc);
