@@ -82,6 +82,12 @@
   <ItemGroup>
     <Compile Include="BatchExport\WaterDrawingNameInfo.cs" />
     <Compile Include="CommonClass\CommonClass.cs" />
+    <Compile Include="CreatConstructionPlan\ConstructionPlanInfo.cs" />
+    <Compile Include="CreatConstructionPlan\ConstructionDrawingInfo.cs" />
+    <Compile Include="CreatConstructionPlan\ConstructionPlan.xaml.cs">
+      <DependentUpon>ConstructionPlan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreatConstructionPlan\ConstructionPlan.cs" />
     <Compile Include="CreatDrawing\CreatDrawing.cs" />
     <Compile Include="CreatDrawing\CreatDrawing.xaml.cs">
       <DependentUpon>CreatDrawing.xaml</DependentUpon>
@@ -133,6 +139,10 @@
     <Compile Include="BatchExport\ViewSheets.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="CreatConstructionPlan\ConstructionPlan.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="CreatDrawing\CreatDrawing.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

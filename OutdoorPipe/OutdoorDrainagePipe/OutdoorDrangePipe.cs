@@ -37,13 +37,22 @@ namespace FFETOOLS
                 //mainfrm = new OutdoorDrangePipeForm(); //保留窗体，为后续计算使用
                 //IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
                 //WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
-               // helper.Owner = rvtPtr;
+                // helper.Owner = rvtPtr;
                 //mainfrm.Show();
+                IList<TopographySurface> tpSurface = CollectorHelper.TCollector<TopographySurface>(doc);
+                int surfaceNum = tpSurface.Count;
 
                 View view = uidoc.ActiveView;
                 if (view is View3D)
                 {
-                    AutoCreatWells(doc, uidoc);
+                    if (surfaceNum != 0)
+                    {
+                        AutoCreatWells(doc, uidoc);
+                    }
+                    else
+                    {
+                        TaskDialog.Show("警告", "请确保三维视图中存在总图地形并显示");
+                    }
                 }
                 else
                 {
@@ -215,7 +224,7 @@ namespace FFETOOLS
                 FamilySymbol familySymbol = WaterStructureSymbol(doc, "排水构筑物", "砖砌排水检查井");
                 familySymbol.Activate();
                 FamilyInstance wellinstance = null;
-               
+
                 int num = 1;
                 foreach (XYZ item in wellPoints)
                 {
@@ -226,23 +235,23 @@ namespace FFETOOLS
                     height.SetValueString(lgh.ToString());
                     Parameter depth = wellinstance.LookupParameter("管中心高");
                     depth.SetValueString("1500");
-                   
+
                     Parameter code = wellinstance.LookupParameter("标记");
                     code.Set("P" + num.ToString());
-                   num++;
+                    num++;
                 }
 
                 List<Pipe> pipesHDPE = new List<Pipe>();
-                List<Pipe> pipesUPVC=new List<Pipe>();
-            
+                List<Pipe> pipesUPVC = new List<Pipe>();
+
                 foreach (Pipe pipe in allPipes)
                 {
                     bool oneEqual = false;
-                    bool twoEqual=false;
+                    bool twoEqual = false;
                     Line newLine = pipe.LocationLine();
                     XYZ newStartPoint = LineExtension.StartPoint(newLine);
                     XYZ newEndPoint = LineExtension.EndPoint(newLine);
-                    
+
                     foreach (XYZ point in wellPoints)
                     {
                         if (newStartPoint.IsAlmostEqualTo(point))
@@ -268,23 +277,23 @@ namespace FFETOOLS
                     {
                         pipesUPVC.Add(pipe);
                     }
-                }             
+                }
 
                 ElementId sys = GetPipeSystemType(doc, "给排水", "污水管道").Id;
                 ElementId typeHDPE = GetPipeType(doc, "给排水", "HDPE管").Id;
                 ElementId typeUPVC = GetPipeType(doc, "给排水", "UPVC管").Id;
-                ElementId level = GetPipeLevel(doc,"0.000").Id;
+                ElementId level = GetPipeLevel(doc, "0.000").Id;
 
-              foreach (Pipe pipe in pipesHDPE)
+                foreach (Pipe pipe in pipesHDPE)
                 {
                     Line newLine = pipe.LocationLine();
                     XYZ newStartPoint = LineExtension.StartPoint(newLine);
                     XYZ newEndPoint = LineExtension.EndPoint(newLine);
 
                     Line startline = CalculateHeight(doc, newStartPoint);
-                    Line endline = CalculateHeight(doc,newEndPoint);
+                    Line endline = CalculateHeight(doc, newEndPoint);
 
-                    XYZ realStartPoint= new XYZ(newStartPoint.X,newStartPoint.Y,newStartPoint.Z + startline.Length - 1500 / 304.8);
+                    XYZ realStartPoint = new XYZ(newStartPoint.X, newStartPoint.Y, newStartPoint.Z + startline.Length - 1500 / 304.8);
                     XYZ realEndPoint = new XYZ(newEndPoint.X, newEndPoint.Y, newEndPoint.Z + endline.Length - 1500 / 304.8);
 
                     Pipe p = Pipe.Create(doc, sys, typeHDPE, level, realStartPoint, realEndPoint);
@@ -309,7 +318,7 @@ namespace FFETOOLS
 
                 trans.Commit();
             }
-          
+
             //using (Transaction trans = new Transaction(doc, "删除管道系统"))
             //{
             //    trans.Start();
@@ -479,7 +488,7 @@ namespace FFETOOLS
                 }
             }
             return pipesys;
-        }      
+        }
         public static void ChangePipeSize(Pipe pipe, string dn)
         {
             //改变管道尺寸

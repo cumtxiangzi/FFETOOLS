@@ -40,7 +40,12 @@
       "ProjectGuid": "d9e47387-ff8e-4fa2-bf61-3b4e0fae236f",
       "DisplayName": "Ribbon",
       "ColorIndex": 6
+    },
+    "034a6fff-dc40-4de3-a7cc-6f54598703ae": {
+      "ProjectGuid": "034a6fff-dc40-4de3-a7cc-6f54598703ae",
+      "DisplayName": "ExportDLT",
+      "ColorIndex": 7
     }
   },
-  "NextColorIndex": 7
+  "NextColorIndex": 8
 }

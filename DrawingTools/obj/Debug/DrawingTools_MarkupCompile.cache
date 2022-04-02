@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 
-101256771628
+11-163525861
 
-312006874389
+35944929334
 25445727880
-CreatDrawing\CreatDrawing.xaml;CreatPipeSystem\CreatPipeSystemForm.xaml;CreatPipeTag\CreatPipeTag.xaml;DesignNote\DesignNoteForm.xaml;ExportDLT\ExportDLT.xaml;BatchExport\BatchExportForm.xaml;ExportELT\ExportELT.xaml;NotePipes\NotePipes.xaml;ShowWorkset\ShowWorkset.xaml;ViewDuplicate\ViewDuplicateForm.xaml;
+CreatConstructionPlan\ConstructionPlan.xaml;CreatDrawing\CreatDrawing.xaml;CreatPipeSystem\CreatPipeSystemForm.xaml;CreatPipeTag\CreatPipeTag.xaml;DesignNote\DesignNoteForm.xaml;ExportDLT\ExportDLT.xaml;BatchExport\BatchExportForm.xaml;ExportELT\ExportELT.xaml;NotePipes\NotePipes.xaml;ShowWorkset\ShowWorkset.xaml;ViewDuplicate\ViewDuplicateForm.xaml;
 
 False
 
