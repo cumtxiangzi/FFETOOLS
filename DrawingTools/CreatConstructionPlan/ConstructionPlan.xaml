@@ -5,33 +5,69 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
-        Title="创建给排水施工图" Name="this" Height="450" Width="600" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen" Loaded="this_Loaded"  KeyDown="this_KeyDown">
+        Title="创建给排水施工图" Name="this" Height="700" Width="650" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen" Loaded="this_Loaded"  KeyDown="this_KeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="15*"/>
             <ColumnDefinition Width="60*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="给排水视图" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="1" Margin="5,5,5,5" BorderBrush="Gray">
-            <Grid>
-                <ListBox x:Name="ConstructionPlanListBox" Margin="5,5,5,5" BorderThickness="0" >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsSelected}"  Content="{Binding DrawingName}" CommandParameter="{Binding No}" 
-                                      HorizontalAlignment="Left" VerticalAlignment="Top" 
-                                      VerticalContentAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Auto" UseLayoutRounding="False" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
+            <TreeView x:Name="ConstructionPlanTreeView" Margin="5,5,5,5" BorderThickness="0"  >
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        
+                        <Setter Property="IsExpanded" Value="True"></Setter>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.ItemTemplate >
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" >
+                        <StackPanel Orientation="Horizontal" x:Name="stankPanel">
+                            <CheckBox x:Name="PlanCheckBox" IsChecked="{Binding IsSelected}" Content="{Binding PlanName}" Tag="{Binding Id}" Click="PlanCheckBox_Click"  
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Height="20"/>
+                            
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
         </GroupBox>
 
         <Grid Grid.Column="1" Grid.Row="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="56*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+
+                <RowDefinition Height="56*"/>
+            </Grid.RowDefinitions>
             
+            <Button x:Name="AddButton" Content="加 入"  Grid.Column="1" Grid.Row="1" Margin="15,10,15,10" FontSize="10.5" Cursor="Hand" Click="AddButton_Click">
+                <Button.Template >
+                    <ControlTemplate TargetType="{x:Type Button}" >
+                        <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                            <Border.Background>LightGray</Border.Background>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            
+            <Button x:Name="RemoveButton" Content="移 除"  Grid.Column="1" Grid.Row="2" Margin="15,10,15,10" FontSize="10.5" Cursor="Hand" Click="RemoveButton_Click">
+                <Button.Template >
+                    <ControlTemplate TargetType="{x:Type Button}" >
+                        <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                            <Border.Background>LightGray</Border.Background>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+
         </Grid>
 
         <GroupBox Header="给排水图纸" Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="1" Margin="5,5,5,5" BorderBrush="Gray">
@@ -48,37 +84,35 @@
             </Grid>
         </GroupBox>
 
-        <Button x:Name="ClickButton" Content="全选"  Grid.Column="1" Grid.Row="1" Margin="5,5,10,10" FontSize="10.5" Cursor="Hand" >
-            <Button.Template >
-                <ControlTemplate TargetType="{x:Type Button}" >
-                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
-                        <Border.Background>LightGray</Border.Background>
-                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
+        <Grid  Grid.Row="1" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Button x:Name="OkButton" Content="确 定"  Grid.Column="2" Grid.Row="1" Margin="5,5,10,10" FontSize="10.5"  Cursor="Hand" Click="OkButton_Click">
+                <Button.Template >
+                    <ControlTemplate TargetType="{x:Type Button}" >
+                        <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                            <Border.Background>LightGray</Border.Background>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
-        <Button x:Name="ClearButton" Content="清空"  Grid.Column="2" Grid.Row="1" Margin="5,5,10,10" FontSize="10.5" Cursor="Hand">
-            <Button.Template >
-                <ControlTemplate TargetType="{x:Type Button}" >
-                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
-                        <Border.Background>LightGray</Border.Background>
-                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-
-        <Button x:Name="OkButton" Content="确定"  Grid.Column="3" Grid.Row="1" Margin="5,5,10,10" FontSize="10.5"  Cursor="Hand" >
-            <Button.Template >
-                <ControlTemplate TargetType="{x:Type Button}" >
-                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
-                        <Border.Background>LightGray</Border.Background>
-                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
+            <Button x:Name="CancelButton" Content="创建图框"  Grid.Column="1" Grid.Row="1" Margin="5,5,10,10" FontSize="10.5"  Cursor="Hand" Click="CancelButton_Click">
+                <Button.Template >
+                    <ControlTemplate TargetType="{x:Type Button}" >
+                        <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                            <Border.Background>LightGray</Border.Background>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+        
     </Grid>
 </Window>

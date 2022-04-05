@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FFETOOLS
 {
-    class ConstructionDrawingInfo : INotifyPropertyChanged //图名信息
+    class ConstructionDrawingInfo : INotifyPropertyChanged //图纸信息
     {
         private string drawingName;//图名
         private bool isSelected;
