@@ -207,7 +207,7 @@ namespace FFETOOLS
             scheduleNameList.Sort();
             return scheduleNameList;
         }
-        public List<string> GetDrawingName(Document doc)
+        public List<string> GetDrawingName(Document doc)//ͼֽ
         {
             List<string> drawingNameList = new List<string>();
             IList<ViewSheet> views = CollectorHelper.TCollector<ViewSheet>(doc);
@@ -218,7 +218,11 @@ namespace FFETOOLS
                 {
                     if (view.IsTemplate == false)
                     {
-                        drawingNameList.Add(view.Title.Replace("ͼֽ:",""));
+                        ICollection<ElementId> allDrawings = view.GetAllViewports();
+                        if (!(allDrawings.Count>0))
+                        {
+                            drawingNameList.Add(view.Title.Replace("ͼֽ:", ""));
+                        }                      
                     }
                 }
             }

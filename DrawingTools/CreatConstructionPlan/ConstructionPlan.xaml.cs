@@ -23,13 +23,15 @@ namespace FFETOOLS
     {
         public List<string> SelectPlanNameList = new List<string>();
         public List<string> PlanNameList= new List<string>();
-        
+        public List<string> DrawingNameList = new List<string>();
+
         int PlanListCount = 0;
         int SectionListCount = 0;
         int SystemListCount = 0;
         int DetailListCount = 0;
         int DraftingListCount = 0;
         int ScheduleListCount = 0;
+        int DrawingListCount = 0;
 
         ExecuteEventConstructionPlan excConstructionPlan = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerConstructionPlan = null;
@@ -42,17 +44,11 @@ namespace FFETOOLS
         {
             InitializeComponent();
 
-            PlanNameList.Add("平面图");
             PlanNameList.AddRange(planNameList); 
-            PlanNameList.Add("剖面图");
             PlanNameList.AddRange(sectionNameList);
-            PlanNameList.Add("系统图");
             PlanNameList.AddRange(systemViewNameList);
-            PlanNameList.Add("详图视图");
             PlanNameList.AddRange(detailNameList);
-            PlanNameList.Add("绘制视图");
             PlanNameList.AddRange(draftingNameList);
-            PlanNameList.Add("明细表");
             PlanNameList.AddRange(scheduleNameList);
 
             PlanListCount=planNameList.Count;
@@ -63,15 +59,11 @@ namespace FFETOOLS
             ScheduleListCount=scheduleNameList.Count;
             ConstructionPlanTreeView.ItemsSource= InitData();
 
-           // MessageBox.Show(PlanListCount.ToString());
-            
+            DrawingNameList.AddRange(drawingNameList);
+            DrawingListCount=drawingNameList.Count;
+            ConstructionDrawingTreeView.ItemsSource = DrawingInitData();
 
-            foreach (string info in drawingNameList)
-            {
-              drawings.Add(new ConstructionDrawingInfo(info, false));
-            }
-            ConstructionDrawingListBox.ItemsSource = drawings;
-
+            //MessageBox.Show(DrawingNameList.FirstOrDefault());
         }
         
         /// <summary>
@@ -82,17 +74,60 @@ namespace FFETOOLS
         {
             ObservableCollection<ConstructionPlanInfo> tcList=new ObservableCollection<ConstructionPlanInfo>();
             
-            tcList.Add(new ConstructionPlanInfo() { Id = 1, PlanName = PlanNameList.ElementAt(0), ParentID = 0 });
-            for (int i = 1; i < PlanListCount+1; i++)
+            tcList.Add(new ConstructionPlanInfo() { Id = 1, PlanName = "平面图", ParentID = 0 });
+            tcList.Add(new ConstructionPlanInfo() { Id = 2, PlanName = "剖面图", ParentID = 0 });
+            tcList.Add(new ConstructionPlanInfo() { Id = 3, PlanName = "系统图", ParentID = 0 });
+            tcList.Add(new ConstructionPlanInfo() { Id = 4, PlanName = "详图视图", ParentID = 0 });
+            tcList.Add(new ConstructionPlanInfo() { Id = 5, PlanName = "绘制视图", ParentID = 0 });
+            tcList.Add(new ConstructionPlanInfo() { Id = 6, PlanName = "明细表", ParentID = 0 });
+
+            for (int i = 7; i < PlanListCount+7; i++)
             {         
-                    tcList.Add(new ConstructionPlanInfo() { Id = i+1, PlanName =PlanNameList.ElementAt(i), ParentID =1 });              
+                   tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName =PlanNameList.ElementAt(i-7), ParentID =1 });              
             }
-          
+
+            for (int i = PlanListCount + 7; i < PlanListCount+SectionListCount + 7; i++)
+            {
+                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i-7), ParentID = 2 });
+            }
+
+            for (int i = SectionListCount+PlanListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + 7; i++)
+            {
+                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 3 });
+            }
+
+            for (int i = SectionListCount + SystemListCount + PlanListCount + 7; i < PlanListCount + SectionListCount + SystemListCount+ DetailListCount + 7; i++)
+            {
+                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 4 });
+            }
+
+            for (int i = SectionListCount + SystemListCount + PlanListCount + DetailListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + DetailListCount + DraftingListCount + 7; i++)
+            {
+                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 5 });
+            }
+
+            for (int i = SectionListCount + SystemListCount + PlanListCount + DetailListCount + DraftingListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + DetailListCount + DraftingListCount + ScheduleListCount + 7; i++)
+            {
+                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 6 });
+            }
             //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】
             plans = FindChild(tcList, 0);
             return plans;
         }
-       
+        private ObservableCollection<ConstructionDrawingInfo> DrawingInitData()
+        {
+            ObservableCollection<ConstructionDrawingInfo> tcList = new ObservableCollection<ConstructionDrawingInfo>();
+
+            for (int i =1; i < DrawingListCount + 1; i++)
+            {
+                tcList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = DrawingNameList.ElementAt(i - 1), ParentID = 0 });
+            }
+
+            //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】
+            drawings = FindChild(tcList, 0);
+            return drawings;
+        }
+
         /// <summary>
         /// 遍历子类
         /// </summary>
@@ -117,6 +152,25 @@ namespace FFETOOLS
             }
             return childList;
         }
+        private ObservableCollection<ConstructionDrawingInfo> FindChild(ObservableCollection<ConstructionDrawingInfo> tcList, int id)
+        {
+            ObservableCollection<ConstructionDrawingInfo> childList = new ObservableCollection<ConstructionDrawingInfo>();
+            foreach (var item in tcList)
+            {
+                if (item.ParentID == id)
+                {
+                    childList.Add(item);
+                    //判断是否有子节点
+                    int count = tcList.Where(a => a.ParentID == item.Id).Count();
+                    if (count > 0)
+                    {
+                        item.Children = FindChild(tcList, item.Id);
+                    }
+                }
+            }
+            return childList;
+        }
+
         private void PlanCheckBox_Click(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
@@ -128,6 +182,19 @@ namespace FFETOOLS
             {
                 IsSelected(trees.Children, Convert.ToBoolean(checkBox.IsChecked));
             }
+        }
+        private void DrawingCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            int id = Convert.ToInt32(checkBox.Tag);
+            //寻找被点击的checkbox
+            //ConstructionDrawingInfo trees = FindNode(ConstructionPlanTreeView.Items.Cast<ConstructionDrawingInfo>().ToList(), id);
+            //如果有子类,则子类状态和被点击的CheckBox状态一致
+            //if (trees.Children.Count() > 0)
+            //{
+            //    IsSelected(trees.Children, Convert.ToBoolean(checkBox.IsChecked));
+            //}
+
         }
 
         /// <summary>
@@ -156,7 +223,26 @@ namespace FFETOOLS
             }
             return tree;
         }
-
+        private ConstructionDrawingInfo FindNode(List<ConstructionDrawingInfo> Nodes, int id)
+        {
+            ConstructionDrawingInfo tree = new ConstructionDrawingInfo();
+            foreach (var item in Nodes)
+            {
+                if (item.Id != id)
+                {
+                    tree = FindNode(item.Children.ToList(), id);
+                }
+                else
+                {
+                    tree = item;
+                }
+                if (tree.Id == id)
+                {
+                    return tree;
+                }
+            }
+            return tree;
+        }
         /// <summary>
         /// 更改子节点状态
         /// </summary>
@@ -173,7 +259,17 @@ namespace FFETOOLS
                 }
             }
         }
-
+        private void IsSelected(ObservableCollection<ConstructionDrawingInfo> tcList, bool flag)
+        {
+            foreach (var item in tcList)
+            {
+                item.IsSelected = flag;
+                if (item.Children.Count() > 0)
+                {
+                    IsSelected(item.Children, flag);
+                }
+            }
+        }
 
         private void this_Loaded(object sender, RoutedEventArgs e)
         {
@@ -222,6 +318,6 @@ namespace FFETOOLS
             }
             return selectPlanName;
         }
-       
+      
     }
 }

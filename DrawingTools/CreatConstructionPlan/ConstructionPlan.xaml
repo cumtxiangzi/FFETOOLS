@@ -71,17 +71,23 @@
         </Grid>
 
         <GroupBox Header="给排水图纸" Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="1" Margin="5,5,5,5" BorderBrush="Gray">
-            <Grid>
-                <ListBox x:Name="ConstructionDrawingListBox" Margin="5,5,5,5" BorderThickness="0" >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsSelected}"  Content="{Binding DrawingName}" CommandParameter="{Binding No}" 
-                                      HorizontalAlignment="Left" VerticalAlignment="Top" 
-                                      VerticalContentAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Auto" UseLayoutRounding="False" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
+            <TreeView x:Name="ConstructionDrawingTreeView" Margin="5,5,5,5" BorderThickness="0"  >
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+
+                        <Setter Property="IsExpanded" Value="True"></Setter>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.ItemTemplate >
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" >
+                        <StackPanel Orientation="Horizontal" x:Name="stankPanel">
+                            <CheckBox x:Name="DrawingCheckBox" IsChecked="{Binding IsSelected}" Content="{Binding DrawingName}" Tag="{Binding Id}" Click="DrawingCheckBox_Click"  
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Height="20"/>
+
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
         </GroupBox>
 
         <Grid  Grid.Row="1" Grid.Column="2">

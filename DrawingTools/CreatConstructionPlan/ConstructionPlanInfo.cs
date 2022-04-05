@@ -69,35 +69,5 @@ namespace FFETOOLS
             }
         }
 
-
-        //public string PlanName
-        //{
-        //    get { return planName; }
-        //    set
-        //    {
-        //        planName = value;
-        //        PropertyChanged(this, new PropertyChangedEventArgs("PlanName"));
-        //    }
-        //}
-        //public bool IsSelected
-        //{
-        //    get { return isSelected; }
-        //    set
-        //    {
-        //        isSelected = value;
-        //        PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));
-        //    }
-        //}
-        
-        //public ConstructionPlanInfo(string planName, bool isSelected)//构造函数
-        //{
-        //    this.planName = planName;
-        //    this.isSelected = isSelected;       
-        //}
-        //public ConstructionPlanInfo(string planName)//构造函数
-        //{
-        //    this.planName = planName;
-        //}
-
     }
 }
