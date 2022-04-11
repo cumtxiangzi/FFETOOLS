@@ -22,7 +22,7 @@ namespace FFETOOLS
     public partial class ConstructionPlanForm : Window
     {
         public List<string> SelectPlanNameList = new List<string>();
-        public List<string> PlanNameList= new List<string>();
+        public List<string> PlanNameList = new List<string>();
         public List<string> DrawingNameList = new List<string>();
 
         int PlanListCount = 0;
@@ -35,98 +35,131 @@ namespace FFETOOLS
 
         ExecuteEventConstructionPlan excConstructionPlan = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerConstructionPlan = null;
-     
-        private ObservableCollection<ConstructionPlanInfo> plans = new ObservableCollection<ConstructionPlanInfo>();   
+
+        private ObservableCollection<ConstructionPlanInfo> tcPlanList = new ObservableCollection<ConstructionPlanInfo>();
+        private ObservableCollection<ConstructionDrawingInfo> tcDrawingList = new ObservableCollection<ConstructionDrawingInfo>();
+
+        private ObservableCollection<ConstructionPlanInfo> plans = new ObservableCollection<ConstructionPlanInfo>();
         private ObservableCollection<ConstructionDrawingInfo> drawings = new ObservableCollection<ConstructionDrawingInfo>();
-       
-        public ConstructionPlanForm(List<string> planNameList, List<string>drawingNameList,List<string> sectionNameList, List<string>systemViewNameList,
-            List<string>detailNameList, List<string> draftingNameList, List<string> scheduleNameList)
+
+        //private ObservableCollection<ConstructionPlanInfo> tcNewPlanList = new ObservableCollection<ConstructionPlanInfo>();
+        private ObservableCollection<ConstructionDrawingInfo> tcNewDrawingList = new ObservableCollection<ConstructionDrawingInfo>();
+        public ConstructionPlanForm(List<string> planNameList, List<string> drawingNameList, List<string> sectionNameList, List<string> systemViewNameList,
+            List<string> detailNameList, List<string> draftingNameList, List<string> scheduleNameList)
         {
             InitializeComponent();
 
-            PlanNameList.AddRange(planNameList); 
+            PlanNameList.AddRange(planNameList);
             PlanNameList.AddRange(sectionNameList);
             PlanNameList.AddRange(systemViewNameList);
             PlanNameList.AddRange(detailNameList);
             PlanNameList.AddRange(draftingNameList);
             PlanNameList.AddRange(scheduleNameList);
 
-            PlanListCount=planNameList.Count;
-            SectionListCount=sectionNameList.Count;
-            SystemListCount=systemViewNameList.Count;
-            DetailListCount=detailNameList.Count;
-            DraftingListCount=draftingNameList.Count;
-            ScheduleListCount=scheduleNameList.Count;
-            ConstructionPlanTreeView.ItemsSource= InitData();
+            PlanListCount = planNameList.Count;
+            SectionListCount = sectionNameList.Count;
+            SystemListCount = systemViewNameList.Count;
+            DetailListCount = detailNameList.Count;
+            DraftingListCount = draftingNameList.Count;
+            ScheduleListCount = scheduleNameList.Count;
+            ConstructionPlanTreeView.ItemsSource = InitData();
 
             DrawingNameList.AddRange(drawingNameList);
-            DrawingListCount=drawingNameList.Count;
+            DrawingListCount = drawingNameList.Count;
             ConstructionDrawingTreeView.ItemsSource = DrawingInitData();
 
-            //MessageBox.Show(DrawingNameList.FirstOrDefault());
         }
-        
+
         /// <summary>
-         /// 数据初始化
-         /// </summary>
-         /// <returns></returns>
+        /// 数据初始化
+        /// </summary>
+        /// <returns></returns>
         private ObservableCollection<ConstructionPlanInfo> InitData()
         {
-            ObservableCollection<ConstructionPlanInfo> tcList=new ObservableCollection<ConstructionPlanInfo>();
-            
-            tcList.Add(new ConstructionPlanInfo() { Id = 1, PlanName = "平面图", ParentID = 0 });
-            tcList.Add(new ConstructionPlanInfo() { Id = 2, PlanName = "剖面图", ParentID = 0 });
-            tcList.Add(new ConstructionPlanInfo() { Id = 3, PlanName = "系统图", ParentID = 0 });
-            tcList.Add(new ConstructionPlanInfo() { Id = 4, PlanName = "详图视图", ParentID = 0 });
-            tcList.Add(new ConstructionPlanInfo() { Id = 5, PlanName = "绘制视图", ParentID = 0 });
-            tcList.Add(new ConstructionPlanInfo() { Id = 6, PlanName = "明细表", ParentID = 0 });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 1, PlanName = "平面图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 2, PlanName = "剖面图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 3, PlanName = "系统图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 4, PlanName = "详图视图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 5, PlanName = "绘制视图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 6, PlanName = "明细表", ParentID = 0, Fontweight = "Bold" });
 
-            for (int i = 7; i < PlanListCount+7; i++)
-            {         
-                   tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName =PlanNameList.ElementAt(i-7), ParentID =1 });              
+            for (int i = 7; i < PlanListCount + 7; i++)
+            {
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 1 });
             }
 
-            for (int i = PlanListCount + 7; i < PlanListCount+SectionListCount + 7; i++)
+            for (int i = PlanListCount + 7; i < PlanListCount + SectionListCount + 7; i++)
             {
-                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i-7), ParentID = 2 });
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 2 });
             }
 
-            for (int i = SectionListCount+PlanListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + 7; i++)
+            for (int i = SectionListCount + PlanListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + 7; i++)
             {
-                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 3 });
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 3 });
             }
 
-            for (int i = SectionListCount + SystemListCount + PlanListCount + 7; i < PlanListCount + SectionListCount + SystemListCount+ DetailListCount + 7; i++)
+            for (int i = SectionListCount + SystemListCount + PlanListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + DetailListCount + 7; i++)
             {
-                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 4 });
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 4 });
             }
 
             for (int i = SectionListCount + SystemListCount + PlanListCount + DetailListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + DetailListCount + DraftingListCount + 7; i++)
             {
-                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 5 });
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 5 });
             }
 
             for (int i = SectionListCount + SystemListCount + PlanListCount + DetailListCount + DraftingListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + DetailListCount + DraftingListCount + ScheduleListCount + 7; i++)
             {
-                tcList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 6 });
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 6 });
             }
             //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】
-            plans = FindChild(tcList, 0);
+            plans = FindChild(tcPlanList, 0);
             return plans;
         }
         private ObservableCollection<ConstructionDrawingInfo> DrawingInitData()
         {
-            ObservableCollection<ConstructionDrawingInfo> tcList = new ObservableCollection<ConstructionDrawingInfo>();
-
-            for (int i =1; i < DrawingListCount + 1; i++)
+            for (int i = 1; i < DrawingListCount + 1; i++)
             {
-                tcList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = DrawingNameList.ElementAt(i - 1), ParentID = 0 });
+                tcDrawingList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = DrawingNameList.ElementAt(i - 1), ParentID = 0, Fontweight = "Bold" });
             }
 
             //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】
-            drawings = FindChild(tcList, 0);
+            drawings = FindChild(tcDrawingList, 0);
             return drawings;
         }
+
+        //private ObservableCollection<ConstructionDrawingInfo> NewDrawingInitData(string selectDrawing,List<string> selectPlan)
+        //{
+        //    ObservableCollection<ConstructionDrawingInfo> drawings = new ObservableCollection<ConstructionDrawingInfo>();
+
+        //    for (int i = 1; i < DrawingListCount + 1; i++)
+        //    {
+        //        tcNewDrawingList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = DrawingNameList.ElementAt(i - 1), ParentID = 0});
+        //    }
+
+        //    int selectDrawingID = 1;
+        //    foreach (ConstructionDrawingInfo item in tcDrawingList)
+        //    {
+        //        if (item.DrawingName == selectDrawing)
+        //        {
+        //            selectDrawingID = item.Id;
+        //        }
+        //    }
+
+        //    //tcNewDrawingList.Clear();
+
+        //    for (int i = DrawingListCount + 1; i < selectPlan.Count+ DrawingListCount + 1; i++)
+        //    {
+        //        if (!(IsHeader(selectPlan.ElementAt(i))))
+        //        {
+        //            tcNewDrawingList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = selectPlan.ElementAt(i-(DrawingListCount + 1)), ParentID = 1 });
+        //        }
+        //    }
+
+        //    //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】
+        //    drawings = FindChild(tcNewDrawingList, 0);
+        //    return drawings;
+        //}
 
         /// <summary>
         /// 遍历子类
@@ -288,7 +321,7 @@ namespace FFETOOLS
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             eventHandlerConstructionPlan.Raise();
-            SelectPlanNameList = SelecPlanName(plans);
+            //SelectPlanNameList = SelecPlanName(plans);
             Close();
         }
 
@@ -297,14 +330,106 @@ namespace FFETOOLS
             Close();
         }
 
+        private List<List<string>> SelectPlanName = new List<List<string>>();
+        private List<int> SelectDrawingID = new List<int>();
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            List<string> selectPlan = SelecPlanName(tcPlanList);
+            string selectDrawing = SelecDrawingName(tcDrawingList).FirstOrDefault();
 
+            if (SelecDrawingName(tcDrawingList).Count > 1)
+            {
+                MessageBox.Show("只能选择一张图纸", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                foreach (ConstructionDrawingInfo item in tcDrawingList)
+                {
+                    item.IsSelected = false;
+                }
+            }
+            else if (selectPlan.Count == 0)
+            {
+                MessageBox.Show("请从左侧选择一张给排水视图", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else if (SelecDrawingName(tcDrawingList).Count == 0)
+            {
+                MessageBox.Show("请从右侧选择一张给排水图纸", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                foreach (string item in selectPlan)
+                {
+                    foreach (ConstructionPlanInfo plan in tcPlanList)
+                    {
+                        if (plan.PlanName == item)
+                        {
+                            if (!(IsHeader(plan.PlanName)))
+                            {
+                                plan.VisualSetting = "Hidden";
+                            }
+                            else
+                            {
+                                plan.IsSelected = false;
+                            }
+                        }
+                    }
+                }
+
+                int selectDrawingID = 1;
+                foreach (ConstructionDrawingInfo item in tcDrawingList)
+                {
+                    if (item.DrawingName == selectDrawing)
+                    {
+                        selectDrawingID = item.Id;
+                    }
+                }
+
+                SelectDrawingID.Add(selectDrawingID);   
+
+                tcDrawingList.Clear();
+
+                for (int i = DrawingListCount + 1; i < selectPlan.Count + DrawingListCount + 1; i++)
+                {
+                    if (!(IsHeader(selectPlan.ElementAt(i - (DrawingListCount + 1)))))
+                    {
+                        tcDrawingList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = selectPlan.ElementAt(i - (DrawingListCount + 1)), ParentID = selectDrawingID });
+                    }
+                }
+
+                foreach (string item in selectPlan)
+                {
+                    foreach (ConstructionPlanInfo plan in tcPlanList)
+                    {
+                        if (plan.PlanName == item)
+                        {
+
+                            plan.IsSelected = false;
+
+                        }
+                    }
+                }
+                //MessageBox.Show(tcDrawingList.Count.ToString() +"\n"+tcPlanList.Count.ToString()+"\n" +plans.Count.ToString());
+                ConstructionDrawingTreeView.ItemsSource = DrawingInitData();
+
+
+            }
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
+            List<string> selectPlan = SelecPlanName(tcPlanList);
+            string selectDrawing = SelecDrawingName(tcDrawingList).FirstOrDefault();
 
+            foreach (string item in selectPlan)
+            {
+                foreach (ConstructionPlanInfo plan in tcPlanList)
+                {
+                    if (plan.PlanName == item)
+                    {
+                        //tcPlanList.Remove(plan);
+                        //MessageBox.Show(plan.PlanName);
+                        plan.VisualSetting = "Visible";
+                    }
+                }
+            }
         }
         private List<string> SelecPlanName(ObservableCollection<ConstructionPlanInfo> items)
         {
@@ -318,6 +443,27 @@ namespace FFETOOLS
             }
             return selectPlanName;
         }
-      
+        private List<string> SelecDrawingName(ObservableCollection<ConstructionDrawingInfo> items)
+        {
+            List<string> selectDrawingName = new List<string>();
+            foreach (var item in items)
+            {
+                if (item.IsSelected == true)
+                {
+                    selectDrawingName.Add(item.DrawingName);
+                }
+            }
+            return selectDrawingName;
+        }
+        public bool IsHeader(string name)
+        {
+            bool isHeader = false;
+            if (name == "平面图" || name == "剖面图" || name == "系统图" || name == "详图视图" || name == "绘制视图" || name == "明细表")
+            {
+                isHeader = true;
+            }
+            return isHeader;
+        }
+
     }
 }

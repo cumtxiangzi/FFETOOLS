@@ -16,6 +16,7 @@ namespace FFETOOLS
         private int parentID;
         private ObservableCollection<ConstructionDrawingInfo> children;
         private string icon;
+        private string fontweight;
 
         /// <summary>
         /// 节点编号
@@ -59,6 +60,10 @@ namespace FFETOOLS
         /// 图标
         /// </summary>
         public string Icon { get { return icon; } set { icon = value; OnPropertyChanged("Icon"); } }
+        /// <summary>
+        /// 字体粗显
+        /// </summary>
+        public string Fontweight { get { return fontweight; } set { fontweight = value; OnPropertyChanged("Fontweight"); } }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

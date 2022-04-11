@@ -8,7 +8,7 @@
         Title="创建给排水施工图" Name="this" Height="700" Width="650" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen" Loaded="this_Loaded"  KeyDown="this_KeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="55*"/>
             <ColumnDefinition Width="15*"/>
             <ColumnDefinition Width="60*"/>
         </Grid.ColumnDefinitions>
@@ -28,7 +28,7 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}" >
                         <StackPanel Orientation="Horizontal" x:Name="stankPanel">
                             <CheckBox x:Name="PlanCheckBox" IsChecked="{Binding IsSelected}" Content="{Binding PlanName}" Tag="{Binding Id}" Click="PlanCheckBox_Click"  
-                                      HorizontalAlignment="Center" VerticalAlignment="Center" Height="20"/>
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Height="20" FontWeight="{Binding Fontweight}" Visibility="{Binding VisualSetting}" />
                             
                         </StackPanel>
                     </HierarchicalDataTemplate>
@@ -45,7 +45,7 @@
                 <RowDefinition Height="56*"/>
             </Grid.RowDefinitions>
             
-            <Button x:Name="AddButton" Content="加 入"  Grid.Column="1" Grid.Row="1" Margin="15,10,15,10" FontSize="10.5" Cursor="Hand" Click="AddButton_Click">
+            <Button x:Name="AddButton" Content="加 入"  Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" FontSize="10.5" Cursor="Hand" Click="AddButton_Click">
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -56,7 +56,7 @@
                 </Button.Template>
             </Button>
             
-            <Button x:Name="RemoveButton" Content="移 除"  Grid.Column="1" Grid.Row="2" Margin="15,10,15,10" FontSize="10.5" Cursor="Hand" Click="RemoveButton_Click">
+            <Button x:Name="RemoveButton" Content="移 除"  Grid.Column="1" Grid.Row="2" Margin="10,10,10,10" FontSize="10.5" Cursor="Hand" Click="RemoveButton_Click">
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -82,7 +82,7 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}" >
                         <StackPanel Orientation="Horizontal" x:Name="stankPanel">
                             <CheckBox x:Name="DrawingCheckBox" IsChecked="{Binding IsSelected}" Content="{Binding DrawingName}" Tag="{Binding Id}" Click="DrawingCheckBox_Click"  
-                                      HorizontalAlignment="Center" VerticalAlignment="Center" Height="20"/>
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Height="20" FontWeight="{Binding Fontweight}"/>
 
                         </StackPanel>
                     </HierarchicalDataTemplate>
