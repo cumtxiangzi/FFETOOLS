@@ -112,7 +112,63 @@ namespace FFETOOLS
             {
                 tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 6 });
             }
-            //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】
+            //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】           
+            plans = FindChild(tcPlanList, 0);
+            return plans;
+        }
+        private ObservableCollection<ConstructionPlanInfo> NewInitData(List<List<string>> selectPlan)
+        {
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 1, PlanName = "平面图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 2, PlanName = "剖面图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 3, PlanName = "系统图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 4, PlanName = "详图视图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 5, PlanName = "绘制视图", ParentID = 0, Fontweight = "Bold" });
+            tcPlanList.Add(new ConstructionPlanInfo() { Id = 6, PlanName = "明细表", ParentID = 0, Fontweight = "Bold" });
+
+            for (int i = 7; i < PlanListCount + 7; i++)
+            {
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 1 });
+            }
+
+            for (int i = PlanListCount + 7; i < PlanListCount + SectionListCount + 7; i++)
+            {
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 2 });
+            }
+
+            for (int i = SectionListCount + PlanListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + 7; i++)
+            {
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 3 });
+            }
+
+            for (int i = SectionListCount + SystemListCount + PlanListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + DetailListCount + 7; i++)
+            {
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 4 });
+            }
+
+            for (int i = SectionListCount + SystemListCount + PlanListCount + DetailListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + DetailListCount + DraftingListCount + 7; i++)
+            {
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 5 });
+            }
+
+            for (int i = SectionListCount + SystemListCount + PlanListCount + DetailListCount + DraftingListCount + 7; i < PlanListCount + SectionListCount + SystemListCount + DetailListCount + DraftingListCount + ScheduleListCount + 7; i++)
+            {
+                tcPlanList.Add(new ConstructionPlanInfo() { Id = i, PlanName = PlanNameList.ElementAt(i - 7), ParentID = 6 });
+            }
+
+            foreach (var item in selectPlan)
+            {
+                foreach (var plan in item)
+                {
+                    for (int i = tcPlanList.Count - 1; i >= 0; i--)
+                    {
+                        if (tcPlanList[i].PlanName == plan)
+                        {
+                            tcPlanList.Remove(tcPlanList[i]);
+                        }
+                    }
+                }
+            }
+            //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】           
             plans = FindChild(tcPlanList, 0);
             return plans;
         }
@@ -128,38 +184,29 @@ namespace FFETOOLS
             return drawings;
         }
 
-        //private ObservableCollection<ConstructionDrawingInfo> NewDrawingInitData(string selectDrawing,List<string> selectPlan)
-        //{
-        //    ObservableCollection<ConstructionDrawingInfo> drawings = new ObservableCollection<ConstructionDrawingInfo>();
+        private ObservableCollection<ConstructionDrawingInfo> NewDrawingInitData(List<List<string>> selectPlan, List<int> selectDrawingID)//增加平面后数据
+        {
+            for (int i = 1; i < DrawingListCount + 1; i++)
+            {
+                tcDrawingList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = DrawingNameList.ElementAt(i - 1), ParentID = 0, Fontweight = "Bold" });
+            }
 
-        //    for (int i = 1; i < DrawingListCount + 1; i++)
-        //    {
-        //        tcNewDrawingList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = DrawingNameList.ElementAt(i - 1), ParentID = 0});
-        //    }
+            int num1 = DrawingListCount + 1;
+            for (int i = 0; i < selectPlan.Count; i++)
+            {
+                int num2 = selectPlan.ElementAt(i).Count;
 
-        //    int selectDrawingID = 1;
-        //    foreach (ConstructionDrawingInfo item in tcDrawingList)
-        //    {
-        //        if (item.DrawingName == selectDrawing)
-        //        {
-        //            selectDrawingID = item.Id;
-        //        }
-        //    }
+                for (int j = num1; j < num2 + num1; j++)
+                {
+                    tcDrawingList.Add(new ConstructionDrawingInfo() { Id = j, DrawingName = selectPlan.ElementAt(i).ElementAt(j - num1), ParentID = selectDrawingID.ElementAt(i) });
+                }
+                num1 += num2;
+            }
 
-        //    //tcNewDrawingList.Clear();
-
-        //    for (int i = DrawingListCount + 1; i < selectPlan.Count+ DrawingListCount + 1; i++)
-        //    {
-        //        if (!(IsHeader(selectPlan.ElementAt(i))))
-        //        {
-        //            tcNewDrawingList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = selectPlan.ElementAt(i-(DrawingListCount + 1)), ParentID = 1 });
-        //        }
-        //    }
-
-        //    //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】
-        //    drawings = FindChild(tcNewDrawingList, 0);
-        //    return drawings;
-        //}
+            //最开始的父节点默认为0,如果不递归,TreeView并不会生成【树】
+            drawings = FindChild(tcDrawingList, 0);
+            return drawings;
+        }
 
         /// <summary>
         /// 遍历子类
@@ -330,14 +377,15 @@ namespace FFETOOLS
             Close();
         }
 
-        private List<List<string>> SelectPlanName = new List<List<string>>();
+        private List<List<string>> SelectPlan = new List<List<string>>();
         private List<int> SelectDrawingID = new List<int>();
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private void AddButton_Click(object sender, RoutedEventArgs e) //增加视图操作
         {
-            List<string> selectPlan = SelecPlanName(tcPlanList);
-            string selectDrawing = SelecDrawingName(tcDrawingList).FirstOrDefault();
+            List<string> selectPlan = SelectPlanName(tcPlanList);
+            List<string> selectPlanNotHeader = new List<string>();
+            string selectDrawing = SelectDrawingName(tcDrawingList).FirstOrDefault();
 
-            if (SelecDrawingName(tcDrawingList).Count > 1)
+            if (SelectDrawingName(tcDrawingList).Count > 1)
             {
                 MessageBox.Show("只能选择一张图纸", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                 foreach (ConstructionDrawingInfo item in tcDrawingList)
@@ -349,9 +397,13 @@ namespace FFETOOLS
             {
                 MessageBox.Show("请从左侧选择一张给排水视图", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            else if (SelecDrawingName(tcDrawingList).Count == 0)
+            else if (SelectDrawingName(tcDrawingList).Count == 0)
             {
                 MessageBox.Show("请从右侧选择一张给排水图纸", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else if (!(selectDrawing.Contains("WD")))
+            {
+                MessageBox.Show("请确保右侧选择项为图纸", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
             {
@@ -363,7 +415,8 @@ namespace FFETOOLS
                         {
                             if (!(IsHeader(plan.PlanName)))
                             {
-                                plan.VisualSetting = "Hidden";
+                                //plan.VisualSetting = "Collapsed";
+                                selectPlanNotHeader.Add(plan.PlanName);
                             }
                             else
                             {
@@ -379,59 +432,60 @@ namespace FFETOOLS
                     if (item.DrawingName == selectDrawing)
                     {
                         selectDrawingID = item.Id;
+
                     }
                 }
-
-                SelectDrawingID.Add(selectDrawingID);   
+               
+                SelectPlan.Add(selectPlanNotHeader);
+                SelectDrawingID.Add(selectDrawingID);
 
                 tcDrawingList.Clear();
+                ConstructionDrawingTreeView.ItemsSource = NewDrawingInitData(SelectPlan, SelectDrawingID);
 
-                for (int i = DrawingListCount + 1; i < selectPlan.Count + DrawingListCount + 1; i++)
-                {
-                    if (!(IsHeader(selectPlan.ElementAt(i - (DrawingListCount + 1)))))
-                    {
-                        tcDrawingList.Add(new ConstructionDrawingInfo() { Id = i, DrawingName = selectPlan.ElementAt(i - (DrawingListCount + 1)), ParentID = selectDrawingID });
-                    }
-                }
-
-                foreach (string item in selectPlan)
-                {
-                    foreach (ConstructionPlanInfo plan in tcPlanList)
-                    {
-                        if (plan.PlanName == item)
-                        {
-
-                            plan.IsSelected = false;
-
-                        }
-                    }
-                }
-                //MessageBox.Show(tcDrawingList.Count.ToString() +"\n"+tcPlanList.Count.ToString()+"\n" +plans.Count.ToString());
-                ConstructionDrawingTreeView.ItemsSource = DrawingInitData();
-
-
+                tcPlanList.Clear();
+                ConstructionPlanTreeView.ItemsSource = NewInitData(SelectPlan);
             }
         }
 
-        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        private void RemoveButton_Click(object sender, RoutedEventArgs e) //移除选择图纸操作 未解决暂时不做
         {
-            List<string> selectPlan = SelecPlanName(tcPlanList);
-            string selectDrawing = SelecDrawingName(tcDrawingList).FirstOrDefault();
+            //List<string> selectPlan = SelectPlanName(tcPlanList);
+            List<string> selectDrawingPlan = SelectDrawingName(tcDrawingList);
+            List<ConstructionDrawingInfo> selectDrawingInfo = new List<ConstructionDrawingInfo>();
 
-            foreach (string item in selectPlan)
+            //foreach (string item in selectPlan)
+            //{
+            //    foreach (ConstructionPlanInfo plan in tcPlanList)
+            //    {
+            //        if (plan.PlanName == item)
+            //        {
+            //            //tcPlanList.Remove(plan);
+            //            //MessageBox.Show(plan.PlanName);
+            //            plan.VisualSetting = "Visible";
+            //        }
+            //    }
+            //}
+
+            foreach (string item in selectDrawingPlan)
             {
-                foreach (ConstructionPlanInfo plan in tcPlanList)
+                foreach (ConstructionDrawingInfo drawing in tcDrawingList)
                 {
-                    if (plan.PlanName == item)
+                    if (drawing.DrawingName == item && !(item.Contains("WD")))
                     {
-                        //tcPlanList.Remove(plan);
-                        //MessageBox.Show(plan.PlanName);
-                        plan.VisualSetting = "Visible";
+                        selectDrawingInfo.Add(drawing);
                     }
                 }
             }
+
+            foreach (ConstructionDrawingInfo item in selectDrawingInfo)
+            {
+                MessageBox.Show("sss");
+                tcDrawingList.Remove(item);
+            }
+
+            ConstructionDrawingTreeView.ItemsSource = FindChild(tcDrawingList, 0);
         }
-        private List<string> SelecPlanName(ObservableCollection<ConstructionPlanInfo> items)
+        private List<string> SelectPlanName(ObservableCollection<ConstructionPlanInfo> items)
         {
             List<string> selectPlanName = new List<string>();
             foreach (var item in items)
@@ -443,7 +497,7 @@ namespace FFETOOLS
             }
             return selectPlanName;
         }
-        private List<string> SelecDrawingName(ObservableCollection<ConstructionDrawingInfo> items)
+        private List<string> SelectDrawingName(ObservableCollection<ConstructionDrawingInfo> items)
         {
             List<string> selectDrawingName = new List<string>();
             foreach (var item in items)
