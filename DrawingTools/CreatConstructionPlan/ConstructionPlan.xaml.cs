@@ -25,6 +25,9 @@ namespace FFETOOLS
         public List<string> PlanNameList = new List<string>();
         public List<string> DrawingNameList = new List<string>();
 
+        public List<string> AllDrawings = new List<string>();
+        public List<List<string>> AllPlans = new List<List<string>>();
+
         int PlanListCount = 0;
         int SectionListCount = 0;
         int SystemListCount = 0;
@@ -43,7 +46,7 @@ namespace FFETOOLS
         private ObservableCollection<ConstructionDrawingInfo> drawings = new ObservableCollection<ConstructionDrawingInfo>();
 
         //private ObservableCollection<ConstructionPlanInfo> tcNewPlanList = new ObservableCollection<ConstructionPlanInfo>();
-        private ObservableCollection<ConstructionDrawingInfo> tcNewDrawingList = new ObservableCollection<ConstructionDrawingInfo>();
+        //private ObservableCollection<ConstructionDrawingInfo> tcNewDrawingList = new ObservableCollection<ConstructionDrawingInfo>();
         public ConstructionPlanForm(List<string> planNameList, List<string> drawingNameList, List<string> sectionNameList, List<string> systemViewNameList,
             List<string> detailNameList, List<string> draftingNameList, List<string> scheduleNameList)
         {
@@ -367,11 +370,26 @@ namespace FFETOOLS
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            eventHandlerConstructionPlan.Raise();
-            //SelectPlanNameList = SelecPlanName(plans);
+            eventHandlerConstructionPlan.Raise();        
+
+            foreach (var item in tcDrawingList)
+            {
+                if (item.ParentID == 0)
+                {
+                    AllDrawings.Add(item.DrawingName);
+                    List<string> planUnderDrawing = new List<string>();
+                    foreach (var item1 in tcDrawingList)
+                    {
+                        if (item1.ParentID == item.Id)
+                        {                         
+                            planUnderDrawing.Add(item1.DrawingName);                         
+                        }
+                    }
+                    AllPlans.Add(planUnderDrawing);
+                }
+            }
             Close();
         }
-
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -401,7 +419,7 @@ namespace FFETOOLS
             {
                 MessageBox.Show("请从右侧选择一张给排水图纸", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            else if (!(selectDrawing.Contains("WD")))
+            else if (!(selectDrawing.Contains("W")))
             {
                 MessageBox.Show("请确保右侧选择项为图纸", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
@@ -435,7 +453,7 @@ namespace FFETOOLS
 
                     }
                 }
-               
+
                 SelectPlan.Add(selectPlanNotHeader);
                 SelectDrawingID.Add(selectDrawingID);
 
@@ -446,7 +464,6 @@ namespace FFETOOLS
                 ConstructionPlanTreeView.ItemsSource = NewInitData(SelectPlan);
             }
         }
-
         private void RemoveButton_Click(object sender, RoutedEventArgs e) //移除选择图纸操作 未解决暂时不做
         {
             //List<string> selectPlan = SelectPlanName(tcPlanList);

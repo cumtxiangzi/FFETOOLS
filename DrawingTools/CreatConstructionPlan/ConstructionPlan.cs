@@ -34,9 +34,9 @@ namespace FFETOOLS
                 Document doc = uidoc.Document;
                 Selection sel = uidoc.Selection;
 
-                ExecuteEventConstructionPlan plan = new ExecuteEventConstructionPlan();               
-                mainfrm = new ConstructionPlanForm(plan.GetPlanName(doc),plan.GetDrawingName(doc),plan.GetSectionName(doc),plan.GetSystemViewName(doc),
-                    plan.GetDetailName(doc),plan.GetDraftingName(doc),plan.GetScheduleName(doc));
+                ExecuteEventConstructionPlan plan = new ExecuteEventConstructionPlan();
+                mainfrm = new ConstructionPlanForm(plan.GetPlanName(doc), plan.GetDrawingName(doc), plan.GetSectionName(doc), plan.GetSystemViewName(doc),
+                    plan.GetDetailName(doc), plan.GetDraftingName(doc), plan.GetScheduleName(doc));
 
                 IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
                 WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
@@ -61,19 +61,102 @@ namespace FFETOOLS
                 Document doc = app.ActiveUIDocument.Document;
                 Selection sel = app.ActiveUIDocument.Selection;
 
+                List<string> drawings = ConstructionPlan.mainfrm.AllDrawings;
+                List<List<string>> plans = ConstructionPlan.mainfrm.AllPlans;
+
+                List<ViewSheet> viewSheet = new List<ViewSheet>();
+                List<ViewPlan> viewPlan = new List<ViewPlan>();
+
                 using (Transaction trans = new Transaction(doc, "创建施工图"))
                 {
                     trans.Start();
 
+                    IList<View> views = CollectorHelper.TCollector<View>(doc);
+                    IList<ViewSheet> viewsheets = CollectorHelper.TCollector<ViewSheet>(doc);
+                    List<View> filterViews=new List<View>();
 
-                    MessageBox.Show("sss");
+                    for (int i = 0; i < drawings.Count; i++)
+                    {
+                        ViewSheet drawingSheet = null;
+                        View viewOnDrawing = null;
+
+                        foreach (var item in viewsheets)
+                        {
+                            if (item.Title.Contains(drawings[i]))
+                            {
+                                drawingSheet = item;
+                                break;
+                            }
+                        }
+
+                        if (plans[i].Count != 0)
+                        {
+                            foreach (var plan in plans[i])
+                            {
+                                foreach (var view in views)
+                                {
+                                    if (view.Title.Contains(plan))
+                                    {
+                                        viewOnDrawing = view;
+                                        CreateViewport(doc, drawingSheet, viewOnDrawing.Id, GetPoint(drawingSheet));
+                                    }
+
+                                }
+                            }
+                        }
+
+
+
+                        //MessageBox.Show(drawings[i]);
+
+
+
+                    }
+
+
+                    foreach (View view in views)
+                    {
+                       
+                    }
+                    //foreach (ViewPlan view in views)
+                    //{
+                    //    if (view.ViewType == ViewType.FloorPlan && view.Name.Contains("给排水"))
+                    //    {
+                    //        if (view.IsTemplate == false && !(view.LookupParameter("图纸编号").AsString().Contains("WD")))
+                    //        {
+                    //            planNameList.Add(view.Name);
+                    //        }
+                    //    }
+                    //}
+
+
+
+
+                    //string drawname = null;
+                    //string planname = null;
+                    //foreach (string drawing in drawings)
+                    //{
+                    //    drawname += drawing;
+                    //    drawname += "\n";
+                    //}
+
+                    //foreach (var plan in plans)
+                    //{
+
+                    //    foreach (string plan1 in plan)
+                    //    {
+                    //        planname += plan1;
+                    //        planname += "\n";
+                    //    }
+
+                    //}
+                    //MessageBox.Show(drawname + "\n" + planname);
 
 
                     trans.Commit();
                 }
-
             }
-            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            catch (Exception)
             {
 
             }
@@ -82,10 +165,39 @@ namespace FFETOOLS
         {
             return "创建施工图";
         }
+
+        /// <summary>
+        /// 图纸中加入视图
+        /// </summary>
+        /// <param name="viewSheet"></param>
+        /// <param name="viewID"></param>
+        /// <param name="point"></param>
+        private void CreateViewport(Document document, ViewSheet viewSheet, ElementId viewID, XYZ point)
+        {
+            bool isok = Viewport.CanAddViewToSheet(document, viewSheet.Id, viewID);
+            if (isok)
+            {
+                //图纸加入视图
+                Viewport.Create(document, viewSheet.Id, viewID, point);
+            }
+        }
+        /// <summary>
+        /// 得到图框中心点
+        /// 这里计算的是整个图框的中心点，里面内容框的中心点需要根据指定的图框类型去加减上下左右的边距
+        /// </summary>
+        /// <param name="viewSheet">图纸</param>
+        /// <returns></returns>
+        private XYZ GetPoint(ViewSheet viewSheet)
+        {
+            UV loc = new UV((viewSheet.Outline.Max.U + viewSheet.Outline.Min.U) / 2, (viewSheet.Outline.Max.V + viewSheet.Outline.Min.V) / 2);
+            XYZ point = new XYZ(loc.U, loc.V, 0);
+            return point;
+        }
+
         public List<string> GetPlanName(Document doc)//平面视图
         {
             List<string> planNameList = new List<string>();
-            IList<ViewPlan> views=CollectorHelper.TCollector<ViewPlan>(doc);         
+            IList<ViewPlan> views = CollectorHelper.TCollector<ViewPlan>(doc);
 
             foreach (ViewPlan view in views)
             {
@@ -97,7 +209,7 @@ namespace FFETOOLS
                     }
                 }
             }
-           planNameList.Sort();
+            planNameList.Sort();
             return planNameList;
         }
         public List<string> GetSectionName(Document doc)//剖面视图
@@ -129,7 +241,7 @@ namespace FFETOOLS
                 {
                     if (view.IsTemplate == false && !(view.LookupParameter("图纸编号").AsString().Contains("WD")))
                     {
-                        systemNameList.Add(view.Name.Replace("给排水",""));
+                        systemNameList.Add(view.Name.Replace("给排水", ""));
                     }
                 }
             }
@@ -151,7 +263,7 @@ namespace FFETOOLS
                     }
                 }
             }
-           draftingNameList.Sort();
+            draftingNameList.Sort();
             return draftingNameList;
         }
         public List<string> GetDetailName(Document doc)//详图视图
@@ -187,7 +299,7 @@ namespace FFETOOLS
                 }
             }
             List<string> sysList = pipesysName.Distinct().ToList();
-            
+
             foreach (ViewSchedule view in views)
             {
                 if (view.ViewType == ViewType.Schedule && view.Name.Contains("给排水"))
@@ -196,11 +308,11 @@ namespace FFETOOLS
                     {
                         foreach (string item in sysList)
                         {
-                            if (view.Name.Contains(item.Replace("管道系统","")))
+                            if (view.Name.Contains(item.Replace("管道系统", "")))
                             {
-                                scheduleNameList.Add(view.Name.Replace("给排水",""));
+                                scheduleNameList.Add(view.Name.Replace("给排水", ""));
                             }
-                        }                       
+                        }
                     }
                 }
             }
@@ -214,15 +326,15 @@ namespace FFETOOLS
 
             foreach (ViewSheet view in views)
             {
-                if (view.ViewType == ViewType.DrawingSheet && view.SheetNumber.Contains("WD"))
+                if (view.ViewType == ViewType.DrawingSheet && view.SheetNumber.Contains("W"))
                 {
                     if (view.IsTemplate == false)
                     {
                         ICollection<ElementId> allDrawings = view.GetAllViewports();
-                        if (!(allDrawings.Count>0))
+                        if (!(allDrawings.Count > 0))
                         {
                             drawingNameList.Add(view.Title.Replace("图纸:", ""));
-                        }                      
+                        }
                     }
                 }
             }
