@@ -47,6 +47,7 @@ namespace FFETOOLS
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             DrawingNumber.Focus();
+            CreatTitle.IsChecked = true;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

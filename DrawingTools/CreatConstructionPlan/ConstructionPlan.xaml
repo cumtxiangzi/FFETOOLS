@@ -8,7 +8,7 @@
         Title="创建给排水施工图" Name="this" Height="700" Width="650" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen" Loaded="this_Loaded"  KeyDown="this_KeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="55*"/>
+            <ColumnDefinition Width="60*"/>
             <ColumnDefinition Width="15*"/>
             <ColumnDefinition Width="60*"/>
         </Grid.ColumnDefinitions>

@@ -41,7 +41,7 @@ namespace FFETOOLS
                 foreach (Element elm in DrawingCollector)
                 {
                     FamilySymbol drw = elm as FamilySymbol;
-                    if (drw.FamilyName.Contains("A1")|| drw.FamilyName.Contains("A2")||drw.FamilyName.Contains("A3")|| drw.FamilyName.Contains("A0"))
+                    if (drw.FamilyName.Contains("A1") || drw.FamilyName.Contains("A2") || drw.FamilyName.Contains("A3") || drw.FamilyName.Contains("A0"))
                     {
                         DrawingType.Add(drw.FamilyName + "：" + drw.Name);
                     }
@@ -101,37 +101,43 @@ namespace FFETOOLS
             {
                 UIDocument uidoc = app.ActiveUIDocument;
                 Document doc = uidoc.Document;
-                Selection sel = uidoc.Selection;             
+                Selection sel = uidoc.Selection;
 
                 using (Transaction transaction = new Transaction(doc, "批量创建图纸"))
                 {
                     transaction.Start();
                     int num = ExistingDrawingNumber(doc, CreatDrawing.mainfrm.drawingMajorName);
+                    ViewSheet activeSheet = null;
+
                     if (CreatDrawing.mainfrm.type.Contains("共用_图纸_A1"))
                     {
-                        MainMethod(doc, "共用_图纸_A1", CreatDrawing.mainfrm);
+                        activeSheet = MainMethod(doc, "共用_图纸_A1", CreatDrawing.mainfrm);
                     }
                     else if (CreatDrawing.mainfrm.type.Contains("共用_图纸_A0"))
                     {
-                        MainMethod(doc, "共用_图纸_A0", CreatDrawing.mainfrm);
+                        activeSheet = MainMethod(doc, "共用_图纸_A0", CreatDrawing.mainfrm);
                     }
                     else if (CreatDrawing.mainfrm.type.Contains("共用_图纸_A2"))
                     {
-                        MainMethod(doc, "共用_图纸_A2", CreatDrawing.mainfrm);
+                        activeSheet = MainMethod(doc, "共用_图纸_A2", CreatDrawing.mainfrm);
                     }
                     else if (CreatDrawing.mainfrm.type.Contains("共用_图纸_A3"))
                     {
-                        MainMethod(doc, "共用_图纸_A3", CreatDrawing.mainfrm);
+                        activeSheet = MainMethod(doc, "共用_图纸_A3", CreatDrawing.mainfrm);
                     }
                     else
-                    {                       
+                    {
                         for (int i = 0; i < CreatDrawing.mainfrm.number; i++)
                         {
-                            CreateDrawingView(doc, CreatDrawing.mainfrm.type, i + num + 1, CreatDrawing.mainfrm.drawingMajorName);
+                            activeSheet = CreateDrawingView(doc, CreatDrawing.mainfrm.type, i + num + 1, CreatDrawing.mainfrm.drawingMajorName);
                         }
                     }
 
                     transaction.Commit();
+                    if (activeSheet != null)
+                    {
+                        uidoc.ActiveView = activeSheet;
+                    }
                 }
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
@@ -190,7 +196,7 @@ namespace FFETOOLS
                     title = tl;
                     break;
                 }
-            }          
+            }
             return title;
         }
 
@@ -207,10 +213,10 @@ namespace FFETOOLS
                     edition = ed;
                     break;
                 }
-            }         
+            }
             return edition;
         }
-        private void MainMethod(Document doc, string name, CreatDrawings crwForm)
+        private ViewSheet MainMethod(Document doc, string name, CreatDrawings crwForm)
         {
             int num = ExistingDrawingNumber(doc, crwForm.drawingMajorName);
             XYZ titlelocation = new XYZ();
@@ -219,25 +225,30 @@ namespace FFETOOLS
             ViewSheet vws = null;
             FamilySymbol title = null;
             FamilySymbol edition = null;
-            title = TitleBlock(doc);
-            edition = Edition(doc);
+            bool creatTitle = (bool)CreatDrawing.mainfrm.CreatTitle.IsChecked;
 
-            if (crwForm.type.Contains("共用_图纸_A1"))
+            if (creatTitle)
+            {
+                title = TitleBlock(doc);
+                edition = Edition(doc);
+            }
+
+            if (crwForm.type.Contains("共用_图纸_A1") && creatTitle)
             {
                 titlelocation = new XYZ(1.88748115805841, 4.4597850267791, 0);
                 editionlocation = new XYZ(1.88748115805841, 4.60742282205469, 0);
             }
-            if (crwForm.type.Contains("共用_图纸_A0"))
+            if (crwForm.type.Contains("共用_图纸_A0") && creatTitle)
             {
                 titlelocation = new XYZ(3.02921344152298, 4.4597850267791, 0);
                 editionlocation = new XYZ(3.02921344152298, 4.60742282205469, 0);
             }
-            if (crwForm.type.Contains("共用_图纸_A2"))
+            if (crwForm.type.Contains("共用_图纸_A2") && creatTitle)
             {
                 titlelocation = new XYZ(1.07710058063059, 4.4597850267791, 0);
                 editionlocation = new XYZ(1.07710058063059, 4.60742282205469, 0);
             }
-            if (crwForm.type.Contains("共用_图纸_A3"))
+            if (crwForm.type.Contains("共用_图纸_A3") && creatTitle)
             {
                 titlelocation = new XYZ(0.52265176173295, 4.4597850267791, 0);
                 editionlocation = new XYZ(0.52265176173295, 4.60742282205469, 0);
@@ -246,9 +257,17 @@ namespace FFETOOLS
             for (int i = 0; i < crwForm.number; i++)
             {
                 vws = CreateDrawingView(doc, crwForm.type, i + num + 1, crwForm.drawingMajorName);
-                FamilyInstance titlein = doc.Create.NewFamilyInstance(titlelocation, title, vws);
-                FamilyInstance editionin = doc.Create.NewFamilyInstance(editionlocation, edition, vws);
-                if (crwForm.CH_Button.IsChecked == true)
+
+                FamilyInstance titlein = null;
+                FamilyInstance editionin = null;
+
+                if (creatTitle)
+                {
+                    titlein = doc.Create.NewFamilyInstance(titlelocation, title, vws);
+                    editionin = doc.Create.NewFamilyInstance(editionlocation, edition, vws);
+                }
+
+                if (crwForm.CH_Button.IsChecked == true && creatTitle)
                 {
                     titlein.LookupParameter("中文").Set(1);
                     editionin.LookupParameter("中文").Set(1);
@@ -259,7 +278,7 @@ namespace FFETOOLS
                     titlein.LookupParameter("比例可见").Set(0);
                 }
 
-                if (crwForm.EN_Button.IsChecked == true)
+                if (crwForm.EN_Button.IsChecked == true && creatTitle)
                 {
                     titlein.LookupParameter("中文").Set(0);
                     editionin.LookupParameter("中文").Set(0);
@@ -270,7 +289,7 @@ namespace FFETOOLS
                     titlein.LookupParameter("比例可见").Set(0);
                 }
 
-                if (crwForm.CH_EN_Button.IsChecked == true)
+                if (crwForm.CH_EN_Button.IsChecked == true && creatTitle)
                 {
                     titlein.LookupParameter("中文").Set(0);
                     editionin.LookupParameter("中文").Set(0);
@@ -281,7 +300,9 @@ namespace FFETOOLS
                     titlein.LookupParameter("比例可见").Set(0);
                 }
             }
+
+            return vws;
         }
-        
+
     }
 }

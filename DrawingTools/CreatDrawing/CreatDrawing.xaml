@@ -18,6 +18,6 @@
         <RadioButton x:Name="CH_Button" Content="中文" HorizontalAlignment="Left" Margin="138,179,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="EN_Button" Content="英文" HorizontalAlignment="Left" Margin="187,179,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="CH_EN_Button" Content="中英文" HorizontalAlignment="Left" Margin="235,179,0,0" VerticalAlignment="Top"/>
-
+        <CheckBox x:Name="CreatTitle"  HorizontalAlignment="Left" Margin="20,223,0,0" VerticalAlignment="Top" Content="创建标题栏" FontSize="14"/>
     </Grid>
 </Window>
