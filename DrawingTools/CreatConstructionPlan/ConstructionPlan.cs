@@ -74,15 +74,15 @@ namespace FFETOOLS
                     IList<View> views = CollectorHelper.TCollector<View>(doc);
                     IList<ViewSheet> viewsheets = CollectorHelper.TCollector<ViewSheet>(doc);
                     List<View> filterViews = new List<View>();
-                    ViewSheet activeSheet = null;
-                    ElementType viewPortType = GetViewPortType(doc, 60);
+                    List<ViewSheet> waterViewsheets = new List<ViewSheet>();
 
+                    ViewSheet activeSheet = null;
                     foreach (var item in views)
                     {
                         if (item.ViewType == ViewType.FloorPlan || item.ViewType == ViewType.Section || item.ViewType == ViewType.ThreeD
                             || item.ViewType == ViewType.DraftingView || item.ViewType == ViewType.Detail || item.ViewType == ViewType.Schedule)
                         {
-                            if (item.IsTemplate == false && item.Name.Contains("给排水"))
+                            if (item.IsTemplate == false && (item.Name.Contains("给排水") || item.Name.Contains("设计说明") || item.Name.Contains("WL")))
                             {
                                 filterViews.Add(item);
                             }
@@ -98,14 +98,13 @@ namespace FFETOOLS
                         {
                             if (item.Title.Contains(drawings[i]))
                             {
-                                drawingSheet = item;                            
+                                drawingSheet = item;
+                                if (drawingSheet.Title.Contains("WD"))
+                                {
+                                    waterViewsheets.Add(drawingSheet);
+                                }
                                 break;
                             }
-                        }
-
-                        if (drawingSheet.Title.Contains("001"))
-                        {
-                            activeSheet = drawingSheet;
                         }
 
                         if (plans[i].Count != 0)
@@ -114,28 +113,40 @@ namespace FFETOOLS
                             {
                                 foreach (var view in filterViews)
                                 {
-                                    if (view.ViewType == ViewType.FloorPlan && view.ViewName == plan)
-                                    {
-                                        viewOnDrawing = view;
-                                        CreateViewport(doc, drawingSheet, viewOnDrawing.Id, GetPoint(drawingSheet), viewPortType);
-                                    }
-
-                                    if (view.ViewType != ViewType.FloorPlan && view.Title.Contains(plan))
-                                    {
-                                        viewOnDrawing = view;
-                                        CreateViewport(doc, drawingSheet, viewOnDrawing.Id, GetPoint(drawingSheet), viewPortType);
-                                    }
-
                                     if (view.ViewType == ViewType.Schedule && view.Name.Replace("给排水_", "") == plan)
                                     {
                                         viewOnDrawing = view;
                                         ScheduleSheetInstance.Create(doc, drawingSheet.Id, viewOnDrawing.Id, GetPoint(drawingSheet));
                                     }
+
+                                    if (view.ViewType == ViewType.DraftingView && view.ViewName == plan && (plan.Contains("设计说明") || plan.Contains("WL")))
+                                    {
+                                        viewOnDrawing = view;
+                                        CreateViewport(doc, drawingSheet, viewOnDrawing.Id, GetPoint(drawingSheet), GetViewPortType(doc));
+                                    }
+
+                                    if (view.ViewType == ViewType.FloorPlan && view.ViewName == plan && view.ViewType != ViewType.Schedule)
+                                    {
+                                        viewOnDrawing = view;
+                                        string name = view.LookupParameter("图纸上的标题").AsString();
+                                        int nameLength = name.Length;
+                                        CreateViewport(doc, drawingSheet, viewOnDrawing.Id, GetPoint(drawingSheet), GetViewPortType(doc, nameLength));
+                                    }
+
+                                    if (view.ViewType != ViewType.FloorPlan && view.Title.Contains(plan) && view.ViewType != ViewType.Schedule)
+                                    {
+                                        viewOnDrawing = view;
+                                        string name = view.LookupParameter("图纸上的标题").AsString();
+                                        int nameLength = name.Length;
+                                        CreateViewport(doc, drawingSheet, viewOnDrawing.Id, GetPoint(drawingSheet), GetViewPortType(doc, nameLength));
+                                    }
+
                                 }
 
                             }
                         }
                     }
+                    activeSheet = waterViewsheets[0];
 
                     trans.Commit();
                     uidoc.ActiveView = activeSheet;
@@ -181,7 +192,34 @@ namespace FFETOOLS
             XYZ point = new XYZ(loc.U, loc.V, 0);
             return point;
         }
-        public ElementType GetViewPortType(Document doc, int length)
+        public ElementType GetViewPortType(Document doc, int length) //未完成文字数量驱动长度
+        {
+            ElementType type = null;
+            IList<ElementType> types = CollectorHelper.TCollector<ElementType>(doc);
+            //List<ElementType> filterTypes = new List<ElementType>();
+            int titleLength = 60;
+
+            if (length > 6 && length < 10)
+            {
+                titleLength = 80;
+            }
+            if (length > 10)
+            {
+                titleLength = 100;
+            }
+
+            foreach (var item in types)
+            {
+                if (item.FamilyName == "视口" && item.Name.Contains("给排水") && item.Name.Contains(titleLength.ToString()))
+                {
+                    type = item;
+                    break;
+                }
+            }
+
+            return type;
+        }
+        public ElementType GetViewPortType(Document doc) //无标题设置
         {
             ElementType type = null;
             IList<ElementType> types = CollectorHelper.TCollector<ElementType>(doc);
@@ -189,7 +227,7 @@ namespace FFETOOLS
 
             foreach (var item in types)
             {
-                if (item.FamilyName == "视口" && item.Name.Contains("给排水") && item.Name.Contains(length.ToString()))
+                if (item.FamilyName == "视口" && item.Name.Contains("公用") && item.Name.Contains("无标题"))
                 {
                     type = item;
                     break;
@@ -259,7 +297,7 @@ namespace FFETOOLS
 
             foreach (ViewDrafting view in views)
             {
-                if (view.ViewType == ViewType.DraftingView && view.Name.Contains("给排水"))
+                if (view.ViewType == ViewType.DraftingView && (view.Name.Contains("给排水") || view.Name.Contains("设计说明") || view.Name.Contains("WL")))
                 {
                     if (view.IsTemplate == false && !(view.LookupParameter("图纸编号").AsString().Contains("WD")))
                     {

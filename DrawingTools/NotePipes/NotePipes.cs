@@ -34,7 +34,7 @@ namespace FFETOOLS
                 Document doc = uidoc.Document;
                 Selection sel = uidoc.Selection;
 
-                mainfrm = new NotePipesForm();
+                mainfrm = new NotePipesForm(new ExecuteEventNotePipes().GetWDrawingName(doc));
                 IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
                 WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
                 helper.Owner = rvtPtr;
@@ -85,8 +85,28 @@ namespace FFETOOLS
         public string GetName()
         {
             return "批量标注管径";
-        }   
-        public void CreatPipeNotes(Document doc,UIDocument uidoc)
+        }
+        public List<string> GetWDrawingName(Document doc)
+        {
+            List<string> wDrawingNameList = new List<string>();
+            FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
+            viewCollector.OfClass(typeof(ViewPlan)).OfCategory(BuiltInCategory.OST_Views);
+            IList<Element> views = viewCollector.ToElements();
+
+            foreach (ViewPlan view in views)
+            {
+                if (view.ViewType == ViewType.FloorPlan)
+                {
+                    if (view.IsTemplate == false && view.Name.Contains("给排水"))
+                    {
+                        wDrawingNameList.Add(view.Name);
+                    }
+                }
+            }
+            wDrawingNameList.Sort();
+            return wDrawingNameList;
+        }
+        public void CreatPipeNotes(Document doc, UIDocument uidoc)
         {
             using (Transaction trans = new Transaction(doc, "批量标注管径"))
             {
@@ -147,7 +167,7 @@ namespace FFETOOLS
 
                 }
                 trans.Commit();
-            }         
+            }
         }
     }
     public class NotePipeComparer : IEqualityComparer<Pipe>
