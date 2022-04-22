@@ -52,11 +52,11 @@ namespace FFETOOLS
                 Curve c = grid.Curve;
                 if (IsInPolygon(c.GetEndPoint(0).SetZ(), pointList))
                 {
-                    SetGridBubbleVisible(grid, uidoc.ActiveGraphicalView, DatumEnds.End0);
+                    SetGridBubbleVisible(grid, uidoc.ActiveGraphicalView, DatumEnds.End1);
                 }
                 else if (IsInPolygon(c.GetEndPoint(1).SetZ(), pointList))
                 {
-                    SetGridBubbleVisible(grid, uidoc.ActiveGraphicalView, DatumEnds.End1);
+                    SetGridBubbleVisible(grid, uidoc.ActiveGraphicalView, DatumEnds.End0);
                 }
             }
             trans.Commit();

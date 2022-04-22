@@ -60,15 +60,37 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="About\About.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="Class2.cs" />
-    <Compile Include="Class3.cs" />
-    <Compile Include="QuickGridDimension.cs" />
+    <Compile Include="CommonClass\Common.cs" />
+    <Compile Include="CommonClass\EdgeInfo.cs" />
+    <Compile Include="CommonClass\Generics.cs" />
+    <Compile Include="CommonClass\Geometry.cs" />
+    <Compile Include="CreatAxis\AxisNameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreatAxis\AxisNameForm.designer.cs">
+      <DependentUpon>AxisNameForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreatAxis\OffsetLengthForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreatAxis\OffsetLengthForm.designer.cs">
+      <DependentUpon>OffsetLengthForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateWall\CreateWallForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateWall\CreateWallForm.designer.cs">
+      <DependentUpon>CreateWallForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Test\Class1.cs" />
+    <Compile Include="Test\Class2.cs" />
+    <Compile Include="Test\Class3.cs" />
+    <Compile Include="Test\QuickGridDimension.cs" />
     <Compile Include="CommonClass\CommonClass.cs" />
-    <Compile Include="CreatFloorOpening.cs" />
-    <Compile Include="CreatFloorOpeningByMaual.cs" />
-    <Compile Include="CreatWallOpening.cs" />
-    <Compile Include="CreatWallOpeningByManual.cs" />
+    <Compile Include="Test\CreatFloorOpening.cs" />
+    <Compile Include="Test\CreatFloorOpeningByMaual.cs" />
+    <Compile Include="Test\CreatWallOpening.cs" />
+    <Compile Include="Test\CreatWallOpeningByManual.cs" />
     <Compile Include="CreatWorkset\CreatWorksetForm.xaml.cs">
       <DependentUpon>CreatWorksetForm.xaml</DependentUpon>
     </Compile>
@@ -81,7 +103,7 @@
       <DependentUpon>ModifyValue.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModifyValue\ModifyValue.cs" />
-    <Compile Include="Others\GridHeadHide.cs" />
+    <Compile Include="Test\GridHeadHideTest.cs" />
     <Compile Include="Others\ShowSectionSymbol.cs" />
     <Compile Include="Others\SwitchBackGround.cs" />
     <Compile Include="About\AboutForm.xaml.cs">
@@ -95,9 +117,18 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AllPipeAndGridDimension.cs" />
-    <Compile Include="RevitClass1.cs" />
-    <Compile Include="ShowAndCloseGridNumber.cs" />
+    <Compile Include="Test\AllPipeAndGridDimension.cs" />
+    <Compile Include="Test\HideGridHeadTest.cs" />
+    <Compile Include="Others\ShowAndCloseGridNumber.cs" />
+    <Compile Include="Test\RevitClass1.cs" />
+    <Compile Include="Test\RevitClass2.cs" />
+    <Compile Include="Test\RevitClass3.cs" />
+    <Compile Include="Test\RevitClass4.cs" />
+    <Compile Include="Test\RevitClass5.cs" />
+    <Compile Include="Test\RevitClass6.cs" />
+    <Compile Include="Test\RevitClass7.cs" />
+    <Compile Include="CreateWall\CreateWall.cs" />
+    <Compile Include="CreatAxis\CreatAxis.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="About\AboutForm.xaml">
@@ -118,6 +149,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CreatAxis\AxisNameForm.resx">
+      <DependentUpon>AxisNameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreatAxis\OffsetLengthForm.resx">
+      <DependentUpon>OffsetLengthForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateWall\CreateWallForm.resx">
+      <DependentUpon>CreateWallForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
