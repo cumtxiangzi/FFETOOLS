@@ -59,14 +59,6 @@ namespace FFETOOLS
                 Document doc = uidoc.Document;
                 Selection sel = uidoc.Selection;
 
-                if (CreatWorkset.mainfrm.Main.IsChecked == true)
-                {
-                    if (doc.IsWorkshared == false)
-                    {
-                        doc.EnableWorksharing("共享标高和轴网", "工作集1");
-                    }
-                }
-
                 ProjectInfo pro = doc.ProjectInformation;
                 Parameter proNum = pro.LookupParameter("工程代号");
                 Parameter subproNum = pro.LookupParameter("子项代号");
@@ -112,8 +104,25 @@ namespace FFETOOLS
                 {
                     userName = "杨雪";
                 }
+                if (userName == "liuyiman")
+                {
+                    userName = "刘一曼";
+                }
 
                 string name = proNum.AsString() + "_" + subproNum.AsString() + "_" + "给排水" + "_" + userName;
+                string Bname = proNum.AsString() + "_" + subproNum.AsString() + "_" + "建筑" + "_";
+                string Sname = proNum.AsString() + "_" + subproNum.AsString() + "_" + "结构" + "_";
+
+                if (CreatWorkset.mainfrm.Main.IsChecked == true)
+                {
+                    if (doc.IsWorkshared == false)
+                    {
+                        doc.EnableWorksharing("共享标高和轴网", name);
+                    }
+                }
+
+                TransactionGroup tg = new TransactionGroup(doc, "创建给排水工作集");
+                tg.Start();
 
                 using (Transaction trans = new Transaction(doc, "创建工作集"))
                 {
@@ -124,8 +133,38 @@ namespace FFETOOLS
                         GetWorkset(doc, name);
                         doc.GetWorksetTable().SetActiveWorksetId(GetWorkset(doc, name).Id);
                     }
+
+                    if (CreatWorkset.mainfrm.Main.IsChecked == true)
+                    {
+                        GetWorkset(doc, Bname);
+                        GetWorkset(doc, Sname);
+                        //doc.GetWorksetTable().SetActiveWorksetId(GetWorkset(doc, name).Id);
+                    }
+
                     trans.Commit();
                 }
+
+                using (Transaction trans = new Transaction(doc, "元素归类"))
+                {
+                    trans.Start();
+
+                    int number = 0;
+                    if (CreatWorkset.mainfrm.Main.IsChecked == true)
+                    {
+                        AddElementsToWorkSet(doc, BuildingElement(doc), Bname);
+                        AddElementsToWorkSet(doc, StructureElement(doc), Sname);
+                        number++;
+                    }
+
+                    if (number != 0)
+                    {
+                        MessageBox.Show("工作集已创建并归类","消息",MessageBoxButton.OK,MessageBoxImage.Information);
+                    }
+
+                    trans.Commit();
+                }
+
+                tg.Assimilate();
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
@@ -136,21 +175,147 @@ namespace FFETOOLS
         {
             return "创建工作集";
         }
+        public List<Element> BuildingElement(Document doc)
+        {
+            List<Element> list = new List<Element>();
+            IList<FamilyInstance> instances = CollectorHelper.TCollector<FamilyInstance>(doc);
+            IList<Railing> railings = CollectorHelper.TCollector<Railing>(doc);
+            IList<Wall> walls = CollectorHelper.TCollector<Wall>(doc);
+            IList<Floor> floors = CollectorHelper.TCollector<Floor>(doc);
+            IList<FootPrintRoof> roofs = CollectorHelper.TCollector<FootPrintRoof>(doc);
+            IList<Stairs> stairs = CollectorHelper.TCollector<Stairs>(doc);
+            IList<HostedSweep> edges = CollectorHelper.TCollector<HostedSweep>(doc);//特别注意散水属于楼板边缘但过滤器不适用slabedeg,需要通过父类过滤         
+
+            foreach (FamilyInstance item in instances)
+            {
+                if (item.Symbol.FamilyName.Contains("建筑"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in railings)
+            {
+                if (item.Name.Contains("建筑"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in walls)
+            {
+                if (item.Name.Contains("建筑") || item.Name.Contains("default_砌体墙") || item.Name.Contains("default_压型钢板墙面") || item.Name.Contains("TB"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in floors)
+            {
+                if (item.Name.Contains("建筑") || item.Name.Contains("default_钢筋混凝土楼板") ||
+                    item.Name.Contains("TB") || item.Name.Contains("default_花纹钢楼板"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in roofs)
+            {
+                if (item.Name.Contains("建筑") || item.Name.Contains("default_压型钢板屋面") || item.Name.Contains("TB"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in stairs)
+            {
+                Parameter ps = item.get_Parameter(BuiltInParameter.ELEM_TYPE_PARAM);
+
+                if (ps.AsValueString().Contains("建筑"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in edges)
+            {
+                SlabEdge sg = item as SlabEdge;
+                if (sg.Name.Contains("建筑"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            return list;
+        }
+        public List<Element> StructureElement(Document doc)
+        {
+            List<Element> list = new List<Element>();
+            IList<FamilyInstance> instances = CollectorHelper.TCollector<FamilyInstance>(doc);
+            IList<Wall> walls = CollectorHelper.TCollector<Wall>(doc);
+            IList<Floor> floors = CollectorHelper.TCollector<Floor>(doc);
+            IList<Stairs> stairs = CollectorHelper.TCollector<Stairs>(doc);
+
+            foreach (FamilyInstance item in instances)
+            {
+                if (item.Symbol.FamilyName.Contains("结构") || item.Symbol.FamilyName.Contains("通气管") ||
+                    item.Symbol.FamilyName.Contains("阀门井") || item.Symbol.FamilyName.Contains("设备基础"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in walls)
+            {
+                if (item.Name.Contains("结构"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in floors)
+            {
+                if (item.Name.Contains("结构"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in stairs)
+            {
+                Parameter ps = item.get_Parameter(BuiltInParameter.ELEM_TYPE_PARAM);
+
+                if (ps.AsValueString().Contains("浇筑"))
+                {
+                    list.Add(item);
+                }
+            }
+
+            return list;
+        }
         public void AddElementsToWorkSet(Document doc, List<Element> elements, string workSetName)
         {
-            if (doc.IsWorkshared == true)
+            Workset workset = null;
+            IList<Workset> worksetList = new FilteredWorksetCollector(doc).OfKind(WorksetKind.UserWorkset).ToWorksets();
+            foreach (Workset item in worksetList)
             {
-                var workset = GetWorkset(doc, workSetName);
-                if (workset != null)
+                if (item.Name.Contains(workSetName))
                 {
-                    var worksetID = workset.Id.IntegerValue;
-                    foreach (var ele in elements)
+                    workset = item;
+                    break;
+                }
+            }
+
+            if (workset != null)
+            {
+                var worksetID = workset.Id.IntegerValue;
+
+                foreach (var ele in elements)
+                {
+                    Parameter wsparam = ele.get_Parameter(BuiltInParameter.ELEM_PARTITION_PARAM);
+                    if (wsparam != null && wsparam.IsReadOnly == false) //此处巨坑，要判断参数是否为只读
                     {
-                        Parameter wsparam = ele.get_Parameter(BuiltInParameter.ELEM_PARTITION_PARAM);
-                        if (wsparam != null)
-                        {
-                            wsparam.Set(worksetID);
-                        }
+                        wsparam.Set(worksetID);
                     }
                 }
             }
@@ -174,7 +339,7 @@ namespace FFETOOLS
                     {
                         if (workset.Name.Contains(worksetName))
                         {
-                            return workset;
+                            newWorkset = workset;
                         }
                     }
                 }

@@ -199,30 +199,6 @@ namespace FFETOOLS
             return normalFace;
         }
     }
-    //楼板的过滤条件
-    public class FloorSelectionFilter : ISelectionFilter
-    {
-        public bool AllowElement(Element e)
-        {
-            return e is Floor;
-        }
-
-        public bool AllowReference(Reference r, XYZ p)
-        {
-            return true;
-        }
-    }
-    //水管的过滤条件
-    public class PipeSelectionFilter : ISelectionFilter
-    {
-        public bool AllowElement(Element e)
-        {
-            return e is Pipe;
-        }
-
-        public bool AllowReference(Reference r, XYZ p)
-        {
-            return true;
-        }
-    }
+   
+    
 }

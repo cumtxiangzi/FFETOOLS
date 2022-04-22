@@ -61,7 +61,10 @@
   <ItemGroup>
     <Compile Include="About\About.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Class2.cs" />
     <Compile Include="Class3.cs" />
+    <Compile Include="QuickGridDimension.cs" />
+    <Compile Include="CommonClass\CommonClass.cs" />
     <Compile Include="CreatFloorOpening.cs" />
     <Compile Include="CreatFloorOpeningByMaual.cs" />
     <Compile Include="CreatWallOpening.cs" />
@@ -70,6 +73,15 @@
       <DependentUpon>CreatWorksetForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="CreatWorkset\CreatWorkset.cs" />
+    <Compile Include="FamilyManager\FamilyManager.cs" />
+    <Compile Include="FamilyManager\FamilyManager.xaml.cs">
+      <DependentUpon>FamilyManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ModifyValue\ModifyValue.xaml.cs">
+      <DependentUpon>ModifyValue.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ModifyValue\ModifyValue.cs" />
+    <Compile Include="Others\GridHeadHide.cs" />
     <Compile Include="Others\ShowSectionSymbol.cs" />
     <Compile Include="Others\SwitchBackGround.cs" />
     <Compile Include="About\AboutForm.xaml.cs">
@@ -83,6 +95,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AllPipeAndGridDimension.cs" />
+    <Compile Include="RevitClass1.cs" />
+    <Compile Include="ShowAndCloseGridNumber.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="About\AboutForm.xaml">
@@ -90,6 +105,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CreatWorkset\CreatWorksetForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FamilyManager\FamilyManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ModifyValue\ModifyValue.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -109,5 +132,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

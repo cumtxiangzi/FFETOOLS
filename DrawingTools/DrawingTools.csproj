@@ -112,7 +112,6 @@
       <DependentUpon>NotePipes.xaml</DependentUpon>
     </Compile>
     <Compile Include="NotePipes\NotePipes.cs" />
-    <Compile Include="NotePipes\WDrawingNameInfo.cs" />
     <Compile Include="Others\PipeShowBold.cs" />
     <Compile Include="BatchExport\BatchExport.cs" />
     <Compile Include="BatchExport\PrintMgr.cs" />

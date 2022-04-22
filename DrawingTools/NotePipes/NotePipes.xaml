@@ -5,61 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
-         Title="管道批量标注" Height="500" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
+         Title="管道批量标注" Height="150" Width="250" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="65*"/>
-            <ColumnDefinition Width="45*"/>
-            <ColumnDefinition Width="45*"/>
-            <ColumnDefinition Width="45*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="60*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="1.1*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="12*"/>
         </Grid.RowDefinitions>
-        
-        <GroupBox Header="给排水视图" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" Margin="5,5,5,5" BorderBrush="Gray">
-            <Grid>
-                <ListBox x:Name="DrawingNameListBox" Margin="5,5,5,5" BorderThickness="0" >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsSelected}"  Content="{Binding DrawingName}" CommandParameter="{Binding No}" 
-                                      HorizontalAlignment="Left" VerticalAlignment="Top" 
-                                      VerticalContentAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Auto" UseLayoutRounding="False" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-        </GroupBox>
 
+        <TextBlock Text="管道标注长度限值(mm):" Margin="9,15,5,5" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" FontSize="13"/>
+        <TextBox x:Name="LengthValue" Margin="5,15,10,5" Grid.Column="2" Grid.Row="0"  VerticalAlignment="Center" FontSize="13"/>
 
-        <TextBlock Text="管道标注长度限值(mm):" Margin="9,5,5,5" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" FontSize="13"/>
-        <TextBox x:Name="LengthValue" Margin="5,5,10,5" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" FontSize="13"/>
-       
-        <Button x:Name="ClickButton" Content="全选"  Grid.Column="1" Grid.Row="2" Margin="5,5,10,10" FontSize="10.5" Cursor="Hand" Click="ClickButton_Click" >
-            <Button.Template >
-                <ControlTemplate TargetType="{x:Type Button}" >
-                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
-                        <Border.Background>LightGray</Border.Background>
-                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-
-        <Button x:Name="ClearButton" Content="清空"  Grid.Column="2" Grid.Row="2" Margin="5,5,10,10" FontSize="10.5" Cursor="Hand" Click="ClearButton_Click">
-            <Button.Template >
-                <ControlTemplate TargetType="{x:Type Button}" >
-                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
-                        <Border.Background>LightGray</Border.Background>
-                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-
-        <Button x:Name="OkButton" Content="确定" Margin="5,5,10,10" FontSize="10.5" Cursor="Hand" Grid.Column="3" Grid.Row="2" Click="OkButton_Click" >
+        <Button x:Name="OkButton" Content="确定" Margin="5,5,10,10" FontSize="13" Cursor="Hand" Grid.Column="2" Grid.Row="2" Click="OkButton_Click" >
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
