@@ -481,3 +481,5 @@ D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\F
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\BatchTools\obj\Debug\ModifyValue\ModifyValue.g.cs
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\BatchTools\obj\Debug\ModifyValue\ModifyValue.baml
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\BatchTools\obj\Debug\FFETOOLS.CreateWallForm.resources
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\BatchTools\obj\Debug\FFETOOLS.AxisNameForm.resources
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\BatchTools\obj\Debug\FFETOOLS.OffsetLengthForm.resources

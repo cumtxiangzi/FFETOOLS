@@ -139,7 +139,7 @@ namespace FFETOOLS
             ptEnd = ptEnd.Add(offsetDir);
 
             Line geomLine = Line.CreateBound(ptStart, ptEnd);
-            Grid lineGrid = m_Revit.Application.ActiveUIDocument.Document.Create.newg(geomLine);
+            Grid lineGrid = Grid.Create(m_Revit.Application.ActiveUIDocument.Document,geomLine);
 
             if (null == lineGrid)
             {
@@ -149,7 +149,7 @@ namespace FFETOOLS
 
             if (null != type)
             {
-                lineGrid.GridType = type;
+                lineGrid.ChangeTypeId(type.Id);
             }
 
         }
@@ -176,7 +176,7 @@ namespace FFETOOLS
             }
 
             Arc geomArc = Arc.Create(ptCenter, radius, startAngle, endAngle, XYZ.BasisX, XYZ.BasisY);
-            Grid lineGrid = DOC.NewGrid(geomArc);
+            Grid lineGrid = Grid.Create(m_Revit.Application.ActiveUIDocument.Document, geomArc);
 
             if (null == lineGrid)
             {
@@ -186,7 +186,7 @@ namespace FFETOOLS
 
             if (null != type)
             {
-                lineGrid.GridType = type;
+                lineGrid.ChangeTypeId(type.Id);
             }
         }
     }
