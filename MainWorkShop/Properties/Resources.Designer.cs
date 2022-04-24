@@ -61,6 +61,204 @@ namespace MainWorkShop.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Please adjust the values and try again! 的本地化字符串。
+        /// </summary>
+        internal static string AjustValues {
+            get {
+                return ResourceManager.GetString("AjustValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Coordinate can not be null! 的本地化字符串。
+        /// </summary>
+        internal static string CoordinateCannotBeNull {
+            get {
+                return ResourceManager.GetString("CoordinateCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Coordinate is not in a correct format! 的本地化字符串。
+        /// </summary>
+        internal static string CoordinateFormatWrong {
+            get {
+                return ResourceManager.GetString("CoordinateFormatWrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Degree can not be negative! 的本地化字符串。
+        /// </summary>
+        internal static string DegreeCannotBeNegative {
+            get {
+                return ResourceManager.GetString("DegreeCannotBeNegative", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Degree can not be null! 的本地化字符串。
+        /// </summary>
+        internal static string DegreeCannotBeNull {
+            get {
+                return ResourceManager.GetString("DegreeCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Degree is not in a correct format! 的本地化字符串。
+        /// </summary>
+        internal static string DegreeFormatWrong {
+            get {
+                return ResourceManager.GetString("DegreeFormatWrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Start degree and end degree can not be so close! 的本地化字符串。
+        /// </summary>
+        internal static string DegreesAreTooClose {
+            get {
+                return ResourceManager.GetString("DegreesAreTooClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Degree should be within the range of 0 - 360! 的本地化字符串。
+        /// </summary>
+        internal static string DegreeWithin0To360 {
+            get {
+                return ResourceManager.GetString("DegreeWithin0To360", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Distance can not be negative! 的本地化字符串。
+        /// </summary>
+        internal static string DistanceCannotBeNegative {
+            get {
+                return ResourceManager.GetString("DistanceCannotBeNegative", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Distance can not be null! 的本地化字符串。
+        /// </summary>
+        internal static string DistanceCannotBeNull {
+            get {
+                return ResourceManager.GetString("DistanceCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Distance is not in a correct format! 的本地化字符串。
+        /// </summary>
+        internal static string DistanceFormatWrong {
+            get {
+                return ResourceManager.GetString("DistanceFormatWrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 cm 的本地化字符串。
+        /// </summary>
+        internal static string DUT_CENTIMETERS {
+            get {
+                return ResourceManager.GetString("DUT_CENTIMETERS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 &apos; 的本地化字符串。
+        /// </summary>
+        internal static string DUT_DECIMAL_FEET {
+            get {
+                return ResourceManager.GetString("DUT_DECIMAL_FEET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 &quot; 的本地化字符串。
+        /// </summary>
+        internal static string DUT_DECIMAL_INCHES {
+            get {
+                return ResourceManager.GetString("DUT_DECIMAL_INCHES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 m 的本地化字符串。
+        /// </summary>
+        internal static string DUT_METERS {
+            get {
+                return ResourceManager.GetString("DUT_METERS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 m 的本地化字符串。
+        /// </summary>
+        internal static string DUT_METERS_CENTIMETERS {
+            get {
+                return ResourceManager.GetString("DUT_METERS_CENTIMETERS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 - Start point and end point of arc grids are too close 的本地化字符串。
+        /// </summary>
+        internal static string EndPointsTooClose {
+            get {
+                return ResourceManager.GetString("EndPointsTooClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 That may be caused by one or more of following reasons: 的本地化字符串。
+        /// </summary>
+        internal static string Reasons {
+            get {
+                return ResourceManager.GetString("Reasons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Spacing can not be null! 的本地化字符串。
+        /// </summary>
+        internal static string SpacingCannotBeNull {
+            get {
+                return ResourceManager.GetString("SpacingCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Spacing is not in a correct format! 的本地化字符串。
+        /// </summary>
+        internal static string SpacingFormatWrong {
+            get {
+                return ResourceManager.GetString("SpacingFormatWrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 - Spacings between grids are too small 的本地化字符串。
+        /// </summary>
+        internal static string SpacingsTooSmall {
+            get {
+                return ResourceManager.GetString("SpacingsTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Start degree should be less than end degree! 的本地化字符串。
+        /// </summary>
+        internal static string StartDegreeShouldBeLessThanEndDegree {
+            get {
+                return ResourceManager.GetString("StartDegreeShouldBeLessThanEndDegree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Bitmap 卧式单吸泵 {

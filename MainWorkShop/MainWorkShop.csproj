@@ -60,7 +60,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonClass\Common.cs" />
     <Compile Include="CommonClass\CommonClass.cs" />
+    <Compile Include="CommonClass\EdgeInfo.cs" />
+    <Compile Include="CommonClass\Generics.cs" />
+    <Compile Include="CommonClass\Geometry.cs" />
+    <Compile Include="PumpStation\CreateGridsData.cs" />
+    <Compile Include="PumpStation\CreateOrthogonalGridsData.cs" />
+    <Compile Include="PumpStation\EnumsAndValues.cs" />
+    <Compile Include="PumpStation\Unit.cs" />
+    <Compile Include="PumpStation\Validation.cs" />
     <Compile Include="WaterPool\WaterPool.xaml.cs">
       <DependentUpon>WaterPool.xaml</DependentUpon>
     </Compile>

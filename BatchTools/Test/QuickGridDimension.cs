@@ -91,7 +91,7 @@ namespace FFETOOLS
                         }
                         if (i == 0 || i == referenceArray1.Size - 1)
                         {
-                            referenceArray2.Append(new Reference(g));
+                           referenceArray2.Append(new Reference(g));
                         }
                     }
                     //计算尺寸标注位置
@@ -112,8 +112,15 @@ namespace FFETOOLS
                     using (Transaction tran = new Transaction(document, "轴网尺寸标注"))
                     {
                         tran.Start();
-                        document.Create.NewDimension(activeView, line_o, referenceArray2, dimType);
-                        document.Create.NewDimension(activeView, line_i, referenceArray1, dimType);
+                        if(grids.Count>2)
+                        {
+                            document.Create.NewDimension(activeView, line_o, referenceArray2, dimType);
+                            document.Create.NewDimension(activeView, line_i, referenceArray1, dimType);
+                        }
+                        else
+                        {
+                            document.Create.NewDimension(activeView, line_o, referenceArray2, dimType);
+                        }
                         tran.Commit();
                     }
                 }

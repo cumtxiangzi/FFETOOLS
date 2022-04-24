@@ -130,6 +130,7 @@
     <Compile Include="Test\RevitClass7.cs" />
     <Compile Include="CreateWall\CreateWall.cs" />
     <Compile Include="CreatAxis\CreatAxis.cs" />
+    <Compile Include="Test\RevitClass8.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="About\AboutForm.xaml">

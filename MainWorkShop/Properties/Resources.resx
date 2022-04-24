@@ -117,6 +117,72 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AjustValues" xml:space="preserve">
+    <value>Please adjust the values and try again!</value>
+  </data>
+  <data name="CoordinateCannotBeNull" xml:space="preserve">
+    <value>Coordinate can not be null!</value>
+  </data>
+  <data name="CoordinateFormatWrong" xml:space="preserve">
+    <value>Coordinate is not in a correct format!</value>
+  </data>
+  <data name="DegreeCannotBeNegative" xml:space="preserve">
+    <value>Degree can not be negative!</value>
+  </data>
+  <data name="DegreeCannotBeNull" xml:space="preserve">
+    <value>Degree can not be null!</value>
+  </data>
+  <data name="DegreeFormatWrong" xml:space="preserve">
+    <value>Degree is not in a correct format!</value>
+  </data>
+  <data name="DegreesAreTooClose" xml:space="preserve">
+    <value>Start degree and end degree can not be so close!</value>
+  </data>
+  <data name="DegreeWithin0To360" xml:space="preserve">
+    <value>Degree should be within the range of 0 - 360!</value>
+  </data>
+  <data name="DistanceCannotBeNegative" xml:space="preserve">
+    <value>Distance can not be negative!</value>
+  </data>
+  <data name="DistanceCannotBeNull" xml:space="preserve">
+    <value>Distance can not be null!</value>
+  </data>
+  <data name="DistanceFormatWrong" xml:space="preserve">
+    <value>Distance is not in a correct format!</value>
+  </data>
+  <data name="DUT_CENTIMETERS" xml:space="preserve">
+    <value>cm</value>
+  </data>
+  <data name="DUT_DECIMAL_FEET" xml:space="preserve">
+    <value>'</value>
+  </data>
+  <data name="DUT_DECIMAL_INCHES" xml:space="preserve">
+    <value>"</value>
+  </data>
+  <data name="DUT_METERS" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="DUT_METERS_CENTIMETERS" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="EndPointsTooClose" xml:space="preserve">
+    <value>- Start point and end point of arc grids are too close</value>
+  </data>
+  <data name="Reasons" xml:space="preserve">
+    <value>That may be caused by one or more of following reasons:</value>
+  </data>
+  <data name="SpacingCannotBeNull" xml:space="preserve">
+    <value>Spacing can not be null!</value>
+  </data>
+  <data name="SpacingFormatWrong" xml:space="preserve">
+    <value>Spacing is not in a correct format!</value>
+  </data>
+  <data name="SpacingsTooSmall" xml:space="preserve">
+    <value>- Spacings between grids are too small</value>
+  </data>
+  <data name="StartDegreeShouldBeLessThanEndDegree" xml:space="preserve">
+    <value>Start degree should be less than end degree!</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="卧式单吸泵" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\卧式单吸泵.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
