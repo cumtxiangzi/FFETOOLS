@@ -150,11 +150,12 @@ namespace FFETOOLS
                         trans.Commit();
                     }
 
+                    List<Wall> newWalls = new List<Wall>();
                     using (Transaction trans = new Transaction(doc, "轴网标注及生墙"))
                     {
                         trans.Start();
 
-                        AddWallByCrossGrids(doc, app, XYGrids, roomToplevel, roomBottomlevel, -100, false, false);//此处需要关联窗体参数
+                        newWalls = AddWallByCrossGrids(doc, app, XYGrids, roomToplevel, roomBottomlevel, -100, false, false);//此处需要关联窗体参数
 
                         CreatGridDemesion(doc, activeView, XGrids);
                         CreatGridDemesion(doc, activeView, YGrids);
@@ -181,12 +182,33 @@ namespace FFETOOLS
                         array.Append(Line.CreateBound(point31, point41));
                         array.Append(Line.CreateBound(point41, point11));
 
+                        CurveArray array2 = new CurveArray();
+                        XYZ point12 = new XYZ(pickpoint.X - roomWallThick - 800 / 304.8, pickpoint.Y - roomWallThick - 800 / 304.8, 0);
+                        XYZ point22 = new XYZ(pickpoint.X - roomWallThick - 800 / 304.8, pickpoint.Y + roomWallThick + roomWidthValue / 304.8 + 800 / 304.8, 0);
+                        XYZ point32 = new XYZ(pickpoint.X + roomWallThick + roomLehgthValue / 304.8 + 800 / 304.8, pickpoint.Y + roomWallThick + roomWidthValue / 304.8 + 800 / 304.8, 0);
+                        XYZ point42 = new XYZ(pickpoint.X + roomWallThick + roomLehgthValue / 304.8 + 800 / 304.8, pickpoint.Y - roomWallThick - 800 / 304.8, 0);
+                        array2.Append(Line.CreateBound(point12, point22));
+                        array2.Append(Line.CreateBound(point22, point32));
+                        array2.Append(Line.CreateBound(point32, point42));
+                        array2.Append(Line.CreateBound(point42, point12));
+
                         roomBottomFloor = doc.Create.NewFloor(array, PoolFloorType(doc, "100"), roomBottomlevel, true, XYZ.BasisZ);
                         roomBottomFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(0);
 
-                        roomTopFloor = doc.Create.NewFloor(array, PoolFloorType(doc, "100"), roomToplevel, true, XYZ.BasisZ);
+                        roomTopFloor = doc.Create.NewFloor(array2, PoolFloorType(doc, "100"), roomToplevel, true, XYZ.BasisZ);
                         double topFloorThick = roomTopFloor.get_Parameter(BuiltInParameter.FLOOR_ATTR_THICKNESS_PARAM).AsDouble();
-                        roomTopFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(0);
+                        roomTopFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(100 / 304.8);
+
+                        CreatDoorAndWindow(doc, newWalls, roomWidthValue);
+
+                        trans.Commit();
+                    }
+
+                    using (Transaction trans = new Transaction(doc, "生成散水"))
+                    {
+                        trans.Start();
+
+                        GetSlabEdge(doc, roomBottomFloor);
 
                         trans.Commit();
                     }
@@ -207,6 +229,137 @@ namespace FFETOOLS
         {
             return "创建泵站";
         }
+        public void CreatDoorAndWindow(Document RevitDoc, List<Wall> walls, double roomWidth)
+        {
+            FamilySymbol doorType = null;
+            FamilySymbol windowType = null;
+
+            IList<FamilySymbol> symbols = CollectorHelper.TCollector<FamilySymbol>(RevitDoc);
+            foreach (FamilySymbol element in symbols)
+            {
+                if (element.FamilyName.Contains("建筑_门_default双扇") && element.Name.Contains("1500x2400"))
+                {
+                    doorType = element;
+                    break;
+                }
+            }
+
+            foreach (FamilySymbol element in symbols)
+            {
+                if (element.FamilyName.Contains("铝合金窗") && element.Name.Contains("C-1"))
+                {
+                    windowType = element;
+                    break;
+                }
+            }
+
+            // 使用族类型创建门 
+            foreach (var item in walls)
+            {
+                Line line = null;
+                LocationCurve locationCurve = item.Location as LocationCurve;
+                if (locationCurve != null)
+                {
+                    line = locationCurve.Curve as Line;
+                }
+
+                XYZ midPoint = (line.GetEndPoint(0) + line.GetEndPoint(1)) / 2;
+                Level wallLevel = RevitDoc.GetElement(item.LevelId) as Level;
+
+                if (line.Direction.X == 1 && line.Direction.Y == 0)
+                {
+                    if (line.GetEndPoint(0).Y == 0)
+                    {
+                        // 在墙的中心位置创建一个门 
+                        FamilyInstance door = RevitDoc.Create.NewFamilyInstance(midPoint, doorType, item, wallLevel, StructuralType.NonStructural);
+                        if (door.CanRotate)
+                        {
+                            door.rotate();
+                        }
+                    }
+                    else
+                    {
+                        if (HasMinimalDifference(line.GetEndPoint(0).Y, roomWidth / 304.8, 1))
+                        {
+                            // 在墙的中心位置创建一个门 
+                           FamilyInstance window = RevitDoc.Create.NewFamilyInstance(midPoint, windowType, item, wallLevel, StructuralType.NonStructural);
+                            window.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM).Set(900/304.8);
+                            //if (door.CanRotate)
+                            //{
+                            //    door.rotate();
+                            //}
+                        }
+                    }
+
+                }
+            }
+        }
+        public bool HasMinimalDifference(double value1, double value2, int units)
+        {
+            long lValue1 = BitConverter.DoubleToInt64Bits(value1);
+            long lValue2 = BitConverter.DoubleToInt64Bits(value2);
+
+            // If the signs are different, return false except for +0 and -0.
+            if ((lValue1 >> 63) != (lValue2 >> 63))
+            {
+                if (value1 == value2)
+                    return true;
+
+                return false;
+            }
+
+            long diff = Math.Abs(lValue1 - lValue2);
+
+            if (diff <= (long)units)
+                return true;
+
+            return false;
+        }
+        public void GetSlabEdge(Document doc, Floor bottomFloor)//创建散水
+        {
+            SlabEdgeType footSlab = null;
+            IList<SlabEdgeType> edges = CollectorHelper.TCollector<SlabEdgeType>(doc);
+            foreach (var item in edges)
+            {
+                if (item.Name.Contains("建筑_散水无垫层_1000"))
+                {
+                    footSlab = item;
+                    break;
+                }
+            }
+
+            Face normalFace = null;
+            Options options = new Options();
+            options.ComputeReferences = true;
+            GeometryElement geometryElement = bottomFloor.get_Geometry(options);
+            foreach (GeometryObject item in geometryElement)
+            {
+                if (item is Solid solid)
+                {
+                    List<Face> list = new List<Face>();
+                    foreach (Face face in solid.Faces)
+                    {
+                        list.Add(face);
+                    }
+                    double AreaMax = list.Max(t => t.Area);
+                    normalFace = list.FirstOrDefault(p => p.Area == AreaMax);
+                }
+            }
+
+            EdgeArrayArray eaa = normalFace.EdgeLoops;
+            EdgeArray ea = eaa.get_Item(0);
+
+            ReferenceArray refArr = new ReferenceArray();
+            foreach (Edge item in ea)
+            {
+                refArr.Append(item.Reference);
+            }
+
+            SlabEdge newEdge = doc.Create.NewSlabEdge(footSlab, refArr);
+            newEdge.get_Parameter(BuiltInParameter.SWEEP_BASE_OFFSET).Set(200 / 304.8);
+            newEdge.get_Parameter(BuiltInParameter.SWEEP_BASE_VERT_OFFSET).Set(200 / 304.8);
+        }
+
         public ViewFamilyType GetViewFamilyType(Document doc)
         {
             ViewFamilyType view = null;
@@ -399,13 +552,15 @@ namespace FFETOOLS
             }
             return false;
         }
-        public void AddWallByCrossGrids(Document doc, UIApplication uiapp, List<Grid> wallGrids, Level topLevel,
+        public List<Wall> AddWallByCrossGrids(Document doc, UIApplication uiapp, List<Grid> wallGrids, Level topLevel,
             Level bottomLevel, double offset, bool isSegemention, bool isStructure)
         {
+            List<Wall> res = new List<Wall>();
+
             WallType wallType = GetWallTypeByName(doc, "default_砌体墙");
             if (null == wallType)
             {
-                return;
+                return res;
             }
 
             foreach (Grid grid in wallGrids)
@@ -414,9 +569,12 @@ namespace FFETOOLS
 
                 foreach (Curve curve in curves)
                 {
-                    CreateSegementionWall(doc, curve, topLevel, bottomLevel, wallType, isSegemention, isStructure, offset);
+                    List<Wall> newWall = CreateSegementionWall(doc, curve, topLevel, bottomLevel, wallType, isSegemention, isStructure, offset);
+                    res.AddRange(newWall);
                 }
             }
+
+            return res;
         }
         protected List<Wall> CreateSegementionWall(Document doc, Curve curve, Level topLevel, Level bottomLevel, WallType wallType,
                                                   bool isSegemention, bool isStructural, double offset)

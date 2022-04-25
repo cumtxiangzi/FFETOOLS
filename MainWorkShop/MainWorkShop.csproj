@@ -63,8 +63,10 @@
     <Compile Include="CommonClass\Common.cs" />
     <Compile Include="CommonClass\CommonClass.cs" />
     <Compile Include="CommonClass\EdgeInfo.cs" />
+    <Compile Include="CommonClass\ElementGeometry.cs" />
     <Compile Include="CommonClass\Generics.cs" />
     <Compile Include="CommonClass\Geometry.cs" />
+    <Compile Include="CommonClass\TrackBall.cs" />
     <Compile Include="PumpStation\CreateGridsData.cs" />
     <Compile Include="PumpStation\CreateOrthogonalGridsData.cs" />
     <Compile Include="PumpStation\EnumsAndValues.cs" />

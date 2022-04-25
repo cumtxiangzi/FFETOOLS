@@ -64,6 +64,7 @@
     <Compile Include="CommonClass\EdgeInfo.cs" />
     <Compile Include="CommonClass\Generics.cs" />
     <Compile Include="CommonClass\Geometry.cs" />
+    <Compile Include="CommonClass\Util.cs" />
     <Compile Include="CreatAxis\AxisNameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,7 +131,9 @@
     <Compile Include="Test\RevitClass7.cs" />
     <Compile Include="CreateWall\CreateWall.cs" />
     <Compile Include="CreatAxis\CreatAxis.cs" />
+    <Compile Include="Test\CreatWallByCrossGrid.cs" />
     <Compile Include="Test\RevitClass8.cs" />
+    <Compile Include="Test\RevitClass9.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="About\AboutForm.xaml">
