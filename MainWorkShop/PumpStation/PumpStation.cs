@@ -72,17 +72,25 @@ namespace FFETOOLS
                 Level roomBottomlevel = null;
                 Level roomToplevel = null;
 
-                //string roomBottomElevation = WaterPool.mainfrm.PoolBottomElevation.Text;
-                //double roomBottomElevationValue = WaterPool.mainfrm.PoolBottomElevationValue;
-                //double roomHeightValue = WaterPool.mainfrm.PoolHeightValue;
-                //double roomLehgthValue = WaterPool.mainfrm.PoolLengthValue;
-                //double roomWidthValue = WaterPool.mainfrm.PoolWidthValue;
+                List<RoomSetInfo> RoomSetInfoList = new List<RoomSetInfo>();
+                for (int i = 0; i < PumpStation.mainfrm.RoomSettingGrid.Items.Count; i++)
+                {
+                    string roomName = PumpStation.mainfrm.GetComBoxValue(i, 1, "RoomName");
+                    double roomLength = double.Parse(PumpStation.mainfrm.GetTextBlockValue(i, 2));
+                    double roomBottom = double.Parse(PumpStation.mainfrm.GetTextBlockValue(i, 3));
+                    double roomHeigth = double.Parse(PumpStation.mainfrm.RoomHeight.Text);
+                    double roomWidth = double.Parse(PumpStation.mainfrm.RoomWidth.Text);
 
-                string roomBottomElevation = "0.0";
-                double roomBottomElevationValue = 0;
-                double roomHeightValue = 4000;
-                double roomLehgthValue = 16000;
-                double roomWidthValue = 6000;
+                    RoomSetInfoList.Add(new RoomSetInfo()
+                    {
+                        RoomCode = i,
+                        RoomName = roomName,
+                        RoomLength = roomLength,
+                        RoomWidth = roomWidth,
+                        RoomBottom = roomBottom,
+                        RoomHeight = roomHeigth
+                    });
+                }
 
                 if (activeView.IsTemplate != true && activeView.ViewType == ViewType.FloorPlan)
                 {
@@ -93,56 +101,92 @@ namespace FFETOOLS
                     {
                         trans.Start();
 
-                        if (ElevationExist(doc, (roomBottomElevationValue * 1000).ToString()))
+                        foreach (var item in RoomSetInfoList)
                         {
-                            roomBottomlevel = GetLevel(doc, (roomBottomElevationValue * 1000).ToString());
-                        }
-                        else
-                        {
-                            roomBottomlevel = Level.Create(doc, roomBottomElevationValue * 1000 / 304.8);
-                            roomBottomlevel.Name = Convert.ToDouble(roomBottomElevation).ToString("0.000");
-                            viewPlan = ViewPlan.Create(doc, GetViewFamilyType(doc).Id, roomBottomlevel.Id);//为新建的标高创建对应的视图                    
+                            double roomTopElevationValue = item.RoomHeight;
+                            if (ElevationExist(doc, (roomTopElevationValue * 1000).ToString()))
+                            {
+                                roomToplevel = GetLevel(doc, (roomTopElevationValue * 1000).ToString());
+                            }
+                            else
+                            {
+                                roomToplevel = Level.Create(doc, roomTopElevationValue * 1000 / 304.8);
+                                roomToplevel.Name = roomTopElevationValue.ToString("0.000");
+                                viewPlan = ViewPlan.Create(doc, GetViewFamilyType(doc).Id, roomToplevel.Id);//为新建的标高创建对应的视图                    
+                            }
+                            break;
                         }
 
-                        if (ElevationExist(doc, (roomBottomElevationValue * 1000 + roomHeightValue).ToString()))
+                        foreach (var item in RoomSetInfoList)
                         {
-                            roomToplevel = GetLevel(doc, (roomBottomElevationValue * 1000 + roomHeightValue).ToString());
-                        }
-                        else
-                        {
-                            roomToplevel = Level.Create(doc, (roomBottomElevationValue * 1000 + roomHeightValue) / 304.8);
-                            roomToplevel.Name = (roomBottomElevationValue + roomHeightValue / 1000).ToString("0.000");
-                            ViewPlan.Create(doc, GetViewFamilyType(doc).Id, roomToplevel.Id);
+                            double roomBottomElevationValue = item.RoomBottom;
+                            if (ElevationExist(doc, (roomBottomElevationValue * 1000).ToString()))
+                            {
+                                roomBottomlevel = GetLevel(doc, (roomBottomElevationValue * 1000).ToString());
+                            }
+                            else
+                            {
+                                roomBottomlevel = Level.Create(doc, roomBottomElevationValue * 1000 / 304.8);
+                                roomBottomlevel.Name = roomBottomElevationValue.ToString("0.000");
+                                viewPlan = ViewPlan.Create(doc, GetViewFamilyType(doc).Id, roomBottomlevel.Id);//为新建的标高创建对应的视图                    
+                            }
                         }
 
                         trans.Commit();
                     }
 
+                    double roomLehgthValue = 10000;
+                    double roomWidthValue = 6000;
+
                     using (Transaction trans = new Transaction(doc, "布置轴网"))
                     {
                         trans.Start();
 
+                        List<double> roomLengthList = new List<double>();
                         CreateOrthogonalGridsData orthogonalData = new CreateOrthogonalGridsData(app, dut, labels);
 
                         m_data = orthogonalData;
                         m_data.XOrigin = Unit.CovertToAPI(0, m_data.Dut);
                         m_data.YOrigin = Unit.CovertToAPI(0, m_data.Dut);
                         m_data.XNumber = 2;
-                        m_data.YNumber = 5;
+                        m_data.YNumber = (uint)(RoomSetInfoList.Count + 1);
 
-                        m_data.XSpacing = Unit.CovertToAPI(6000, m_data.Dut);
+                        int roomWidth = (int)RoomSetInfoList.FirstOrDefault().RoomWidth;
+                        m_data.XSpacing = Unit.CovertToAPI(roomWidth, m_data.Dut);//垂直方向
                         m_data.XBubbleLoc = BubbleLocation.StartPoint;
                         m_data.XFirstLabel = "A";
 
-                        m_data.YSpacing = Unit.CovertToAPI(4000, m_data.Dut);
+                        m_data.YSpacing = Unit.CovertToAPI(1000, m_data.Dut);//水平方向
                         m_data.YBubbleLoc = BubbleLocation.StartPoint;
                         m_data.YFirstLabel = "1";
 
-                        orthogonalData.CreateGrids();
+                        double roomTotalLength = 0;
+                        foreach (var item in RoomSetInfoList)
+                        {
+                            roomTotalLength += item.RoomLength;
+                        }
+
+                        roomLehgthValue = roomTotalLength;
+                        roomWidthValue = RoomSetInfoList.FirstOrDefault().RoomWidth;
+
+                        orthogonalData.CreateGrids(Unit.CovertToAPI(roomTotalLength, m_data.Dut));
                         XGrids.AddRange(orthogonalData.XGrids);
                         YGrids.AddRange(orthogonalData.YGrids);
                         HideGridBubble(XGrids, activeView);
                         HideGridBubble(YGrids, activeView);
+
+                        foreach (var item in RoomSetInfoList)
+                        {
+                            roomLengthList.Add(item.RoomLength);
+                        }
+
+                        double offset = 0;
+                        for (int i = 0; i < roomLengthList.Count; i++)
+                        {
+                            offset += roomLengthList[i] - 1000 * (i + 1);
+                            ElementTransformUtils.MoveElement(doc, YGrids[i + 1].Id, new XYZ(offset / 304.8, 0, 0));
+                            offset += 1000 * (i + 1);
+                        }
 
                         XYGrids.AddRange(orthogonalData.XGrids);
                         XYGrids.AddRange(orthogonalData.YGrids);
@@ -155,7 +199,9 @@ namespace FFETOOLS
                     {
                         trans.Start();
 
-                        newWalls = AddWallByCrossGrids(doc, app, XYGrids, roomToplevel, roomBottomlevel, -100, false, false);//此处需要关联窗体参数
+                        newWalls = AddWallByCrossGrids(doc, app, XYGrids, roomToplevel, GetLevel(doc, 0.ToString()), -100, false, false);//先创建±0.000平面墙
+
+
 
                         CreatGridDemesion(doc, activeView, XGrids);
                         CreatGridDemesion(doc, activeView, YGrids);
@@ -266,33 +312,85 @@ namespace FFETOOLS
                 XYZ midPoint = (line.GetEndPoint(0) + line.GetEndPoint(1)) / 2;
                 Level wallLevel = RevitDoc.GetElement(item.LevelId) as Level;
 
-                if (line.Direction.X == 1 && line.Direction.Y == 0)
+                double wallLength = double.Parse(item.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsValueString());
+                if (wallLength > 6500)
                 {
-                    if (line.GetEndPoint(0).Y == 0)
+                    if (line.Direction.X == 1 && line.Direction.Y == 0)
                     {
-                        // 在墙的中心位置创建一个门 
-                        FamilyInstance door = RevitDoc.Create.NewFamilyInstance(midPoint, doorType, item, wallLevel, StructuralType.NonStructural);
-                        if (door.CanRotate)
+                        if (line.GetEndPoint(0).Y == 0)
                         {
-                            door.rotate();
+                            // 在墙的一侧位置创建一个门 
+                          double doorwidth=  doorType.get_Parameter(BuiltInParameter.DOOR_WIDTH).AsDouble();
+
+                            XYZ doorPoint =new XYZ(line.GetEndPoint(1).X-200/304.8, line.GetEndPoint(1).Y, line.GetEndPoint(1).Z);
+                            FamilyInstance door = RevitDoc.Create.NewFamilyInstance(doorPoint, doorType, item, wallLevel, StructuralType.NonStructural);
+                            if (door.CanRotate)
+                            {
+                                door.rotate();
+                            }
+                        }
+                        else
+                        {
+                            if (HasMinimalDifference(line.GetEndPoint(0).Y, roomWidth / 304.8, 1))
+                            {
+                                // 在墙的创建多个窗 
+                                List<XYZ> windowPoints = GetWindowLocationPoints(line.StartPoint(),line.Length*304.8,0);
+                                foreach (var point in windowPoints)
+                                {
+                                    FamilyInstance window = RevitDoc.Create.NewFamilyInstance(point, windowType, item, wallLevel, StructuralType.NonStructural);
+                                    window.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM).Set(900 / 304.8);
+                                }                            
+                            }
                         }
                     }
-                    else
+                }
+                else
+                {
+                    if (line.Direction.X == 1 && line.Direction.Y == 0)
                     {
-                        if (HasMinimalDifference(line.GetEndPoint(0).Y, roomWidth / 304.8, 1))
+                        if (line.GetEndPoint(0).Y == 0)
                         {
                             // 在墙的中心位置创建一个门 
-                           FamilyInstance window = RevitDoc.Create.NewFamilyInstance(midPoint, windowType, item, wallLevel, StructuralType.NonStructural);
-                            window.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM).Set(900/304.8);
-                            //if (door.CanRotate)
-                            //{
-                            //    door.rotate();
-                            //}
+                            FamilyInstance door = RevitDoc.Create.NewFamilyInstance(midPoint, doorType, item, wallLevel, StructuralType.NonStructural);
+                            if (door.CanRotate)
+                            {
+                                door.rotate();
+                            }
+                        }
+                        else
+                        {
+                            if (HasMinimalDifference(line.GetEndPoint(0).Y, roomWidth / 304.8, 1))
+                            {
+                                // 在墙的中心位置创建一个窗 
+                                FamilyInstance window = RevitDoc.Create.NewFamilyInstance(midPoint, windowType, item, wallLevel, StructuralType.NonStructural);
+                                window.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM).Set(900 / 304.8);                             
+                            }
                         }
                     }
-
-                }
+                }            
             }
+        }
+        public List<XYZ> GetWindowLocationPoints(XYZ basePoint, double length, double width)
+        {
+            //用于窗等分,单排
+            int divide = 1;
+            List<XYZ> points = new List<XYZ>();
+
+            for (int a = 1; a < 100; a++)
+            {
+                if ((length / a) > 3300 && (length / a) < 4500)
+                {
+                    divide = a;
+                    break;
+                }
+
+            }
+            double len = length / 304.8 / divide;
+            for (int x = 1; x < divide; x++)
+            {
+                points.Add(new XYZ(basePoint.X + x * len, basePoint.Y + width / 2 / 304.8, basePoint.Z));
+            }
+            return points;
         }
         public bool HasMinimalDifference(double value1, double value2, int units)
         {

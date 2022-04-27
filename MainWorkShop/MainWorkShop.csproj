@@ -67,11 +67,13 @@
     <Compile Include="CommonClass\Generics.cs" />
     <Compile Include="CommonClass\Geometry.cs" />
     <Compile Include="CommonClass\TrackBall.cs" />
-    <Compile Include="PumpStation\CreateGridsData.cs" />
-    <Compile Include="PumpStation\CreateOrthogonalGridsData.cs" />
-    <Compile Include="PumpStation\EnumsAndValues.cs" />
-    <Compile Include="PumpStation\Unit.cs" />
-    <Compile Include="PumpStation\Validation.cs" />
+    <Compile Include="PumpStation\CreatGrids\CreateGridsData.cs" />
+    <Compile Include="PumpStation\CreatGrids\CreateOrthogonalGridsData.cs" />
+    <Compile Include="PumpStation\CreatGrids\EnumsAndValues.cs" />
+    <Compile Include="PumpStation\CreatGrids\Unit.cs" />
+    <Compile Include="CommonClass\Validation.cs" />
+    <Compile Include="PumpStation\DataGridHelper.cs" />
+    <Compile Include="PumpStation\RoomInfo.cs" />
     <Compile Include="WaterPool\WaterPool.xaml.cs">
       <DependentUpon>WaterPool.xaml</DependentUpon>
     </Compile>
