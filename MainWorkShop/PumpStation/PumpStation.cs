@@ -59,6 +59,7 @@ namespace FFETOOLS
                 Selection sel = app.ActiveUIDocument.Selection;
                 View activeView = doc.ActiveView;
 
+                List<Element> allElements = new List<Element>();
                 ArrayList labels = GetAllLabelsOfGrids(doc);
                 DisplayUnitType dut = GetLengthUnitType(doc);
                 CreateOrthogonalGridsData m_data;
@@ -190,21 +191,95 @@ namespace FFETOOLS
 
                         XYGrids.AddRange(orthogonalData.XGrids);
                         XYGrids.AddRange(orthogonalData.YGrids);
+                        allElements.AddRange(XYGrids);
 
                         trans.Commit();
                     }
 
                     List<Wall> newWalls = new List<Wall>();
+                    List<Wall> newBottomWalls = new List<Wall>();
+                    Floor roomBottomUnderFloor = null;
+                    double roomBottomWallThick = 200 / 304.8;
+                    List<CurveArray> holeOnFloorAry = new List<CurveArray>();
+
                     using (Transaction trans = new Transaction(doc, "轴网标注及生墙"))
                     {
                         trans.Start();
 
-                        newWalls = AddWallByCrossGrids(doc, app, XYGrids, roomToplevel, GetLevel(doc, 0.ToString()), -100, false, false);//先创建±0.000平面墙
+                        newWalls = AddWallByCrossGrids(doc, app, XYGrids, roomToplevel, GetLevel(doc, 0.ToString()), 0, false, false);//先创建±0.000平面墙
+                        allElements.AddRange(newWalls);
 
+                        List<Grid> newGrids = new List<Grid>();
+                        foreach (var item in RoomSetInfoList)
+                        {
+                            newGrids.AddRange(XGrids);
+                            if (item.RoomBottom < 0)
+                            {
+                                string gridNum1 = (item.RoomCode + 1).ToString();
+                                string gridNum2 = (item.RoomCode + 2).ToString();
 
+                                foreach (var grid in YGrids)
+                                {
+                                    if (grid.Name == gridNum1 || grid.Name == gridNum2)
+                                    {
+                                        newGrids.Add(grid);
+                                    }
+                                }
+                                newBottomWalls = AddWallByCrossGrids(doc, app, newGrids, GetLevel(doc, 0.ToString()),
+                                    GetLevel(doc, (item.RoomBottom * 1000).ToString()), -100, false, false);//创建±0.000以下平面墙
+                                allElements.AddRange(newBottomWalls);
 
-                        CreatGridDemesion(doc, activeView, XGrids);
-                        CreatGridDemesion(doc, activeView, YGrids);
+                                List<XYZ> newBottomFloorPoints = GridCrossPoints(newGrids);
+                                CurveArray curveArray = new CurveArray();
+                                newBottomFloorPoints.Sort((a, b) => a.X.CompareTo(b.X));
+                                newBottomFloorPoints.Sort((a, b) => a.Y.CompareTo(b.Y));
+
+                                XYZ point1 = newBottomFloorPoints[0];
+                                XYZ point2 = newBottomFloorPoints[1];
+                                XYZ point3 = newBottomFloorPoints[2];
+                                XYZ point4 = newBottomFloorPoints[3];
+
+                                XYZ point11 = new XYZ(point1.X + roomBottomWallThick / 2, point1.Y - roomBottomWallThick / 2, 0);
+                                XYZ point21 = new XYZ(point2.X - roomBottomWallThick / 2, point2.Y - roomBottomWallThick / 2, 0);
+                                XYZ point31 = new XYZ(point3.X - roomBottomWallThick / 2, point3.Y + roomBottomWallThick / 2, 0);
+                                XYZ point41 = new XYZ(point4.X + roomBottomWallThick / 2, point4.Y + roomBottomWallThick / 2, 0);
+
+                                XYZ point12 = new XYZ(point1.X - roomBottomWallThick / 2, point1.Y + roomBottomWallThick / 2, 0);
+                                XYZ point22 = new XYZ(point2.X + roomBottomWallThick / 2, point2.Y + roomBottomWallThick / 2, 0);
+                                XYZ point32 = new XYZ(point3.X + roomBottomWallThick / 2, point3.Y - roomBottomWallThick / 2, 0);
+                                XYZ point42 = new XYZ(point4.X - roomBottomWallThick / 2, point4.Y - roomBottomWallThick / 2, 0);
+
+                                curveArray.Append(Line.CreateBound(point11, point21));
+                                curveArray.Append(Line.CreateBound(point21, point31));
+                                curveArray.Append(Line.CreateBound(point31, point41));
+                                curveArray.Append(Line.CreateBound(point41, point11));
+
+                                CurveArray holeCurveArray = new CurveArray();
+                                holeCurveArray.Append(Line.CreateBound(point12, point22));
+                                holeCurveArray.Append(Line.CreateBound(point22, point32));
+                                holeCurveArray.Append(Line.CreateBound(point32, point42));
+                                holeCurveArray.Append(Line.CreateBound(point42, point12));
+
+                                if (curveArray.Size != 0)
+                                {
+                                    roomBottomUnderFloor = doc.Create.NewFloor(curveArray, PoolFloorType(doc, "250"),
+                                        GetLevel(doc, (item.RoomBottom * 1000).ToString()), true, XYZ.BasisZ);//创建±0.000以下楼板                           
+                                    roomBottomUnderFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(0);
+                                    allElements.Add(roomBottomUnderFloor);
+                                }
+
+                                if (holeCurveArray.Size != 0)
+                                {
+                                    holeOnFloorAry.Add(holeCurveArray);
+                                }
+                            }
+                            newGrids.Clear();
+                        }
+
+                        List<Dimension> dmList1 = CreatGridDemesion(doc, activeView, XGrids);
+                        List<Dimension> dmList2 = CreatGridDemesion(doc, activeView, YGrids);
+                        allElements.AddRange(dmList1);
+                        allElements.AddRange(dmList2);
 
                         trans.Commit();
                     }
@@ -238,23 +313,80 @@ namespace FFETOOLS
                         array2.Append(Line.CreateBound(point32, point42));
                         array2.Append(Line.CreateBound(point42, point12));
 
-                        roomBottomFloor = doc.Create.NewFloor(array, PoolFloorType(doc, "100"), roomBottomlevel, true, XYZ.BasisZ);
+                        roomBottomFloor = doc.Create.NewFloor(array, PoolFloorType(doc, "100"), GetLevel(doc, 0.ToString()), true, XYZ.BasisZ);//创建±0.000平面楼板
                         roomBottomFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(0);
+                        allElements.Add(roomBottomFloor);
 
-                        roomTopFloor = doc.Create.NewFloor(array2, PoolFloorType(doc, "100"), roomToplevel, true, XYZ.BasisZ);
+                        roomTopFloor = doc.Create.NewFloor(array2, PoolFloorType(doc, "100"), roomToplevel, true, XYZ.BasisZ);//创建屋顶楼板
                         double topFloorThick = roomTopFloor.get_Parameter(BuiltInParameter.FLOOR_ATTR_THICKNESS_PARAM).AsDouble();
                         roomTopFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(100 / 304.8);
+                        allElements.Add(roomTopFloor);
 
-                        CreatDoorAndWindow(doc, newWalls, roomWidthValue);
+                        List<FamilyInstance> instances = CreatDoorAndWindow(doc, newWalls, roomWidthValue);//创建门和窗
+                        allElements.AddRange(instances);
 
                         trans.Commit();
                     }
 
-                    using (Transaction trans = new Transaction(doc, "生成散水"))
+                    using (Transaction trans = new Transaction(doc, "楼板开洞"))
                     {
                         trans.Start();
 
-                        GetSlabEdge(doc, roomBottomFloor);
+                        foreach (var item in RoomSetInfoList)
+                        {
+                            if (item.RoomBottom < 0)
+                            {
+                                foreach (var arry in holeOnFloorAry)
+                                {
+                                    Opening hole = doc.Create.NewOpening(roomBottomFloor, arry, true);
+                                    allElements.Add(hole);
+                                }
+                                break;
+                            }
+                        }
+
+                        trans.Commit();
+                    }
+
+                    using (Transaction trans = new Transaction(doc, "生成散水和文字"))
+                    {
+                        trans.Start();
+
+                        GetSlabEdge(doc, roomBottomFloor);//创建散水
+
+                        List<string> names=new List<string>();
+                        foreach (var item in RoomSetInfoList)
+                        {
+                            names.Add(item.RoomName);
+                        }
+
+                        List<XYZ> points=new List<XYZ>();
+                        points.Add(new XYZ(0, 0, 0));
+                        points.Add(new XYZ(0, 0, 0));
+                        points.Add(new XYZ(0, 0, 0));
+
+                        List<TextNote> roomNameList = RoomNameText(doc,activeView,names,points);
+
+                        trans.Commit();
+                    }
+
+                    using (Transaction trans = new Transaction(doc, "镜像泵站"))
+                    {
+                        trans.Start();
+
+                        List<ElementId> mirroElementsID = new List<ElementId>();
+                        foreach (var item in allElements)
+                        {
+                            if (ElementTransformUtils.CanMirrorElement(doc, item.Id))
+                            {
+                                mirroElementsID.Add(item.Id);
+                            }
+                        }
+
+                        if (PumpStation.mainfrm.RoomMirro.IsChecked == true)
+                        {
+                            ElementTransformUtils.MirrorElements(doc, mirroElementsID, Plane.CreateByNormalAndOrigin(new XYZ(0, 1, 0), new XYZ(0, 0, 0)), false);
+                        }
 
                         trans.Commit();
                     }
@@ -275,10 +407,73 @@ namespace FFETOOLS
         {
             return "创建泵站";
         }
-        public void CreatDoorAndWindow(Document RevitDoc, List<Wall> walls, double roomWidth)
+        public List<TextNote> RoomNameText(Document doc, View view, List<string> roomNames, List<XYZ> points)
         {
+            List<TextNote> list = new List<TextNote>();
+            TextNoteType type = null;
+            IList<TextNoteType> noteTypes=CollectorHelper.TCollector<TextNoteType>(doc);
+
+            foreach (var item in noteTypes)
+            {
+                if (item.Name.Contains("给排水-字高5"))
+                {
+                    type = item;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                TextNote note = TextNote.Create(doc, view.Id, points[i], roomNames[i], type.Id);
+                list.Add(note);
+            }
+
+            return list;
+        }
+        public List<XYZ> GridCrossPoints(List<Grid> allGrids)
+        {
+            //获取轴网的所有交点
+            List<XYZ> Points = new List<XYZ>();
+            foreach (Grid grid in allGrids)
+            {
+                Grid currentGrid = grid;
+                foreach (Grid grd in allGrids)
+                {
+                    IntersectionResultArray ira = null;
+                    SetComparisonResult scr = currentGrid.Curve.Intersect(grd.Curve, out ira);
+                    if (ira != null)
+                    {
+                        IntersectionResult ir = ira.get_Item(0);
+
+                        // 判断点是否重复
+                        if (!CheckPoint(Points, ir.XYZPoint))
+                        {
+                            Points.Add(ir.XYZPoint);
+                        }
+                    }
+                }
+            }
+            return Points;
+        }
+        private bool CheckPoint(List<XYZ> points, XYZ point) //判断轴线交点是否重复
+        {
+            bool flag = false;
+            foreach (XYZ p in points)
+            {
+                if (p.IsAlmostEqualTo(point))
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            return flag;
+        }
+        public List<FamilyInstance> CreatDoorAndWindow(Document RevitDoc, List<Wall> walls, double roomWidth)
+        {
+            List<FamilyInstance> instanceLists = new List<FamilyInstance>();
             FamilySymbol doorType = null;
             FamilySymbol windowType = null;
+            FamilySymbol rampType = null;//坡道
 
             IList<FamilySymbol> symbols = CollectorHelper.TCollector<FamilySymbol>(RevitDoc);
             foreach (FamilySymbol element in symbols)
@@ -299,7 +494,16 @@ namespace FFETOOLS
                 }
             }
 
-            // 使用族类型创建门 
+            foreach (FamilySymbol element in symbols)
+            {
+                if (element.FamilyName.Contains("建筑_构件_坡道") && element.Name.Contains("无垫层"))
+                {
+                    rampType = element;
+                    break;
+                }
+            }
+
+            // 使用族类型创建门窗坡道
             foreach (var item in walls)
             {
                 Line line = null;
@@ -313,33 +517,49 @@ namespace FFETOOLS
                 Level wallLevel = RevitDoc.GetElement(item.LevelId) as Level;
 
                 double wallLength = double.Parse(item.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsValueString());
-                if (wallLength > 6500)
+                if (wallLength > 6800)
                 {
                     if (line.Direction.X == 1 && line.Direction.Y == 0)
                     {
                         if (line.GetEndPoint(0).Y == 0)
                         {
                             // 在墙的一侧位置创建一个门 
-                          double doorwidth=  doorType.get_Parameter(BuiltInParameter.DOOR_WIDTH).AsDouble();
+                            double doorwidth = doorType.get_Parameter(BuiltInParameter.DOOR_WIDTH).AsDouble();
 
-                            XYZ doorPoint =new XYZ(line.GetEndPoint(1).X-200/304.8, line.GetEndPoint(1).Y, line.GetEndPoint(1).Z);
+                            XYZ doorPoint = new XYZ(line.GetEndPoint(1).X - doorwidth / 2 - 500 / 304.8, line.GetEndPoint(1).Y, line.GetEndPoint(1).Z);
                             FamilyInstance door = RevitDoc.Create.NewFamilyInstance(doorPoint, doorType, item, wallLevel, StructuralType.NonStructural);
                             if (door.CanRotate)
                             {
                                 door.rotate();
+                            }
+                            instanceLists.Add(door);
+
+                            FamilyInstance ramp = RevitDoc.Create.NewFamilyInstance(doorPoint, rampType, item, wallLevel, StructuralType.NonStructural);
+                            ramp.LookupParameter("门洞宽").Set(doorwidth);
+                            instanceLists.Add(ramp);
+
+                            XYZ newPoint = new XYZ(line.GetEndPoint(1).X - doorwidth - 500 / 304.8, line.GetEndPoint(1).Y, line.GetEndPoint(1).Z);
+                            Line windowLine = Line.CreateBound(line.GetEndPoint(0), newPoint);
+                            List<XYZ> windowPoints = GetWindowLocationPoints(windowLine.StartPoint(), windowLine.Length * 304.8, 0);
+                            foreach (var point in windowPoints)
+                            {
+                                FamilyInstance window = RevitDoc.Create.NewFamilyInstance(point, windowType, item, wallLevel, StructuralType.NonStructural);
+                                window.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM).Set(900 / 304.8);
+                                instanceLists.Add(window);
                             }
                         }
                         else
                         {
                             if (HasMinimalDifference(line.GetEndPoint(0).Y, roomWidth / 304.8, 1))
                             {
-                                // 在墙的创建多个窗 
-                                List<XYZ> windowPoints = GetWindowLocationPoints(line.StartPoint(),line.Length*304.8,0);
+                                // 在墙上创建多个窗 
+                                List<XYZ> windowPoints = GetWindowLocationPoints(line.StartPoint(), line.Length * 304.8, 0);
                                 foreach (var point in windowPoints)
                                 {
                                     FamilyInstance window = RevitDoc.Create.NewFamilyInstance(point, windowType, item, wallLevel, StructuralType.NonStructural);
                                     window.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM).Set(900 / 304.8);
-                                }                            
+                                    instanceLists.Add(window);
+                                }
                             }
                         }
                     }
@@ -356,6 +576,12 @@ namespace FFETOOLS
                             {
                                 door.rotate();
                             }
+                            instanceLists.Add(door);
+
+                            double doorwidth = doorType.get_Parameter(BuiltInParameter.DOOR_WIDTH).AsDouble();
+                            FamilyInstance ramp = RevitDoc.Create.NewFamilyInstance(midPoint, rampType, item, wallLevel, StructuralType.NonStructural);
+                            ramp.LookupParameter("门洞宽").Set(doorwidth);
+                            instanceLists.Add(ramp);
                         }
                         else
                         {
@@ -363,12 +589,15 @@ namespace FFETOOLS
                             {
                                 // 在墙的中心位置创建一个窗 
                                 FamilyInstance window = RevitDoc.Create.NewFamilyInstance(midPoint, windowType, item, wallLevel, StructuralType.NonStructural);
-                                window.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM).Set(900 / 304.8);                             
+                                window.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM).Set(900 / 304.8);
+                                instanceLists.Add(window);
                             }
                         }
                     }
-                }            
+                }
             }
+
+            return instanceLists;
         }
         public List<XYZ> GetWindowLocationPoints(XYZ basePoint, double length, double width)
         {
@@ -435,7 +664,7 @@ namespace FFETOOLS
                 if (item is Solid solid)
                 {
                     List<Face> list = new List<Face>();
-                    foreach (Face face in solid.Faces)
+                    foreach (Face face in Getupfaces(solid))
                     {
                         list.Add(face);
                     }
@@ -455,9 +684,22 @@ namespace FFETOOLS
 
             SlabEdge newEdge = doc.Create.NewSlabEdge(footSlab, refArr);
             newEdge.get_Parameter(BuiltInParameter.SWEEP_BASE_OFFSET).Set(200 / 304.8);
-            newEdge.get_Parameter(BuiltInParameter.SWEEP_BASE_VERT_OFFSET).Set(200 / 304.8);
+            newEdge.get_Parameter(BuiltInParameter.SWEEP_BASE_VERT_OFFSET).Set(20 / 304.8);
         }
-
+        public List<Face> Getupfaces(Solid solid)
+        {
+            var upfaces = new List<Face>();
+            var faces = solid.Faces;
+            foreach (Face face in faces)
+            {
+                var normal = face.ComputeNormal(new UV());
+                if (normal.IsSameDirection(XYZ.BasisZ))
+                {
+                    upfaces.Add(face);
+                }
+            }
+            return upfaces;
+        }
         public ViewFamilyType GetViewFamilyType(Document doc)
         {
             ViewFamilyType view = null;
@@ -535,8 +777,9 @@ namespace FFETOOLS
             }
             return levelOffset;
         }
-        public void CreatGridDemesion(Document doc, View activeView, List<Grid> grids)
+        public List<Dimension> CreatGridDemesion(Document doc, View activeView, List<Grid> grids)
         {
+            List<Dimension> dimensions = new List<Dimension>();
             //尺寸标注定位点
             XYZ locationPoint = new XYZ();
             Line gridLine = grids.FirstOrDefault().Curve as Line;
@@ -631,15 +874,19 @@ namespace FFETOOLS
                     //创建尺寸标注
                     if (grids.Count > 2)
                     {
-                        doc.Create.NewDimension(activeView, line_o, referenceArray2, dimType);
-                        doc.Create.NewDimension(activeView, line_i, referenceArray1, dimType);
+                        Dimension dm1 = doc.Create.NewDimension(activeView, line_o, referenceArray2, dimType);
+                        Dimension dm2 = doc.Create.NewDimension(activeView, line_i, referenceArray1, dimType);
+                        dimensions.Add(dm1);
+                        dimensions.Add(dm2);
                     }
                     else
                     {
-                        doc.Create.NewDimension(activeView, line_o, referenceArray2, dimType);
+                        Dimension dm = doc.Create.NewDimension(activeView, line_o, referenceArray2, dimType);
+                        dimensions.Add(dm);
                     }
                 }
             }
+            return dimensions;
         }
         public bool PointOnTheLeft(XYZ point1, XYZ point2, XYZ point)
         {
@@ -694,7 +941,7 @@ namespace FFETOOLS
                     Level curTopLevel = Levels[i + 1];
                     Wall wall = CreateOneWall(doc, curve, curBottomLevel, curTopLevel, wallType, offset, isStructural);
                     wall.get_Parameter(BuiltInParameter.WALL_BASE_OFFSET).Set(0);
-                    wall.get_Parameter(BuiltInParameter.WALL_TOP_OFFSET).Set(0);
+                    wall.get_Parameter(BuiltInParameter.WALL_TOP_OFFSET).Set(offset / 304.8);
                     res.Add(wall);
                 }
             }
@@ -702,7 +949,7 @@ namespace FFETOOLS
             {
                 Wall wall = CreateOneWall(doc, curve, bottomLevel, topLevel, wallType, offset, isStructural);
                 wall.get_Parameter(BuiltInParameter.WALL_BASE_OFFSET).Set(0);
-                wall.get_Parameter(BuiltInParameter.WALL_TOP_OFFSET).Set(0);
+                wall.get_Parameter(BuiltInParameter.WALL_TOP_OFFSET).Set(offset / 304.8);
                 res.Add(wall);
             }
 

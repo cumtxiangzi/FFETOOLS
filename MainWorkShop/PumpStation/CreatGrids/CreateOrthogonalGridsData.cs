@@ -208,7 +208,7 @@ namespace FFETOOLS
         /// Create grids
         /// </summary>
         public void CreateGrids(double roomLength)
-        {          
+        {
             CreateXGrids(roomLength);
             CreateYGrids();
         }
@@ -219,7 +219,7 @@ namespace FFETOOLS
         /// <param name="failureReasons">ArrayList contains failure reasons</param>
         /// <returns>Number of grids failed to create</returns>
         private void CreateXGrids(double roomLength)
-        {         
+        {
             // Curve array which stores all curves for batch creation
             CurveArray curves = new CurveArray();
 
@@ -234,8 +234,8 @@ namespace FFETOOLS
                     if (m_yNumber != 0)
                     {
                         // Grids will have an extension distance of m_ySpacing / 2
-                        startPoint = new Autodesk.Revit.DB.XYZ(m_xOrigin - 3000/304.8, m_yOrigin + i * m_xSpacing, 0);
-                        endPoint = new Autodesk.Revit.DB.XYZ(m_xOrigin + roomLength + 3000/304.8, m_yOrigin + i * m_xSpacing, 0);
+                        startPoint = new Autodesk.Revit.DB.XYZ(m_xOrigin - 3000 / 304.8, m_yOrigin + i * m_xSpacing, 0);
+                        endPoint = new Autodesk.Revit.DB.XYZ(m_xOrigin + roomLength + 3000 / 304.8, m_yOrigin + i * m_xSpacing, 0);
                     }
                     else
                     {
@@ -257,7 +257,7 @@ namespace FFETOOLS
                         }
                     }
                     catch (System.ArgumentException)
-                    {                    
+                    {
                         continue;
                     }
 
@@ -315,7 +315,7 @@ namespace FFETOOLS
                 {
                     if (m_xNumber != 0)
                     {
-                        startPoint = new Autodesk.Revit.DB.XYZ(m_xOrigin + j * m_ySpacing, m_yOrigin - m_xSpacing / 2, 0);
+                        startPoint = new Autodesk.Revit.DB.XYZ(m_xOrigin + j * m_ySpacing, m_yOrigin - m_xSpacing / 2-1000/304.8, 0);
                         endPoint = new Autodesk.Revit.DB.XYZ(m_xOrigin + j * m_ySpacing, m_yOrigin + (m_xNumber - 1) * m_xSpacing + m_xSpacing / 2, 0);
                     }
                     else
@@ -337,7 +337,7 @@ namespace FFETOOLS
                         }
                     }
                     catch (System.ArgumentException)
-                    {                     
+                    {
                         continue;
                     }
 
@@ -355,7 +355,7 @@ namespace FFETOOLS
                         }
                         catch (System.ArgumentException)
                         {
-                            
+
                         }
                     }
                     else
