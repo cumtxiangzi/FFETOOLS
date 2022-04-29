@@ -125,6 +125,7 @@
     <Compile Include="Test\RevitClass1.cs" />
     <Compile Include="Test\RevitClass10.cs" />
     <Compile Include="Test\RevitClass11.cs" />
+    <Compile Include="Test\RevitClass12.cs" />
     <Compile Include="Test\RevitClass2.cs" />
     <Compile Include="Test\RevitClass3.cs" />
     <Compile Include="Test\RevitClass4.cs" />
