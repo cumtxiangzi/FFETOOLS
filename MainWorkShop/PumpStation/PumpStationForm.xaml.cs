@@ -20,12 +20,17 @@ namespace FFETOOLS
     /// PumpStationForm.xaml 的交互逻辑
     /// </summary>
     public partial class PumpStationForm : Window
-    {     
+    {
         ExecuteEventPumpStation excPumpStation = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerPumpStation = null;
 
         ObservableCollection<RoomInfo> roomInfoList = new ObservableCollection<RoomInfo>();//DataGrid的数据源
         ObservableCollection<RoomInfo> roomInfoSelectList = new ObservableCollection<RoomInfo>();//用于DataGrid的模板加载时提供选项
+
+        List<string> roomNames = new List<string>() { "水泵间", "PUMP ROOM" , "PUMP ROOM" + "\n" + "     " + "水泵间" , "加药间",
+        "DOSING ROOM", "DOSING ROOM" + "\n" + "       " + "加药间","控制室","CONTROL ROOM","CONTROL ROOM" + "\n" + "         " + "控制室",
+       "储药间", "CHEMICAL STORAGE ROOM","CHEMICAL STORAGE ROOM" + "\n" + "                 " + "储药间" ,"水质监测室", "WATER QUALITY MONITORING ROOM" ,
+        "WATER QUALITY MONITORING ROOM" + "\n" + "                       " + "水质监测室" };
         public PumpStationForm()
         {
             InitializeComponent();
@@ -36,11 +41,10 @@ namespace FFETOOLS
             roomInfoList.Add(new RoomInfo() { RoomCode = "房间2", RoomLength = "4500", RoomNameList = "控制室", RoomBottomList = "0.0" });
             roomInfoList.Add(new RoomInfo() { RoomCode = "房间3", RoomLength = "4000", RoomNameList = "加药间", RoomBottomList = "0.0" });
 
-            roomInfoSelectList.Add(new RoomInfo() { RoomNameList = "水泵间" });
-            roomInfoSelectList.Add(new RoomInfo() { RoomNameList = "加药间" });
-            roomInfoSelectList.Add(new RoomInfo() { RoomNameList = "控制室" });
-            roomInfoSelectList.Add(new RoomInfo() { RoomNameList = "储药间" });
-            roomInfoSelectList.Add(new RoomInfo() { RoomNameList = "水质监测室" });
+            foreach (var item in roomNames)
+            {
+                roomInfoSelectList.Add(new RoomInfo() { RoomNameList = item });
+            }
 
             RoomSettingGrid.ItemsSource = roomInfoList;//绑定数据源
         }
@@ -62,7 +66,7 @@ namespace FFETOOLS
                 RoomHeight.Text = "4.0";
             }
             else
-            {             
+            {
                 eventHandlerPumpStation.Raise();
                 Close();
             }

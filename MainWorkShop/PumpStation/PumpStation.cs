@@ -101,6 +101,7 @@ namespace FFETOOLS
                     using (Transaction trans = new Transaction(doc, "创建标高"))
                     {
                         trans.Start();
+                        activeView.Scale = 50;
 
                         foreach (var item in RoomSetInfoList)
                         {
@@ -348,24 +349,21 @@ namespace FFETOOLS
                         trans.Commit();
                     }
 
+                    List<TextNote> roomNameList=new List<TextNote>();   
                     using (Transaction trans = new Transaction(doc, "生成散水和文字"))
                     {
                         trans.Start();
 
                         GetSlabEdge(doc, roomBottomFloor);//创建散水
 
-                        List<string> names=new List<string>();
+                        List<string> names = new List<string>();
                         foreach (var item in RoomSetInfoList)
                         {
                             names.Add(item.RoomName);
                         }
 
-                        List<XYZ> points=new List<XYZ>();
-                        points.Add(new XYZ(0, 0, 0));
-                        points.Add(new XYZ(0, 0, 0));
-                        points.Add(new XYZ(0, 0, 0));
-
-                        List<TextNote> roomNameList = RoomNameText(doc,activeView,names,points);
+                        List<XYZ> points = TextPoints(newWalls, roomWidthValue);
+                        roomNameList = RoomNameText(doc, activeView, names, points);//创建文字                       
 
                         trans.Commit();
                     }
@@ -373,6 +371,9 @@ namespace FFETOOLS
                     using (Transaction trans = new Transaction(doc, "镜像泵站"))
                     {
                         trans.Start();
+
+                        MoveText(doc, activeView, roomNameList);
+                        allElements.AddRange(roomNameList);
 
                         List<ElementId> mirroElementsID = new List<ElementId>();
                         foreach (var item in allElements)
@@ -407,11 +408,46 @@ namespace FFETOOLS
         {
             return "创建泵站";
         }
+        
+        public void MoveText(Document doc, View view, List<TextNote> textList)
+        {
+            foreach (var item in textList)
+            {
+                BoundingBoxXYZ box = item.get_BoundingBox(view);
+                double length = box.Max.X - box.Min.X;
+                ElementTransformUtils.MoveElement(doc, item.Id, new XYZ(-length / 2, 0, 0));
+            }
+        }
+        public List<XYZ> TextPoints(List<Wall> walls, double roomWidth)
+        {
+            List<XYZ> textPoints = new List<XYZ>();
+            foreach (var item in walls)
+            {
+                Line line = null;
+                LocationCurve locationCurve = item.Location as LocationCurve;
+                if (locationCurve != null)
+                {
+                    line = locationCurve.Curve as Line;
+                }
+
+                if (line.Direction.X == 1 && line.Direction.Y == 0)
+                {
+                    if (line.GetEndPoint(0).Y == 0)
+                    {
+                        XYZ midPoint = (line.GetEndPoint(0) + line.GetEndPoint(1)) / 2;
+                        XYZ textPoint = new XYZ(midPoint.X, midPoint.Y + roomWidth / 2 / 304.8, midPoint.Z);
+                        textPoints.Add(textPoint);
+                    }
+                }
+            }
+
+            return textPoints;
+        }
         public List<TextNote> RoomNameText(Document doc, View view, List<string> roomNames, List<XYZ> points)
         {
             List<TextNote> list = new List<TextNote>();
             TextNoteType type = null;
-            IList<TextNoteType> noteTypes=CollectorHelper.TCollector<TextNoteType>(doc);
+            IList<TextNoteType> noteTypes = CollectorHelper.TCollector<TextNoteType>(doc);
 
             foreach (var item in noteTypes)
             {
@@ -517,7 +553,7 @@ namespace FFETOOLS
                 Level wallLevel = RevitDoc.GetElement(item.LevelId) as Level;
 
                 double wallLength = double.Parse(item.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsValueString());
-                if (wallLength > 6800)
+                if (wallLength > 6700)
                 {
                     if (line.Direction.X == 1 && line.Direction.Y == 0)
                     {
