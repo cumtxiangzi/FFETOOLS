@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FFETOOLS
 {
-    class RoomSetInfo
+    public class RoomSetInfo
     {
         public int RoomCode { get; set; }
         public string RoomName { get; set; }

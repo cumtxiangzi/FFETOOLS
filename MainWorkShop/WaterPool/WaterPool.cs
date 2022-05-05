@@ -102,6 +102,7 @@ namespace FFETOOLS
             FamilySymbol poolColumnSymbol = null;
             FamilySymbol sumpSymbol = null;
             FamilySymbol coolTowerSymbol = null;
+            FamilySymbol ladderSymbol = null;
 
             FamilyInstance manHole1 = null;
             FamilyInstance manHole2 = null;
@@ -111,6 +112,8 @@ namespace FFETOOLS
             FamilyInstance ventPipe4 = null;
             FamilyInstance sump = null;
             FamilyInstance coolTower = null;
+            FamilyInstance ladder1 = null;
+            FamilyInstance ladder2 = null;
 
             XYZ pickpoint = sel.PickPoint("请选择插入点");
             XYZ middlePoint = new XYZ(pickpoint.X + poolLehgthValue / 2 / 304.8, pickpoint.Y + poolWidthValue / 2 / 304.8, pickpoint.Z);
@@ -146,63 +149,6 @@ namespace FFETOOLS
 
                 trans.Commit();
             }
-
-            //using (Transaction trans = new Transaction(doc, "创建标高对应视图"))
-            //{
-            //    trans.Start();
-
-            //    if (viewPlan.CanViewBeDuplicated(ViewDuplicateOption.Duplicate) || viewPlan.CanViewBeDuplicated(ViewDuplicateOption.WithDetailing))
-            //    {
-            //        newViewId = viewPlan.Duplicate(ViewDuplicateOption.WithDetailing);
-            //    }
-            //    poolBottomPlan = uidoc.ActiveView.Document.GetElement(newViewId) as ViewPlan;
-            //    poolBottomPlan.Name = "给排水" + "_" + Convert.ToDouble(poolBottomElevation).ToString("0.000") + "平面图";
-            //    poolBottomPlan.LookupParameter("子规程").Set("给排水");
-            //    poolBottomPlan.Discipline = ViewDiscipline.Mechanical;
-            //    poolBottomPlan.DetailLevel = ViewDetailLevel.Fine;
-
-            //    poolBottomPlan.LookupParameter("图纸上的标题").Set((poolBottomPlan.Name.Replace("给排水", "")).Replace("_", ""));
-            //    string title = poolBottomPlan.LookupParameter("图纸上的标题").AsString();
-            //    if (!(title.Contains("平面")))
-            //    {
-            //        poolBottomPlan.LookupParameter("图纸上的标题").Set(title + "平面图");
-            //    }
-            //    if (title.Contains("平面") && (!(title.Contains("图"))))
-            //    {
-            //        poolBottomPlan.LookupParameter("图纸上的标题").Set(title + "图");
-            //    }
-
-            //    List<ElementId> categories = new List<ElementId>();
-            //    categories.Add(new ElementId(BuiltInCategory.OST_Rebar));
-            //    categories.Add(new ElementId(BuiltInCategory.OST_PipeFitting));
-            //    categories.Add(new ElementId(BuiltInCategory.OST_PipeCurves));
-            //    categories.Add(new ElementId(BuiltInCategory.OST_PipeAccessory));
-            //    categories.Add(new ElementId(BuiltInCategory.OST_MechanicalEquipment));
-            //    categories.Add(new ElementId(BuiltInCategory.OST_Floors));
-            //    categories.Add(new ElementId(BuiltInCategory.OST_Walls));
-            //    poolBottomPlan.SetCategoryHidden(categories.ElementAt(0), true);
-            //    poolBottomPlan.SetCategoryHidden(categories.ElementAt(1), false);
-            //    poolBottomPlan.SetCategoryHidden(categories.ElementAt(2), false);
-            //    poolBottomPlan.SetCategoryHidden(categories.ElementAt(3), false);
-            //    poolBottomPlan.SetCategoryHidden(categories.ElementAt(4), false);
-
-            //    OverrideGraphicSettings orgFloor = new OverrideGraphicSettings();
-            //    orgFloor.SetCutFillPatternVisible(false);
-            //    orgFloor.SetProjectionFillPatternVisible(false);
-            //    poolBottomPlan.SetCategoryOverrides(categories.ElementAt(5), orgFloor);
-            //    poolBottomPlan.SetCategoryOverrides(categories.ElementAt(6), orgFloor);
-
-            //    OverrideGraphicSettings org5 = new OverrideGraphicSettings();
-            //    org5.SetProjectionLineWeight(5);
-            //    poolBottomPlan.SetCategoryOverrides(categories.ElementAt(1), org5);
-            //    poolBottomPlan.SetCategoryOverrides(categories.ElementAt(2), org5);
-            //    OverrideGraphicSettings org1 = new OverrideGraphicSettings();
-            //    org1.SetProjectionLineWeight(1);
-            //    poolBottomPlan.SetCategoryOverrides(categories.ElementAt(3), org1);
-            //    poolBottomPlan.SetCategoryOverrides(categories.ElementAt(4), org1);
-
-            //    trans.Commit();
-            //}
 
             using (Transaction trans = new Transaction(doc, "创建水池主体"))
             {
@@ -250,7 +196,7 @@ namespace FFETOOLS
                 manHole1 = doc.Create.NewFamilyInstance(manHolePoint1, manHoleSymbol, poolTopFloor, poolToplevel, StructuralType.NonStructural);
                 manHole1.LookupParameter("人孔半径").SetValueString((manHoleSize / 2).ToString());
                 manHole2 = doc.Create.NewFamilyInstance(manHolePoint2, manHoleSymbol, poolTopFloor, poolToplevel, StructuralType.NonStructural);
-                manHole2.LookupParameter("人孔半径").SetValueString((manHoleSize / 2).ToString());
+                manHole2.LookupParameter("人孔半径").SetValueString((manHoleSize / 2).ToString());           
 
                 double poolToplevelOffset = poolToplevel.get_Parameter(BuiltInParameter.LEVEL_ELEV).AsDouble();
                 if (poolToplevelOffset * 304.8 > -400)
@@ -264,6 +210,20 @@ namespace FFETOOLS
                     manHole2.LookupParameter("人孔高度").SetValueString(((-poolToplevelOffset * 304.8) - 200).ToString());
                 }
 
+                double ladderHeight = (poolHeightValue-1000)/304.8;
+                ladderSymbol = LadderSymbol(doc);
+                ladderSymbol.Activate();
+                XYZ ladderPoint1 = new XYZ(pickpoint.X + manHoleSize / 2 / 304.8, pickpoint.Y+250/304.8, pickpoint.Z);
+                XYZ ladderPoint2 = new XYZ(pickpoint.X + poolLehgthValue / 304.8 - manHoleSize / 2 / 304.8, pickpoint.Y + poolWidthValue / 304.8 - 250/ 304.8, pickpoint.Z);
+                ladder1 = doc.Create.NewFamilyInstance(ladderPoint1, ladderSymbol, poolBottomlevel, StructuralType.NonStructural);
+                ladder1.LookupParameter("护笼可见").Set(0);
+                ladder1.LookupParameter("建筑爬梯_梯高").Set(ladderHeight);
+                ladder2 = doc.Create.NewFamilyInstance(ladderPoint2, ladderSymbol, poolBottomlevel, StructuralType.NonStructural);
+                ladder2.LookupParameter("护笼可见").Set(0);
+                ladder2.LookupParameter("建筑爬梯_梯高").Set(ladderHeight);
+                Line line = Line.CreateBound(ladderPoint2, ladderPoint2 + XYZ.BasisZ * 1);
+                ElementTransformUtils.RotateElement(doc, ladder2.Id, line, Math.PI);
+
                 PoolSumpFamilyLoad(doc);
                 sumpSymbol = SumpSymbol(doc);
                 sumpSymbol.Activate();
@@ -274,7 +234,7 @@ namespace FFETOOLS
                 sump.LookupParameter("地坑长度").SetValueString((WaterPool.mainfrm.SumpLengthValue).ToString());
                 sump.LookupParameter("地坑宽度").SetValueString((WaterPool.mainfrm.SumpWidthValue).ToString());
 
-                if (haveCoolTower==true)
+                if (haveCoolTower == true)
                 {
                     if (coolTowerFlow == "400" || coolTowerFlow == "500" || coolTowerFlow == "600" || coolTowerFlow == "700")
                     {
@@ -378,7 +338,7 @@ namespace FFETOOLS
                             coolTower.LookupParameter("基础高度").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
                         }
                     }
-                }              
+                }
 
                 if (WaterPool.mainfrm.PoolColumn.IsChecked == true)
                 {
@@ -1086,6 +1046,22 @@ namespace FFETOOLS
             foreach (FamilySymbol item in manHoles)
             {
                 if (item.Family.Name.Contains("结构") && item.Family.Name.Contains("水池人孔"))
+                {
+                    manHoleSymbolList.Add(item);
+                }
+            }
+            return manHoleSymbolList.FirstOrDefault();
+        }
+        public FamilySymbol LadderSymbol(Document doc)
+        {
+            FilteredElementCollector manHoleCollector = new FilteredElementCollector(doc);
+            manHoleCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_GenericModel);
+            List<FamilySymbol> manHoleSymbolList = new List<FamilySymbol>();
+
+            IList<Element> manHoles = manHoleCollector.ToElements();
+            foreach (FamilySymbol item in manHoles)
+            {
+                if (item.Family.Name.Contains("建筑_爬梯_default"))
                 {
                     manHoleSymbolList.Add(item);
                 }

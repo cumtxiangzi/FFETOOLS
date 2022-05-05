@@ -969,5 +969,26 @@ namespace FFETOOLS
         }
     }
     #endregion
-
+    public class FailuresPreprocessor : IFailuresPreprocessor
+    {
+        public FailureProcessingResult PreprocessFailures(FailuresAccessor failuresAccessor)
+        {
+            IList<FailureMessageAccessor> listFma = failuresAccessor.GetFailureMessages();
+            if (listFma.Count == 0)
+                return FailureProcessingResult.Continue;
+            foreach (FailureMessageAccessor fma in listFma)
+            {
+                if (fma.GetSeverity() == FailureSeverity.Error)
+                {
+                    if (fma.HasResolutions())
+                        failuresAccessor.ResolveFailure(fma);
+                }
+                if (fma.GetSeverity() == FailureSeverity.Warning)
+                {
+                    failuresAccessor.DeleteWarning(fma);
+                }
+            }
+            return FailureProcessingResult.ProceedWithCommit;
+        }
+    }
 }

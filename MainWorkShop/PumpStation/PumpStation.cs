@@ -73,6 +73,8 @@ namespace FFETOOLS
                 Level roomBottomlevel = null;
                 Level roomToplevel = null;
 
+                XYZ stairsPosition = null;
+
                 List<RoomSetInfo> RoomSetInfoList = new List<RoomSetInfo>();
                 for (int i = 0; i < PumpStation.mainfrm.RoomSettingGrid.Items.Count; i++)
                 {
@@ -198,6 +200,7 @@ namespace FFETOOLS
                     }
 
                     List<Wall> newWalls = new List<Wall>();
+                    List<Wall> allNewBottomWalls = new List<Wall>();
                     List<Wall> newBottomWalls = new List<Wall>();
                     Floor roomBottomUnderFloor = null;
                     double roomBottomWallThick = 200 / 304.8;
@@ -231,6 +234,7 @@ namespace FFETOOLS
                                 newBottomWalls = AddWallByCrossGrids(doc, app, newGrids, GetLevel(doc, 0.ToString()),
                                     GetLevel(doc, (item.RoomBottom * 1000).ToString()), -100, false, false);//创建±0.000以下平面墙
                                 allElements.AddRange(newBottomWalls);
+                                allNewBottomWalls.AddRange(newBottomWalls);
 
                                 List<XYZ> newBottomFloorPoints = GridCrossPoints(newGrids);
                                 CurveArray curveArray = new CurveArray();
@@ -345,9 +349,18 @@ namespace FFETOOLS
                             }
                         }
 
-                        List<Element> instances = CreatDoorAndWindow(doc, newWalls, roomWidthValue, roomBottomValue);//创建门和窗
+                        trans.Commit();
+                    }
+
+                    using (Transaction trans = new Transaction(doc, "创建门窗及入口平台"))
+                    {
+                        trans.Start();
+
+                        List<Element> instances = CreatDoorAndWindow(doc, newWalls, roomWidthValue);//创建门和窗
                         allElements.AddRange(instances);
 
+                        List<Element> floors = CreatFloorEnter(doc, RoomSetInfoList, allNewBottomWalls);//创建入口平台和栏杆
+                        allElements.AddRange(floors);
 
                         trans.Commit();
                     }
@@ -371,7 +384,8 @@ namespace FFETOOLS
                         trans.Commit();
                     }
 
-                    CreateStairs(doc, roomBottomlevel, roomToplevel);//创建楼梯比较特殊的一种事务
+                    List<Stairs> allStairs = CreatStairsMain(doc, allNewBottomWalls, RoomSetInfoList);//创建直跑楼梯
+                    allElements.AddRange(allStairs);
 
                     using (Transaction trans = new Transaction(doc, "镜像泵站"))
                     {
@@ -413,9 +427,139 @@ namespace FFETOOLS
         {
             return "创建泵站";
         }
-        private ElementId CreateStairs(Document document, Level levelBottom, Level levelTop)//创建楼梯
+        public List<Element> CreatFloorEnter(Document RevitDoc, List<RoomSetInfo> roomSetInfos, List<Wall> walls)
+        {
+            List<Element> floors = new List<Element>();
+            double bottomVlaue = 0;
+            RailingType railType = null;
+
+            IList<RailingType> rails =CollectorHelper.TCollector<RailingType>(RevitDoc);
+            foreach (var item in rails)
+            {
+                if (item.Name.Contains("建筑_平台栏杆_1"))
+                {
+                    railType = item;
+                    break;
+                }
+            }
+
+            foreach (var roomInfo in roomSetInfos)
+            {
+                if (roomInfo.RoomBottom < 0 && roomInfo.RoomLength > 6700)
+                {
+                    bottomVlaue = -1;
+                    break;
+                }
+            }
+
+            if (bottomVlaue < 0)
+            {
+                foreach (var item in walls)
+                {
+                    Line line = null;
+                    LocationCurve locationCurve = item.Location as LocationCurve;
+                    if (locationCurve != null)
+                    {
+                        line = locationCurve.Curve as Line;
+                    }
+
+                    double wallLength = double.Parse(item.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsValueString());
+                    if (wallLength > 6700)
+                    {
+                        if (line.Direction.X == 1 && line.Direction.Y == 0)
+                        {
+                            if (line.GetEndPoint(0).Y == 0)
+                            {
+                                XYZ point1 = new XYZ(line.GetEndPoint(1).X - 100 / 304.8, line.GetEndPoint(1).Y + 100 / 304.8, line.GetEndPoint(1).Z);
+                                XYZ point2 = new XYZ(line.GetEndPoint(1).X - 3000 / 304.8, line.GetEndPoint(1).Y + 100 / 304.8, line.GetEndPoint(1).Z);
+                                XYZ point3 = new XYZ(line.GetEndPoint(1).X - 3000 / 304.8, line.GetEndPoint(1).Y + 2000 / 304.8, line.GetEndPoint(1).Z);
+                                XYZ point4 = new XYZ(line.GetEndPoint(1).X - 100 / 304.8, line.GetEndPoint(1).Y + 2000 / 304.8, line.GetEndPoint(1).Z);
+
+                                CurveArray curveArray = new CurveArray();
+                                curveArray.Append(Line.CreateBound(point1, point2));
+                                curveArray.Append(Line.CreateBound(point2, point3));
+                                curveArray.Append(Line.CreateBound(point3, point4));
+                                curveArray.Append(Line.CreateBound(point4, point1));
+
+                                Floor roomPlatformFloor = RevitDoc.Create.NewFloor(curveArray, PoolFloorType(RevitDoc, "100"), GetLevel(RevitDoc, 0.ToString()), true, XYZ.BasisZ);//创建±0.000入口平台
+                                roomPlatformFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(0);
+                                floors.Add(roomPlatformFloor);
+
+                                XYZ point22 = new XYZ(line.GetEndPoint(1).X - 3000 / 304.8, line.GetEndPoint(1).Y + 1150 / 304.8, line.GetEndPoint(1).Z);
+                                IList<Curve> lines = new List<Curve>();
+                                lines.Add(Line.CreateBound(point22, point3));
+                                lines.Add(Line.CreateBound(point3, point4));
+                                CurveLoop railLoop = CurveLoop.Create(lines);
+                                Railing floorRail = Railing.Create(RevitDoc,railLoop,railType.Id, GetLevel(RevitDoc, 0.ToString()).Id);//创建平台栏杆
+                                floors.Add(floorRail);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return floors;
+        }
+        public List<Stairs> CreatStairsMain(Document RevitDoc, List<Wall> walls, List<RoomSetInfo> roomSetInfos) //创建直跑楼梯，创建草图楼梯有问题
+        {
+            List<Stairs> stairsList = new List<Stairs>();
+            double bottomVlaue = 0;
+
+            foreach (var roomInfo in roomSetInfos)
+            {
+                if (roomInfo.RoomBottom < 0 && roomInfo.RoomLength > 6700)
+                {
+                    bottomVlaue = -1;
+                    break;
+                }
+            }
+
+            if (bottomVlaue < 0)
+            {
+                foreach (var item in walls)
+                {
+                    Line line = null;
+                    LocationCurve locationCurve = item.Location as LocationCurve;
+                    if (locationCurve != null)
+                    {
+                        line = locationCurve.Curve as Line;
+                    }
+
+                    double wallLength = double.Parse(item.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsValueString());
+                    if (wallLength > 6700)
+                    {
+                        if (line.Direction.X == 1 && line.Direction.Y == 0)
+                        {
+                            if (line.GetEndPoint(0).Y == 0)
+                            {
+                                XYZ point = new XYZ(line.GetEndPoint(1).X - 3000 / 304.8, 0, 0);//获得平台楼梯起点
+
+                                ElementId stairsID = CreateStairs(RevitDoc, point, RevitDoc.GetElement((item.LevelId)) as Level, GetLevel(RevitDoc, 0.ToString()));//创建楼梯比较特殊的一种事务
+                                Stairs newStairs = RevitDoc.GetElement(stairsID) as Stairs;
+
+                                using (Transaction trans = new Transaction(RevitDoc, "修改楼梯踏步数"))
+                                {
+                                    trans.Start();
+
+                                    int stairsNum = newStairs.get_Parameter(BuiltInParameter.STAIRS_ACTUAL_NUM_RISERS).AsInteger();
+                                    newStairs.get_Parameter(BuiltInParameter.STAIRS_DESIRED_NUMBER_OF_RISERS).Set(stairsNum);
+
+                                    trans.Commit();
+                                }
+                                stairsList.Add(newStairs);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return stairsList;
+        }
+        private ElementId CreateStairs(Document document, XYZ stairPoint, Level levelBottom, Level levelTop)//创建楼梯
         {
             ElementId newStairsId = null;
+            double length = 10;
+
             using (StairsEditScope newStairsScope = new StairsEditScope(document, "创建楼梯"))
             {
                 newStairsId = newStairsScope.Start(levelBottom.Id, levelTop.Id);
@@ -423,46 +567,22 @@ namespace FFETOOLS
                 {
                     stairsTrans.Start();
 
-                    // 为楼梯创建一个草图梯段
-                    IList<Curve> bdryCurves = new List<Curve>();
-                    IList<Curve> riserCurves = new List<Curve>();
-                    IList<Curve> pathCurves = new List<Curve>();
-
                     double height = levelTop.Elevation - levelBottom.Elevation;
-                    double length = height - 200 / 304.8;
+                    double heightStringValue = Convert.ToDouble((levelBottom.get_Parameter(BuiltInParameter.LEVEL_ELEV).AsValueString())) / 1000;
 
-
-
-                    XYZ pnt1 = new XYZ(0, 0, 0);
-                    XYZ pnt2 = new XYZ(length, 0, 0);
-                    XYZ pnt3 = new XYZ(0, 900 / 304.8, 0);
-                    XYZ pnt4 = new XYZ(length, 900 / 304.8, 0);
-                    //边界
-                    bdryCurves.Add(Line.CreateBound(pnt1, pnt2));
-                    bdryCurves.Add(Line.CreateBound(pnt3, pnt4));
-                    // 踏步的线
-                    double riserNum = Convert.ToInt32(height * 304.8 / 200);
-                    for (int ii = 0; ii <= riserNum; ii++)
+                    if (IsIntegerForDouble(heightStringValue))
                     {
-                        XYZ end0 = (pnt1 + pnt2) * ii / riserNum;
-                        XYZ end1 = (pnt3 + pnt4) * ii / riserNum;
-                        XYZ end2 = new XYZ(end1.X, 900/304.8, 0);
-                        riserCurves.Add(Line.CreateBound(end0, end2));
+                        length = height - 200 / 304.8;
+                    }
+                    else
+                    {
+                        length = height - 100 / 304.8;
                     }
 
-                    //楼梯的路径
-                    XYZ pathEnd0 = (pnt1 + pnt3) / 2.0;
-                    XYZ pathEnd1 = (pnt2 + pnt4) / 2.0;
-                    pathCurves.Add(Line.CreateBound(pathEnd0, pathEnd1));
-
-                    // 创建一个草图梯段
-                    StairsRun newRun1 = StairsRun.CreateSketchedRun(document, newStairsId, levelBottom.Elevation, bdryCurves, riserCurves, pathCurves);
-
                     // 创建一个直跑梯段
-                    Line locationLine = Line.CreateBound(new XYZ(0, 0, 0), new XYZ(3800 / 304.8, 0, 0));
-                    //StairsRun newRun2 = StairsRun.CreateStraightRun(document, newStairsId, locationLine, StairsRunJustification.Center);
-                    //newRun2.ActualRunWidth = 20;
-
+                    Line locationLine = Line.CreateBound(new XYZ(stairPoint.X - length, 700 / 304.8, levelBottom.Elevation), new XYZ(stairPoint.X, 700 / 304.8, levelBottom.Elevation));
+                    StairsRun newRun2 = StairsRun.CreateStraightRun(document, newStairsId, locationLine, StairsRunJustification.Center);
+                    newRun2.ActualRunWidth = 900 / 304.8;
 
                     stairsTrans.Commit();
                 }
@@ -470,6 +590,11 @@ namespace FFETOOLS
                 newStairsScope.Commit(new FailuresPreprocessor());
             }
             return newStairsId;
+        }
+        public bool IsIntegerForDouble(double obj)//判断double是否是整数
+        {
+            double eps = 1e-10;  // 精度范围
+            return obj - Math.Floor(obj) < eps;
         }
         public void MoveText(Document doc, View view, List<TextNote> textList)
         {
@@ -566,20 +691,25 @@ namespace FFETOOLS
             }
             return flag;
         }
-        public List<Element> CreatDoorAndWindow(Document RevitDoc, List<Wall> walls, double roomWidth, double roomBottom)
+        public List<Element> CreatDoorAndWindow(Document RevitDoc, List<Wall> walls, double roomWidth)
         {
             List<Element> instanceLists = new List<Element>();
-            FamilySymbol doorType = null;
+            FamilySymbol doorType1800 = null;
+            FamilySymbol doorType1500 = null;
             FamilySymbol windowType = null;
-            FamilySymbol rampType = null;//坡道
+            FamilySymbol rampType = null;//坡道   
 
             IList<FamilySymbol> symbols = CollectorHelper.TCollector<FamilySymbol>(RevitDoc);
             foreach (FamilySymbol element in symbols)
             {
+                if (element.FamilyName.Contains("建筑_门_default双扇") && element.Name.Contains("1800x2400"))
+                {
+                    doorType1800 = element;                    
+                }
+
                 if (element.FamilyName.Contains("建筑_门_default双扇") && element.Name.Contains("1500x2400"))
                 {
-                    doorType = element;
-                    break;
+                    doorType1500 = element;              
                 }
             }
 
@@ -622,10 +752,10 @@ namespace FFETOOLS
                         if (line.GetEndPoint(0).Y == 0)
                         {
                             // 在墙的一侧位置创建一个门 
-                            double doorwidth = doorType.get_Parameter(BuiltInParameter.DOOR_WIDTH).AsDouble();
+                            double doorwidth = doorType1800.get_Parameter(BuiltInParameter.DOOR_WIDTH).AsDouble();
 
-                            XYZ doorPoint = new XYZ(line.GetEndPoint(1).X - doorwidth / 2 - 500 / 304.8, line.GetEndPoint(1).Y, line.GetEndPoint(1).Z);
-                            FamilyInstance door = RevitDoc.Create.NewFamilyInstance(doorPoint, doorType, item, wallLevel, StructuralType.NonStructural);
+                            XYZ doorPoint = new XYZ(line.GetEndPoint(1).X - doorwidth / 2 - 600 / 304.8, line.GetEndPoint(1).Y, line.GetEndPoint(1).Z);
+                            FamilyInstance door = RevitDoc.Create.NewFamilyInstance(doorPoint, doorType1800, item, wallLevel, StructuralType.NonStructural);
                             if (door.CanRotate)
                             {
                                 door.rotate();
@@ -642,15 +772,6 @@ namespace FFETOOLS
                             curveArray.Append(Line.CreateBound(point2, point3));
                             curveArray.Append(Line.CreateBound(point3, point4));
                             curveArray.Append(Line.CreateBound(point4, point1));
-
-                            if (roomBottom < 0)
-                            {
-                                Floor roomPlatformFloor = RevitDoc.Create.NewFloor(curveArray, PoolFloorType(RevitDoc, "100"), GetLevel(RevitDoc, 0.ToString()), true, XYZ.BasisZ);//创建±0.000入口平台
-                                roomPlatformFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(0);
-                                instanceLists.Add(roomPlatformFloor);
-
-
-                            }
 
                             FamilyInstance ramp = RevitDoc.Create.NewFamilyInstance(doorPoint, rampType, item, wallLevel, StructuralType.NonStructural);
                             ramp.LookupParameter("门洞宽").Set(doorwidth);
@@ -689,14 +810,14 @@ namespace FFETOOLS
                         if (line.GetEndPoint(0).Y == 0)
                         {
                             // 在墙的中心位置创建一个门 
-                            FamilyInstance door = RevitDoc.Create.NewFamilyInstance(midPoint, doorType, item, wallLevel, StructuralType.NonStructural);
+                            FamilyInstance door = RevitDoc.Create.NewFamilyInstance(midPoint, doorType1500, item, wallLevel, StructuralType.NonStructural);
                             if (door.CanRotate)
                             {
                                 door.rotate();
                             }
                             instanceLists.Add(door);
 
-                            double doorwidth = doorType.get_Parameter(BuiltInParameter.DOOR_WIDTH).AsDouble();
+                            double doorwidth = doorType1500.get_Parameter(BuiltInParameter.DOOR_WIDTH).AsDouble();
                             FamilyInstance ramp = RevitDoc.Create.NewFamilyInstance(midPoint, rampType, item, wallLevel, StructuralType.NonStructural);
                             ramp.LookupParameter("门洞宽").Set(doorwidth);
                             instanceLists.Add(ramp);
