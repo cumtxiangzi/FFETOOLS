@@ -214,6 +214,11 @@ namespace FFETOOLS
                         newWalls = AddWallByCrossGrids(doc, app, XYGrids, roomToplevel, GetLevel(doc, 0.ToString()), 0, false, false);//先创建±0.000平面墙
                         allElements.AddRange(newWalls);
 
+                        FamilySymbol pitSymbol = null;
+                        FamilyInstance pitInstance = null;
+                        IList<FamilySymbol> pitSymbolList = CollectorHelper.TCollector<FamilySymbol>(doc);
+                        pitSymbol = pitSymbolList.FirstOrDefault(x => x.FamilyName.Contains("结构_地坑_集水坑01_1"));
+
                         List<Grid> newGrids = new List<Grid>();
                         foreach (var item in RoomSetInfoList)
                         {
@@ -273,6 +278,16 @@ namespace FFETOOLS
                                         GetLevel(doc, (item.RoomBottom * 1000).ToString()), true, XYZ.BasisZ);//创建±0.000以下楼板                           
                                     roomBottomUnderFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(0);
                                     allElements.Add(roomBottomUnderFloor);
+
+                                    XYZ pitPoint = new XYZ(point2.X + roomBottomWallThick / 2, point2.Y + roomBottomWallThick / 2+(roomWidthValue-1000)/304.8, 0);
+                                    pitSymbol.Activate();
+                                    pitInstance = doc.Create.NewFamilyInstance(pitPoint, pitSymbol, roomBottomUnderFloor,
+                                        GetLevel(doc, (item.RoomBottom * 1000).ToString()), StructuralType.NonStructural);
+                                    pitInstance.LookupParameter("坑壁厚度").SetValueString("200");
+                                    pitInstance.LookupParameter("地坑高度").SetValueString("800");
+                                    pitInstance.LookupParameter("地坑长度").SetValueString("800");
+                                    pitInstance.LookupParameter("地坑宽度").SetValueString("800");
+                                    allElements.Add(pitInstance);
                                 }
 
                                 if (holeCurveArray.Size != 0)
@@ -362,6 +377,9 @@ namespace FFETOOLS
                         List<Element> floors = CreatFloorEnter(doc, RoomSetInfoList, allNewBottomWalls);//创建入口平台和栏杆
                         allElements.AddRange(floors);
 
+                        List<FamilyInstance> steelAndHoists = CreatSteelAndHoist(doc, newWalls);//创建工字钢和手动葫芦
+                        allElements.AddRange(steelAndHoists);
+
                         trans.Commit();
                     }
 
@@ -427,13 +445,69 @@ namespace FFETOOLS
         {
             return "创建泵站";
         }
+        public List<FamilyInstance> CreatSteelAndHoist(Document doc, List<Wall> walls)
+        {
+            List<FamilyInstance> instances = new List<FamilyInstance>();
+
+            FamilySymbol steelBeamSymbol = null;
+            FamilyInstance steelBeamInstance = null;
+            IList<FamilySymbol> steelSymbolList = CollectorHelper.TCollector<FamilySymbol>(doc);
+            steelBeamSymbol = steelSymbolList.FirstOrDefault(x => x.FamilyName.Contains("结构_工字钢"));
+
+            FamilySymbol hoistSymbol = null;
+            FamilyInstance hoistInstance = null;
+            IList<FamilySymbol> hoistSymbolList = CollectorHelper.TCollector<FamilySymbol>(doc);
+            hoistSymbol = hoistSymbolList.FirstOrDefault(x => x.FamilyName.Contains("给排水_提升检修设备_手动葫芦"));
+
+            foreach (var item in walls)
+            {
+                Line line = null;
+                LocationCurve locationCurve = item.Location as LocationCurve;
+                if (locationCurve != null)
+                {
+                    line = locationCurve.Curve as Line;
+                }
+
+                double wallLength = double.Parse(item.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsValueString());
+                if (wallLength > 6700)
+                {
+                    if (line.Direction.X == 1 && line.Direction.Y == 0)
+                    {
+                        if (line.GetEndPoint(0).Y == 0)
+                        {
+                            double roomWidth = Convert.ToDouble(PumpStation.mainfrm.RoomWidth.Text);
+                            double roomHeight = Convert.ToDouble(PumpStation.mainfrm.RoomHeight.Text);
+
+                            XYZ steelPoint = new XYZ(line.GetEndPoint(0).X + (wallLength - 3100 + 3100) / 304.8 / 2, line.GetEndPoint(1).Y + roomWidth / 2 / 304.8, line.GetEndPoint(1).Z);
+                            steelBeamSymbol.Activate();
+                            steelBeamInstance = doc.Create.NewFamilyInstance(steelPoint, steelBeamSymbol, GetLevel(doc, 0.ToString()), StructuralType.NonStructural);
+                            steelBeamInstance.get_Parameter(BuiltInParameter.INSTANCE_FREE_HOST_OFFSET_PARAM).Set(roomHeight * 1000 / 304.8 - 500 / 304.8);
+                            Line rotateLine = Line.CreateBound(steelPoint, steelPoint + XYZ.BasisZ * 1);
+                            ElementTransformUtils.RotateElement(doc, steelBeamInstance.Id, rotateLine, Math.PI / 2);
+                            steelBeamInstance.LookupParameter("长").Set((wallLength - 3100 + 3100) / 304.8);
+
+                            XYZ hoistPoint = new XYZ(line.GetEndPoint(0).X + (wallLength - 3100 + 3100) / 304.8 / 2, line.GetEndPoint(1).Y + roomWidth / 2 / 304.8, line.GetEndPoint(1).Z);
+                            hoistSymbol.Activate();
+                            hoistInstance = doc.Create.NewFamilyInstance(hoistPoint, hoistSymbol, GetLevel(doc, 0.ToString()), StructuralType.NonStructural);
+                            hoistInstance.get_Parameter(BuiltInParameter.INSTANCE_FREE_HOST_OFFSET_PARAM).Set(roomHeight * 1000 / 304.8 + 100 / 304.8);
+                            Line rotateLineHoist = Line.CreateBound(hoistPoint, hoistPoint + XYZ.BasisZ * 1);
+                            ElementTransformUtils.RotateElement(doc, hoistInstance.Id, rotateLineHoist, Math.PI / 2);
+
+                            instances.Add(steelBeamInstance);
+                            instances.Add(hoistInstance);
+                        }
+                    }
+                }
+            }
+            return instances;
+        }
         public List<Element> CreatFloorEnter(Document RevitDoc, List<RoomSetInfo> roomSetInfos, List<Wall> walls)
         {
             List<Element> floors = new List<Element>();
             double bottomVlaue = 0;
-            RailingType railType = null;
+            RailingType railType = null;         
 
-            IList<RailingType> rails =CollectorHelper.TCollector<RailingType>(RevitDoc);
+            IList<RailingType> rails = CollectorHelper.TCollector<RailingType>(RevitDoc);
             foreach (var item in rails)
             {
                 if (item.Name.Contains("建筑_平台栏杆_1"))
@@ -490,8 +564,9 @@ namespace FFETOOLS
                                 lines.Add(Line.CreateBound(point22, point3));
                                 lines.Add(Line.CreateBound(point3, point4));
                                 CurveLoop railLoop = CurveLoop.Create(lines);
-                                Railing floorRail = Railing.Create(RevitDoc,railLoop,railType.Id, GetLevel(RevitDoc, 0.ToString()).Id);//创建平台栏杆
+                                Railing floorRail = Railing.Create(RevitDoc, railLoop, railType.Id, GetLevel(RevitDoc, 0.ToString()).Id);//创建平台栏杆
                                 floors.Add(floorRail);
+
                             }
                         }
                     }
@@ -704,12 +779,12 @@ namespace FFETOOLS
             {
                 if (element.FamilyName.Contains("建筑_门_default双扇") && element.Name.Contains("1800x2400"))
                 {
-                    doorType1800 = element;                    
+                    doorType1800 = element;
                 }
 
                 if (element.FamilyName.Contains("建筑_门_default双扇") && element.Name.Contains("1500x2400"))
                 {
-                    doorType1500 = element;              
+                    doorType1500 = element;
                 }
             }
 
