@@ -21,6 +21,15 @@ namespace FFETOOLS
     public partial class CreatPipeTagForm : Window
     {
         public int clicked = 0;
+        List<string> TextWithLineList = new List<string>
+        {"接风机(613FA18)循环水进口","接润滑装置(613LU10)循环水进口","接选粉机(416SP17)减速机循环水进口","接辊压机(216RP04)辊轴循环水进口","接辊压机(416RP04)轴承座循环水进口",
+            "接辊压机稀油站(416LU10)循环水进口","预留洞400X300","楼板留洞Φ100","楼板及屋顶留洞Φ150",
+            "池底预埋钢板1000X950X20mm","工字钢", "压力传感器(XP1)","温度传感器(XT3)","爬梯",
+            "人孔","活动栏杆","土建专业设钢盖板","集水坑400X400X400","收水堰","回水台","见详图A","接至水质检测室","接生产给水泵(919PU43)吸水管",
+            "排水至散水","溢流口上方加防雨罩","消防水泵接合器","灭火砂箱","屋顶试验消火栓","洗眼器","楼板贴壁留洞Φ100","接小便器排水管","接大便器排水管"
+        };
+
+        List<string> LanguageList = new List<string>() { "中文","英文","中英文"};
 
         ExecuteEventCreatPipeTag excCreatPipe = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerCreatPipe = null;
@@ -40,11 +49,32 @@ namespace FFETOOLS
         private void this_Loaded(object sender, RoutedEventArgs e)
         {
             //e.Handled = true;
+            TextInputCmb.Focus();
+            TextInputCmb.ItemsSource = TextWithLineList;
+            LanguageCmb.ItemsSource = LanguageList;
+            LanguageCmb.SelectedIndex = 0;
+
+            Button10.Content = "管 道 附 件" + "\n" + "    标 注";
+            Button7.Content = "刚 性 套 管" + "\n" + "图 集 标 注";
+            Button8.Content = "柔 性 套 管" + "\n" + "图 集 标 注";
+            Button6.Content = "管 道 基 础" + "\n" + "    留 洞";
+            Button11.Content = "管 道 楼 板" + "\n" + "留 洞 方 形";
+            Button12.Content = "管 道 墙 壁" + "\n" + "    留 洞";
+            Button17.Content = " 潜 水 泵" + "\n" + " 电 控 箱";
+            Button18.Content = "消 火 栓 箱" + "\n" + "    留 洞";
+            Button19.Content = "支 架 剖 面" + "\n" + "管 道 标 注";
+            Button20.Content = "侧 壁 预 埋" + "\n" + "  板 标 注";
+            Button21.Content = "刚 性 套 管" + "\n" + "字 母 标 注";
+            Button22.Content = "柔 性 套 管" + "\n" + "字 母 标 注";
+            Button23.Content = "管 道 楼 板" + "\n" + "留 洞 圆 形";
 
             excCreatPipe = new ExecuteEventCreatPipeTag();
             eventHandlerCreatPipe = Autodesk.Revit.UI.ExternalEvent.Create(excCreatPipe);
         }
+        private void this_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
 
+        }
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             clicked = 1;
@@ -111,15 +141,130 @@ namespace FFETOOLS
             Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
-        private void this_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
 
+        private void Button11_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 11;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void Button12_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            clicked = 12;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
         }
 
+        private void Button13_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 13;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+
+        private void Button14_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 14;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+
+        private void Button15_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 15;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+
+        private void Button16_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 16;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+
+        private void Button17_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 17;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+
+        private void Button18_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 18;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+
+        private void Button19_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 19;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+        private void Button20_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 20;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+        private void Button21_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 21;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+
+        private void Button22_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 22;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+        private void Button23_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 23;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 100;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+
+        private void ButtonTemperature_Click(object sender, RoutedEventArgs e)
+        {
+            TextInputCmb.Text += "℃";
+            TextInputCmb.Focus();
+        }
+
+        private void ButtonPositive_Click(object sender, RoutedEventArgs e)
+        {
+            TextInputCmb.Text += "±";
+            TextInputCmb.Focus();
+        }
+
+        private void ButtonCircle_Click(object sender, RoutedEventArgs e)
+        {
+            TextInputCmb.Text += "Φ";
+            TextInputCmb.Focus();
+        }
+
+        private void ButtonPercent_Click(object sender, RoutedEventArgs e)
+        {
+            TextInputCmb.Text += "％";
+            TextInputCmb.Focus();
+        }
+
+        private void TextInputCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            clicked = 100;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
     }
 }

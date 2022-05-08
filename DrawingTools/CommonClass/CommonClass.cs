@@ -850,6 +850,46 @@ namespace FFETOOLS
             return true;
         }
     }
+    //常规模型的过滤条件
+    public class GenericModelSelectionFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element e)
+        {
+            if (e.Category.Name == "常规模型")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool AllowReference(Reference r, XYZ p)
+        {
+            return true;
+        }
+    }
+    //常规注释的过滤条件
+    public class GenericSignSelectionFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element e)
+        {
+            if (e.Category.Name == "常规注释")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool AllowReference(Reference r, XYZ p)
+        {
+            return true;
+        }
+    }
     //管路附件的过滤条件
     public class PipeAccessorySelectionFilter : ISelectionFilter
     {
@@ -887,6 +927,32 @@ namespace FFETOOLS
             return true;
         }
     }
+
+    public static class IndependentTagHelper
+    {
+        /// <summary>
+        /// 判断当前视图上的元素是否被标记过
+        /// </summary>
+        /// <param name="ele"></param>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public static bool IsTaged(this Element ele, Document doc)
+        {
+            var result = false;
+
+            var collector = new FilteredElementCollector(doc, doc.ActiveView.Id);
+
+            var independenttags = collector.OfClass(typeof(IndependentTag)).WhereElementIsNotElementType();
+
+            var tagids = independenttags.Cast<IndependentTag>().Select(m => m.TaggedLocalElementId);
+
+            if (tagids.Contains(ele.Id))
+                result = true;
+
+            return result;
+        }
+    }
+
     #endregion
 
 }

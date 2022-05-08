@@ -27,10 +27,11 @@ namespace FFETOOLS
         ObservableCollection<RoomInfo> roomInfoList = new ObservableCollection<RoomInfo>();//DataGrid的数据源
         ObservableCollection<RoomInfo> roomInfoSelectList = new ObservableCollection<RoomInfo>();//用于DataGrid的模板加载时提供选项
 
-        List<string> roomNames = new List<string>() { "水泵间", "PUMP ROOM" , "PUMP ROOM" + "\n" + "     " + "水泵间" , "加药间",
-        "DOSING ROOM", "DOSING ROOM" + "\n" + "       " + "加药间","控制室","CONTROL ROOM","CONTROL ROOM" + "\n" + "         " + "控制室",
-       "储药间", "CHEMICAL STORAGE ROOM","CHEMICAL STORAGE ROOM" + "\n" + "                 " + "储药间" ,"水质监测室", "WATER QUALITY MONITORING ROOM" ,
-        "WATER QUALITY MONITORING ROOM" + "\n" + "                       " + "水质监测室" };
+        List<string> roomNames = new List<string>() { "水泵间", "加药间","控制室","储药间","水质监测室",
+            "PUMP ROOM" + "\n" + "     " + "水泵间" ,"DOSING ROOM" + "\n" + "       " + "加药间","CONTROL ROOM" + "\n" + "         " + "控制室",
+            "CHEMICAL STORAGE ROOM" + "\n" + "                 " + "储药间" ,"WATER QUALITY MONITORING ROOM" + "\n" + "                       " + "水质监测室",
+            "PUMP ROOM" ,"DOSING ROOM","CONTROL ROOM","CHEMICAL STORAGE ROOM", "WATER QUALITY MONITORING ROOM"
+        };
         public PumpStationForm()
         {
             InitializeComponent();

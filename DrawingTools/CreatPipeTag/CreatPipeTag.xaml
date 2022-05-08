@@ -5,35 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
-        Title="标注工具" Name="this" Height="650" Width="130" ResizeMode="NoResize"  WindowStartupLocation="Manual"  KeyDown="this_KeyDown" Loaded="this_Loaded" Closing="this_Closing">
+        Title="标注工具" Name="this" Height="600" Width="400" ResizeMode="NoResize"  WindowStartupLocation="Manual"  KeyDown="this_KeyDown" Loaded="this_Loaded" Closing="this_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100*"/>
-            
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="20*"/>
-            <RowDefinition Height="30*"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.6*"/>
         </Grid.RowDefinitions>
 
-        <GroupBox Header="标注类型" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="6,5,6,5" BorderBrush="Gray">
+        <GroupBox Header="常用标注" Grid.Column="0" Grid.Row="0"  Grid.ColumnSpan="2"  Margin="6,5,6,5" BorderBrush="Gray">
             <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+
                 </Grid.RowDefinitions>
 
-                <Button x:Name="Button1" Content="设备编号"  Grid.Column="0" Grid.Row="0" Margin="12,10,12,10" Click="Button1_Click" Cursor="Hand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="Button1"  Content="设 备 编 号" Grid.Column="0" Grid.Row="0" Margin="12,10,12,10" Click="Button1_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -44,7 +45,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button2" Content="管道直径"  Grid.Column="0" Grid.Row="1" Margin="12,10,12,10" Click="Button2_Click" Cursor="Hand">
+                <Button x:Name="Button2" Content="管 道 直 径"  Grid.Column="1" Grid.Row="0" Margin="12,10,12,10" Click="Button2_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -55,7 +56,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button3" Content="管道缩写"  Grid.Column="0" Grid.Row="2" Margin="12,10,12,10" Click="Button3_Click" Cursor="Hand">
+                <Button x:Name="Button3" Content="管 道 缩 写"  Grid.Column="2" Grid.Row="0" Margin="12,10,12,10" Click="Button3_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -66,7 +67,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button4" Content="进出户编号"  Grid.Column="0" Grid.Row="3" Margin="12,10,12,10" Click="Button4_Click" Cursor="Hand">
+                <Button x:Name="Button4" Content="进出户编号"  Grid.Column="2" Grid.Row="1" Margin="12,10,12,10" Click="Button4_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -77,7 +78,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button5" Content="立管编号"  Grid.Column="0" Grid.Row="4" Margin="12,10,12,10" Click="Button5_Click" Cursor="Hand">
+                <Button x:Name="Button5" Content="立 管 编 号"  Grid.Column="3" Grid.Row="0" Margin="12,10,12,10" Click="Button5_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -88,7 +89,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button6" Content="管道预留洞"  Grid.Column="0" Grid.Row="5" Margin="12,10,12,10" Click="Button6_Click" Cursor="Hand">
+                <Button x:Name="Button6" Content="管道基础洞"  Grid.Column="0" Grid.Row="1" Margin="12,10,12,10" Click="Button6_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -99,7 +100,8 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button7" Content="套管标注(图集)"  Grid.Column="0" Grid.Row="6" Margin="12,10,12,10" Click="Button7_Click" FontSize="10.5" Cursor="Hand">
+              
+                <Button x:Name="Button9" Content="标 高 标 注"  Grid.Column="3" Grid.Row="1" Margin="12,10,12,10" Click="Button9_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -110,7 +112,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button8" Content="套管标注(详图)"  Grid.Column="0" Grid.Row="7" Margin="12,10,12,10" Click="Button8_Click" FontSize="10.5" Cursor="Hand">
+                <Button x:Name="Button10" Content="管道附件标注"  Grid.Column="1" Grid.Row="1" Margin="12,10,12,10" Click="Button10_Click" Cursor="Hand" >
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -121,7 +123,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button9" Content="标高标注"  Grid.Column="0" Grid.Row="8" Margin="12,10,12,10" Click="Button9_Click" Cursor="Hand">
+                <Button x:Name="Button11" Content="管道楼板留洞方形"  Grid.Column="1" Grid.Row="2" Margin="12,10,12,10" Click="Button11_Click"  Cursor="Hand" >
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -132,7 +134,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button10" Content="管道附件标注"  Grid.Column="0" Grid.Row="9" Margin="12,10,12,10" Click="Button10_Click" Cursor="Hand" >
+                <Button x:Name="Button12" Content="管道墙壁留洞"  Grid.Column="0" Grid.Row="2" Margin="12,10,12,10" Click="Button12_Click"  Cursor="Hand" >
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -142,20 +144,258 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
+
+                <Button x:Name="Button23" Content="管道楼板留洞圆形"  Grid.Column="2" Grid.Row="2" Margin="12,10,12,10" Click="Button23_Click"  Cursor="Hand" >
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
             </Grid>
         </GroupBox>
 
+        <GroupBox Header="其他标注" Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2"  Margin="6,5,6,5" BorderBrush="Gray">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
 
-        <Button x:Name="CancelButton" Content="取消"  Grid.Column="1" Grid.Row="3" Margin="60,10,10,10" Click="CancelButton_Click" Cursor="Hand">
-            <Button.Template >
-                <ControlTemplate TargetType="{x:Type Button}" >
-                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
-                        <Border.Background>#FFDDDDDD</Border.Background>
-                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
+                </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button x:Name="Button7" Content="刚性套管"  Grid.Column="0" Grid.Row="0" Margin="12,10,12,10" Click="Button7_Click" FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button8" Content="柔性套管"  Grid.Column="1" Grid.Row="0" Margin="12,10,12,10" Click="Button8_Click" FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button13" Content="爬 梯 标 注"  Grid.Column="2" Grid.Row="1" Margin="12,10,12,10" Click="Button13_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                
+                <Button x:Name="Button14" Content="人 孔 标 注"  Grid.Column="3" Grid.Row="1" Margin="12,10,12,10" Click="Button14_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button15" Content="通气管标注"  Grid.Column="0" Grid.Row="1" Margin="12,10,12,10" Click="Button15_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button16" Content="吊 环 标 注"  Grid.Column="1" Grid.Row="1" Margin="12,10,12,10" Click="Button16_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button17" Content="电控箱标注"  Grid.Column="1" Grid.Row="2" Margin="12,10,12,10" Click="Button17_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                
+                <Button x:Name="Button18" Content="消火栓留洞标注"  Grid.Column="2" Grid.Row="2" Margin="12,10,12,10" Click="Button18_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button19" Content="支架剖面管道标注"  Grid.Column="3" Grid.Row="2" Margin="12,10,12,10" Click="Button19_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button20" Content="侧壁预埋板标注"  Grid.Column="0" Grid.Row="2" Margin="12,10,12,10" Click="Button20_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button21" Content="刚性套管字母标注"  Grid.Column="2" Grid.Row="0" Margin="12,10,12,10" Click="Button21_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="Button22" Content="柔性套管字母标注"  Grid.Column="3" Grid.Row="0" Margin="12,10,12,10" Click="Button22_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="带线文字标注" Grid.Column="0" Grid.Row="2"  Grid.ColumnSpan="2"  Margin="6,5,6,5" BorderBrush="Gray">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.8*"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox x:Name="TextInputCmb"  Grid.Column="0" Grid.Row="0"  Grid.ColumnSpan="4" Margin="10,10,10,10" 
+                          IsEditable="True" FontSize="14" SelectionChanged="TextInputCmb_SelectionChanged"/>
+
+                <Grid  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2" Margin="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="ButtonCircle" Content="Φ"  Grid.Column="0" Grid.Row="1" Margin="5,10,5,10" Click="ButtonCircle_Click"  Cursor="Hand" FontSize="15">
+                        <Button.Template >
+                            <ControlTemplate TargetType="{x:Type Button}" >
+                                <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                    <Border.Background>#FFDDDDDD</Border.Background>
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button x:Name="ButtonPositive" Content="±"  Grid.Column="1" Grid.Row="1" Margin="5,10,5,10" Click="ButtonPositive_Click"  Cursor="Hand" FontSize="15">
+                        <Button.Template >
+                            <ControlTemplate TargetType="{x:Type Button}" >
+                                <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                    <Border.Background>#FFDDDDDD</Border.Background>
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button x:Name="ButtonTemperature" Content="℃"  Grid.Column="2" Grid.Row="1" Margin="5,10,5,10" Click="ButtonTemperature_Click"  Cursor="Hand" FontSize="14">
+                        <Button.Template >
+                            <ControlTemplate TargetType="{x:Type Button}" >
+                                <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                    <Border.Background>#FFDDDDDD</Border.Background>
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button x:Name="ButtonPercent" Content="％"  Grid.Column="3" Grid.Row="1" Margin="5,10,5,10" Click="ButtonPercent_Click"  Cursor="Hand" FontSize="14">
+                        <Button.Template >
+                            <ControlTemplate TargetType="{x:Type Button}" >
+                                <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                    <Border.Background>#FFDDDDDD</Border.Background>
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                </Grid>
+
+                <ComboBox x:Name="LanguageCmb" Grid.Column="2" Grid.Row="1" Margin="12,10,12,10" FontSize="12" VerticalContentAlignment="Center"/>
+
+                <Button x:Name="OKButton"  Content="确 定"  Grid.Column="4" Grid.Row="1" Margin="12,10,12,10" Click="OKButton_Click"  Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFDDDDDD</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

@@ -90,123 +90,613 @@ namespace FFETOOLS
         }
         public void CreatTagMain(Document doc, UIDocument uidoc, UIApplication app)
         {
+            //TransactionGroup tg = new TransactionGroup(doc, "创建给排水标注");
+            //tg.Start();
+
             using (Transaction trans = new Transaction(doc, "给排水标注"))
             {
                 trans.Start();
                 if (CreatPipeTag.mainfrm.clicked == 1)
                 {
                     CreatEquipmentTagMethod(doc, uidoc);
-                    //CreatPipeTag.mainfrm.clicked = 0;
                 }
 
                 if (CreatPipeTag.mainfrm.clicked == 2)
                 {
                     CreatPipeTagMethod(doc, uidoc, "管道公称直径");
-                    //CreatPipeTag.mainfrm.clicked = 0;
                 }
 
                 if (CreatPipeTag.mainfrm.clicked == 3)
                 {
                     CreatPipeTagMethod(doc, uidoc, "管道系统缩写");
-                    //CreatPipeTag.mainfrm.clicked = 0;
                 }
 
                 if (CreatPipeTag.mainfrm.clicked == 4)
                 {
                     CreatPipeTagMethod(doc, uidoc, "进出户管编号");
-                    //CreatPipeTag.mainfrm.clicked = 0;
                 }
 
-                if (CreatPipeTag.mainfrm.clicked == 5)
-                {
-                    CreatPipeTagWithLine(doc, uidoc, "立管编号");
-                    //CreatPipeTag.mainfrm.clicked = 0;
-                }
 
-                //if (CreatPipeTag.mainfrm.clicked == 6)
-                //{
-                //    CreatPipeTagMethod(doc, uidoc, app, "污水");
-                //    CreatPipeTag.mainfrm.clicked = 0;
-                //}
 
-                //if (CreatPipeTag.mainfrm.clicked == 7)
-                //{
-                //    CreatPipeTagMethod(doc, uidoc, app, CreatPipeTag.mainfrm.Button7.Content.ToString());
-                //    CreatPipeTag.mainfrm.clicked = 0;
-                //}
+                
+               
 
-                //if (CreatPipeTag.mainfrm.clicked == 8)
-                //{
-                //    CreatPipeTagMethod(doc, uidoc, app, CreatPipeTag.mainfrm.Button9.Content.ToString());
-                //    CreatPipeTag.mainfrm.clicked = 0;
-                //}
-
+              
                 if (CreatPipeTag.mainfrm.clicked == 9)
                 {
-
                     RevitCommandId cmdId = RevitCommandId.LookupPostableCommandId(PostableCommand.SpotElevation);
                     app.PostCommand(cmdId);
-                    //CreatPipeTag.mainfrm.clicked = 0;
                 }
 
                 if (CreatPipeTag.mainfrm.clicked == 10)
                 {
                     CreatPipeAccessoryTagMethod(doc, uidoc);
-                    //CreatPipeTag.mainfrm.clicked = 0;
                 }
-                //CreatPipeTag.mainfrm.clicked = 0;
+
+                
+                if (CreatPipeTag.mainfrm.clicked == 19)
+                {
+
+                }
+
+                if (CreatPipeTag.mainfrm.clicked == 100)
+                {
+                    CreatTextWithLineMethod(doc, uidoc);
+                }
+
                 trans.Commit();
             }
-        }
 
+            if (CreatPipeTag.mainfrm.clicked == 5)
+            {
+                CreatPipeTagWithLine(doc, uidoc, "立管编号");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 6)
+            {
+                CreatCommonNote(doc, uidoc, "管道基础留洞");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 7)
+            {
+                CreatSleeveNote(doc, uidoc, "刚性防水套管");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 8)
+            {
+                CreatSleeveNote(doc, uidoc, "柔性防水套管");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 11)
+            {
+                CreatCommonNote(doc, uidoc, "管道楼板留洞方形");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 12)
+            {
+                CreatCommonNote(doc, uidoc, "管道预留洞");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 13)
+            {
+                CreatCommonNote(doc, uidoc, "爬梯标注");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 14)
+            {
+                CreatManHoleNote(doc, uidoc);
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 15)
+            {
+                CreatVentPipeNote(doc, uidoc);
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 16)
+            {
+                CreatCommonNote(doc, uidoc, "吊环标注");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 17)
+            {
+                CreatCommonNote(doc, uidoc, "电控箱标注");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 18)
+            {
+                CreatCommonNote(doc, uidoc, "消火栓箱留洞标注");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 20)
+            {
+                CreatCommonNote(doc, uidoc, "侧壁预埋板标注");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 23)
+            {
+                CreatCommonNote(doc, uidoc, "管道楼板留洞圆形");
+            }
+
+            //tg.Assimilate();
+        }
+        public bool CreatCommonNote(Document doc, UIDocument uidoc,string name)//创建通用标注
+        {
+            try
+            {
+                using (Transaction trans = new Transaction(doc, "创建通用标注"))
+                {
+                    trans.Start();
+
+                    if (name=="爬梯标注")
+                    {
+                        TagFamilyLoad(doc, "梯子标注");
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new GenericModelSelectionFilter(), "请选择爬梯");
+                        FamilyInstance ladder = doc.GetElement(reference) as FamilyInstance;
+                        LocationPoint ladderLocation = ladder.Location as LocationPoint;
+
+                        XYZ pt1 = ladderLocation.Point;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        FamilySymbol ladderSymbol = null;
+                        AnnotationSymbol ladderNote = null;
+                        ladderSymbol = NoteSymbol(doc, "梯子标注");
+                        ladderSymbol.Activate();
+                        ladderNote = doc.Create.NewFamilyInstance(pt2, ladderSymbol, doc.ActiveView) as AnnotationSymbol;
+                        ladderNote.addLeader();
+                        IList<Leader> leadList = ladderNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = pt1;
+                    }
+
+                    if (name == "电控箱标注")
+                    {
+                        TagFamilyLoad(doc, "潜水泵电控箱标注");
+                        Selection sel = uidoc.Selection;
+
+                        XYZ pt1 = sel.PickPoint("请选择电控箱位置");
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        FamilySymbol boxSymbol = null;
+                        AnnotationSymbol boxNote = null;
+                        boxSymbol = NoteSymbol(doc, "潜水泵电控箱标注");
+                        boxSymbol.Activate();
+                        boxNote = doc.Create.NewFamilyInstance(pt2, boxSymbol, doc.ActiveView) as AnnotationSymbol;
+                        boxNote.addLeader();
+                        IList<Leader> leadList = boxNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = pt1;
+                    }
+
+                    if (name == "吊环标注")
+                    {
+                        TagFamilyLoad(doc, "吊环标注");
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new GenericSignSelectionFilter(), "请选择吊环十字符号");
+                        AnnotationSymbol ring = doc.GetElement(reference) as AnnotationSymbol;
+                        LocationPoint ringLocation = ring.Location as LocationPoint;
+
+                        Reference reference1 = sel.PickObject(ObjectType.Element, new GenericSignSelectionFilter(), "请选择吊环十字符号");
+                        AnnotationSymbol ring1 = doc.GetElement(reference1) as AnnotationSymbol;
+                        LocationPoint ringLocation1 = ring1.Location as LocationPoint;
+
+                        XYZ pt1 = ringLocation.Point;
+                        XYZ pt2 = ringLocation1.Point;
+                        XYZ pt3 = sel.PickPoint("请选择标注创建位置");
+
+                        FamilySymbol ringSymbol = null;
+                        AnnotationSymbol ringNote = null;
+                        ringSymbol = NoteSymbol(doc, "吊环标注");
+                        ringSymbol.Activate();
+                        ringNote = doc.Create.NewFamilyInstance(pt3, ringSymbol, doc.ActiveView) as AnnotationSymbol;
+                        ringNote.addLeader();
+                        ringNote.addLeader();
+                        IList<Leader> leadList = ringNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = pt1;
+                        Leader lead1 = leadList[1];
+                        lead1.End = pt2;
+                    }
+
+                    if (name == "侧壁预埋板标注")
+                    {
+                        TagFamilyLoad(doc, "侧壁预埋钢板标注");
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new DetailineSelectionFilter(), "请选择预埋钢板线");
+                        DetailLine steel = doc.GetElement(reference) as DetailLine;
+                        LocationCurve steelLocationCurve = steel.Location as LocationCurve;
+                        string steelLength = steel.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH).AsValueString();
+
+                        XYZ pickPoint = reference.GlobalPoint;
+                        XYZ projectPickPoint = steelLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        FamilySymbol steelSymbol = null;
+                        AnnotationSymbol steelNote = null;
+                        steelSymbol = NoteSymbol(doc, "侧壁预埋钢板标注");
+                        steelSymbol.Activate();
+                        steelNote = doc.Create.NewFamilyInstance(pt2, steelSymbol, doc.ActiveView) as AnnotationSymbol;
+                        steelNote.addLeader();
+                        IList<Leader> leadList = steelNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        steelNote.LookupParameter("下行文字").Set(steelLength.ToString()+"X100X10mm钢板");
+                    }
+
+                    if (name == "消火栓箱留洞标注")
+                    {
+                        TagFamilyLoad(doc, "消火栓预留洞标注");
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new MechanicalSelectionFilter(), "请选择消火栓箱");
+                        FamilyInstance box = doc.GetElement(reference) as FamilyInstance;
+                        LocationPoint boxLocation = box.Location as LocationPoint;
+
+                        XYZ pt1 = boxLocation.Point;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        FamilySymbol boxSymbol = null;
+                        AnnotationSymbol boxNote = null;
+                        boxSymbol = NoteSymbol(doc, "消火栓预留洞标注");
+                        boxSymbol.Activate();
+                        boxNote = doc.Create.NewFamilyInstance(pt2, boxSymbol, doc.ActiveView) as AnnotationSymbol;
+                        boxNote.addLeader();
+                        IList<Leader> leadList = boxNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = pt1;
+                    }
+
+                    if (name == "管道基础留洞")
+                    {
+                        TagFamilyLoad(doc, "管道基础留洞标注");
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
+                        Pipe pipe = doc.GetElement(reference) as Pipe;
+                        LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+
+                        XYZ pickPoint = reference.GlobalPoint;
+                        XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        double d = UnitUtils.Convert(projectPickPoint.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_METERS);
+
+                        FamilySymbol baseHoleSymbol = null;
+                        AnnotationSymbol baseHoleNote = null;
+                        baseHoleSymbol = NoteSymbol(doc, "管道基础留洞标注");
+                        baseHoleSymbol.Activate();
+                        baseHoleNote = doc.Create.NewFamilyInstance(pt2, baseHoleSymbol, doc.ActiveView) as AnnotationSymbol;
+                        baseHoleNote.addLeader();
+                        IList<Leader> leadList = baseHoleNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        baseHoleNote.LookupParameter("留洞尺寸").Set(BaseHoleSize(pipeSize));
+                        baseHoleNote.LookupParameter("洞中心标高").Set(d.ToString("0.000"));
+                    }
+
+                    if (name == "管道预留洞")
+                    {
+                        TagFamilyLoad(doc, "管道预留洞标注");
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
+                        Pipe pipe = doc.GetElement(reference) as Pipe;
+                        LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+
+                        XYZ pickPoint = reference.GlobalPoint;
+                        XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        double d = UnitUtils.Convert(projectPickPoint.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_METERS);
+
+                        FamilySymbol baseHoleSymbol = null;
+                        AnnotationSymbol baseHoleNote = null;
+                        baseHoleSymbol = NoteSymbol(doc, "管道预留洞标注");
+                        baseHoleSymbol.Activate();
+                        baseHoleNote = doc.Create.NewFamilyInstance(pt2, baseHoleSymbol, doc.ActiveView) as AnnotationSymbol;
+                        baseHoleNote.addLeader();
+                        IList<Leader> leadList = baseHoleNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        baseHoleNote.LookupParameter("留洞尺寸").Set(BaseHoleSize(pipeSize));
+                        baseHoleNote.LookupParameter("洞中心标高").Set(d.ToString("0.000"));
+                    }
+
+                    if (name == "管道楼板留洞方形")
+                    {
+                        TagFamilyLoad(doc, "管道楼板留洞标注");
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
+                        Pipe pipe = doc.GetElement(reference) as Pipe;
+                        LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+
+                        XYZ pickPoint = reference.GlobalPoint;
+                        XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        double d = UnitUtils.Convert(projectPickPoint.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_METERS);
+
+                        FamilySymbol baseHoleSymbol = null;
+                        AnnotationSymbol baseHoleNote = null;
+                        baseHoleSymbol = NoteSymbol(doc, "管道楼板留洞标注");
+                        baseHoleSymbol.Activate();
+                        baseHoleNote = doc.Create.NewFamilyInstance(pt2, baseHoleSymbol, doc.ActiveView) as AnnotationSymbol;
+                        baseHoleNote.addLeader();
+                        IList<Leader> leadList = baseHoleNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        baseHoleNote.LookupParameter("留洞尺寸").Set(BaseHoleSize(pipeSize));
+                    }
+
+                    if (name == "管道楼板留洞圆形")
+                    {
+                        TagFamilyLoad(doc, "管道楼板留洞标注");
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
+                        Pipe pipe = doc.GetElement(reference) as Pipe;
+                        LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+
+                        XYZ pickPoint = reference.GlobalPoint;
+                        XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        double d = UnitUtils.Convert(projectPickPoint.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_METERS);
+
+                        FamilySymbol baseHoleSymbol = null;
+                        AnnotationSymbol baseHoleNote = null;
+                        baseHoleSymbol = NoteSymbol(doc, "管道楼板留洞标注");
+                        baseHoleSymbol.Activate();
+                        baseHoleNote = doc.Create.NewFamilyInstance(pt2, baseHoleSymbol, doc.ActiveView) as AnnotationSymbol;
+                        baseHoleNote.addLeader();
+                        IList<Leader> leadList = baseHoleNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        baseHoleNote.LookupParameter("留洞尺寸").Set(FloorHoleSize(pipeSize));
+                    }
+
+                    trans.Commit();
+                }
+
+                CreatCommonNote(doc, uidoc,name);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool CreatManHoleNote(Document doc, UIDocument uidoc)//创建人孔标注
+        {
+            try
+            {
+                using (Transaction trans = new Transaction(doc, "创建人孔标注"))
+                {
+                    trans.Start();
+
+                    TagFamilyLoad(doc, "检修孔标注");
+                    Selection sel = uidoc.Selection;
+                    Reference reference = sel.PickObject(ObjectType.Element, new GenericModelSelectionFilter(), "请选择人孔");
+                    FamilyInstance manHole = doc.GetElement(reference) as FamilyInstance;
+                    LocationPoint manHoleLocation = manHole.Location as LocationPoint;
+                    string manHoleSize = manHole.LookupParameter("人孔半径").AsValueString();
+                    double manHoleDN = double.Parse(manHoleSize)*2;
+
+                    XYZ pt1 = manHoleLocation.Point;
+                    XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                        FamilySymbol manHoleSymbol = null;
+                        AnnotationSymbol manHoleNote = null;
+                        manHoleSymbol = NoteSymbol(doc, "检修孔标注");
+                        manHoleSymbol.Activate();
+                        manHoleNote = doc.Create.NewFamilyInstance(pt2, manHoleSymbol, doc.ActiveView) as AnnotationSymbol;
+                        manHoleNote.addLeader();
+                        IList<Leader> leadList = manHoleNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = pt1;
+                        manHoleNote.LookupParameter("上行文字").Set("Φ"+manHoleDN.ToString()+" 检修孔");                              
+
+                    trans.Commit();
+                }
+
+                CreatManHoleNote(doc, uidoc);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool CreatVentPipeNote(Document doc, UIDocument uidoc)
+        {
+            try
+            {
+                using (Transaction trans = new Transaction(doc, "创建通气管标注"))
+                {
+                    trans.Start();
+
+                    TagFamilyLoad(doc, "通气管标注");
+                    Selection sel = uidoc.Selection;
+                    Reference reference = sel.PickObject(ObjectType.Element, new MechanicalSelectionFilter(), "请选择通气管");
+                    FamilyInstance ventPipe = doc.GetElement(reference) as FamilyInstance;
+                    LocationPoint ventPipeLocation = ventPipe.Location as LocationPoint;
+                    string ventPipeHeight =ventPipe.LookupParameter("通气管顶部高度").AsValueString();
+                    double ventHeight=double.Parse(ventPipeHeight); 
+
+                    XYZ pt1 = ventPipeLocation.Point;
+                    XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                    if (ventHeight==900 || ventHeight == 1400)
+                    {
+                        FamilySymbol ventSymbol = null;
+                        AnnotationSymbol ventNote = null;
+                        ventSymbol = NoteSymbol(doc, "通气管标注");
+                        ventSymbol.Activate();
+                        ventNote = doc.Create.NewFamilyInstance(pt2, ventSymbol, doc.ActiveView) as AnnotationSymbol;
+                        ventNote.addLeader();
+                        IList<Leader> leadList = ventNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = pt1;
+                        ventNote.LookupParameter("上行文字").Set("通气管DN200 高出池顶"+ventPipeHeight + "mm");
+                        ventNote.LookupParameter("下行文字").Set("详见02S403,98");
+                    }
+
+                    if (ventHeight != 900 && ventHeight != 1400)
+                    {
+                        double d = UnitUtils.Convert(pt1.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS);
+
+                        FamilySymbol ventSymbol = null;
+                        AnnotationSymbol ventNote = null;
+                        ventSymbol = NoteSymbol(doc, "通气管标注");
+                        ventSymbol.Activate();
+                        ventNote = doc.Create.NewFamilyInstance(pt2, ventSymbol, doc.ActiveView) as AnnotationSymbol;
+                        ventNote.addLeader();
+                        IList<Leader> leadList = ventNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = pt1;
+
+                        double ventRealHeight = ventHeight - (d + 200) * (-1);                  
+                        if (TwoValueEqual(ventRealHeight,900))
+                        {                          
+                            ventNote.LookupParameter("上行文字").Set("通气管DN200 高出覆土900mm");
+                            ventNote.LookupParameter("下行文字").Set("详见02S403,98");
+                        }
+
+                        if (TwoValueEqual(ventRealHeight, 1400))
+                        {
+                            ventNote.LookupParameter("上行文字").Set("通气管DN200 高出覆土1400mm");
+                            ventNote.LookupParameter("下行文字").Set("详见02S403,98");
+                        }
+                    }
+
+                    trans.Commit();
+                }
+
+                CreatVentPipeNote(doc, uidoc);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool CreatSleeveNote(Document doc, UIDocument uidoc, string sleeveName)
+        {
+            try
+            {
+                using (Transaction trans = new Transaction(doc, "创建套管标注"))
+                {
+                    trans.Start();
+
+                    TagFamilyLoad(doc, "刚性防水套管标注");
+                    TagFamilyLoad(doc, "柔性防水套管标注");
+                    Selection sel = uidoc.Selection;
+                    Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
+                    Pipe pipe = doc.GetElement(reference) as Pipe;
+                    LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+                    string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+
+                    XYZ pickPoint = reference.GlobalPoint;
+                    XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                    XYZ pt2 = sel.PickPoint("请选择标注创建位置");                
+
+                    double d = UnitUtils.Convert(projectPickPoint.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_METERS);
+
+                    if (sleeveName == "刚性防水套管")
+                    {
+                        FamilySymbol sleeveSymbol = null;
+                        AnnotationSymbol sleeveNote = null;
+                        sleeveSymbol = NoteSymbol(doc, "刚性防水套管标注");
+                        sleeveSymbol.Activate();
+                        sleeveNote = doc.Create.NewFamilyInstance(pt2, sleeveSymbol, doc.ActiveView) as AnnotationSymbol;
+                        sleeveNote.addLeader();
+                        IList<Leader> leadList = sleeveNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        sleeveNote.LookupParameter("上行文字").Set("预埋刚性防水套管(A)型D3=" + SleeveSize(pipeSize, 0) + "mm");
+                        sleeveNote.LookupParameter("下行文字").Set("套管中心标高"+d.ToString("0.000"));
+                    }
+
+                    if (sleeveName == "柔性防水套管")
+                    {
+                        FamilySymbol sleeveSymbol = null;
+                        AnnotationSymbol sleeveNote = null;
+                        sleeveSymbol = NoteSymbol(doc, "柔性防水套管标注");
+                        sleeveSymbol.Activate();
+                        sleeveNote = doc.Create.NewFamilyInstance(pt2, sleeveSymbol, doc.ActiveView) as AnnotationSymbol;
+                        sleeveNote.addLeader();
+                        IList<Leader> leadList = sleeveNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        sleeveNote.LookupParameter("上行文字").Set("预埋柔性防水套管(A)型D2=" + SleeveSize(pipeSize, 1) + "mm");
+                        sleeveNote.LookupParameter("下行文字").Set("套管中心标高" + d.ToString("0.000"));
+                    }
+
+                    trans.Commit();
+                }
+
+                CreatSleeveNote(doc, uidoc, sleeveName);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
+        }
         public bool CreatPipeTagWithLine(Document doc, UIDocument uidoc, string tagName)
         {
             try
             {
-                TagFamilyLoad(doc, "立管编号");
-                Selection sel = uidoc.Selection;
-                Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter());
-                Pipe pipe = doc.GetElement(reference) as Pipe;
-                LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-
-                XYZ pickPoint = reference.GlobalPoint;
-                XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
-
-                IList<Element> pipetagscollect = new FilteredElementCollector(doc).OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_PipeTags).ToElements();
-                FamilySymbol pipeTag = null;
-                Family pipeCodeTag = null;
-                foreach (var item in pipetagscollect)
+                using (Transaction trans = new Transaction(doc, "创建立管标注"))
                 {
-                    FamilySymbol pipetag = item as FamilySymbol;
-                    Family ftag = pipetag.Family;
-                    if (ftag.Name.Contains(tagName) && ftag.Name.Contains("给排水"))
+                    trans.Start();
+                    TagFamilyLoad(doc, "立管编号");
+                    Selection sel = uidoc.Selection;
+                    Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter());
+                    Pipe pipe = doc.GetElement(reference) as Pipe;
+                    LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+
+                    XYZ pickPoint = reference.GlobalPoint;
+                    XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+
+                    IList<Element> pipetagscollect = new FilteredElementCollector(doc).OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_PipeTags).ToElements();
+                    FamilySymbol pipeTag = null;
+                    Family pipeCodeTag = null;
+                    foreach (var item in pipetagscollect)
                     {
-                        pipeTag = pipetag;
-                        pipeCodeTag = ftag;
-                        break;
+                        FamilySymbol pipetag = item as FamilySymbol;
+                        Family ftag = pipetag.Family;
+                        if (ftag.Name.Contains(tagName) && ftag.Name.Contains("给排水"))
+                        {
+                            pipeTag = pipetag;
+                            pipeCodeTag = ftag;
+                            break;
+                        }
                     }
+
+                    Reference pipeRef = new Reference(pipe);
+                    TagMode tageMode = TagMode.TM_ADDBY_CATEGORY;
+                    TagOrientation tagOri = TagOrientation.Horizontal;
+                    IndependentTag tag = IndependentTag.Create(doc, uidoc.ActiveView.Id, pipeRef, true, tageMode, tagOri, projectPickPoint);
+                    tag.ChangeTypeId(pipeTag.Id);
+                    tag.LeaderEndCondition = LeaderEndCondition.Free;
+
+                    if (uidoc.ActiveView is View3D)
+                    {
+                        tag.LeaderEnd = projectPickPoint;
+                        tag.LeaderElbow = projectPickPoint + new XYZ(100 / 304.8, 300 / 304.8, 200 / 304.8);
+                        tag.TagHeadPosition = projectPickPoint + new XYZ(100 / 304.8, 469 / 304.8, 250 / 304.8);
+                    }
+                    else
+                    {
+                        tag.LeaderEnd = projectPickPoint;
+                        tag.LeaderElbow = projectPickPoint + new XYZ(800 / 304.8, 800 / 304.8, 0);
+                        tag.TagHeadPosition = projectPickPoint + new XYZ(1019 / 304.8, 1019 / 304.8, 0);
+                    }
+                    trans.Commit();
                 }
 
-                Reference pipeRef = new Reference(pipe);
-                TagMode tageMode = TagMode.TM_ADDBY_CATEGORY;
-                TagOrientation tagOri = TagOrientation.Horizontal;
-                IndependentTag tag = IndependentTag.Create(doc, uidoc.ActiveView.Id, pipeRef, true, tageMode, tagOri, projectPickPoint);
-                tag.ChangeTypeId(pipeTag.Id);
-                tag.LeaderEndCondition = LeaderEndCondition.Free;
-
-                if (uidoc.ActiveView is View3D)
-                {
-                    tag.LeaderEnd = projectPickPoint;
-                    tag.LeaderElbow = projectPickPoint + new XYZ(100 / 304.8, 300 / 304.8, 200 / 304.8);
-                    tag.TagHeadPosition = projectPickPoint + new XYZ(100 / 304.8, 469 / 304.8, 250 / 304.8);
-                }
-                else
-                {
-                    tag.LeaderEnd = projectPickPoint;
-                    tag.LeaderElbow = projectPickPoint + new XYZ(800 / 304.8, 800 / 304.8, 0);
-                    tag.TagHeadPosition = projectPickPoint + new XYZ(1019 / 304.8, 1019 / 304.8, 0);
-                }
-
+                CreatPipeTagWithLine(doc, uidoc, tagName);
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
@@ -434,6 +924,70 @@ namespace FFETOOLS
             return true;
 
         }
+        public bool CreatTextWithLineMethod(Document doc, UIDocument uidoc)
+        {
+            try
+            {
+                TextNoteType textNoteType = null;
+                IList<TextNoteType> noteTypes = CollectorHelper.TCollector<TextNoteType>(doc);
+                textNoteType = noteTypes.FirstOrDefault(x => x.Name.Contains("给排水") && x.Name.Contains("带线"));
+
+                if (textNoteType == null)
+                {
+                    textNoteType = CreatTextWithLineType(doc);
+                }
+
+
+                Selection sel = uidoc.Selection;
+                XYZ pt1 = sel.PickPoint("请选择带线文字箭头位置");
+                XYZ pt2 = sel.PickPoint("请选择带线文字创建位置");
+
+                //创建文字注释
+                TextNote note = TextNote.Create(doc, doc.ActiveView.Id, pt2, CreatPipeTag.mainfrm.TextInputCmb.Text, textNoteType.Id);
+                note.AddLeader(TextNoteLeaderTypes.TNLT_STRAIGHT_L); //引线方向，一共四种，左直，右直，左弧，右弧
+                note.LeaderLeftAttachment = LeaderAtachement.TopLine;//引线的位置，top代表引线位置在第一行文本的位置
+
+                //设置文字为上标
+                FormattedText formatText = note.GetFormattedText();
+                formatText.SetSuperscriptStatus(true);
+                note.SetFormattedText(formatText);
+
+                //设置箭头终点
+                IList<Leader> leaderList = note.GetLeaders();
+                foreach (Leader leader in leaderList)
+                {
+                    leader.End = pt1;
+                }
+
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
+
+        }
+        public TextNoteType CreatTextWithLineType(Document doc)
+        {
+            IList<TextNoteType> noteTypes = CollectorHelper.TCollector<TextNoteType>(doc);
+            TextNoteType existType = noteTypes.FirstOrDefault(x => x.Name.Contains("给排水"));
+
+            TextNoteType duplicatedtextType = null;
+            duplicatedtextType = existType.Duplicate("给排水-带线文字") as TextNoteType;
+
+            duplicatedtextType.LookupParameter("文字大小").SetValueString("5.5mm");
+            duplicatedtextType.LookupParameter("宽度系数").Set(0.70);
+            duplicatedtextType.LookupParameter("文字字体").Set("Bahnschrift SemiLight");
+            duplicatedtextType.LookupParameter("背景").Set(1);
+            duplicatedtextType.LookupParameter("线宽").Set(1);
+            duplicatedtextType.LookupParameter("下划线").Set(1);
+            duplicatedtextType.LookupParameter("粗体").Set(0);
+            duplicatedtextType.LookupParameter("斜体").Set(0);
+            duplicatedtextType.LookupParameter("引线/边界偏移量").Set(0);
+            duplicatedtextType.LookupParameter("引线箭头").Set(new ElementId(-1));//箭头设置为无的办法
+
+            return duplicatedtextType;
+        }
         public string ConnectorDirection(Pipe pipe)
         {
             string direction = null;
@@ -478,6 +1032,404 @@ namespace FFETOOLS
             {
                 doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_注释符号_" + categoryName + ".rfa");
             }
+        }
+        public string SleeveSize(string nominal_Diameter, int num) //套管D3和D2值
+        {
+            string sleeveSize = "114";
+
+            if (num == 0)
+            {
+                if (nominal_Diameter == "15")
+                {
+                    sleeveSize = "114";
+                }
+                else if (nominal_Diameter == "20")
+                {
+                    sleeveSize = "114";
+                }
+                else if (nominal_Diameter == "25")
+                {
+                    sleeveSize = "114";
+                }
+                else if (nominal_Diameter == "32")
+                {
+                    sleeveSize = "114";
+                }
+                else if (nominal_Diameter == "40")
+                {
+                    sleeveSize = "114";
+                }
+                else if (nominal_Diameter == "50")
+                {
+                    sleeveSize = "114";
+                }
+                else if (nominal_Diameter == "65")
+                {
+                    sleeveSize = "121";
+                }
+                else if (nominal_Diameter == "80")
+                {
+                    sleeveSize = "140";
+                }
+                else if (nominal_Diameter == "100")
+                {
+                    sleeveSize = "159";
+                }
+                else if (nominal_Diameter == "125")
+                {
+                    sleeveSize = "180";
+                }
+                else if (nominal_Diameter == "150")
+                {
+                    sleeveSize = "219";
+                }
+                else if (nominal_Diameter == "200")
+                {
+                    sleeveSize = "273";
+                }
+                else if (nominal_Diameter == "250")
+                {
+                    sleeveSize = "325";
+                }
+                else if (nominal_Diameter == "300")
+                {
+                    sleeveSize = "377";
+                }
+                else if (nominal_Diameter == "350")
+                {
+                    sleeveSize = "426";
+                }
+                else if (nominal_Diameter == "400")
+                {
+                    sleeveSize = "480";
+                }
+                else if (nominal_Diameter == "450")
+                {
+                    sleeveSize = "530";
+                }
+                else if (nominal_Diameter == "500")
+                {
+                    sleeveSize = "590";
+                }
+                else if (nominal_Diameter == "600")
+                {
+                    sleeveSize = "690";
+                }
+                else if (nominal_Diameter == "700")
+                {
+                    sleeveSize = "790";
+                }
+                else if (nominal_Diameter == "800")
+                {
+                    sleeveSize = "880";
+                }
+                else if (nominal_Diameter == "900")
+                {
+                    sleeveSize = "980";
+                }
+                else if (nominal_Diameter == "1000")
+                {
+                    sleeveSize = "1080";
+                }
+            }
+
+            if (num == 1)
+            {
+                if (nominal_Diameter == "15")
+                {
+                    sleeveSize = "95";
+                }
+                else if (nominal_Diameter == "20")
+                {
+                    sleeveSize = "95";
+                }
+                else if (nominal_Diameter == "25")
+                {
+                    sleeveSize = "95";
+                }
+                else if (nominal_Diameter == "32")
+                {
+                    sleeveSize = "95";
+                }
+                else if (nominal_Diameter == "40")
+                {
+                    sleeveSize = "95";
+                }
+                else if (nominal_Diameter == "50")
+                {
+                    sleeveSize = "95";
+                }
+                else if (nominal_Diameter == "65")
+                {
+                    sleeveSize = "114";
+                }
+                else if (nominal_Diameter == "80")
+                {
+                    sleeveSize = "127";
+                }
+                else if (nominal_Diameter == "100")
+                {
+                    sleeveSize = "146";
+                }
+                else if (nominal_Diameter == "125")
+                {
+                    sleeveSize = "180";
+                }
+                else if (nominal_Diameter == "150")
+                {
+                    sleeveSize = "203";
+                }
+                else if (nominal_Diameter == "200")
+                {
+                    sleeveSize = "265";
+                }
+                else if (nominal_Diameter == "250")
+                {
+                    sleeveSize = "325";
+                }
+                else if (nominal_Diameter == "300")
+                {
+                    sleeveSize = "377";
+                }
+                else if (nominal_Diameter == "350")
+                {
+                    sleeveSize = "426";
+                }
+                else if (nominal_Diameter == "400")
+                {
+                    sleeveSize = "480";
+                }
+                else if (nominal_Diameter == "450")
+                {
+                    sleeveSize = "530";
+                }
+                else if (nominal_Diameter == "500")
+                {
+                    sleeveSize = "585";
+                }
+                else if (nominal_Diameter == "600")
+                {
+                    sleeveSize = "690";
+                }
+                else if (nominal_Diameter == "700")
+                {
+                    sleeveSize = "780";
+                }
+                else if (nominal_Diameter == "800")
+                {
+                    sleeveSize = "880";
+                }
+                else if (nominal_Diameter == "900")
+                {
+                    sleeveSize = "980";
+                }
+                else if (nominal_Diameter == "1000")
+                {
+                    sleeveSize = "1080";
+                }
+            }
+
+            return sleeveSize;
+        }
+        public string BaseHoleSize(string nominal_Diameter) //基础留洞尺寸
+        {
+            string baseHoleSize = "100X100";
+
+                if (nominal_Diameter == "15")
+                {
+                    baseHoleSize = "50X50";
+                }
+                else if (nominal_Diameter == "20")
+                {
+                    baseHoleSize = "50X50";
+                }
+                else if (nominal_Diameter == "25")
+                {
+                    baseHoleSize = "50X50";
+                }
+                else if (nominal_Diameter == "32")
+                {
+                    baseHoleSize = "50X50";
+                }
+                else if (nominal_Diameter == "40")
+                {
+                    baseHoleSize = "100X100";
+                }
+                else if (nominal_Diameter == "50")
+                {
+                    baseHoleSize = "100X100";
+                }
+                else if (nominal_Diameter == "65")
+                {
+                    baseHoleSize = "150X150";
+                }
+                else if (nominal_Diameter == "80")
+                {
+                    baseHoleSize = "150X150";
+                }
+                else if (nominal_Diameter == "100")
+                {
+                    baseHoleSize = "200X200";
+                }
+                else if (nominal_Diameter == "125")
+                {
+                    baseHoleSize = "200X200";
+                }
+                else if (nominal_Diameter == "150")
+                {
+                    baseHoleSize = "250X250";
+                }
+                else if (nominal_Diameter == "200")
+                {
+                    baseHoleSize = "300X300";
+                }
+                else if (nominal_Diameter == "250")
+                {
+                    baseHoleSize = "350X350";
+                }
+                else if (nominal_Diameter == "300")
+                {
+                    baseHoleSize = "400X400";
+                }
+                else if (nominal_Diameter == "350")
+                {
+                    baseHoleSize = "450X450";
+                }
+                else if (nominal_Diameter == "400")
+                {
+                    baseHoleSize = "500X500";
+                }
+                else if (nominal_Diameter == "450")
+                {
+                    baseHoleSize = "550X550";
+                }
+                else if (nominal_Diameter == "500")
+                {
+                    baseHoleSize = "600X600";
+                }
+                else if (nominal_Diameter == "600")
+                {
+                    baseHoleSize = "700X700";
+                }
+                else if (nominal_Diameter == "700")
+                {
+                    baseHoleSize = "800X800";
+                }             
+          
+            return baseHoleSize;
+        }
+        public string FloorHoleSize(string nominal_Diameter) //楼板圆形留洞尺寸
+        {
+            string floorHoleSize = "Φ100";
+
+            if (nominal_Diameter == "15")
+            {
+                floorHoleSize = "Φ50";
+            }
+            else if (nominal_Diameter == "20")
+            {
+                floorHoleSize = "Φ50";
+            }
+            else if (nominal_Diameter == "25")
+            {
+                floorHoleSize = "Φ50";
+            }
+            else if (nominal_Diameter == "32")
+            {
+                floorHoleSize = "Φ50";
+            }
+            else if (nominal_Diameter == "40")
+            {
+                floorHoleSize = "Φ100";
+            }
+            else if (nominal_Diameter == "50")
+            {
+                floorHoleSize = "Φ100";
+            }
+            else if (nominal_Diameter == "65")
+            {
+                floorHoleSize = "Φ150";
+            }
+            else if (nominal_Diameter == "80")
+            {
+                floorHoleSize = "Φ150";
+            }
+            else if (nominal_Diameter == "100")
+            {
+                floorHoleSize = "Φ200";
+            }
+            else if (nominal_Diameter == "125")
+            {
+                floorHoleSize = "Φ200";
+            }
+            else if (nominal_Diameter == "150")
+            {
+                floorHoleSize = "Φ250";
+            }
+            else if (nominal_Diameter == "200")
+            {
+                floorHoleSize = "Φ300";
+            }
+            else if (nominal_Diameter == "250")
+            {
+                floorHoleSize = "Φ350";
+            }
+            else if (nominal_Diameter == "300")
+            {
+                floorHoleSize = "Φ400";
+            }
+            else if (nominal_Diameter == "350")
+            {
+                floorHoleSize = "Φ450";
+            }
+            else if (nominal_Diameter == "400")
+            {
+                floorHoleSize = "Φ500";
+            }
+            else if (nominal_Diameter == "450")
+            {
+                floorHoleSize = "Φ550";
+            }
+            else if (nominal_Diameter == "500")
+            {
+                floorHoleSize = "Φ600";
+            }
+            else if (nominal_Diameter == "600")
+            {
+                floorHoleSize = "Φ700";
+            }
+            else if (nominal_Diameter == "700")
+            {
+                floorHoleSize = "Φ800";
+            }
+
+            return floorHoleSize;
+        }
+        public FamilySymbol NoteSymbol(Document doc, string symbolName)//获取注释类型
+        {
+            FamilySymbol symbol = null;
+            FilteredElementCollector sectionCollector = new FilteredElementCollector(doc);
+            sectionCollector.OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_GenericAnnotation);
+
+            IList<Element> sections = sectionCollector.ToElements();
+            foreach (FamilySymbol item in sections)
+            {
+                if (item.Family.Name.Contains("给排水") && item.Family.Name.Contains(symbolName))
+                {
+                    symbol = item;
+                    break;
+                }
+            }
+            return symbol;
+        }
+        public bool TwoValueEqual(double value1, double value2)
+        {
+            bool equal = false;
+            if (Math.Abs(value2-value1)<0.1)
+            {
+              equal = true;
+            }
+            return equal;
         }
     }
     public static class Helper
