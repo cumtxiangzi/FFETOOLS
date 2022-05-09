@@ -255,7 +255,7 @@ namespace FFETOOLS
     /// <summary>
     /// A failure preprocessor to hide the warning about duplicate types being pasted.
     /// </summary>
-    class HidePasteDuplicateTypesPreprocessor : IFailuresPreprocessor
+    public class HidePasteDuplicateTypesPreprocessor : IFailuresPreprocessor
     {
         #region IFailuresPreprocessor Members
 
@@ -284,13 +284,17 @@ namespace FFETOOLS
                 }
                 else if (failure.GetFailureDefinitionId() == BuiltInFailures.EditingFailures.ElementsDeleted)
                 {
-                   failuresAccessor.DeleteWarning(failure);
+                    failuresAccessor.DeleteWarning(failure);
                 }
                 else if (failure.GetFailureDefinitionId() == BuiltInFailures.EditingFailures.CannotEditElements)
                 {
                     failuresAccessor.DeleteWarning(failure);
                 }
                 else if (failure.GetFailureDefinitionId() == BuiltInFailures.EditingFailures.OwnedByOther)
+                {
+                    failuresAccessor.DeleteWarning(failure);
+                }
+                else if (failure.GetFailureDefinitionId() == BuiltInFailures.GeneralFailures.DuplicateValue)//标记值重复错误清除
                 {
                     failuresAccessor.DeleteWarning(failure);
                 }

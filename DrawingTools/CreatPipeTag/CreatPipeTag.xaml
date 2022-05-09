@@ -67,7 +67,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button4" Content="进出户编号"  Grid.Column="2" Grid.Row="1" Margin="12,10,12,10" Click="Button4_Click" Cursor="Hand">
+                <Button x:Name="Button4" Content="进出户编号"  Grid.Column="1" Grid.Row="1" Margin="12,10,12,10" Click="Button4_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -89,7 +89,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button6" Content="管道基础洞"  Grid.Column="0" Grid.Row="1" Margin="12,10,12,10" Click="Button6_Click" Cursor="Hand">
+                <Button x:Name="Button6" Content="管道基础洞"  Grid.Column="3" Grid.Row="1" Margin="12,10,12,10" Click="Button6_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -101,7 +101,7 @@
                 </Button>
 
               
-                <Button x:Name="Button9" Content="标 高 标 注"  Grid.Column="3" Grid.Row="1" Margin="12,10,12,10" Click="Button9_Click" Cursor="Hand">
+                <Button x:Name="Button9" Content="标 高 标 注"  Grid.Column="2" Grid.Row="1" Margin="12,10,12,10" Click="Button9_Click" Cursor="Hand">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -112,7 +112,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button x:Name="Button10" Content="管道附件标注"  Grid.Column="1" Grid.Row="1" Margin="12,10,12,10" Click="Button10_Click" Cursor="Hand" >
+                <Button x:Name="Button10" Content="管道附件标注"  Grid.Column="0" Grid.Row="1" Margin="12,10,12,10" Click="Button10_Click" Cursor="Hand" >
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -382,7 +382,8 @@
 
                 </Grid>
 
-                <ComboBox x:Name="LanguageCmb" Grid.Column="2" Grid.Row="1" Margin="12,10,12,10" FontSize="12" VerticalContentAlignment="Center"/>
+                <ComboBox x:Name="LanguageCmb" Grid.Column="2" Grid.Row="1" Margin="12,10,12,10" FontSize="12" 
+                          VerticalContentAlignment="Center" SelectionChanged="LanguageCmb_SelectionChanged"/>
 
                 <Button x:Name="OKButton"  Content="确 定"  Grid.Column="4" Grid.Row="1" Margin="12,10,12,10" Click="OKButton_Click"  Cursor="Hand">
                     <Button.Template >

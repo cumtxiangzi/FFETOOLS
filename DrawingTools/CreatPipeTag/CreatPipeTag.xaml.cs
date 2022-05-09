@@ -21,15 +21,19 @@ namespace FFETOOLS
     public partial class CreatPipeTagForm : Window
     {
         public int clicked = 0;
-        List<string> TextWithLineList = new List<string>
+        List<string> TextWithLineList = new List<string>()
         {"接风机(613FA18)循环水进口","接润滑装置(613LU10)循环水进口","接选粉机(416SP17)减速机循环水进口","接辊压机(216RP04)辊轴循环水进口","接辊压机(416RP04)轴承座循环水进口",
             "接辊压机稀油站(416LU10)循环水进口","预留洞400X300","楼板留洞Φ100","楼板及屋顶留洞Φ150",
-            "池底预埋钢板1000X950X20mm","工字钢", "压力传感器(XP1)","温度传感器(XT3)","爬梯",
+            "池底预埋钢板1000X950X20mm","工字钢", "压力传感器(XP1)","温度传感器(XT3)","爬梯","导流墙",
             "人孔","活动栏杆","土建专业设钢盖板","集水坑400X400X400","收水堰","回水台","见详图A","接至水质检测室","接生产给水泵(919PU43)吸水管",
-            "排水至散水","溢流口上方加防雨罩","消防水泵接合器","灭火砂箱","屋顶试验消火栓","洗眼器","楼板贴壁留洞Φ100","接小便器排水管","接大便器排水管"
+            "排水至散水","溢流口上方加防雨罩","消防水泵接合器","灭火砂箱","屋顶试验消火栓","洗眼器","楼板贴壁留洞Φ100","接小便器排水管","接大便器排水管","设备安装后封墙"
         };
 
-        List<string> LanguageList = new List<string>() { "中文","英文","中英文"};
+        List<string> TextWithLineListEN = new List<string>() { "TO INLET OF 216RP07-BEARING", "FROM OUTLET OF 216RP07-BEARING", "TO INLET OF 216LU13-LUBRICATION" ,
+        "TO INLET OF 216RP07-ROLLER","DRAINAGE TO APROLL SLOPE","SEE DETAIL A","SUMP400X400X400","MANHOLE","STEEL COVER SEE CIVIL DRAWING","LADDER",
+        "MOVABLE RAILING","1000X950X20mm STEEL PLATE BE PREFORMED","BUILT WALL AFTER EQUIPMENT INSTALLATION","工-STEEL FOR HOIST","DIVERSION WALL"};
+
+        List<string> LanguageList = new List<string>() { "中文","英文"};
 
         ExecuteEventCreatPipeTag excCreatPipe = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerCreatPipe = null;
@@ -265,6 +269,25 @@ namespace FFETOOLS
             clicked = 100;
             Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
+        }
+
+        private void LanguageCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LanguageCmb.SelectedItem.ToString()=="中文")
+            {
+                TextInputCmb.ItemsSource = TextWithLineList;
+            }
+
+            if (LanguageCmb.SelectedItem.ToString() == "英文")
+            {
+                TextInputCmb.ItemsSource = TextWithLineListEN;
+            }
+
+            if (LanguageCmb.SelectedItem.ToString() == "中英文")
+            {
+                TextInputCmb.ItemsSource = TextWithLineListEN;
+            }
+
         }
     }
 }

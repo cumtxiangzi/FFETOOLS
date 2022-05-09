@@ -931,7 +931,7 @@ namespace FFETOOLS
     public static class IndependentTagHelper
     {
         /// <summary>
-        /// 判断当前视图上的元素是否被标记过
+        /// 判断所有视图上的元素是否被标记过
         /// </summary>
         /// <param name="ele"></param>
         /// <param name="doc"></param>
@@ -940,7 +940,9 @@ namespace FFETOOLS
         {
             var result = false;
 
-            var collector = new FilteredElementCollector(doc, doc.ActiveView.Id);
+            //var collector = new FilteredElementCollector(doc, doc.ActiveView.Id);
+
+            var collector = new FilteredElementCollector(doc);
 
             var independenttags = collector.OfClass(typeof(IndependentTag)).WhereElementIsNotElementType();
 
