@@ -96,6 +96,7 @@
     <Compile Include="CreatDrawing\CreatDrawing.xaml.cs">
       <DependentUpon>CreatDrawing.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CreatSleeveTable.cs" />
     <Compile Include="DesignNote\DesignNoteForm.xaml.cs">
       <DependentUpon>DesignNoteForm.xaml</DependentUpon>
     </Compile>

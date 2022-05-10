@@ -71,6 +71,7 @@ namespace FFETOOLS
             Button21.Content = "刚 性 套 管" + "\n" + "字 母 标 注";
             Button22.Content = "柔 性 套 管" + "\n" + "字 母 标 注";
             Button23.Content = "管 道 楼 板" + "\n" + "留 洞 圆 形";
+            Button26.Content = "  预 留 洞" + "\n" + "字 母 标 注";
 
             excCreatPipe = new ExecuteEventCreatPipeTag();
             eventHandlerCreatPipe = Autodesk.Revit.UI.ExternalEvent.Create(excCreatPipe);
@@ -233,6 +234,24 @@ namespace FFETOOLS
             Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
+        private void Button24_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 24;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+        private void Button25_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 25;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
+        private void Button26_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 26;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             clicked = 100;
@@ -289,5 +308,6 @@ namespace FFETOOLS
             }
 
         }
+    
     }
 }

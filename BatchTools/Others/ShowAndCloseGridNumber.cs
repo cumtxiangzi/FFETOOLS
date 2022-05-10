@@ -89,15 +89,12 @@ namespace FFETOOLS
                 result.Add(p2);
                 result.Add(p3);
                 result.Add(p4);
-
-
             }
             catch
             {
                 System.Windows.Forms.MessageBox.Show("框选轮廓过小，无法判别");
                 result = new List<XYZ>();
             }
-
 
             return result;
         }

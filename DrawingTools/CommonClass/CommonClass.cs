@@ -415,6 +415,11 @@ namespace FFETOOLS
             Type type = typeof(T);
             return new FilteredElementCollector(doc).OfClass(type).Cast<T>().ToList();
         }
+        public static IList<T> TCollector<T>(this Document doc,UIDocument uidoc)
+        {
+            Type type = typeof(T);
+            return new FilteredElementCollector(doc,uidoc.ActiveView.Id).OfClass(type).Cast<T>().ToList();
+        }
     }
     public static class TransactionHelper
     {
@@ -876,6 +881,26 @@ namespace FFETOOLS
         public bool AllowElement(Element e)
         {
             if (e.Category.Name == "常规注释")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool AllowReference(Reference r, XYZ p)
+        {
+            return true;
+        }
+    }
+    //详图项目的过滤条件
+    public class DetailSignSelectionFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element e)
+        {
+            if (e.Category.Name == "详图项目")
             {
                 return true;
             }

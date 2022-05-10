@@ -118,8 +118,7 @@ namespace FFETOOLS
 
                 if (CreatPipeTag.mainfrm.clicked == 9)
                 {
-                    RevitCommandId cmdId = RevitCommandId.LookupPostableCommandId(PostableCommand.SpotElevation);
-                    app.PostCommand(cmdId);
+                    BatchNote(doc, uidoc);
                 }
 
                 if (CreatPipeTag.mainfrm.clicked == 10)
@@ -127,10 +126,9 @@ namespace FFETOOLS
                     CreatPipeAccessoryTagMethod(doc, uidoc);
                 }
 
-
-                if (CreatPipeTag.mainfrm.clicked == 19)
+                if (CreatPipeTag.mainfrm.clicked == 24)
                 {
-
+                    AlignNote(doc, uidoc);
                 }
 
                 if (CreatPipeTag.mainfrm.clicked == 100)
@@ -203,9 +201,24 @@ namespace FFETOOLS
                 CreatCommonNote(doc, uidoc, "消火栓箱留洞标注");
             }
 
+            if (CreatPipeTag.mainfrm.clicked == 19)
+            {
+                CreatSupportSectionNote(doc, uidoc);
+            }
+
             if (CreatPipeTag.mainfrm.clicked == 20)
             {
                 CreatCommonNote(doc, uidoc, "侧壁预埋板标注");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 21)
+            {
+                CreatCommonNote(doc, uidoc, "刚性套管字母标注");
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 22)
+            {
+                CreatCommonNote(doc, uidoc, "柔性套管字母标注");
             }
 
             if (CreatPipeTag.mainfrm.clicked == 23)
@@ -213,8 +226,238 @@ namespace FFETOOLS
                 CreatCommonNote(doc, uidoc, "管道楼板留洞圆形");
             }
 
+            if (CreatPipeTag.mainfrm.clicked ==25)
+            {
+                CreatElevationNote(doc,uidoc);
+            }
+
+            if (CreatPipeTag.mainfrm.clicked == 26)
+            {
+                CreatCommonNote(doc, uidoc, "预留洞字母标注");
+            }
             //tg.Assimilate();
         }
+        public bool CreatElevationNote(Document doc, UIDocument uidoc)//创建标高
+        {
+            try
+            {
+                SpotDimensionType type = null;
+                using (Transaction trans = new Transaction(doc, "给排水标高"))
+                {
+                    trans.Start();
+
+                    type = CollectorHelper.TCollector<SpotDimensionType>(doc).FirstOrDefault(x=> x.Name=="给排水高程"); 
+                    
+                    if (type.get_Parameter(BuiltInParameter.SPOT_TEXT_FROM_LEADER).AsDouble()==3.0/304.8)
+                    {
+                        type.get_Parameter(BuiltInParameter.SPOT_TEXT_FROM_LEADER).Set(3.5/304.8);
+                    }
+                  
+                    trans.Commit();
+                }
+                uidoc.PostRequestForElementTypePlacement(type);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool CreatSupportSectionNote(Document doc, UIDocument uidoc)
+        {
+            try
+            {
+                using (Transaction trans = new Transaction(doc, "创建管道支架剖面标注"))
+                {
+                    trans.Start();
+
+                    Selection sel = uidoc.Selection;
+                    Reference reference = sel.PickObject(ObjectType.Element, new DetailSignSelectionFilter(), "请选择剖面管道");
+                    FamilyInstance ladder = doc.GetElement(reference) as FamilyInstance;
+                    LocationPoint ladderLocation = ladder.Location as LocationPoint;
+                    string dn = (Convert.ToDouble(ladder.LookupParameter("管道半径").AsValueString()) * 2).ToString();
+                    int hasInsulation = ladder.LookupParameter("管道保温").AsInteger();
+
+                    XYZ pt1 = ladderLocation.Point;
+                    XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+
+                    FamilySymbol boxSymbol = null;
+                    AnnotationSymbol boxNote = null;
+
+                    TagFamilyLoad(doc, "支架剖面管道标注");
+                    boxSymbol = NoteSymbol(doc, "支架剖面管道标注");
+                    boxSymbol.Activate();
+                    boxNote = doc.Create.NewFamilyInstance(pt2, boxSymbol, doc.ActiveView) as AnnotationSymbol;
+                    boxNote.addLeader();
+                    IList<Leader> leadList = boxNote.GetLeaders();
+                    Leader lead = leadList[0];
+                    lead.End = pt1;
+
+                    boxNote.LookupParameter("管道类型及尺寸").Set("XJ-DN" + dn);
+                    boxNote.LookupParameter("管道重量").Set(PipeWeight("DN" + dn, hasInsulation));
+
+                    trans.Commit();
+                }
+
+                CreatSupportSectionNote(doc, uidoc);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
+        }
+        public void BatchNote(Document doc, UIDocument uidoc)//批量标注族实例
+        {
+            IList<FamilyInstance> waterInstance = CollectorHelper.TCollector<FamilyInstance>(doc, uidoc);
+
+            foreach (var item in waterInstance)
+            {
+                if (item.Category.Name == "机械设备" && item.Symbol.FamilyName.Contains("给排水") && !item.Symbol.FamilyName.Contains("消防设备")
+                    && !item.Symbol.FamilyName.Contains("通气管") && !item.Symbol.FamilyName.Contains("通风管"))
+                {
+                    if (!item.IsTaged(doc))
+                    {
+                        SetEquipmentCode(doc, item);
+                    }
+                    LocationPoint equipmentLocation = item.Location as LocationPoint;
+                    XYZ projectPickPoint = equipmentLocation.Point;
+
+                    IList<Element> equipmentTagsCollect = new FilteredElementCollector(doc).OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_MechanicalEquipmentTags).ToElements();
+                    FamilySymbol equipmentTag = null;
+                    foreach (var tagItem in equipmentTagsCollect)
+                    {
+                        FamilySymbol etag = tagItem as FamilySymbol;
+                        Family ftag = etag.Family;
+                        if (ftag.Name.Contains("设备编号") && ftag.Name.Contains("给排水"))
+                        {
+                            equipmentTag = etag;
+                            break;
+                        }
+                    }
+
+                    Reference pipeRef = new Reference(item);
+                    TagMode tageMode = TagMode.TM_ADDBY_CATEGORY;
+                    TagOrientation tagOri = TagOrientation.Horizontal;
+                    IndependentTag tag = IndependentTag.Create(doc, uidoc.ActiveView.Id, pipeRef, false, tageMode, tagOri, projectPickPoint);
+                    tag.ChangeTypeId(equipmentTag.Id);
+                }
+
+                if (item.Category.Name == "管道附件" && item.Symbol.FamilyName.Contains("给排水") && !item.Symbol.FamilyName.Contains("给水设备附件")
+                    && !item.Symbol.FamilyName.Contains("排水设备附件") && !item.Symbol.FamilyName.Contains("消防设备"))
+                {
+                    if (!item.IsTaged(doc))
+                    {
+                        SetEquipmentCode(doc, item);
+                    }
+
+                    LocationPoint accessoryLocation = item.Location as LocationPoint;
+                    XYZ projectPickPoint = accessoryLocation.Point;
+
+                    IList<Element> accessoryTagsCollect = new FilteredElementCollector(doc).OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_PipeAccessoryTags).ToElements();
+
+                    FamilySymbol accessoryTag = null;
+                    foreach (var tagItem in accessoryTagsCollect)
+                    {
+                        FamilySymbol etag = tagItem as FamilySymbol;
+                        Family ftag = etag.Family;
+                        if (ftag.Name.Contains("管道附件") && ftag.Name.Contains("给排水"))
+                        {
+                            accessoryTag = etag;
+                            break;
+                        }
+                    }
+
+                    Reference pipeRef = new Reference(item);
+                    TagMode tageMode = TagMode.TM_ADDBY_CATEGORY;
+                    TagOrientation tagOri = TagOrientation.Horizontal;
+                    IndependentTag tag = IndependentTag.Create(doc, uidoc.ActiveView.Id, pipeRef, false, tageMode, tagOri, projectPickPoint);
+                    tag.ChangeTypeId(accessoryTag.Id);
+                }
+            }
+
+        }
+        #region
+        public void AlignNote(Document doc, UIDocument uidoc)//对齐标注未完成可参考align tag代码
+        {
+            PickedBox pickBox = null;
+            pickBox = uidoc.Selection.PickBox(PickBoxStyle.Crossing, "请选择需要处理的轴线");
+
+            XYZ maxPoint = pickBox.Max;
+            XYZ minPoint = pickBox.Min;
+            //极值
+            double minX = Math.Min(minPoint.X, maxPoint.X);
+            double maxX = Math.Max(minPoint.X, maxPoint.X);
+            double minY = Math.Min(minPoint.Y, maxPoint.Y);
+            double maxY = Math.Max(minPoint.Y, maxPoint.Y);
+            List<XYZ> pointList = TwoPointGetPointList(new XYZ(minX, minY, 0), new XYZ(maxX, maxY, 0));
+            List<IndependentTag> tagList = new FilteredElementCollector(doc, uidoc.ActiveGraphicalView.Id).OfClass(typeof(IndependentTag)).OfType<IndependentTag>().ToList();
+
+            foreach (var tag in tagList)
+            {
+                //Curve c = grid.Curve;
+                //if (IsInPolygon(c.GetEndPoint(0).SetZ(), pointList))
+                //{
+                //    TaskDialog.Show("cc","你好");
+                //}           
+            }
+        }
+        public List<XYZ> TwoPointGetPointList(XYZ minPoint, XYZ maxPoint)
+        {
+            List<XYZ> result = new List<XYZ>();
+            try
+            {
+                XYZ p1 = minPoint;
+                XYZ p3 = maxPoint;
+                XYZ p2 = new XYZ(maxPoint.X, minPoint.Y, 0);
+                XYZ p4 = new XYZ(minPoint.X, maxPoint.Y, 0);
+                result.Add(p1);
+                result.Add(p2);
+                result.Add(p3);
+                result.Add(p4);
+            }
+            catch
+            {
+                System.Windows.Forms.MessageBox.Show("框选轮廓过小，无法判别");
+                result = new List<XYZ>();
+            }
+            return result;
+        }
+        public bool IsInPolygon(XYZ checkPoint, List<XYZ> polygonPoints)
+        {
+            bool inSide = false;
+            int pointCount = polygonPoints.Count;
+            XYZ p1, p2;
+            for (int i = 0, j = pointCount - 1;
+                i < pointCount;
+                j = i, i++)
+            {
+                p1 = polygonPoints[i];
+                p2 = polygonPoints[j];
+                if (checkPoint.Y < p2.Y)
+                {
+                    if (p1.Y <= checkPoint.Y)
+                    {
+                        if ((checkPoint.Y - p1.Y) * (p2.X - p1.X) > (checkPoint.X - p1.X) * (p2.Y - p1.Y)
+                        )
+                        {
+                            inSide = (!inSide);
+                        }
+                    }
+                }
+                else if (checkPoint.Y < p1.Y)
+                {
+                    if ((checkPoint.Y - p1.Y) * (p2.X - p1.X) < (checkPoint.X - p1.X) * (p2.Y - p1.Y)
+                    )
+                    {
+                        inSide = (!inSide);
+                    }
+                }
+            }
+
+            return inSide;
+        }
+        #endregion
         public bool CreatCommonNote(Document doc, UIDocument uidoc, string name)//创建通用标注
         {
             try
@@ -247,7 +490,7 @@ namespace FFETOOLS
                     }
 
                     if (name == "电控箱标注")
-                    {                     
+                    {
                         Selection sel = uidoc.Selection;
                         XYZ pt1 = sel.PickPoint("请选择电控箱位置");
                         XYZ pt2 = sel.PickPoint("请选择标注创建位置");
@@ -255,7 +498,7 @@ namespace FFETOOLS
                         FamilySymbol boxSymbol = null;
                         AnnotationSymbol boxNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "潜水泵电控箱标注");
                             boxSymbol = NoteSymbol(doc, "潜水泵电控箱标注");
@@ -281,7 +524,7 @@ namespace FFETOOLS
                     }
 
                     if (name == "吊环标注")
-                    {                                            
+                    {
                         Selection sel = uidoc.Selection;
                         Reference reference = sel.PickObject(ObjectType.Element, new GenericSignSelectionFilter(), "请选择吊环十字符号");
                         AnnotationSymbol ring = doc.GetElement(reference) as AnnotationSymbol;
@@ -298,7 +541,7 @@ namespace FFETOOLS
                         FamilySymbol ringSymbol = null;
                         AnnotationSymbol ringNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "吊环标注");
                             ringSymbol = NoteSymbol(doc, "吊环标注");
@@ -330,7 +573,7 @@ namespace FFETOOLS
                     }
 
                     if (name == "侧壁预埋板标注")
-                    {                                           
+                    {
                         Selection sel = uidoc.Selection;
                         Reference reference = sel.PickObject(ObjectType.Element, new DetailineSelectionFilter(), "请选择预埋钢板线");
                         DetailLine steel = doc.GetElement(reference) as DetailLine;
@@ -344,7 +587,7 @@ namespace FFETOOLS
                         FamilySymbol steelSymbol = null;
                         AnnotationSymbol steelNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "侧壁预埋钢板标注");
                             steelSymbol = NoteSymbol(doc, "侧壁预埋钢板标注");
@@ -373,7 +616,7 @@ namespace FFETOOLS
                     }
 
                     if (name == "消火栓箱留洞标注")
-                    {                                           
+                    {
                         Selection sel = uidoc.Selection;
                         Reference reference = sel.PickObject(ObjectType.Element, new MechanicalSelectionFilter(), "请选择消火栓箱");
                         FamilyInstance box = doc.GetElement(reference) as FamilyInstance;
@@ -385,7 +628,7 @@ namespace FFETOOLS
                         FamilySymbol boxSymbol = null;
                         AnnotationSymbol boxNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "消火栓预留洞标注");
                             boxSymbol = NoteSymbol(doc, "消火栓预留洞标注");
@@ -411,7 +654,7 @@ namespace FFETOOLS
                     }
 
                     if (name == "管道基础留洞")
-                    {                     
+                    {
                         Selection sel = uidoc.Selection;
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
@@ -426,8 +669,8 @@ namespace FFETOOLS
 
                         FamilySymbol baseHoleSymbol = null;
                         AnnotationSymbol baseHoleNote = null;
-                       
-                        if (LanguageVer=="中文")
+
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "管道基础留洞标注");
                             baseHoleSymbol = NoteSymbol(doc, "管道基础留洞标注");
@@ -457,7 +700,7 @@ namespace FFETOOLS
                     }
 
                     if (name == "管道预留洞")
-                    {                      
+                    {
                         Selection sel = uidoc.Selection;
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
@@ -473,7 +716,7 @@ namespace FFETOOLS
                         FamilySymbol baseHoleSymbol = null;
                         AnnotationSymbol baseHoleNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "管道预留洞标注");
                             baseHoleSymbol = NoteSymbol(doc, "管道预留洞标注");
@@ -503,7 +746,7 @@ namespace FFETOOLS
                     }
 
                     if (name == "管道楼板留洞方形")
-                    {                    
+                    {
                         Selection sel = uidoc.Selection;
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
@@ -519,7 +762,7 @@ namespace FFETOOLS
                         FamilySymbol baseHoleSymbol = null;
                         AnnotationSymbol baseHoleNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "管道楼板留洞标注");
                             baseHoleSymbol = NoteSymbol(doc, "管道楼板留洞标注");
@@ -547,7 +790,7 @@ namespace FFETOOLS
                     }
 
                     if (name == "管道楼板留洞圆形")
-                    {                        
+                    {
                         Selection sel = uidoc.Selection;
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
@@ -563,7 +806,7 @@ namespace FFETOOLS
                         FamilySymbol baseHoleSymbol = null;
                         AnnotationSymbol baseHoleNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "管道楼板留洞标注");
                             baseHoleSymbol = NoteSymbol(doc, "管道楼板留洞标注");
@@ -589,6 +832,120 @@ namespace FFETOOLS
                             baseHoleNote.LookupParameter("留洞尺寸").Set(FloorHoleSize(pipeSize));
                         }
 
+                    }
+
+                    if (name == "刚性套管字母标注")
+                    {
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
+                        Pipe pipe = doc.GetElement(reference) as Pipe;
+                        LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        double verticalPipeZ = (pipeLocationCurve.Curve as Line).Direction.Z;
+
+                        XYZ pickPoint = reference.GlobalPoint;
+                        XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+                        double d = UnitUtils.Convert(projectPickPoint.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_METERS);
+
+                        FamilySymbol sleeveSymbol = null;
+                        AnnotationSymbol sleeveNote = null;
+
+                        TagFamilyLoad(doc, "套管字母标注");
+                        sleeveSymbol = NoteSymbol(doc, "套管字母标注");
+                        sleeveSymbol.Activate();
+                        sleeveNote = doc.Create.NewFamilyInstance(pt2, sleeveSymbol, doc.ActiveView) as AnnotationSymbol;
+                        sleeveNote.addLeader();
+                        IList<Leader> leadList = sleeveNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        sleeveNote.LookupParameter("管道直径").Set("DN" + pipeSize);
+                        sleeveNote.LookupParameter("管中心标高").Set(d.ToString("0.000"));
+                        sleeveNote.LookupParameter("套管直径").Set("D3=" + SleeveSize(pipeSize, 0));
+                        sleeveNote.LookupParameter("预留洞").Set("");
+                        sleeveNote.LookupParameter("备注").Set("刚性防水套管,详见02S404-15");
+                        sleeveNote.LookupParameter("是否为套管").Set(1);
+
+                        if (verticalPipeZ == 1 || verticalPipeZ == -1)
+                        {
+                            sleeveNote.LookupParameter("管中心标高").Set("");
+                        }
+                    }
+
+                    if (name == "柔性套管字母标注")
+                    {
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
+                        Pipe pipe = doc.GetElement(reference) as Pipe;
+                        LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        double verticalPipeZ = (pipeLocationCurve.Curve as Line).Direction.Z;
+
+                        XYZ pickPoint = reference.GlobalPoint;
+                        XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+                        double d = UnitUtils.Convert(projectPickPoint.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_METERS);
+
+                        FamilySymbol sleeveSymbol = null;
+                        AnnotationSymbol sleeveNote = null;
+
+                        TagFamilyLoad(doc, "套管字母标注");
+                        sleeveSymbol = NoteSymbol(doc, "套管字母标注");
+                        sleeveSymbol.Activate();
+                        sleeveNote = doc.Create.NewFamilyInstance(pt2, sleeveSymbol, doc.ActiveView) as AnnotationSymbol;
+                        sleeveNote.addLeader();
+                        IList<Leader> leadList = sleeveNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        sleeveNote.LookupParameter("管道直径").Set("DN" + pipeSize);
+                        sleeveNote.LookupParameter("管中心标高").Set(d.ToString("0.000"));
+                        sleeveNote.LookupParameter("套管直径").Set("D2=" + SleeveSize(pipeSize, 1));
+                        sleeveNote.LookupParameter("预留洞").Set("");
+                        sleeveNote.LookupParameter("备注").Set("柔性防水套管,详见02S404-5");
+                        sleeveNote.LookupParameter("是否为套管").Set(1);
+
+                        if (verticalPipeZ == 1 || verticalPipeZ == -1)
+                        {
+                            sleeveNote.LookupParameter("管中心标高").Set("");
+                        }
+                    }
+
+                    if (name == "预留洞字母标注")
+                    {
+                        Selection sel = uidoc.Selection;
+                        Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
+                        Pipe pipe = doc.GetElement(reference) as Pipe;
+                        LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        double verticalPipeZ = (pipeLocationCurve.Curve as Line).Direction.Z;
+
+                        XYZ pickPoint = reference.GlobalPoint;
+                        XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
+                        XYZ pt2 = sel.PickPoint("请选择标注创建位置");
+                        double d = UnitUtils.Convert(projectPickPoint.Z, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_METERS);
+
+                        FamilySymbol sleeveSymbol = null;
+                        AnnotationSymbol sleeveNote = null;
+
+                        TagFamilyLoad(doc, "套管字母标注");
+                        sleeveSymbol = NoteSymbol(doc, "套管字母标注");
+                        sleeveSymbol.Activate();
+                        sleeveNote = doc.Create.NewFamilyInstance(pt2, sleeveSymbol, doc.ActiveView) as AnnotationSymbol;
+                        sleeveNote.addLeader();
+                        IList<Leader> leadList = sleeveNote.GetLeaders();
+                        Leader lead = leadList[0];
+                        lead.End = projectPickPoint;
+                        sleeveNote.LookupParameter("管道直径").Set("DN" + pipeSize);
+                        sleeveNote.LookupParameter("管中心标高").Set(d.ToString("0.000"));
+                        sleeveNote.LookupParameter("套管直径").Set("");
+                        sleeveNote.LookupParameter("预留洞").Set(BaseHoleSize(pipeSize));
+                        sleeveNote.LookupParameter("备注").Set("");
+                        sleeveNote.LookupParameter("是否为套管").Set(0);
+
+                        if (verticalPipeZ == 1 || verticalPipeZ == -1)
+                        {
+                            sleeveNote.LookupParameter("管中心标高").Set("");
+                        }
                     }
 
                     trans.Commit();
@@ -650,8 +1007,8 @@ namespace FFETOOLS
                 using (Transaction trans = new Transaction(doc, "创建通气管标注"))
                 {
                     trans.Start();
-                    string LanguageVer = CreatPipeTag.mainfrm.LanguageCmb.SelectedItem.ToString();                   
-                    
+                    string LanguageVer = CreatPipeTag.mainfrm.LanguageCmb.SelectedItem.ToString();
+
                     Selection sel = uidoc.Selection;
                     Reference reference = sel.PickObject(ObjectType.Element, new MechanicalSelectionFilter(), "请选择通气管");
                     FamilyInstance ventPipe = doc.GetElement(reference) as FamilyInstance;
@@ -667,7 +1024,7 @@ namespace FFETOOLS
                         FamilySymbol ventSymbol = null;
                         AnnotationSymbol ventNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "通气管标注");
                             ventSymbol = NoteSymbol(doc, "通气管标注");
@@ -691,7 +1048,7 @@ namespace FFETOOLS
                             IList<Leader> leadList = ventNote.GetLeaders();
                             Leader lead = leadList[0];
                             lead.End = pt1;
-                            ventNote.LookupParameter("上行文字").Set("VENT PIPE " + ventPipeHeight + "mm "+ "HIGHER");
+                            ventNote.LookupParameter("上行文字").Set("VENT PIPE " + ventPipeHeight + "mm " + "HIGHER");
                             ventNote.LookupParameter("下行文字").Set("THAN TOP OF TANK");
                         }
 
@@ -704,7 +1061,7 @@ namespace FFETOOLS
                         FamilySymbol ventSymbol = null;
                         AnnotationSymbol ventNote = null;
 
-                        if (LanguageVer=="中文")
+                        if (LanguageVer == "中文")
                         {
                             TagFamilyLoad(doc, "通气管标注");
                             ventSymbol = NoteSymbol(doc, "通气管标注");
@@ -774,13 +1131,14 @@ namespace FFETOOLS
                 {
                     trans.Start();
 
-                    string LanguageVer = CreatPipeTag.mainfrm.LanguageCmb.SelectedItem.ToString();                                                     
+                    string LanguageVer = CreatPipeTag.mainfrm.LanguageCmb.SelectedItem.ToString();
 
                     Selection sel = uidoc.Selection;
                     Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                     Pipe pipe = doc.GetElement(reference) as Pipe;
                     LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
                     string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                    double verticalPipeZ = (pipeLocationCurve.Curve as Line).Direction.Z;
 
                     XYZ pickPoint = reference.GlobalPoint;
                     XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
@@ -804,11 +1162,15 @@ namespace FFETOOLS
                             lead.End = projectPickPoint;
                             sleeveNote.LookupParameter("上行文字").Set("预埋刚性防水套管(A)型D3=" + SleeveSize(pipeSize, 0) + "mm");
                             sleeveNote.LookupParameter("池壁套管下行文字").Set("套管中心标高" + d.ToString("0.000"));
+
+                            if (verticalPipeZ == 1 || verticalPipeZ == -1)
+                            {
+                                sleeveNote.LookupParameter("池壁套管").Set(0);
+                            }
                         }
 
                         if (LanguageVer == "英文")
                         {
-                            
                             sleeveSymbol = NoteSymbol(doc, "防水套管英文注释");
                             sleeveSymbol.Activate();
                             sleeveNote = doc.Create.NewFamilyInstance(pt2, sleeveSymbol, doc.ActiveView) as AnnotationSymbol;
@@ -818,6 +1180,11 @@ namespace FFETOOLS
                             lead.End = projectPickPoint;
                             sleeveNote.LookupParameter("上行文字").Set("EMBEDDED WATER-PROOF SLEEVE D3=" + SleeveSize(pipeSize, 0) + "mm");
                             sleeveNote.LookupParameter("池壁套管文字").Set("CENTER ELEVATION " + d.ToString("0.000"));
+
+                            if (verticalPipeZ == 1 || verticalPipeZ == -1)
+                            {
+                                sleeveNote.LookupParameter("池壁套管").Set(0);
+                            }
                         }
                     }
 
@@ -838,6 +1205,11 @@ namespace FFETOOLS
                             lead.End = projectPickPoint;
                             sleeveNote.LookupParameter("上行文字").Set("预埋柔性防水套管(A)型D2=" + SleeveSize(pipeSize, 1) + "mm");
                             sleeveNote.LookupParameter("池壁套管下行文字").Set("套管中心标高" + d.ToString("0.000"));
+
+                            if (verticalPipeZ == 1 || verticalPipeZ == -1)
+                            {
+                                sleeveNote.LookupParameter("池壁套管").Set(0);
+                            }
                         }
 
                         if (LanguageVer == "英文")
@@ -852,6 +1224,11 @@ namespace FFETOOLS
                             lead.End = projectPickPoint;
                             sleeveNote.LookupParameter("上行文字").Set("EMBEDDED WATER-PROOF SLEEVE D2=" + SleeveSize(pipeSize, 1) + "mm");
                             sleeveNote.LookupParameter("池壁套管文字").Set("CENTER ELEVATION " + d.ToString("0.000"));
+
+                            if (verticalPipeZ == 1 || verticalPipeZ == -1)
+                            {
+                                sleeveNote.LookupParameter("池壁套管").Set(0);
+                            }
                         }
                     }
 
@@ -878,6 +1255,12 @@ namespace FFETOOLS
                     Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter());
                     Pipe pipe = doc.GetElement(reference) as Pipe;
                     LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
+
+                    if (!pipe.IsTaged(doc))
+                    {
+                        string systemName = pipe.get_Parameter(BuiltInParameter.RBS_DUCT_PIPE_SYSTEM_ABBREVIATION_PARAM).AsString();
+                        pipe.get_Parameter(BuiltInParameter.DOOR_NUMBER).Set(systemName + "L1");
+                    }
 
                     XYZ pickPoint = reference.GlobalPoint;
                     XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
@@ -916,7 +1299,10 @@ namespace FFETOOLS
                         tag.LeaderElbow = projectPickPoint + new XYZ(800 / 304.8, 800 / 304.8, 0);
                         tag.TagHeadPosition = projectPickPoint + new XYZ(1019 / 304.8, 1019 / 304.8, 0);
                     }
-                    trans.Commit();
+
+                    FailureHandlingOptions failureOptions = trans.GetFailureHandlingOptions();
+                    failureOptions.SetFailuresPreprocessor(new HidePasteDuplicateTypesPreprocessor());
+                    trans.Commit(failureOptions);
                 }
 
                 CreatPipeTagWithLine(doc, uidoc, tagName);
@@ -1079,7 +1465,7 @@ namespace FFETOOLS
                 if (!equipment.IsTaged(doc))
                 {
                     SetEquipmentCode(doc, equipment);
-                }             
+                }
 
                 LocationPoint equipmentLocation = equipment.Location as LocationPoint;
                 XYZ projectPickPoint = equipmentLocation.Point;
@@ -1101,7 +1487,7 @@ namespace FFETOOLS
                 TagMode tageMode = TagMode.TM_ADDBY_CATEGORY;
                 TagOrientation tagOri = TagOrientation.Horizontal;
                 IndependentTag tag = IndependentTag.Create(doc, uidoc.ActiveView.Id, pipeRef, false, tageMode, tagOri, projectPickPoint);
-                tag.ChangeTypeId(equipmentTag.Id);              
+                tag.ChangeTypeId(equipmentTag.Id);
 
                 CreatEquipmentTagMethod(doc, uidoc);
             }
@@ -1112,7 +1498,7 @@ namespace FFETOOLS
             return true;
 
         }
-        public void SetEquipmentCode(Document doc,FamilyInstance equipment)
+        public void SetEquipmentCode(Document doc, FamilyInstance equipment)
         {
             string code = "919PU01";
             string name = equipment.Symbol.FamilyName;
@@ -1139,7 +1525,7 @@ namespace FFETOOLS
                 code = subproNum.AsString() + "TW01";
             }
 
-            if (name.Contains("给排水")&& name.Contains("加药"))
+            if (name.Contains("给排水") && name.Contains("加药"))
             {
                 code = subproNum.AsString() + "TS01";
             }
@@ -1193,7 +1579,7 @@ namespace FFETOOLS
                 else
                 {
                     code = subproNum.AsString() + "WT01";
-                }         
+                }
             }
 
             if (name.Contains("给排水") && name.Contains("污水处理设备"))
@@ -1216,6 +1602,51 @@ namespace FFETOOLS
                 code = subproNum.AsString() + "VA01";
             }
 
+            if (name.Contains("给排水") && name.Contains("橡胶接头"))
+            {
+                code = subproNum.AsString() + "JE01";
+            }
+
+            if (name.Contains("给排水") && name.Contains("真空表"))
+            {
+                code = subproNum.AsString() + "VG01";
+            }
+
+            if (name.Contains("给排水") && name.Contains("压力表"))
+            {
+                code = subproNum.AsString() + "VG01";
+            }
+
+            if (name.Contains("给排水") && name.Contains("流量计"))
+            {
+                code = subproNum.AsString() + "LF01";
+            }
+
+            if (name.Contains("给排水") && name.Contains("水表"))
+            {
+                code = subproNum.AsString() + "LF01";
+            }
+
+            if (name.Contains("给排水") && name.Contains("液位计"))
+            {
+                code = subproNum.AsString() + "LQ01";
+            }
+
+            if (name.Contains("给排水") && name.Contains("分析仪"))
+            {
+                code = subproNum.AsString() + "AG01";
+            }
+
+            if (name.Contains("给排水") && name.Contains("浊度"))
+            {
+                code = subproNum.AsString() + "AG01";
+            }
+
+            if (name.Contains("给排水") && name.Contains("气体报警"))
+            {
+                code = subproNum.AsString() + "AL01";
+            }
+
             equipment.get_Parameter(BuiltInParameter.DOOR_NUMBER).Set(code);
         }
         public bool CreatPipeAccessoryTagMethod(Document doc, UIDocument uidoc)
@@ -1228,7 +1659,7 @@ namespace FFETOOLS
                 FamilyInstance accessory = doc.GetElement(reference) as FamilyInstance;
                 if (!accessory.IsTaged(doc))
                 {
-                    SetEquipmentCode(doc,accessory);
+                    SetEquipmentCode(doc, accessory);
                 }
 
                 LocationPoint accessoryLocation = accessory.Location as LocationPoint;
@@ -1744,6 +2175,153 @@ namespace FFETOOLS
 
             return floorHoleSize;
         }
+        public string PipeWeight(string nominal_Diameter, int haveInsulation) //管道重量
+        {
+            string weight = null;
+            if (haveInsulation == 1)
+            {
+                if (nominal_Diameter == "DN15")
+                {
+                    weight = "3.3";
+                }
+                else if (nominal_Diameter == "DN20")
+                {
+                    weight = "4.0";
+                }
+                else if (nominal_Diameter == "DN25")
+                {
+                    weight = "5.3";
+                }
+                else if (nominal_Diameter == "DN32")
+                {
+                    weight = "6.7";
+                }
+                else if (nominal_Diameter == "DN40")
+                {
+                    weight = "7.9";
+                }
+                else if (nominal_Diameter == "DN50")
+                {
+                    weight = "10.3";
+                }
+                else if (nominal_Diameter == "DN65")
+                {
+                    weight = "14.2";
+                }
+                else if (nominal_Diameter == "DN80")
+                {
+                    weight = "17.8";
+                }
+                else if (nominal_Diameter == "DN100")
+                {
+                    weight = "25.3";
+                }
+                else if (nominal_Diameter == "DN125")
+                {
+                    weight = "34.0";
+                }
+                else if (nominal_Diameter == "DN150")
+                {
+                    weight = "45.3";
+                }
+                else if (nominal_Diameter == "DN200")
+                {
+                    weight = "77.6";
+                }
+                else if (nominal_Diameter == "DN250")
+                {
+                    weight = "112.4";
+                }
+                else if (nominal_Diameter == "DN300")
+                {
+                    weight = "155.7";
+                }
+                else if (nominal_Diameter == "DN350")
+                {
+                    weight = "211.0";
+                }
+                else if (nominal_Diameter == "DN400")
+                {
+                    weight = "255.8";
+                }
+                else if (nominal_Diameter == "DN450")
+                {
+                    weight = "295.7";
+                }
+            }
+            else
+            {
+                if (nominal_Diameter == "DN15")
+                {
+                    weight = "1.7";
+                }
+                else if (nominal_Diameter == "DN20")
+                {
+                    weight = "2.2";
+                }
+                else if (nominal_Diameter == "DN25")
+                {
+                    weight = "3.3";
+                }
+                else if (nominal_Diameter == "DN32")
+                {
+                    weight = "4.6";
+                }
+                else if (nominal_Diameter == "DN40")
+                {
+                    weight = "5.7";
+                }
+                else if (nominal_Diameter == "DN50")
+                {
+                    weight = "7.8";
+                }
+                else if (nominal_Diameter == "DN65")
+                {
+                    weight = "11.3";
+                }
+                else if (nominal_Diameter == "DN80")
+                {
+                    weight = "14.8";
+                }
+                else if (nominal_Diameter == "DN100")
+                {
+                    weight = "21.7";
+                }
+                else if (nominal_Diameter == "DN125")
+                {
+                    weight = "29.9";
+                }
+                else if (nominal_Diameter == "DN150")
+                {
+                    weight = "40.7";
+                }
+                else if (nominal_Diameter == "DN200")
+                {
+                    weight = "71.8";
+                }
+                else if (nominal_Diameter == "DN250")
+                {
+                    weight = "105.5";
+                }
+                else if (nominal_Diameter == "DN300")
+                {
+                    weight = "147.7";
+                }
+                else if (nominal_Diameter == "DN350")
+                {
+                    weight = "201.9";
+                }
+                else if (nominal_Diameter == "DN400")
+                {
+                    weight = "245.7";
+                }
+                else if (nominal_Diameter == "DN450")
+                {
+                    weight = "284.8";
+                }
+            }
+            return weight;
+        }
         public FamilySymbol NoteSymbol(Document doc, string symbolName)//获取注释类型
         {
             FamilySymbol symbol = null;
@@ -1798,5 +2376,6 @@ namespace FFETOOLS
             keybd_event(key, 0, 2, 0);
         }
     }
+   
 }
 
