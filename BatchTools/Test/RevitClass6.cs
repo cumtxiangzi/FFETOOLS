@@ -3,117 +3,146 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI.Selection;
-
+using Autodesk.Revit.ApplicationServices;
 namespace FFETOOLS
 {
     [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
-    [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
     [Autodesk.Revit.Attributes.Journaling(Autodesk.Revit.Attributes.JournalingMode.NoCommandData)]
-    class DimesionOpration : IExternalCommand //族与族之间的标注基本方法 （可批量）
+    [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
+    public class RevitGeometry : IExternalCommand //从族实例中取得几何信息
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            Document document = commandData.Application.ActiveUIDocument.Document;
-            Selection selection = commandData.Application.ActiveUIDocument.Selection;
-            Autodesk.Revit.ApplicationServices.Application app = commandData.Application.Application;
+            Document revitDoc = commandData.Application.ActiveUIDocument.Document;  //取得文档
+            Application revitApp = commandData.Application.Application;             //取得应用程序
+            UIDocument uiDoc = commandData.Application.ActiveUIDocument;
+            Selection sel = uiDoc.Selection;
+            Reference ref1 = sel.PickObject(ObjectType.Element, "选择一个族实例");
+            Element elem = revitDoc.GetElement(ref1);
+            FamilyInstance familyInstance = elem as FamilyInstance;
+            Options opt = new Options();
+            opt.ComputeReferences = true;
+            opt.DetailLevel = ViewDetailLevel.Fine;
+            GeometryElement e = familyInstance.get_Geometry(opt);
 
-            Autodesk.Revit.DB.View view = document.ActiveView;
-            int hashcode = 0;
-            ReferenceArray referenceArray = new ReferenceArray();
-            //Pick one object from Revit.
-            List<Wall> mWalls = new List<Wall>();
-            List<FamilyInstance> familyInstances = new List<FamilyInstance>();
-
-            IList<Reference> instanceReferences = new List<Reference>();
-            IList<Reference> hasPickOne = selection.PickObjects(ObjectType.Element);
-            foreach (Reference reference in hasPickOne)
+            foreach (GeometryObject obj in e)
             {
-                familyInstances.Add((document.GetElement(reference)) as FamilyInstance);//转换选中的族们
+                GeometryInstance geoInstance = obj as GeometryInstance;
+                GeometryElement geoElement = geoInstance.GetInstanceGeometry();
+                Transform insTransform = geoInstance.Transform;
+                foreach (GeometryObject obj2 in geoElement)
+                {
+                    Solid solid2 = obj2 as Solid;
+                    //if (solid2.Faces.Size > 0)
+                    //{
+                        FindBottomFace(solid2);
+                        //FindEdge(solid2);
+                        //FindLine(solid2);
+                        //FindPoint(solid2);
+                       // transformPointAndUaPoint(solid2, insTransform);
+                        TaskDialog.Show("呵呵", "在这里");
+                    //}
+                }
             }
-            bool isHorizen = isDimensionHorizen(familyInstances);//判断设备位置横竖大致情况
-            foreach (FamilyInstance familyInstance in familyInstances)
-            {
-                double rotation = (familyInstance.Location as LocationPoint).Rotation;
-                bool phare = Math.Round(rotation / (0.5 * Math.PI) % 2, 4) == 0;//是否180旋转  即 与原有族各参照线平行  平行则true
-                //MessageBox.Show(isHorizen.ToString() + "\t" + phare.ToString());
-                IList<Reference> refs = isHorizen ^ phare == false ? familyInstance.GetReferences(FamilyInstanceReferenceType.CenterLeftRight)
-                    : familyInstance.GetReferences(FamilyInstanceReferenceType.CenterFrontBack);//将实例中特殊的参照平台拿出来
-
-                IList<Reference> refLRs = familyInstance.GetReferences(FamilyInstanceReferenceType.CenterLeftRight);
-                IList<Reference> reFBRs = familyInstance.GetReferences(FamilyInstanceReferenceType.CenterFrontBack);
-
-
-
-                // IList<Reference> refs = familyInstance.GetReferences(FamilyInstanceReferenceType.CenterLeftRight);//将实例中特殊的参照平台拿出来
-                instanceReferences.Add(refs.Count == 0 ? null : refs[0]); //将获得的中线放入参照平台面内
-
-                referenceArray.Append(refs.Count == 0 ? null : refs[0]);
-            }
-
-            //  AutoCreatDimension(document, selection, instanceReferences);  //该函数可用 但条件苛刻
-
-            Element element = document.GetElement(hasPickOne.ElementAt(0));
-            XYZ elementXyz = (element.Location as LocationPoint).Point;
-            // Line line = (element.Location as LocationCurve).Curve as Line;
-
-            //尺寸线定位
-            double distanceNewLine = 2;
-            Line line = Line.CreateBound(elementXyz, new XYZ(elementXyz.X + distanceNewLine, elementXyz.Y, elementXyz.Z));
-            line = isHorizen == true ?
-                  Line.CreateBound(elementXyz, new XYZ(elementXyz.X, elementXyz.Y + distanceNewLine, elementXyz.Z))
-                : Line.CreateBound(elementXyz, new XYZ(elementXyz.X + distanceNewLine, elementXyz.Y, elementXyz.Z));
-            XYZ selectionPoint = selection.PickPoint();
-            selectionPoint = new XYZ(elementXyz.X + distanceNewLine, elementXyz.Y + 50, elementXyz.Z);
-            selectionPoint = isHorizen == true ?
-                    new XYZ(elementXyz.X + 50, elementXyz.Y + distanceNewLine, elementXyz.Z)
-                : new XYZ(elementXyz.X + distanceNewLine, elementXyz.Y + 50, elementXyz.Z);
-            XYZ projectPoint = line.Project(selectionPoint).XYZPoint;
-            Line newLine = Line.CreateBound(selectionPoint, projectPoint);
-
-            Transaction transaction = new Transaction(document, "添加标注");
-            transaction.Start();
-            //调用创建尺寸的方法创建
-            Dimension autoDimension = document.Create.NewDimension(view, newLine, referenceArray);
-            transaction.Commit();
-
-
-            // AutoCreatDimension(document,selection, hasPickOne);  //该函数可用 但条件苛刻
-
-            //throw new NotImplementedException();
-
             return Result.Succeeded;
         }
-
         /// <summary>
-        /// 判断设备位置大致情况 是否为水平 还是垂直
+        /// 得到最底下的边的面积和原点坐标
         /// </summary>
-        /// <param name="familyInstances"></param>
+        /// <param name=" solid "></param>
         /// <returns></returns>
-        public bool isDimensionHorizen(List<FamilyInstance> familyInstances)
+        Face FindBottomFace(Solid solid)
         {
-            if (
-                Math.Abs
-                (
-                   familyInstances.OrderBy(f => (f.Location as LocationPoint).Point.X).Select(f => (f.Location as LocationPoint).Point.X).First()
-                 - familyInstances.OrderByDescending(f => (f.Location as LocationPoint).Point.X).Select(f => (f.Location as LocationPoint).Point.X).First()
-                )
-                >
-                Math.Abs
-                (
-                      familyInstances.OrderBy(f => (f.Location as LocationPoint).Point.Y).Select(f => (f.Location as LocationPoint).Point.Y).First()
-                    - familyInstances.OrderByDescending(f => (f.Location as LocationPoint).Point.Y).Select(f => (f.Location as LocationPoint).Point.Y).First()
-                 )
-                )
+            PlanarFace pf = null;
+            foreach (Face face in solid.Faces)
             {
-                return true;
+                pf = face as PlanarFace;
+                if (null != pf)
+                {
+                    if (Math.Abs(pf.FaceNormal.X) < 0.01 && Math.Abs(pf.FaceNormal.Y) < 0.01 && pf.FaceNormal.Z < 0)
+                    {
+                        TaskDialog.Show("Wall Bottom Face", "Area is " + pf.Area.ToString() + "; Origin = (" + pf.Origin.X.ToString() + "  " + pf.Origin.Y.ToString() + "  " + pf.Origin.Z.ToString() + ")");
+                        break;
+                    }
+                }
             }
-            return false;
-
+            return pf;
         }
+        /// <summary>
+        /// 通过curve得到12个边的长度
+        /// </summary>
+        /// <param name=" solid "></param>
+        public void FindEdge(Solid solid)
+        {
+            string strParamInfo = null;
+            foreach (Edge e in solid.Edges)
+            {
+                strParamInfo += e.ApproximateLength + "\n";
+            }
+            TaskDialog.Show("REVIT", strParamInfo);
+        }
+        /// <summary>
+        /// 通过Line得到12个边的长度
+        /// </summary>
+        /// <param name=" solid "></param>
+        public void FindLine(Solid solid)
+        {
+            string strParamInfo = null;
+            foreach (Edge e in solid.Edges)
+            {
+                Line line = e.AsCurve() as Line;
+                strParamInfo += line.ApproximateLength + "\n";
+            }
+            TaskDialog.Show("REVIT", strParamInfo);
+        }
+        /// <summary>
+        /// 通过curve或者line找到点
+        /// </summary>
+        /// <param name=" solid "></param>
+        public void FindPoint(Solid solid)
+        {
+            string strParamInfo1 = null;
+            string strParamInfo2 = null;
+            //string strParamInfo3 = null;
+            foreach (Edge e in solid.Edges)
+            {
+                foreach (XYZ ii in e.Tessellate())
+                {
+                    XYZ point = ii;
+                    strParamInfo1 += ii.X + "," + ii.Y + "," + ii.Z + "\n";
 
+                }
+                Line line = e.AsCurve() as Line;
+                foreach (XYZ ii in line.Tessellate())
+                {
+                    XYZ point = ii;
+                    strParamInfo2 += ii.X + "," + ii.Y + "," + ii.Z + "\n";
+                }
 
+            }
+            TaskDialog.Show("通过curve找到点的坐标", strParamInfo1);
+            TaskDialog.Show("通过line找到点的坐标", strParamInfo2);
+        }
+        public void transformPointAndUaPoint(Solid solid, Transform insTransform)
+        {
+            string strParamInfo1 = null;
+            string strParamInfo2 = null;
+            //string strParamInfo3 = null;
+            foreach (Edge e in solid.Edges)
+            {
+                foreach (XYZ ii in e.Tessellate())
+                {
+                    XYZ point = ii;
+                    strParamInfo1 += point.X + "," + point.Y + "," + point.Z + "\n";
+                    XYZ transformPoint = insTransform.OfPoint(point);
+                    strParamInfo2 += transformPoint.X + "," + transformPoint.Y + "," + transformPoint.Z + "\n";
+                }
+            }
+            TaskDialog.Show("未经transform过转换的坐标", strParamInfo1);
+            TaskDialog.Show("经过transform转换的坐标系", strParamInfo2);
+        }
     }
 }

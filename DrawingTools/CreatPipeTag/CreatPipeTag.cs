@@ -226,9 +226,9 @@ namespace FFETOOLS
                 CreatCommonNote(doc, uidoc, "管道楼板留洞圆形");
             }
 
-            if (CreatPipeTag.mainfrm.clicked ==25)
+            if (CreatPipeTag.mainfrm.clicked == 25)
             {
-                CreatElevationNote(doc,uidoc);
+                CreatElevationNote(doc, uidoc);
             }
 
             if (CreatPipeTag.mainfrm.clicked == 26)
@@ -246,13 +246,13 @@ namespace FFETOOLS
                 {
                     trans.Start();
 
-                    type = CollectorHelper.TCollector<SpotDimensionType>(doc).FirstOrDefault(x=> x.Name=="给排水高程"); 
-                    
-                    if (type.get_Parameter(BuiltInParameter.SPOT_TEXT_FROM_LEADER).AsDouble()==3.0/304.8)
+                    type = CollectorHelper.TCollector<SpotDimensionType>(doc).FirstOrDefault(x => x.Name == "给排水高程");
+
+                    if (type.get_Parameter(BuiltInParameter.SPOT_TEXT_FROM_LEADER).AsDouble() == 3.0 / 304.8)
                     {
-                        type.get_Parameter(BuiltInParameter.SPOT_TEXT_FROM_LEADER).Set(3.5/304.8);
+                        type.get_Parameter(BuiltInParameter.SPOT_TEXT_FROM_LEADER).Set(3.5 / 304.8);
                     }
-                  
+
                     trans.Commit();
                 }
                 uidoc.PostRequestForElementTypePlacement(type);
@@ -378,10 +378,10 @@ namespace FFETOOLS
 
         }
         #region
-        public void AlignNote(Document doc, UIDocument uidoc)//对齐标注未完成可参考align tag代码
+        public void AlignNote(Document doc, UIDocument uidoc)//设备编号对齐标注
         {
             PickedBox pickBox = null;
-            pickBox = uidoc.Selection.PickBox(PickBoxStyle.Crossing, "请选择需要处理的轴线");
+            pickBox = uidoc.Selection.PickBox(PickBoxStyle.Crossing, "请选择需要对齐的设备编号");
 
             XYZ maxPoint = pickBox.Max;
             XYZ minPoint = pickBox.Min;
@@ -393,13 +393,31 @@ namespace FFETOOLS
             List<XYZ> pointList = TwoPointGetPointList(new XYZ(minX, minY, 0), new XYZ(maxX, maxY, 0));
             List<IndependentTag> tagList = new FilteredElementCollector(doc, uidoc.ActiveGraphicalView.Id).OfClass(typeof(IndependentTag)).OfType<IndependentTag>().ToList();
 
+            List<IndependentTag> tagInBoxList = new List<IndependentTag>();
             foreach (var tag in tagList)
             {
-                //Curve c = grid.Curve;
-                //if (IsInPolygon(c.GetEndPoint(0).SetZ(), pointList))
-                //{
-                //    TaskDialog.Show("cc","你好");
-                //}           
+                XYZ point = tag.TagHeadPosition;
+                if (IsInPolygon(point.SetZ(), pointList))
+                {
+                    tagInBoxList.Add(tag);
+                }
+            }
+
+            tagInBoxList.Sort((a, b) => a.TagHeadPosition.X.CompareTo(b.TagHeadPosition.X));//排序         
+            foreach (var item in tagInBoxList)
+            {
+                XYZ newpoint = new XYZ();
+                XYZ instancePoint = ((item.GetTaggedLocalElement() as FamilyInstance).Location as LocationPoint).Point;
+
+                if (item.TagHeadPosition.IsSameDirection(tagInBoxList[0].TagHeadPosition))
+                {
+                    newpoint = tagInBoxList[0].TagHeadPosition;
+                }
+                else
+                {
+                    newpoint = new XYZ(instancePoint.X-270/304.8, tagInBoxList[0].TagHeadPosition.Y, item.TagHeadPosition.Z);
+                }
+                item.TagHeadPosition = newpoint;
             }
         }
         public List<XYZ> TwoPointGetPointList(XYZ minPoint, XYZ maxPoint)
@@ -2376,6 +2394,6 @@ namespace FFETOOLS
             keybd_event(key, 0, 2, 0);
         }
     }
-   
+
 }
 

@@ -340,7 +340,14 @@ namespace FFETOOLS
         /// 浮点数相等时的精度
         /// </summary>
         private static double precision = 0.000001;
-
+        /// <summary>
+        /// Z值归零
+        /// </summary>
+        public static XYZ SetZ(this XYZ p)
+        {
+            XYZ point = new XYZ(p.X, p.Y, 0);
+            return point;
+        }
         /// <summary>
         /// 判断两double数值是否相等
         /// </summary>

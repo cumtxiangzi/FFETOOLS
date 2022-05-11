@@ -48,7 +48,11 @@ namespace FFETOOLS
 
             return Result.Succeeded;
         }
-
+        /// <summary>
+        /// 这里是测试信息
+        /// </summary>
+        /// <param name="geoele">平面名称</param>
+        /// <returns></returns>
         private ReferenceArray GetEndPlanRefs(GeometryElement geoele)
         {
             var result = new ReferenceArray();

@@ -916,6 +916,26 @@ namespace FFETOOLS
             return true;
         }
     }
+    //给排水机械设备的过滤条件
+    public class WMechanicalSelectionFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element e)
+        {
+            if (e.Category.Name == "机械设备" && (e as FamilyInstance).Symbol.FamilyName.Contains("给排水"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool AllowReference(Reference r, XYZ p)
+        {
+            return true;
+        }
+    }
     //管路附件的过滤条件
     public class PipeAccessorySelectionFilter : ISelectionFilter
     {

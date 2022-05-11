@@ -86,6 +86,7 @@
     <Compile Include="CommonClass\EdgeInfo.cs" />
     <Compile Include="CommonClass\Generics.cs" />
     <Compile Include="CommonClass\Geometry.cs" />
+    <Compile Include="CommonClass\Util.cs" />
     <Compile Include="CreatConstructionPlan\ConstructionPlanInfo.cs" />
     <Compile Include="CreatConstructionPlan\ConstructionDrawingInfo.cs" />
     <Compile Include="CreatConstructionPlan\ConstructionPlan.xaml.cs">
