@@ -868,7 +868,7 @@ namespace FFETOOLS
 
                         if (verticalPipeZ == 1 || verticalPipeZ == -1)
                         {
-                            sleeveNote.LookupParameter("管中心标高").Set("");
+                            sleeveNote.LookupParameter("管中心标高").Set("池顶");
                         }
                     }
 
@@ -906,7 +906,7 @@ namespace FFETOOLS
 
                         if (verticalPipeZ == 1 || verticalPipeZ == -1)
                         {
-                            sleeveNote.LookupParameter("管中心标高").Set("");
+                            sleeveNote.LookupParameter("管中心标高").Set("池顶");
                         }
                     }
 
