@@ -90,10 +90,25 @@ namespace FFETOOLS
             }
 
             List<FamilyInstance> instanceInBoxList = new List<FamilyInstance>();
-            foreach (FamilyInstance item in quipments)
+            List<Grid> grids= new List<Grid>();
+
+            foreach (var item in quipments)
             {
-                instanceInBoxList.Add(item);
+                if (item.Category.Name=="机械设备")
+                {
+                    instanceInBoxList.Add(item as FamilyInstance);
+                }               
             }
+
+            foreach (var item in quipments)
+            {
+                if (item.Category.Name == "轴网")
+                {
+                    grids.Add(item as Grid);
+                }
+            }
+
+           
 
             View view = doc.ActiveView;
             IList<Reference> instanceReferences = new List<Reference>();
@@ -138,6 +153,16 @@ namespace FFETOOLS
             else
             {
                 referenceLine = Line.CreateBound(new XYZ(), new XYZ(10, 0, 0));
+            }
+
+            //获得内侧尺寸标注的引用
+            foreach (Grid g in grids)
+            {
+                Line line = g.Curve as Line;
+                if (line.Direction.IsAlmostEqualTo(referenceLine.Direction) || line.Direction.IsAlmostEqualTo(referenceLine.Direction.Multiply(-1)))
+                {
+                    referenceArray.Append(new Reference(g));
+                }
             }
 
             if (ref1 != null && ref2 != null)

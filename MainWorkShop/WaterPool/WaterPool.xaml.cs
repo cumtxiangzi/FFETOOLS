@@ -61,6 +61,13 @@ namespace FFETOOLS
             CoolTowerFlow.SelectedIndex = 10;
             CoolTowerFlow.IsEnabled = false;
             CoolTower.IsChecked = false;
+            
+            string[] TexeList = new string[] { "生产循环水池", "消防水池"};
+            PoolText.ItemsSource = TexeList;
+            PoolText.SelectedIndex = 0;
+
+            string volumn = "V=" + StandardSize.Text + "m³";
+            PoolVolumnText.Text = "水池有效容积"+"\n"+"   "+volumn;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -167,6 +174,9 @@ namespace FFETOOLS
 
         private void StandardSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            string volumn = "V=" + StandardSize.SelectedItem.ToString() + "m³";
+            PoolVolumnText.Text = "水池有效容积" + "\n" + "   " + volumn;
+
             if (StandardSize.SelectedItem.ToString() == "50")
             {
                 if (PoolShape.IsChecked == true)

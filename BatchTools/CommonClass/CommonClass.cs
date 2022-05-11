@@ -921,7 +921,8 @@ namespace FFETOOLS
     {
         public bool AllowElement(Element e)
         {
-            if (e.Category.Name == "机械设备" && (e as FamilyInstance).Symbol.FamilyName.Contains("给排水"))
+            if ((e.Category.Name == "机械设备" && (e as FamilyInstance).Symbol.FamilyName.Contains("给排水"))||
+                e.Category.Name == "轴网")
             {
                 return true;
             }

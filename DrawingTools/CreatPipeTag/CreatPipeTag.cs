@@ -402,22 +402,57 @@ namespace FFETOOLS
                     tagInBoxList.Add(tag);
                 }
             }
-
-            tagInBoxList.Sort((a, b) => a.TagHeadPosition.X.CompareTo(b.TagHeadPosition.X));//排序         
+                          
+            List<FamilyInstance> familyInstances = new List<FamilyInstance>();
             foreach (var item in tagInBoxList)
             {
-                XYZ newpoint = new XYZ();
-                XYZ instancePoint = ((item.GetTaggedLocalElement() as FamilyInstance).Location as LocationPoint).Point;
+                FamilyInstance tagInstance = item.GetTaggedLocalElement() as FamilyInstance;
+                familyInstances.Add(tagInstance);
+            }
 
-                if (item.TagHeadPosition.IsSameDirection(tagInBoxList[0].TagHeadPosition))
+            if (isDimensionHorizen(familyInstances))
+            {
+                tagInBoxList.Sort((a, b) => a.TagHeadPosition.X.CompareTo(b.TagHeadPosition.X));//排序    
+                foreach (var item in tagInBoxList)
                 {
-                    newpoint = tagInBoxList[0].TagHeadPosition;
+                    XYZ newpoint = new XYZ();
+                    FamilyInstance tagInstance = item.GetTaggedLocalElement() as FamilyInstance;
+                    XYZ instancePoint = (tagInstance.Location as LocationPoint).Point;
+
+                    if (item.TagHeadPosition.IsSameDirection(tagInBoxList[0].TagHeadPosition))
+                    {
+                        newpoint = tagInBoxList[0].TagHeadPosition;
+                    }
+                    else
+                    {
+                        newpoint = new XYZ(instancePoint.X - 270 / 304.8, tagInBoxList[0].TagHeadPosition.Y, item.TagHeadPosition.Z);
+                    }
+
+                    item.TagHeadPosition = newpoint;
                 }
-                else
+            }
+            else
+            {
+                tagInBoxList.Sort((a, b) => a.TagHeadPosition.Y.CompareTo(b.TagHeadPosition.Y));//排序    
+                foreach (var item in tagInBoxList)
                 {
-                    newpoint = new XYZ(instancePoint.X-270/304.8, tagInBoxList[0].TagHeadPosition.Y, item.TagHeadPosition.Z);
+                    XYZ newpoint = new XYZ();
+                    FamilyInstance tagInstance = item.GetTaggedLocalElement() as FamilyInstance;
+                    XYZ instancePoint = (tagInstance.Location as LocationPoint).Point;
+                    double distance = tagInBoxList[tagInBoxList.Count - 1].TagHeadPosition.Y -
+                        ((tagInBoxList[tagInBoxList.Count - 1].GetTaggedLocalElement() as FamilyInstance).Location as LocationPoint).Point.Y;
+
+                    if (item.TagHeadPosition.IsSameDirection(tagInBoxList[tagInBoxList.Count-1].TagHeadPosition))
+                    {
+                        newpoint = tagInBoxList[tagInBoxList.Count - 1].TagHeadPosition;
+                    }
+                    else
+                    {
+                        newpoint = new XYZ(tagInBoxList[tagInBoxList.Count - 1].TagHeadPosition.X, instancePoint.Y +distance, item.TagHeadPosition.Z);
+                    }
+
+                    item.TagHeadPosition = newpoint;
                 }
-                item.TagHeadPosition = newpoint;
             }
         }
         public List<XYZ> TwoPointGetPointList(XYZ minPoint, XYZ maxPoint)
@@ -474,6 +509,32 @@ namespace FFETOOLS
             }
 
             return inSide;
+        }
+
+        /// <summary>
+        /// 判断设备位置大致情况 是否为水平 还是垂直
+        /// </summary>
+        /// <param name="familyInstances"></param>
+        /// <returns></returns>
+        public bool isDimensionHorizen(List<FamilyInstance> familyInstances)
+        {
+            if (
+                Math.Abs
+                (
+                   familyInstances.OrderBy(f => (f.Location as LocationPoint).Point.X).Select(f => (f.Location as LocationPoint).Point.X).First()
+                 - familyInstances.OrderByDescending(f => (f.Location as LocationPoint).Point.X).Select(f => (f.Location as LocationPoint).Point.X).First()
+                )
+                >
+                Math.Abs
+                (
+                      familyInstances.OrderBy(f => (f.Location as LocationPoint).Point.Y).Select(f => (f.Location as LocationPoint).Point.Y).First()
+                    - familyInstances.OrderByDescending(f => (f.Location as LocationPoint).Point.Y).Select(f => (f.Location as LocationPoint).Point.Y).First()
+                 )
+                )
+            {
+                return true;
+            }
+            return false;
         }
         #endregion
         public bool CreatCommonNote(Document doc, UIDocument uidoc, string name)//创建通用标注
