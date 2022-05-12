@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,7 +65,7 @@ namespace FFETOOLS
                 }
                 else
                 {
-                    TaskDialog.Show("¾¯¸æ", "ÇëÔÚÆ½ÃæÊÓÍ¼ÖĞ½øĞĞ²Ù×÷");
+                    TaskDialog.Show("è­¦å‘Š", "è¯·åœ¨å¹³é¢è§†å›¾ä¸­è¿›è¡Œæ“ä½œ");
                     WaterPool.mainfrm.Show();
                 }
 
@@ -115,13 +115,13 @@ namespace FFETOOLS
             FamilyInstance ladder1 = null;
             FamilyInstance ladder2 = null;
 
-            XYZ pickpoint = sel.PickPoint("ÇëÑ¡Ôñ²åÈëµã");
+            XYZ pickpoint = sel.PickPoint("è¯·é€‰æ‹©æ’å…¥ç‚¹");
             XYZ middlePoint = new XYZ(pickpoint.X + poolLehgthValue / 2 / 304.8, pickpoint.Y + poolWidthValue / 2 / 304.8, pickpoint.Z);
 
-            TransactionGroup tg = new TransactionGroup(doc, "´´½¨Ë®³Ø");
+            TransactionGroup tg = new TransactionGroup(doc, "åˆ›å»ºæ°´æ± ");
             tg.Start();
 
-            using (Transaction trans = new Transaction(doc, "´´½¨±ê¸ß"))
+            using (Transaction trans = new Transaction(doc, "åˆ›å»ºæ ‡é«˜"))
             {
                 trans.Start();
 
@@ -133,7 +133,7 @@ namespace FFETOOLS
                 {
                     poolBottomlevel = Level.Create(doc, poolBottomElevationValue * 1000 / 304.8);
                     poolBottomlevel.Name = Convert.ToDouble(poolBottomElevation).ToString("0.000");
-                    viewPlan = ViewPlan.Create(doc, GetViewFamilyType(doc).Id, poolBottomlevel.Id);//ÎªĞÂ½¨µÄ±ê¸ß´´½¨¶ÔÓ¦µÄÊÓÍ¼                    
+                    viewPlan = ViewPlan.Create(doc, GetViewFamilyType(doc).Id, poolBottomlevel.Id);//ä¸ºæ–°å»ºçš„æ ‡é«˜åˆ›å»ºå¯¹åº”çš„è§†å›¾                    
                 }
 
                 if (ElevationExist(doc, (poolBottomElevationValue * 1000 + poolHeightValue).ToString()))
@@ -150,7 +150,7 @@ namespace FFETOOLS
                 trans.Commit();
             }
 
-            using (Transaction trans = new Transaction(doc, "´´½¨Ë®³ØÖ÷Ìå"))
+            using (Transaction trans = new Transaction(doc, "åˆ›å»ºæ°´æ± ä¸»ä½“"))
             {
                 trans.Start();
 
@@ -188,39 +188,44 @@ namespace FFETOOLS
                 double topFloorThick = poolTopFloor.get_Parameter(BuiltInParameter.FLOOR_ATTR_THICKNESS_PARAM).AsDouble();
                 poolTopFloor.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(topFloorThick);
 
-                ManHoleFamilyLoad(doc, "Ë®³ØÈË¿×");
+                XYZ textPoint = (point11 + point31) / 2;
+                int textLength=WaterPool.mainfrm.PoolText.SelectedItem.ToString().Length;
+                XYZ moveTextPoint = new XYZ(textPoint.X-textLength*70/304.8, textPoint.Y, textPoint.Z);
+                PoolNameText(doc, moveTextPoint);
+
+                ManHoleFamilyLoad(doc, "æ°´æ± äººå­”");
                 manHoleSymbol = ManHoleSymbol(doc);
                 manHoleSymbol.Activate();
                 XYZ manHolePoint1 = new XYZ(pickpoint.X + manHoleSize / 2 / 304.8, pickpoint.Y + manHoleSize / 2 / 304.8, pickpoint.Z);
                 XYZ manHolePoint2 = new XYZ(pickpoint.X + poolLehgthValue / 304.8 - manHoleSize / 2 / 304.8, pickpoint.Y + poolWidthValue / 304.8 - manHoleSize / 2 / 304.8, pickpoint.Z);
                 manHole1 = doc.Create.NewFamilyInstance(manHolePoint1, manHoleSymbol, poolTopFloor, poolToplevel, StructuralType.NonStructural);
-                manHole1.LookupParameter("ÈË¿×°ë¾¶").SetValueString((manHoleSize / 2).ToString());
+                manHole1.LookupParameter("äººå­”åŠå¾„").SetValueString((manHoleSize / 2).ToString());
                 manHole2 = doc.Create.NewFamilyInstance(manHolePoint2, manHoleSymbol, poolTopFloor, poolToplevel, StructuralType.NonStructural);
-                manHole2.LookupParameter("ÈË¿×°ë¾¶").SetValueString((manHoleSize / 2).ToString());           
+                manHole2.LookupParameter("äººå­”åŠå¾„").SetValueString((manHoleSize / 2).ToString());
 
                 double poolToplevelOffset = poolToplevel.get_Parameter(BuiltInParameter.LEVEL_ELEV).AsDouble();
                 if (poolToplevelOffset * 304.8 > -400)
                 {
-                    manHole1.LookupParameter("ÈË¿×¸ß¶È").SetValueString("200");
-                    manHole2.LookupParameter("ÈË¿×¸ß¶È").SetValueString("200");
+                    manHole1.LookupParameter("äººå­”é«˜åº¦").SetValueString("200");
+                    manHole2.LookupParameter("äººå­”é«˜åº¦").SetValueString("200");
                 }
                 else
                 {
-                    manHole1.LookupParameter("ÈË¿×¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) - 200).ToString());
-                    manHole2.LookupParameter("ÈË¿×¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) - 200).ToString());
+                    manHole1.LookupParameter("äººå­”é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) - 200).ToString());
+                    manHole2.LookupParameter("äººå­”é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) - 200).ToString());
                 }
 
-                double ladderHeight = (poolHeightValue-1000)/304.8;
+                double ladderHeight = (poolHeightValue - 1000) / 304.8;
                 ladderSymbol = LadderSymbol(doc);
                 ladderSymbol.Activate();
-                XYZ ladderPoint1 = new XYZ(pickpoint.X + manHoleSize / 2 / 304.8, pickpoint.Y+250/304.8, pickpoint.Z);
-                XYZ ladderPoint2 = new XYZ(pickpoint.X + poolLehgthValue / 304.8 - manHoleSize / 2 / 304.8, pickpoint.Y + poolWidthValue / 304.8 - 250/ 304.8, pickpoint.Z);
+                XYZ ladderPoint1 = new XYZ(pickpoint.X + manHoleSize / 2 / 304.8, pickpoint.Y + 250 / 304.8, pickpoint.Z);
+                XYZ ladderPoint2 = new XYZ(pickpoint.X + poolLehgthValue / 304.8 - manHoleSize / 2 / 304.8, pickpoint.Y + poolWidthValue / 304.8 - 250 / 304.8, pickpoint.Z);
                 ladder1 = doc.Create.NewFamilyInstance(ladderPoint1, ladderSymbol, poolBottomlevel, StructuralType.NonStructural);
-                ladder1.LookupParameter("»¤Áı¿É¼û").Set(0);
-                ladder1.LookupParameter("½¨ÖşÅÀÌİ_Ìİ¸ß").Set(ladderHeight);
+                ladder1.LookupParameter("æŠ¤ç¬¼å¯è§").Set(0);
+                ladder1.LookupParameter("å»ºç­‘çˆ¬æ¢¯_æ¢¯é«˜").Set(ladderHeight);
                 ladder2 = doc.Create.NewFamilyInstance(ladderPoint2, ladderSymbol, poolBottomlevel, StructuralType.NonStructural);
-                ladder2.LookupParameter("»¤Áı¿É¼û").Set(0);
-                ladder2.LookupParameter("½¨ÖşÅÀÌİ_Ìİ¸ß").Set(ladderHeight);
+                ladder2.LookupParameter("æŠ¤ç¬¼å¯è§").Set(0);
+                ladder2.LookupParameter("å»ºç­‘çˆ¬æ¢¯_æ¢¯é«˜").Set(ladderHeight);
                 Line line = Line.CreateBound(ladderPoint2, ladderPoint2 + XYZ.BasisZ * 1);
                 ElementTransformUtils.RotateElement(doc, ladder2.Id, line, Math.PI);
 
@@ -229,113 +234,113 @@ namespace FFETOOLS
                 sumpSymbol.Activate();
                 XYZ sumpPoint = new XYZ(pickpoint.X + (poolLehgthValue - 300 - WaterPool.mainfrm.SumpLengthValue) / 304.8, pickpoint.Y + 300 / 304.8, pickpoint.Z);
                 sump = doc.Create.NewFamilyInstance(sumpPoint, sumpSymbol, poolBottomFloor, poolBottomlevel, StructuralType.NonStructural);
-                sump.LookupParameter("¿Ó±Úºñ¶È").SetValueString("300");
-                sump.LookupParameter("µØ¿Ó¸ß¶È").SetValueString((WaterPool.mainfrm.SumpHeightValue).ToString());
-                sump.LookupParameter("µØ¿Ó³¤¶È").SetValueString((WaterPool.mainfrm.SumpLengthValue).ToString());
-                sump.LookupParameter("µØ¿Ó¿í¶È").SetValueString((WaterPool.mainfrm.SumpWidthValue).ToString());
+                sump.LookupParameter("å‘å£åšåº¦").SetValueString("300");
+                sump.LookupParameter("åœ°å‘é«˜åº¦").SetValueString((WaterPool.mainfrm.SumpHeightValue).ToString());
+                sump.LookupParameter("åœ°å‘é•¿åº¦").SetValueString((WaterPool.mainfrm.SumpLengthValue).ToString());
+                sump.LookupParameter("åœ°å‘å®½åº¦").SetValueString((WaterPool.mainfrm.SumpWidthValue).ToString());
 
                 if (haveCoolTower == true)
                 {
                     if (coolTowerFlow == "400" || coolTowerFlow == "500" || coolTowerFlow == "600" || coolTowerFlow == "700")
                     {
-                        CoolTowerFamilyLoad(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG400-700");
-                        coolTowerSymbol = CoolTowerSymbol(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG400-700");
+                        CoolTowerFamilyLoad(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG400-700");
+                        coolTowerSymbol = CoolTowerSymbol(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG400-700");
                         coolTowerSymbol.Activate();
                         coolTower = doc.Create.NewFamilyInstance(middlePoint, coolTowerSymbol, poolToplevel, StructuralType.NonStructural);
-                        coolTower.LookupParameter("Æ«ÒÆ").SetValueString("200");
-                        coolTower.LookupParameter("Á÷Á¿").SetValueString(coolTowerFlow);
+                        coolTower.LookupParameter("åç§»").SetValueString("200");
+                        coolTower.LookupParameter("æµé‡").SetValueString(coolTowerFlow);
                         if (poolToplevelOffset * 304.8 > -400)
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString("300");
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString("300");
                         }
                         else
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
                         }
                     }
                     else if (coolTowerFlow == "8" || coolTowerFlow == "15" || coolTowerFlow == "30" || coolTowerFlow == "50")
                     {
-                        CoolTowerFamilyLoad(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG8-50");
-                        coolTowerSymbol = CoolTowerSymbol(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG8-50");
+                        CoolTowerFamilyLoad(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG8-50");
+                        coolTowerSymbol = CoolTowerSymbol(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG8-50");
                         coolTowerSymbol.Activate();
                         coolTower = doc.Create.NewFamilyInstance(middlePoint, coolTowerSymbol, poolToplevel, StructuralType.NonStructural);
-                        coolTower.LookupParameter("Æ«ÒÆ").SetValueString("200");
-                        coolTower.LookupParameter("Á÷Á¿").SetValueString(coolTowerFlow);
+                        coolTower.LookupParameter("åç§»").SetValueString("200");
+                        coolTower.LookupParameter("æµé‡").SetValueString(coolTowerFlow);
                         if (poolToplevelOffset * 304.8 > -400)
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString("300");
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString("300");
                         }
                         else
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
                         }
                     }
                     else if (coolTowerFlow == "75" || coolTowerFlow == "100")
                     {
-                        CoolTowerFamilyLoad(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG75-100");
-                        coolTowerSymbol = CoolTowerSymbol(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG75-100");
+                        CoolTowerFamilyLoad(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG75-100");
+                        coolTowerSymbol = CoolTowerSymbol(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG75-100");
                         coolTowerSymbol.Activate();
                         coolTower = doc.Create.NewFamilyInstance(middlePoint, coolTowerSymbol, poolToplevel, StructuralType.NonStructural);
-                        coolTower.LookupParameter("Æ«ÒÆ").SetValueString("200");
-                        coolTower.LookupParameter("Á÷Á¿").SetValueString(coolTowerFlow);
+                        coolTower.LookupParameter("åç§»").SetValueString("200");
+                        coolTower.LookupParameter("æµé‡").SetValueString(coolTowerFlow);
                         if (poolToplevelOffset * 304.8 > -400)
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString("300");
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString("300");
                         }
                         else
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
                         }
                     }
                     else if (coolTowerFlow == "150" || coolTowerFlow == "200")
                     {
-                        CoolTowerFamilyLoad(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG150-200");
-                        coolTowerSymbol = CoolTowerSymbol(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG150-200");
+                        CoolTowerFamilyLoad(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG150-200");
+                        coolTowerSymbol = CoolTowerSymbol(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG150-200");
                         coolTowerSymbol.Activate();
                         coolTower = doc.Create.NewFamilyInstance(middlePoint, coolTowerSymbol, poolToplevel, StructuralType.NonStructural);
-                        coolTower.LookupParameter("Æ«ÒÆ").SetValueString("200");
-                        coolTower.LookupParameter("Á÷Á¿").SetValueString(coolTowerFlow);
+                        coolTower.LookupParameter("åç§»").SetValueString("200");
+                        coolTower.LookupParameter("æµé‡").SetValueString(coolTowerFlow);
                         if (poolToplevelOffset * 304.8 > -400)
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString("300");
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString("300");
                         }
                         else
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
                         }
                     }
                     else if (coolTowerFlow == "300")
                     {
-                        CoolTowerFamilyLoad(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG300");
-                        coolTowerSymbol = CoolTowerSymbol(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG300");
+                        CoolTowerFamilyLoad(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG300");
+                        coolTowerSymbol = CoolTowerSymbol(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG300");
                         coolTowerSymbol.Activate();
                         coolTower = doc.Create.NewFamilyInstance(middlePoint, coolTowerSymbol, poolToplevel, StructuralType.NonStructural);
-                        coolTower.LookupParameter("Æ«ÒÆ").SetValueString("200");
-                        coolTower.LookupParameter("Á÷Á¿").SetValueString(coolTowerFlow);
+                        coolTower.LookupParameter("åç§»").SetValueString("200");
+                        coolTower.LookupParameter("æµé‡").SetValueString(coolTowerFlow);
                         if (poolToplevelOffset * 304.8 > -400)
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString("300");
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString("300");
                         }
                         else
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
                         }
                     }
                     else if (coolTowerFlow == "1000")
                     {
-                        CoolTowerFamilyLoad(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG1000");
-                        coolTowerSymbol = CoolTowerSymbol(doc, "Ô²ĞÎÄæÁ÷Ê½ÀäÈ´Ëş10BNG1000");
+                        CoolTowerFamilyLoad(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG1000");
+                        coolTowerSymbol = CoolTowerSymbol(doc, "åœ†å½¢é€†æµå¼å†·å´å¡”10BNG1000");
                         coolTowerSymbol.Activate();
                         coolTower = doc.Create.NewFamilyInstance(middlePoint, coolTowerSymbol, poolToplevel, StructuralType.NonStructural);
-                        coolTower.LookupParameter("Æ«ÒÆ").SetValueString("200");
-                        coolTower.LookupParameter("Á÷Á¿").SetValueString(coolTowerFlow);
+                        coolTower.LookupParameter("åç§»").SetValueString("200");
+                        coolTower.LookupParameter("æµé‡").SetValueString(coolTowerFlow);
                         if (poolToplevelOffset * 304.8 > -400)
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString("300");
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString("300");
                         }
                         else
                         {
-                            coolTower.LookupParameter("»ù´¡¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
+                            coolTower.LookupParameter("åŸºç¡€é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) - 100).ToString());
                         }
                     }
                 }
@@ -632,7 +637,7 @@ namespace FFETOOLS
                 trans.Commit();
             }
 
-            using (Transaction trans = new Transaction(doc, "´´½¨Í¨Æø¹Ü"))
+            using (Transaction trans = new Transaction(doc, "åˆ›å»ºé€šæ°”ç®¡"))
             {
                 trans.Start();
                 List<FamilyInstance> ventPipes = CreatVentPipe(doc, pickpoint, poolTopFloor, poolToplevel, poolLehgthValue, poolWidthValue);
@@ -643,24 +648,24 @@ namespace FFETOOLS
                     if (poolToplevelOffset * 304.8 > -400)
                     {
                         ventPipe1 = ventPipes.ElementAt(0);
-                        ventPipe1.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString("900");
+                        ventPipe1.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString("900");
                         ventPipe2 = ventPipes.ElementAt(1);
-                        ventPipe2.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString("1400");
+                        ventPipe2.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString("1400");
                         ventPipe3 = ventPipes.ElementAt(2);
-                        ventPipe3.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString("900");
+                        ventPipe3.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString("900");
                         ventPipe4 = ventPipes.ElementAt(3);
-                        ventPipe4.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString("1400");
+                        ventPipe4.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString("1400");
                     }
                     else
                     {
                         ventPipe1 = ventPipes.ElementAt(0);
-                        ventPipe1.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) + 500).ToString());
+                        ventPipe1.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) + 500).ToString());
                         ventPipe2 = ventPipes.ElementAt(1);
-                        ventPipe2.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) + 1000).ToString());
+                        ventPipe2.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) + 1000).ToString());
                         ventPipe3 = ventPipes.ElementAt(2);
-                        ventPipe3.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) + 500).ToString());
+                        ventPipe3.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) + 500).ToString());
                         ventPipe4 = ventPipes.ElementAt(3);
-                        ventPipe4.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) + 1000).ToString());
+                        ventPipe4.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) + 1000).ToString());
                     }
                 }
                 else if (poolLehgthValue == poolWidthValue && poolLehgthValue < 9000)
@@ -668,16 +673,16 @@ namespace FFETOOLS
                     if (poolToplevelOffset * 304.8 > -400)
                     {
                         ventPipe1 = ventPipes.ElementAt(0);
-                        ventPipe1.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString("900");
+                        ventPipe1.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString("900");
                         ventPipe2 = ventPipes.ElementAt(1);
-                        ventPipe2.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString("1400");
+                        ventPipe2.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString("1400");
                     }
                     else
                     {
                         ventPipe1 = ventPipes.ElementAt(0);
-                        ventPipe1.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) + 500).ToString());
+                        ventPipe1.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) + 500).ToString());
                         ventPipe2 = ventPipes.ElementAt(1);
-                        ventPipe2.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) + 1000).ToString());
+                        ventPipe2.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) + 1000).ToString());
                     }
                 }
                 else if (!(poolLehgthValue == poolWidthValue))
@@ -685,16 +690,16 @@ namespace FFETOOLS
                     if (poolToplevelOffset * 304.8 > -400)
                     {
                         ventPipe1 = ventPipes.ElementAt(0);
-                        ventPipe1.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString("900");
+                        ventPipe1.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString("900");
                         ventPipe2 = ventPipes.ElementAt(1);
-                        ventPipe2.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString("1400");
+                        ventPipe2.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString("1400");
                     }
                     else
                     {
                         ventPipe1 = ventPipes.ElementAt(0);
-                        ventPipe1.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) + 500).ToString());
+                        ventPipe1.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) + 500).ToString());
                         ventPipe2 = ventPipes.ElementAt(1);
-                        ventPipe2.LookupParameter("Í¨Æø¹Ü¶¥²¿¸ß¶È").SetValueString(((-poolToplevelOffset * 304.8) + 1000).ToString());
+                        ventPipe2.LookupParameter("é€šæ°”ç®¡é¡¶éƒ¨é«˜åº¦").SetValueString(((-poolToplevelOffset * 304.8) + 1000).ToString());
                     }
                 }
 
@@ -706,7 +711,7 @@ namespace FFETOOLS
         }
         public bool IsIntegerForDouble(double obj)
         {
-            double eps = 1e-10;  // ¾«¶È·¶Î§
+            double eps = 1e-10;  // ç²¾åº¦èŒƒå›´
             return obj - Math.Floor(obj) < eps;
         }
         public List<FamilyInstance> CreatVentPipe(Document doc, XYZ point, Floor poolTopFloor, Level topLevel, double length, double width)
@@ -771,57 +776,57 @@ namespace FFETOOLS
 
             return ventPipes;
         }
-        #region GetSolidsOfElement£º´ÓelementÀïÃæ»ñÈ¡ÊµÌåµÄ·½·¨
+        #region GetSolidsOfElementï¼šä»elementé‡Œé¢è·å–å®ä½“çš„æ–¹æ³•
         public List<Solid> GetSolidsOfElement(Element ele)
         {
-            //Éú³ÉÊÂ¼ş£¬Ö¸¶¨·µ»ØÊı¾İµÄÌØÕ÷
+            //ç”Ÿæˆäº‹ä»¶ï¼ŒæŒ‡å®šè¿”å›æ•°æ®çš„ç‰¹å¾
             Options options = new Options();
             options.DetailLevel = ViewDetailLevel.Fine;
             options.ComputeReferences = true;
             options.IncludeNonVisibleObjects = true;
-            //È¡µÃ¹¹¼şÔªËØ
+            //å–å¾—æ„ä»¶å…ƒç´ 
             GeometryElement geoElement = ele.get_Geometry(options);
             List<GeometryObject> geoObj = new List<GeometryObject>();
-            //µİ¹é»ñÈ¡¼¯ºÏÔªËØµÄËùÓĞgeometryobject
+            //é€’å½’è·å–é›†åˆå…ƒç´ çš„æ‰€æœ‰geometryobject
             GetAllObj(geoElement, ref geoObj);
-            //×ªÎªsolidµÄ¼¯ºÏ
+            //è½¬ä¸ºsolidçš„é›†åˆ
             List<Solid> solids = geoObj.ConvertAll(m => m as Solid);
             return solids;
         }
         #endregion
-        #region GetAllObj»ñµÃgeometryµÄ·½·¨
-        //»ñµÃgeometryobjectµÄµİ¹éËã·¨
+        #region GetAllObjè·å¾—geometryçš„æ–¹æ³•
+        //è·å¾—geometryobjectçš„é€’å½’ç®—æ³•
         public void GetAllObj(GeometryElement gele, ref List<GeometryObject> gobjs)
         {
             if (gele == null)
             {
                 return;
             }
-            //±éÀúgeometryelementÀïÃæµÄgeometryobject
+            //éå†geometryelementé‡Œé¢çš„geometryobject
             IEnumerator<GeometryObject> enumerator = gele.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 GeometryObject geoObject = enumerator.Current;
                 Type type = geoObject.GetType();
-                //Èç¹ûÊÇÇ¶Ì×µÄGeometryElement 
+                //å¦‚æœæ˜¯åµŒå¥—çš„GeometryElement 
                 if (type.Equals(typeof(GeometryElement)))
                 {
-                    //Ôòµİ¹é
+                    //åˆ™é€’å½’
                     GetAllObj(geoObject as GeometryElement, ref gobjs);
                 }
-                //Èç¹ûÇ¶Ì×µÄgeometryinstance
+                //å¦‚æœåµŒå¥—çš„geometryinstance
                 else if (type.Equals(typeof(GeometryInstance)))
                 {
-                    //ÔòÓÃgetinstancegeometryÈ¡µÃÆäÖĞµÄgeometryelementÔÙµİ¹é
+                    //åˆ™ç”¨getinstancegeometryå–å¾—å…¶ä¸­çš„geometryelementå†é€’å½’
                     GetAllObj((geoObject as GeometryInstance).GetInstanceGeometry(), ref gobjs);
                 }
-                //Èç¹ûÊÇsolid£¬Ôò´æÈë¼¯ºÏ£¬µİ¹é½áÊø
+                //å¦‚æœæ˜¯solidï¼Œåˆ™å­˜å…¥é›†åˆï¼Œé€’å½’ç»“æŸ
                 else
                 {
                     if (type.Equals(typeof(Solid)))
                     {
                         Solid solid = geoObject as Solid;
-                        //È¥µô¿ÉÄÜ´æÔÚµÄ¿ÕSolid
+                        //å»æ‰å¯èƒ½å­˜åœ¨çš„ç©ºSolid
                         if (solid.Faces.Size > 0 || solid.Edges.Size > 0)
                         {
                             gobjs.Add(geoObject);
@@ -831,14 +836,14 @@ namespace FFETOOLS
             }
         }
         #endregion
-        #region »ñµÃÔªËØµÄËùÓĞÃæ
+        #region è·å¾—å…ƒç´ çš„æ‰€æœ‰é¢
         public List<Face> GetGeoFaces(Element ele)
         {
-            //´æ·Å¼¯ºÏÔªËØµÄËùÓĞÃæ
+            //å­˜æ”¾é›†åˆå…ƒç´ çš„æ‰€æœ‰é¢
             List<Face> geoFaces = new List<Face>();
-            //ÓÃÉÏÒ»½ÚµÄ·½·¨È¡µÃËùÓĞ¼¸ºÎÌåsolid
+            //ç”¨ä¸Šä¸€èŠ‚çš„æ–¹æ³•å–å¾—æ‰€æœ‰å‡ ä½•ä½“solid
             List<Solid> solids = GetSolidsOfElement(ele);
-            //´Ó¼¯ºÏÌåÖØÌáÈ¡ËùÓĞface£¬´æ½ø¼¯ºÏ
+            //ä»é›†åˆä½“é‡æå–æ‰€æœ‰faceï¼Œå­˜è¿›é›†åˆ
             foreach (Solid solid in solids)
             {
                 foreach (Face face in solid.Faces)
@@ -917,7 +922,7 @@ namespace FFETOOLS
         }
         public List<XYZ> GetColumnLocationPoints(XYZ basePoint, double length, int divide)
         {
-            //ÓÃÓÚ·½ĞÎË®³ØµÈ·Ö£¬ÊÊÓÃÓÚ800Á¢·½Ë®³Ø¼°ÒÔÏÂ,ÊÊÓÃÓÚÍêÈ«µÈ·Ö
+            //ç”¨äºæ–¹å½¢æ°´æ± ç­‰åˆ†ï¼Œé€‚ç”¨äº800ç«‹æ–¹æ°´æ± åŠä»¥ä¸‹,é€‚ç”¨äºå®Œå…¨ç­‰åˆ†
             List<XYZ> points = new List<XYZ>();
             double len = length / divide;
             for (int x = 1; x < divide; x++)
@@ -931,7 +936,7 @@ namespace FFETOOLS
         }
         public List<XYZ> GetColumnLocationPoints(XYZ basePoint, double edgeDistance, double length, int divide)
         {
-            //ÓÃÓÚ·½ĞÎË®³ØµÈ·Ö£¬ÊÊÓÃÓÚ800Á¢·½Ë®³ØÒÔÉÏ,ÊÊÓÃÓÚ²»ÍêÈ«µÈ·Ö
+            //ç”¨äºæ–¹å½¢æ°´æ± ç­‰åˆ†ï¼Œé€‚ç”¨äº800ç«‹æ–¹æ°´æ± ä»¥ä¸Š,é€‚ç”¨äºä¸å®Œå…¨ç­‰åˆ†
             List<XYZ> points = new List<XYZ>();
             double len = (length - edgeDistance * 2) / divide;
 
@@ -946,7 +951,7 @@ namespace FFETOOLS
         }
         public List<XYZ> GetColumnLocationPoints(XYZ basePoint, double edgeDistance, double length, double width, int divideX, int divideY)
         {
-            //ÓÃÓÚ¾ØĞÎË®³ØµÈ·Ö,ÊÊÓÃÓÚ²»ÍêÈ«µÈ·Ö
+            //ç”¨äºçŸ©å½¢æ°´æ± ç­‰åˆ†,é€‚ç”¨äºä¸å®Œå…¨ç­‰åˆ†
             List<XYZ> points = new List<XYZ>();
             double len = (length - edgeDistance * 2) / divideX;
             double wid = (width - edgeDistance * 2) / divideY;
@@ -962,7 +967,7 @@ namespace FFETOOLS
         }
         public List<XYZ> GetColumnLocationPoints(XYZ basePoint, double length, double width, int divideX, int divideY)
         {
-            //ÓÃÓÚ¾ØĞÎË®³ØµÈ·Ö,ÊÊÓÃÓÚÍêÈ«µÈ·Ö
+            //ç”¨äºçŸ©å½¢æ°´æ± ç­‰åˆ†,é€‚ç”¨äºå®Œå…¨ç­‰åˆ†
             List<XYZ> points = new List<XYZ>();
             double len = length / divideX;
             double wid = width / divideY;
@@ -978,7 +983,7 @@ namespace FFETOOLS
         }
         public List<XYZ> GetColumnLocationPoints(XYZ basePoint, double length, double width)
         {
-            //ÓÃÓÚ¾ØĞÎ·Ç±ê×¼Ë®³ØµÈ·Ö,µ¥ÅÅ
+            //ç”¨äºçŸ©å½¢éæ ‡å‡†æ°´æ± ç­‰åˆ†,å•æ’
             int divide = 1;
             List<XYZ> points = new List<XYZ>();
 
@@ -1000,7 +1005,7 @@ namespace FFETOOLS
         }
         public List<XYZ> GetColumnLocationPointsUnStand(XYZ basePoint, double length, double width)
         {
-            //ÓÃÓÚ¾ØĞÎ·Ç±ê×¼Ë®³ØµÈ·Ö,¶àÅÅ           
+            //ç”¨äºçŸ©å½¢éæ ‡å‡†æ°´æ± ç­‰åˆ†,å¤šæ’           
             List<XYZ> points = new List<XYZ>();
             int divideX = 1;
             int divideY = 1;
@@ -1045,7 +1050,7 @@ namespace FFETOOLS
             IList<Element> manHoles = manHoleCollector.ToElements();
             foreach (FamilySymbol item in manHoles)
             {
-                if (item.Family.Name.Contains("½á¹¹") && item.Family.Name.Contains("Ë®³ØÈË¿×"))
+                if (item.Family.Name.Contains("ç»“æ„") && item.Family.Name.Contains("æ°´æ± äººå­”"))
                 {
                     manHoleSymbolList.Add(item);
                 }
@@ -1061,7 +1066,7 @@ namespace FFETOOLS
             IList<Element> manHoles = manHoleCollector.ToElements();
             foreach (FamilySymbol item in manHoles)
             {
-                if (item.Family.Name.Contains("½¨Öş_ÅÀÌİ_default"))
+                if (item.Family.Name.Contains("å»ºç­‘_çˆ¬æ¢¯_default"))
                 {
                     manHoleSymbolList.Add(item);
                 }
@@ -1077,7 +1082,7 @@ namespace FFETOOLS
             IList<Element> manHoles = manHoleCollector.ToElements();
             foreach (FamilySymbol item in manHoles)
             {
-                if (item.Family.Name.Contains("½á¹¹") && item.Family.Name.Contains("¼¯Ë®¿Ó"))
+                if (item.Family.Name.Contains("ç»“æ„") && item.Family.Name.Contains("é›†æ°´å‘"))
                 {
                     manHoleSymbolList.Add(item);
                 }
@@ -1093,7 +1098,7 @@ namespace FFETOOLS
             IList<Element> pumps = pumpCollector.ToElements();
             foreach (FamilySymbol item in pumps)
             {
-                if (item.Family.Name.Contains("¸øÅÅË®") && item.Family.Name.Contains("Íä¹ÜĞÍÍ¨Æø¹Ü"))
+                if (item.Family.Name.Contains("ç»™æ’æ°´") && item.Family.Name.Contains("å¼¯ç®¡å‹é€šæ°”ç®¡"))
                 {
                     pumpSymbolList.Add(item);
                 }
@@ -1109,7 +1114,7 @@ namespace FFETOOLS
             IList<Element> poolcolumns = poolColumnCollector.ToElements();
             foreach (FamilySymbol item in poolcolumns)
             {
-                if (item.Family.Name.Contains("½á¹¹_Öù_¾ØĞÎ»ìÄıÍÁÖù_01"))
+                if (item.Family.Name.Contains("ç»“æ„_æŸ±_çŸ©å½¢æ··å‡åœŸæŸ±_01"))
                 {
                     poolHoleSymbolList.Add(item);
                 }
@@ -1138,7 +1143,7 @@ namespace FFETOOLS
             Family family = null;
             foreach (Family item in familyCollect)
             {
-                if (item.Name.Contains(categoryName) && item.Name.Contains("½á¹¹"))
+                if (item.Name.Contains(categoryName) && item.Name.Contains("ç»“æ„"))
                 {
                     family = item;
                     break;
@@ -1146,7 +1151,7 @@ namespace FFETOOLS
             }
             if (family == null)
             {
-                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "½á¹¹_Â¥ÃæÉè±¸»ù´¡_" + categoryName + ".rfa");
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "ç»“æ„_æ¥¼é¢è®¾å¤‡åŸºç¡€_" + categoryName + ".rfa");
             }
         }
         public void CoolTowerFamilyLoad(Document doc, string categoryName)
@@ -1155,7 +1160,7 @@ namespace FFETOOLS
             Family family = null;
             foreach (Family item in familyCollect)
             {
-                if (item.Name.Contains(categoryName) && item.Name.Contains("¸øÅÅË®"))
+                if (item.Name.Contains(categoryName) && item.Name.Contains("ç»™æ’æ°´"))
                 {
                     family = item;
                     break;
@@ -1163,7 +1168,7 @@ namespace FFETOOLS
             }
             if (family == null)
             {
-                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "¸øÅÅË®_ÀäÈ´Éè±¸_" + categoryName + ".rfa");
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "ç»™æ’æ°´_å†·å´è®¾å¤‡_" + categoryName + ".rfa");
             }
         }
         public void PoolColumnFamilyLoad(Document doc)
@@ -1172,7 +1177,7 @@ namespace FFETOOLS
             Family family = null;
             foreach (Family item in familyCollect)
             {
-                if (item.Name.Contains("½á¹¹_Öù_¾ØĞÎ»ìÄıÍÁÖù_01"))
+                if (item.Name.Contains("ç»“æ„_æŸ±_çŸ©å½¢æ··å‡åœŸæŸ±_01"))
                 {
                     family = item;
                     break;
@@ -1180,7 +1185,7 @@ namespace FFETOOLS
             }
             if (family == null)
             {
-                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "½á¹¹_Öù_¾ØĞÎ»ìÄıÍÁÖù_01" + ".rfa");
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "ç»“æ„_æŸ±_çŸ©å½¢æ··å‡åœŸæŸ±_01" + ".rfa");
             }
         }
         public void PoolSumpFamilyLoad(Document doc)
@@ -1189,7 +1194,7 @@ namespace FFETOOLS
             Family family = null;
             foreach (Family item in familyCollect)
             {
-                if (item.Name.Contains("½á¹¹_µØ¿Ó_¼¯Ë®¿Ó01_1"))
+                if (item.Name.Contains("ç»“æ„_åœ°å‘_é›†æ°´å‘01_1"))
                 {
                     family = item;
                     break;
@@ -1197,7 +1202,7 @@ namespace FFETOOLS
             }
             if (family == null)
             {
-                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "½á¹¹_µØ¿Ó_¼¯Ë®¿Ó01_1" + ".rfa");
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "ç»“æ„_åœ°å‘_é›†æ°´å‘01_1" + ".rfa");
             }
         }
         public void PoolVentPipeFamilyLoad(Document doc)
@@ -1206,7 +1211,7 @@ namespace FFETOOLS
             Family family = null;
             foreach (Family item in familyCollect)
             {
-                if (item.Name.Contains("¸øÅÅË®_¸øË®¹¹¼ş_Íä¹ÜĞÍÍ¨Æø¹Ü"))
+                if (item.Name.Contains("ç»™æ’æ°´_ç»™æ°´æ„ä»¶_å¼¯ç®¡å‹é€šæ°”ç®¡"))
                 {
                     family = item;
                     break;
@@ -1214,7 +1219,7 @@ namespace FFETOOLS
             }
             if (family == null)
             {
-                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "¸øÅÅË®_¸øË®¹¹¼ş_Íä¹ÜĞÍÍ¨Æø¹Ü" + ".rfa");
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "ç»™æ’æ°´_ç»™æ°´æ„ä»¶_å¼¯ç®¡å‹é€šæ°”ç®¡" + ".rfa");
             }
         }
         public WallType PoolWallType(Document doc, string wallThick)
@@ -1225,7 +1230,7 @@ namespace FFETOOLS
             foreach (Element elem in wallTypes)
             {
                 WallType wall = elem as WallType;
-                if (wall.Name.Contains("½á¹¹_¸Ö½î»ìÄıÍÁÇ½") && wall.Name.Contains(wallThick))
+                if (wall.Name.Contains("ç»“æ„_é’¢ç­‹æ··å‡åœŸå¢™") && wall.Name.Contains(wallThick))
                 {
                     poolWallType = wall;
                     break;
@@ -1242,7 +1247,7 @@ namespace FFETOOLS
             foreach (Element elem in collector)
             {
                 FloorType floorType = elem as FloorType;
-                if (floorType.Name.Contains("½á¹¹_»ìÄıÍÁÂ¥°å") && floorType.Name.Contains(floorThick))
+                if (floorType.Name.Contains("ç»“æ„_æ··å‡åœŸæ¥¼æ¿") && floorType.Name.Contains(floorThick))
                 {
                     poolFloorType = floorType;
                     break;
@@ -1298,7 +1303,7 @@ namespace FFETOOLS
         }
         public List<string> GetAllElevation(Document doc)
         {
-            // »ñÈ¡È«²¿±ê¸ß
+            // è·å–å…¨éƒ¨æ ‡é«˜
             FilteredElementCollector collector = new FilteredElementCollector(doc).OfClass(typeof(Level));
             IList<Element> levelList = collector.ToElements();
             List<string> levelOffset = new List<string>();
@@ -1310,9 +1315,101 @@ namespace FFETOOLS
             }
             return levelOffset;
         }
+        public void PoolNameText(Document doc, XYZ point)
+        {
+            TextNoteType type = null;
+            IList<TextNoteType> noteTypes = CollectorHelper.TCollector<TextNoteType>(doc);
+
+            foreach (var item in noteTypes)
+            {
+                if (item.Name.Contains("ç»™æ’æ°´-å­—é«˜5"))
+                {
+                    type = item;
+                    break;
+                }
+            }
+
+            string poolText = WaterPool.mainfrm.PoolText.SelectedItem.ToString();
+            string volumn = PoolVolumn();
+            string blank = "";
+            for (int i = 0; i < poolText.Length / 2+2; i++)
+            {
+                if (poolText.Length != 4)
+                {
+                    blank += " ";
+                }
+            }
+
+            string poolName = poolText + "\n" + blank + "V=" + volumn + "mÂ³";
+            TextNote.Create(doc, doc.ActiveView.Id, point, poolName, type.Id);
+        }
+        public string PoolVolumn()
+        {
+            string volumn = "500";
+            double poolHeightValue = WaterPool.mainfrm.PoolHeightValue;
+            double poolLehgthValue = WaterPool.mainfrm.PoolLengthValue;
+            double poolWidthValue = WaterPool.mainfrm.PoolWidthValue;
+
+            if ((poolLehgthValue == 6800 && poolWidthValue == 6800 && poolHeightValue == 3500) ||
+                (poolLehgthValue == 9450 && poolWidthValue == 5000 && poolHeightValue == 3500))
+            {
+                volumn = "150";
+            }
+            else if ((poolLehgthValue == 7800 && poolWidthValue == 7800 && poolHeightValue == 3500) ||
+                 (poolLehgthValue == 9600 && poolWidthValue == 6300 && poolHeightValue == 3500))
+            {
+                volumn = "200";
+            }
+            else if ((poolLehgthValue == 9900 && poolWidthValue == 9900 && poolHeightValue == 3500) ||
+                 (poolLehgthValue == 13900 && poolWidthValue == 6900 && poolHeightValue == 3500))
+            {
+                volumn = "300";
+            }
+            else if ((poolLehgthValue == 11400 && poolWidthValue == 11400 && poolHeightValue == 3500) ||
+                 (poolLehgthValue == 16000 && poolWidthValue == 8000 && poolHeightValue == 3500))
+            {
+                volumn = "400";
+            }
+            else if ((poolLehgthValue == 11700 && poolWidthValue == 11700 && poolHeightValue == 4000) ||
+                (poolLehgthValue == 16400 && poolWidthValue == 8200 && poolHeightValue == 4000))
+            {
+                volumn = "500";
+            }
+            else if ((poolLehgthValue == 12900 && poolWidthValue == 12900 && poolHeightValue == 4000) ||
+                (poolLehgthValue == 20000 && poolWidthValue == 8000 && poolHeightValue == 4000))
+            {
+                volumn = "600";
+            }
+            else if ((poolLehgthValue == 14800 && poolWidthValue == 14800 && poolHeightValue == 4000) ||
+                (poolLehgthValue == 18800 && poolWidthValue == 11200 && poolHeightValue == 4000))
+            {
+                volumn = "800";
+            }
+            else if ((poolLehgthValue == 15900 && poolWidthValue == 15900 && poolHeightValue == 4000) ||
+                (poolLehgthValue == 22800 && poolWidthValue == 11400 && poolHeightValue == 4000))
+            {
+                volumn = "1000";
+            }
+            else if ((poolLehgthValue == 19800 && poolWidthValue == 19800 && poolHeightValue == 4000) ||
+                (poolLehgthValue == 26400 && poolWidthValue == 15000 && poolHeightValue == 4000))
+            {
+                volumn = "1500";
+            }
+            else if ((poolLehgthValue == 23400 && poolWidthValue == 23400 && poolHeightValue == 4000) ||
+                (poolLehgthValue == 27300 && poolWidthValue == 19500 && poolHeightValue == 4000))
+            {
+                volumn = "2000";
+            }
+            else
+            {
+                volumn = Convert.ToInt64(((poolLehgthValue / 1000) * (poolWidthValue / 1000) * ((poolHeightValue - 400) / 1000))).ToString();
+            }
+
+            return volumn;
+        }
         public string GetName()
         {
-            return "´´½¨Ë®³Ø";
+            return "åˆ›å»ºæ°´æ± ";
         }
     }
     public class projectFamLoadOption : IFamilyLoadOptions

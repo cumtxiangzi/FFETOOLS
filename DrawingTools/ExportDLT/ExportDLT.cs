@@ -12,10 +12,9 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB.Plumbing;
-using NPOI.SS.UserModel;
-using NPOI.HSSF.UserModel;
-using NPOI.XSSF.UserModel;
 using System.Windows.Interop;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System.Windows.Forms;
 
 namespace FFETOOLS
@@ -32,373 +31,214 @@ namespace FFETOOLS
 
                 ProjectInfo pro = doc.ProjectInformation;
                 Parameter proNum = pro.LookupParameter("工程代号");
-                Parameter proNam = pro.LookupParameter("工程名称");
+                Parameter proName = pro.LookupParameter("工程名称");
                 Parameter subproNum = pro.LookupParameter("子项代号");
-                Parameter subproNam = pro.LookupParameter("子项名称");
+                Parameter subproName = pro.LookupParameter("子项名称");
+
+                string projectName = proNum.AsString() + "-" + proName.AsString();
+                string subProjectName = subproNum.AsString() + "-" + subproName.AsString();
+                string footerName = proNum.AsString() + "-" + subproNum.AsString() + "-" + "WD-DLT";
+                string excelFooterName = "&\"Arial\"" + "&16" + " " + footerName;
 
                 ExportDLTWindow eltwin = new ExportDLTWindow();
                 eltwin.ShowDialog();
 
-                XSSFWorkbook wk;
-                FileStream fs = null;
+                string path = "";
 
                 if (eltwin.CH_Button.IsChecked == true)
                 {
-                    fs = new FileStream("C:\\ProgramData\\Autodesk\\Revit\\Addins\\2018\\FFETOOLS\\ExcelTemplate\\CNTemplate-DLT.xlsx", FileMode.Open, FileAccess.Read);
+                    path = "C:\\ProgramData\\Autodesk\\Revit\\Addins\\2018\\FFETOOLS\\ExcelTemplate\\CNTemplate-DLT.xlsx";
                 }
                 if (eltwin.CH_EN_Button.IsChecked == true)
                 {
-                    fs = new FileStream("C:\\ProgramData\\Autodesk\\Revit\\Addins\\2018\\FFETOOLS\\ExcelTemplate\\CNENTemplate-DLT.xlsx", FileMode.Open, FileAccess.Read);
+                    path = "C:\\ProgramData\\Autodesk\\Revit\\Addins\\2018\\FFETOOLS\\ExcelTemplate\\CNENTemplate-DLT.xlsx";
                 }
                 if (eltwin.EN_Button.IsChecked == true)
                 {
-                    fs = new FileStream("C:\\ProgramData\\Autodesk\\Revit\\Addins\\2018\\FFETOOLS\\ExcelTemplate\\ENTemplate-DLT.xlsx", FileMode.Open, FileAccess.Read);
+                    path = "C:\\ProgramData\\Autodesk\\Revit\\Addins\\2018\\FFETOOLS\\ExcelTemplate\\ENTemplate-DLT.xlsx";
                 }
 
-                wk = new XSSFWorkbook(fs);
-                fs.Close();
+                ExcelHelper helper = new ExcelHelper();
+                ExcelPackage package = helper.OpenExcel(path);
 
-                XSSFSheet sheet = (XSSFSheet)wk.GetSheetAt(0);
-                string eltname = proNum.AsString() + "-" + subproNum.AsString() + "-" + "WD" + "-" + "DLT";
-                string eltname2 = "&\"Arial\"" + "&16" + " " + eltname;
-                sheet.Footer.Left = eltname2;
+                //指定需要写入的sheet名
+                ExcelWorksheet excelWorksheet = package.Workbook.Worksheets["2017"];
+                string footPage = "&\"Arial\"" + "&16" + " " + "第" + "&P" + "页，" + "共" + "&N" + "页";
 
+                excelWorksheet.HeaderFooter.differentOddEven = false;
+                excelWorksheet.HeaderFooter.OddFooter.LeftAlignedText = excelFooterName;
+                excelWorksheet.HeaderFooter.OddFooter.RightAlignedText = footPage;
 
-                ICellStyle style6 = wk.CreateCellStyle();
-                IFont font6 = wk.CreateFont();
-                font6.FontName = "Arial";
-                font6.FontHeightInPoints = 16;
-                style6.SetFont(font6);
-                style6.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style6.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Left;
-                style6.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+                excelWorksheet.Cells[1, 4].Value = projectName;
+                excelWorksheet.Cells[2, 4].Value = subProjectName;
+                excelWorksheet.Cells[1, 4].Style.Font.Name = "Arial";
+                excelWorksheet.Cells[2, 4].Style.Font.Name = "Arial";
 
-                ICellStyle style7 = wk.CreateCellStyle();
-                IFont font7 = wk.CreateFont();
-                font7.FontName = "Arial";
-                font7.FontHeightInPoints = 16;
-                style7.SetFont(font7);
-                style7.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style7.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-                style7.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+                IList<ViewSheet> ALLviewSheets = CollectorHelper.TCollector<ViewSheet>(doc);
+               
+                List<ViewSheet> WDviewsheets = new List<ViewSheet>();
+                List<ViewSheet> WLviewsheets = new List<ViewSheet>();
+               
+                foreach (var vs in ALLviewSheets)
+                {                   
+                    if (vs.Title.Contains("WL") && !(vs.Name.Contains("材料表")) && !(vs.Name.Contains("未命名")))
+                    {
+                        WLviewsheets.Add(vs);
+                    }
+                }
+                WLviewsheets.Sort(new ViewSheetComparer());
 
-                ICellStyle style71 = wk.CreateCellStyle();
-                IFont font71 = wk.CreateFont();
-                font71.FontName = "Arial";
-                font71.FontHeightInPoints = 14;
-                style71.SetFont(font71);
-                style71.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style71.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-                style71.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-
-                ICellStyle style8 = wk.CreateCellStyle();
-                IFont font8 = wk.CreateFont();
-                font8.FontName = "Arial";
-                font8.FontHeightInPoints = 16;
-                style8.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00");
-                style8.SetFont(font8);
-                style8.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-                style8.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style8.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                style8.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                style8.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                style8.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-
-                ICellStyle style10 = wk.CreateCellStyle();
-                style10.WrapText = true;//设置换行这个要先设置
-                IFont font10 = wk.CreateFont();
-                font10.FontName = "Arial";
-                font10.FontHeightInPoints = 18;
-                font10.Boldweight= (short)FontBoldWeight.Bold;
-                style10.SetFont(font10);
-                style10.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style10.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Left;
-                style10.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-
-                XSSFCell cell = (XSSFCell)sheet.GetRow(0).GetCell(3);
-                cell.SetCellValue(proNum.AsString() + "-" + proNam.AsString());              
-                cell.CellStyle = style10;
-
-                cell = (XSSFCell)sheet.GetRow(1).GetCell(3);
-                cell.SetCellValue(subproNum.AsString() + "-" + subproNam.AsString());
-
-                List<ViewSheet> wviewsheets = new List<ViewSheet>();
-                IList<Element> elems = new FilteredElementCollector(doc).OfClass(typeof(ViewSheet)).ToElements();
-                foreach (Element e in elems)
-                {
-                    ViewSheet vs = e as ViewSheet;
+                foreach (var vs in ALLviewSheets)
+                {             
                     if (vs.Title.Contains("WD") && !(vs.Name.Contains("材料表")) && !(vs.Name.Contains("未命名")))
                     {
-                        wviewsheets.Add(vs);
+                        WDviewsheets.Add(vs);
                     }
-
                 }
-                wviewsheets.Sort(new ViewSheetComparer());
+                WDviewsheets.Sort(new ViewSheetComparer());
 
-                IList<Element> titleblocks = new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance)).OfCategory(BuiltInCategory.OST_TitleBlocks).ToElements();
-                List<string> sizelist = new List<string>();
-                List<FamilyInstance> WtitleBlocks = new List<FamilyInstance>();
-
-                foreach (var view in wviewsheets)
+               List<DrawingInfoStore> drawingInfoStores = new List<DrawingInfoStore>();                
+                IList<FamilyInstance> titleBlocks=CollectorHelper.TCollector<FamilyInstance>(doc);
+               
+                for (int i = 0; i < WLviewsheets.Count; i++)
                 {
-                    foreach (var item in titleblocks)
+                    FamilyInstance tbInstance = null;
+                    foreach (var tb in titleBlocks)
                     {
-                        FamilyInstance tl = item as FamilyInstance;
-                        Element el = doc.GetElement(tl.OwnerViewId);
-                        ViewSheet vs1 = el as ViewSheet;
-                        if (vs1.Title == view.Title)
+                        if (tb.OwnerViewId== WLviewsheets[i].Id)
                         {
-                            WtitleBlocks.Add(tl);
+                            tbInstance = tb;
+                            break;
                         }
                     }
+                    string size=GetDrawingSize(tbInstance);
+
+                    drawingInfoStores.Add(new DrawingInfoStore() {Code=(i+1).ToString(),Title= proNum.AsString() + "-" + subproNum.AsString() + "-" + WLviewsheets[i].SheetNumber ,
+                    DrawingName = WLviewsheets[i].ViewName,DrawingSize=size});
                 }
 
-                foreach (FamilyInstance tl in WtitleBlocks)
+                for (int i = 0; i < WDviewsheets.Count; i++)
                 {
-                    if (tl.Name.Contains("A0"))
+                    FamilyInstance tbInstance = null;
+                    foreach (var tb in titleBlocks)
                     {
-                        sizelist.Add("2");
+                        if (tb.OwnerViewId == WDviewsheets[i].Id)
+                        {
+                            tbInstance = tb;
+                            break;
+                        }
                     }
-                    else if (tl.Name == "A1")
+                    string size = GetDrawingSize(tbInstance);
+
+                    drawingInfoStores.Add(new DrawingInfoStore()
                     {
-                        sizelist.Add("1");
-                    }
-                    else if (tl.Name == "A1.25")
-                    {
-                        sizelist.Add("1.25");
-                    }
-                    else if (tl.Name == "A1.5")
-                    {
-                        sizelist.Add("1.5");
-                    }
-                    else if (tl.Name == "A1.75")
-                    {
-                        sizelist.Add("1.75");
-                    }
-                    else if (tl.Name.Contains("A2"))
-                    {
-                        sizelist.Add("0.5");
-                    }
-                    else
-                    {
-                        //sizelist.Add("1");
-                    }
+                        Code = (i + 1+WLviewsheets.Count).ToString(),
+                        Title = proNum.AsString() + "-" + subproNum.AsString() + "-" + WDviewsheets[i].SheetNumber,
+                        DrawingName = WDviewsheets[i].ViewName,
+                        DrawingSize = size
+                    });
                 }
 
-                int num = wviewsheets.Count;
-                List<string> strlist = new List<string>();
-                foreach (ViewSheet vs in wviewsheets)
+                int totalNum = drawingInfoStores.Count;
+                for (int i = 0; i < totalNum; i++)
                 {
-                    strlist.Add(vs.Name);
-                }
+                    excelWorksheet.Cells[i + 5, 1].Value = drawingInfoStores[i].Code;
+                    excelWorksheet.Cells[i + 5, 2].Value = drawingInfoStores[i].Title;
 
-                if (eltwin.MainWorkShop.IsChecked == true)
-                {
-                    if (subproNum.AsString().Contains("913") && subproNum.AsString().Contains("919"))
-                    {
-                        strlist.Insert(0, "联合水泵站流程图");
-                        strlist.Insert(0, "给水处理流程图");
-                        sizelist.Insert(0, "1");
-                        sizelist.Insert(0, "1");
-                        num = num + 2;
-                    }
-                    if (!(subproNum.AsString().Contains("913")) && subproNum.AsString().Contains("919"))
-                    {
-                        strlist.Insert(0, "联合水泵站流程图");
-                        sizelist.Insert(0, "1");
-                        num = num + 1;
-                    }
-                    if (!(subproNum.AsString().Contains("919")) && subproNum.AsString().Contains("913"))
-                    {
-                        strlist.Insert(0, "给水处理流程图");
-                        sizelist.Insert(0, "1");
-                        num = num + 1;
-                    }
-                    if (subproNum.AsString().Contains("91N"))
-                    {
-                        strlist.Insert(0, "污水处理流程图");
-                        sizelist.Insert(0, "1");
-                        num = num + 1;
-                    }
-                    if (subproNum.AsString().Contains("92N"))
-                    {
-                        strlist.Insert(0, "废水处理流程图");
-                        sizelist.Insert(0, "1");
-                        num = num + 1;
-                    }
-                    if (subproNum.AsString().Contains("91B"))
-                    {
-                        strlist.Insert(0, "消防泵站流程图");
-                        sizelist.Insert(0, "1");
-                        num = num + 1;
-                    }
-                }
-
-                List<string> drawingCodeList = new List<string>();
-                if (eltwin.MainWorkShop.IsChecked == true)
-                {
-                    if (subproNum.AsString().Contains("913") && subproNum.AsString().Contains("919"))
-                    {
-                        drawingCodeList.Add(proNum.AsString() + "-" + "913" + "-" + "WL" + "-" + 1.ToString().PadLeft(3, '0'));
-                        drawingCodeList.Add(proNum.AsString() + "-" + "919" + "-" + "WL" + "-" + 1.ToString().PadLeft(3, '0'));
-                    }
-                    if (!(subproNum.AsString().Contains("913")) && subproNum.AsString().Contains("919"))
-                    {
-                        drawingCodeList.Add(proNum.AsString() + "-" + "919" + "-" + "WL" + "-" + 1.ToString().PadLeft(3, '0'));
-                    }
-                    if (!(subproNum.AsString().Contains("919")) && subproNum.AsString().Contains("913"))
-                    {
-                        drawingCodeList.Add(proNum.AsString() + "-" + "913" + "-" + "WL" + "-" + 1.ToString().PadLeft(3, '0'));
-                    }
-                    if (subproNum.AsString().Contains("91N"))
-                    {
-                        drawingCodeList.Add(proNum.AsString() + "-" + "91N" + "-" + "WL" + "-" + 1.ToString().PadLeft(3, '0'));
-                    }
-                    if (subproNum.AsString().Contains("92N"))
-                    {
-                        drawingCodeList.Add(proNum.AsString() + "-" + "92N" + "-" + "WL" + "-" + 1.ToString().PadLeft(3, '0'));
-                    }
-                    if (subproNum.AsString().Contains("91B"))
-                    {
-                        drawingCodeList.Add(proNum.AsString() + "-" + "91B" + "-" + "WL" + "-" + 1.ToString().PadLeft(3, '0'));
-                    }
-
-                }
-
-                for (int i = 0; i < num; i++)
-                {
-
-                    drawingCodeList.Add(proNum.AsString() + "-" + subproNum.AsString() + "-" + "WD" + "-" + (i + 1).ToString().PadLeft(3, '0'));
-                }
-
-                for (int i = 0; i < num; i++)
-                {
-                    cell = (XSSFCell)sheet.GetRow(i + 4).GetCell(0);
-                    cell.SetCellValue(i + 1);
-                    cell.CellStyle = style7;
-
-                    cell = (XSSFCell)sheet.GetRow(i + 4).GetCell(1);
-                    cell.SetCellValue(drawingCodeList.ElementAt(i));
+                    excelWorksheet.Cells[i + 5, 1].Style.Font.Size = 16;
+                    excelWorksheet.Cells[i + 5, 1].Style.Font.Name = "Arial";
+                    excelWorksheet.Cells[i + 5, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     if (subproNum.AsString().Length > 4)
                     {
-                        cell.CellStyle = style71;
+                        excelWorksheet.Cells[i + 5, 2].Style.Font.Size = 13;
+                        excelWorksheet.Cells[i + 5, 2].Style.Font.Name = "Arial";
                     }
                     else
                     {
-                        cell.CellStyle = style7;
+                        excelWorksheet.Cells[i + 5, 2].Style.Font.Size = 16;
+                        excelWorksheet.Cells[i + 5, 2].Style.Font.Name = "Arial";
                     }
 
-                    cell = (XSSFCell)sheet.GetRow(i + 4).GetCell(3);
-                    cell.SetCellValue(strlist.ElementAt(i));
-                    cell.CellStyle = style6;
+                    excelWorksheet.Cells[i + 5, 4].Value = drawingInfoStores[i].DrawingName;
+                    excelWorksheet.Cells[i + 5, 4].Style.Font.Size = 16;
+                    excelWorksheet.Cells[i + 5, 4].Style.Font.Name = "Arial";
+                    excelWorksheet.Cells[i + 5, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                    cell = (XSSFCell)sheet.GetRow(i + 4).GetCell(4);
-                    cell.SetCellValue(Convert.ToDouble(sizelist.ElementAt(i)));
-                    cell.CellStyle = style8;
+                    excelWorksheet.Cells[i + 5, 5].Value = Convert.ToDouble(drawingInfoStores[i].DrawingSize);
+                    excelWorksheet.Cells[i + 5, 5].Style.Font.Size = 16;
+                    excelWorksheet.Cells[i + 5, 5].Style.Font.Name = "Arial";
+                    excelWorksheet.Cells[i + 5, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    excelWorksheet.Cells[i + 5, 5].Style.Numberformat.Format = "0.00";
                 }
 
-                cell = (XSSFCell)sheet.GetRow(num + 4).GetCell(0);
-                cell.SetCellValue((num + 1).ToString());
-                cell.CellStyle = style7;
+                excelWorksheet.Cells[totalNum + 5, 1].Value = (totalNum + 1).ToString();
+                excelWorksheet.Cells[totalNum + 5, 4].Value = "给排水设备表" + "（" + eltwin.eltNum.ToString() + "页）";
+                excelWorksheet.Cells[totalNum + 5, 1].Style.Font.Size = 16;
+                excelWorksheet.Cells[totalNum + 5, 1].Style.Font.Name = "Arial";
+                excelWorksheet.Cells[totalNum + 5, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                excelWorksheet.Cells[totalNum + 5, 4].Style.Font.Size = 16;
+                excelWorksheet.Cells[totalNum + 5, 4].Style.Font.Name = "Arial";
+                excelWorksheet.Cells[totalNum + 5, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                cell = (XSSFCell)sheet.GetRow(num + 4).GetCell(1);
-                cell.SetCellValue("");
-
-                cell = (XSSFCell)sheet.GetRow(num + 4).GetCell(3);
-                IFont font = wk.CreateFont();
-                font.FontName = "Arial";
-                font.FontHeightInPoints = 16;
-
-
-                cell.SetCellValue("给排水设备表" + "（" + eltwin.eltNum.ToString() + "页）");
-                ICellStyle style5 = wk.CreateCellStyle();
-                style5.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style5.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                style5.SetFont(font);
-                cell.CellStyle = style5;
                 double eltsize = Convert.ToDouble(eltwin.eltNum) * 0.125;
                 int n = eltsize.ToString().Length - eltsize.ToString().IndexOf(".") - 1;
+                excelWorksheet.Cells[totalNum + 5, 5].Value = eltsize;
+                excelWorksheet.Cells[totalNum + 5, 5].Style.Font.Size =16;
+                excelWorksheet.Cells[totalNum + 5, 5].Style.Font.Name = "Arial";
+                excelWorksheet.Cells[totalNum + 5, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                ICellStyle style2 = wk.CreateCellStyle();
-                style2.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00");
-                style2.SetFont(font);
-                style2.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-                style2.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style2.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                style2.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                style2.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                style2.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                excelWorksheet.Cells["" + "E" + (totalNum + 8).ToString() + ""].Formula = "=SUM(E5:" + "E" + (totalNum + 5).ToString() + ")";
+                excelWorksheet.Cells[totalNum + 8, 4].Value = "总计：";
+                excelWorksheet.Cells[totalNum + 8, 4].Style.Font.Size = 16;
+                excelWorksheet.Cells[totalNum + 8, 4].Style.Font.Name = "Arial";
+                excelWorksheet.Cells[totalNum + 8, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                excelWorksheet.Cells[totalNum + 8, 4].Style.Font.Name = "Arial";
+                excelWorksheet.Cells[totalNum + 8, 5].Style.Font.Name = "Arial";
+                excelWorksheet.Cells[totalNum + 8, 5].Style.Font.Size =16;
+                excelWorksheet.Cells[totalNum + 8, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-
-                ICellStyle style3 = wk.CreateCellStyle();
-                style3.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.000");
-                style3.SetFont(font);
-                style3.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-                style3.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style3.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                style3.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                style3.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                style3.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-
-                cell = (XSSFCell)sheet.GetRow(num + 4).GetCell(4);
-                cell.SetCellValue(eltsize);
                 if (n == 3)
                 {
-                    cell.CellStyle = style3;
+                    excelWorksheet.Cells[totalNum + 5, 5].Style.Numberformat.Format = "0.000";
+                    excelWorksheet.Cells[totalNum + 8, 5].Style.Numberformat.Format = "0.000";
                 }
                 else
                 {
-                    cell.CellStyle = style2;
+                    excelWorksheet.Cells[totalNum + 5, 5].Style.Numberformat.Format = "0.00";
+                    excelWorksheet.Cells[totalNum + 8, 5].Style.Numberformat.Format = "0.00";
                 }
-
-                ICellStyle style = wk.CreateCellStyle();
-                style.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Right;
-                style.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                style.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                style.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                style.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-
-                style.SetFont(font);
-                cell = (XSSFCell)sheet.GetRow(num + 7).GetCell(3);
-                cell.SetCellValue("总计：");
-                cell.CellStyle = style;
-                cell = (XSSFCell)sheet.GetRow(num + 7).GetCell(4);
-                string sum = "sum(E5:" + "E" + (num + 5).ToString() + ")";
-                cell.SetCellFormula(sum);
-
-                ICellStyle style4 = wk.CreateCellStyle();
-                style4.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-                style4.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-                style4.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                style4.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                style4.SetFont(font);
-                if (n == 3)
-                {
-                    style4.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.000");
-                }
-                else
-                {
-                    style4.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00");
-                }
-                cell.CellStyle = style4;
 
                 try
                 {
                     if (!(eltwin.Note.Text.Length == 0))
                     {
+                        string localFilePath, fileName, newFileName, filePath;
                         string dltName = proNum.AsString() + "-" + subproNum.AsString().Replace("/", " ") + "-" + "WD" + "-" + "DLT" + "." + "xlsx";
+
                         SaveFileDialog sfd = new SaveFileDialog();
+                        sfd.Title = "图纸目录导出";
                         sfd.FileName = dltName;
                         sfd.Filter = "Excel 工作薄（*.xlsx）|*.xlsx";
-                        sfd.ShowDialog();
+                        //sfd.FilterIndex = 1;//设置默认文件类型显示顺序
 
-                        FileStream files = new FileStream(sfd.FileName, FileMode.Create);
-                        wk.Write(files);
-                        files.Close();
+                        if (sfd.ShowDialog() == DialogResult.OK)
+                        {
+                            localFilePath = sfd.FileName.ToString();//获得文件路径
+
+                            fileName = localFilePath.Substring(localFilePath.LastIndexOf("\\") + 1);   //获取文件名，不带路径
+
+                            filePath = localFilePath.Substring(0, localFilePath.LastIndexOf("\\"));//获取文件路径，不带文件名 
+
+                            newFileName = DateTime.Now.ToString("yyyymmdd") + fileName;   //给文件名前加上时间
+
+                            sfd.FileName.Insert(1, "abc");//在文件名里插入字符 
+
+                            helper.saveExcel(package, localFilePath);
+                            System.Windows.Forms.MessageBox.Show("图纸目录导出成功!", "GPSBIM", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Process.Start(localFilePath);//打开设备表
+                        }
                     }
-
                 }
                 catch (Autodesk.Revit.Exceptions.OperationCanceledException)
                 {
@@ -413,6 +253,44 @@ namespace FFETOOLS
                 return Result.Failed;
             }
         }
+        public string GetDrawingSize(FamilyInstance tl)
+        {
+            string size = "1";
+
+                if (tl.Name.Contains("A0"))
+                {
+                    size="2";
+                }
+                else if (tl.Name == "A1")
+                {
+                    size="1";
+                }
+                else if (tl.Name == "A1.25")
+                {
+                    size="1.25";
+                }
+                else if (tl.Name == "A1.5")
+                {
+                    size="1.5";
+                }
+                else if (tl.Name == "A1.75")
+                {
+                    size="1.75";
+                }
+                else if (tl.Name.Contains("A2"))
+                {
+                    size="0.5";
+                }         
+            return size;
+        }
+    }
+    public class DrawingInfoStore
+    {
+       public string Code { get; set; }
+       public string Title { get; set; }
+       public string DrawingName { get; set; }
+      public string DrawingSize { get; set; }
+
     }
     public class ViewSheetComparer : IComparer<ViewSheet>
     {

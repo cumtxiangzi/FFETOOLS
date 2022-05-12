@@ -43,18 +43,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI">
-      <HintPath>..\..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\NPOI.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\NPOI.OOXML.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\NPOI.OpenXml4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\NPOI.OpenXmlFormats.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">

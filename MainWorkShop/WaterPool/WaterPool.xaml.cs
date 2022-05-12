@@ -62,7 +62,9 @@ namespace FFETOOLS
             CoolTowerFlow.IsEnabled = false;
             CoolTower.IsChecked = false;
             
-            string[] TexeList = new string[] { "生产循环水池", "消防水池"};
+            string[] TexeList = new string[] { "循环水池", "生产 消防水池","生产循环 消防水池","消防水池","原水池","生活水池","中间水池",
+            "CIRCULATION WATER TANK","FIRE FIGHTING WATER TANK","RAW WATER TANK","POTABLE WATER TANK",
+                "TREATED WATER TANK","SPRAY WATER TANK"};
             PoolText.ItemsSource = TexeList;
             PoolText.SelectedIndex = 0;
 

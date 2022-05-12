@@ -13,8 +13,8 @@ DEBUG;TRACE
 11-163525861
 
 42-826175609
-25445727880
+21-600859078
 CreatConstructionPlan\ConstructionPlan.xaml;CreatDrawing\CreatDrawing.xaml;CreatPipeSystem\CreatPipeSystemForm.xaml;CreatPipeTag\CreatPipeTag.xaml;DesignNote\DesignNoteForm.xaml;ExportDLT\ExportDLT.xaml;BatchExport\BatchExportForm.xaml;ExportELT\ExportELT.xaml;NotePipes\NotePipes.xaml;ShowWorkset\ShowWorkset.xaml;ViewDuplicate\ViewDuplicateForm.xaml;
 
-False
+True
 

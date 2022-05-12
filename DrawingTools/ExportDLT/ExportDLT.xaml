@@ -38,6 +38,7 @@
             </Button.Template>
         </Button>
 
-        <CheckBox x:Name="MainWorkShop" Content="是否为给排水主项" Grid.Row="2" Grid.Column="0" Margin="10,8,0,8" HorizontalAlignment="Left"  VerticalAlignment="Center" FontSize="14" Grid.ColumnSpan="2"/>
+        <CheckBox x:Name="MainWorkShop" Content="是否为给排水主项" Grid.Row="2" Grid.Column="0" Margin="10,8,0,8" Visibility="Collapsed"
+                  HorizontalAlignment="Left"  VerticalAlignment="Center" FontSize="14" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
