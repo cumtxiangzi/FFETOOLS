@@ -24,6 +24,7 @@ namespace FFETOOLS
         public List<string> SelectDrawingNameList = new List<string>();
         ExecuteEventBatchExport excBatchExport = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerBatchExport = null;
+        public int clickNum = 0;
 
         private ObservableCollection<WaterDrawingNameInfo> items = new ObservableCollection<WaterDrawingNameInfo>();
         public BatchExportForm(List<string> drawingNameList)
@@ -86,6 +87,14 @@ namespace FFETOOLS
                 }
             }
             return selectDrawingName;
+        }
+
+        private void CreatListButton_Click(object sender, RoutedEventArgs e)
+        {
+            clickNum = 1;
+            eventHandlerBatchExport.Raise();
+            SelectDrawingNameList = SelectDrawingName(items);
+            Close();
         }
     }
 }

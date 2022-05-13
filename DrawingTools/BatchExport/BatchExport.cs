@@ -61,12 +61,13 @@ namespace FFETOOLS
                 UIDocument uidoc = app.ActiveUIDocument;
                 Document doc = app.ActiveUIDocument.Document;
                 Selection sel = app.ActiveUIDocument.Selection;
+                string sPath = Path.GetDirectoryName(doc.PathName) + "\\DWG";
 
                 using (Transaction trans = new Transaction(doc, "批量导出"))
                 {
                     trans.Start();
 
-                    if (BatchExport.mainfrm.DWGbutton.IsChecked == true)
+                    if (BatchExport.mainfrm.DWGbutton.IsChecked == true && BatchExport.mainfrm.clickNum != 1)
                     {
                         foreach (ViewSheet item in GetSelectViewSheetList(doc, BatchExport.mainfrm))
                         {
@@ -74,8 +75,10 @@ namespace FFETOOLS
                             ExportDWG(doc, item, "给排水导出设置");
                             //MessageBox.Show(ss.ToString());
                         }
+                        MessageBox.Show("DWG图纸导出完成", "GPSBIM", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Process.Start("explorer.exe", sPath);
                     }
-                    if (BatchExport.mainfrm.PDFbutton.IsChecked == true)
+                    if (BatchExport.mainfrm.PDFbutton.IsChecked == true && BatchExport.mainfrm.clickNum != 1)
 
                     {
                         foreach (ViewSheet item in GetSelectViewSheetList(doc, BatchExport.mainfrm))
@@ -83,6 +86,11 @@ namespace FFETOOLS
                             //ExportPDF(doc,item);//暂时不做,revit2022版API已有pdf输出类
                             //MessageBox.Show(ss.ToString());
                         }
+                    }
+                    if (BatchExport.mainfrm.clickNum==1)
+                    {
+                        CreatDrawingList(doc, BatchExport.mainfrm.SelectDrawingNameList);
+                        MessageBox.Show("给排水打印图纸集创建完成", "GPSBIM", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
 
                     trans.Commit();
@@ -97,6 +105,37 @@ namespace FFETOOLS
         public string GetName()
         {
             return "批量导出";
+        }
+        public void CreatDrawingList(Document doc, List<string> names)
+        {
+            IList<ViewSheetSet> sheetSets = CollectorHelper.TCollector<ViewSheetSet>(doc);
+            foreach (var item in sheetSets)
+            {
+                if (item.Name.Contains("给排水打印输出"))
+                {
+                    doc.Delete(item.Id);
+                    break;
+                }
+            }
+            
+            ViewSheetSetting vss = doc.PrintManager.ViewSheetSetting;
+            ViewSet selectedViews = new ViewSet();
+
+            if (null != names && 0 < names.Count)
+            {
+                foreach (ViewSheet sheet in GetSelectViewSheetList(doc, BatchExport.mainfrm))
+                {
+                    if (names.Contains(sheet.Title))
+                    {
+                        selectedViews.Insert(sheet);
+                    }
+                }
+            }
+
+            IViewSheetSet viewSheetSet = vss.CurrentViewSheetSet;
+            viewSheetSet.Views = selectedViews;
+            vss.SaveAs("给排水打印输出");
+
         }
         public List<string> GetViewSheetNameList(Document doc)
         {
@@ -169,6 +208,8 @@ namespace FFETOOLS
                     break;
                 }
             }
+
+
             return exported;
         }
         public ExportDWGSettings GetDefaultExportDWGSettings(Document doc, string defalutSetName = "给排水导出设置")
@@ -222,6 +263,6 @@ namespace FFETOOLS
             // 打印全部可打印视图
             doc.Print(printableViews);
         }
-        
+
     }
 }

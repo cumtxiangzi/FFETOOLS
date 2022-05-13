@@ -76,5 +76,17 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+
+        <Button x:Name="CreatListButton" Content="创建给排水图纸集"  Grid.Column="0" Grid.Row="2" Margin="10,5,30,10" FontSize="10.5" Click="CreatListButton_Click"  Cursor="Hand" >
+            <Button.Template >
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                        <Border.Background>LightGray</Border.Background>
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        
     </Grid>
 </Window>
