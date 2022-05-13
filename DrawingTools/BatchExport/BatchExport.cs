@@ -19,6 +19,7 @@ using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.DB.Architecture;
 using System.Windows.Interop;
 using System.IO;
+using System.Drawing;
 
 namespace FFETOOLS
 {
@@ -79,7 +80,7 @@ namespace FFETOOLS
                     {
                         foreach (ViewSheet item in GetSelectViewSheetList(doc, BatchExport.mainfrm))
                         {
-                            ExportPDF(doc,item);
+                            //ExportPDF(doc,item);//暂时不做,revit2022版API已有pdf输出类
                             //MessageBox.Show(ss.ToString());
                         }
                     }
@@ -221,6 +222,6 @@ namespace FFETOOLS
             // 打印全部可打印视图
             doc.Print(printableViews);
         }
-
+        
     }
 }

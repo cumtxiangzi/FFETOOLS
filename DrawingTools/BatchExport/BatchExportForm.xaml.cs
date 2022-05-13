@@ -31,7 +31,7 @@ namespace FFETOOLS
             InitializeComponent();
             foreach (string info in drawingNameList)
             {
-                items.Add(new WaterDrawingNameInfo(info, false));
+                items.Add(new WaterDrawingNameInfo(info, true));
             }
             DrawingNameListBox.ItemsSource = items;
             DWGbutton.IsChecked = true;

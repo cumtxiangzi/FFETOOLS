@@ -73,14 +73,16 @@ namespace FFETOOLS
                 excelWorksheet.Cells[2, 4].Value = subProjectName;
                 excelWorksheet.Cells[1, 4].Style.Font.Name = "Arial";
                 excelWorksheet.Cells[2, 4].Style.Font.Name = "Arial";
+                excelWorksheet.Cells[1, 4].Style.Font.Size = 18;
+                excelWorksheet.Cells[2, 4].Style.Font.Size = 18;
 
                 IList<ViewSheet> ALLviewSheets = CollectorHelper.TCollector<ViewSheet>(doc);
-               
+
                 List<ViewSheet> WDviewsheets = new List<ViewSheet>();
                 List<ViewSheet> WLviewsheets = new List<ViewSheet>();
-               
+
                 foreach (var vs in ALLviewSheets)
-                {                   
+                {
                     if (vs.Title.Contains("WL") && !(vs.Name.Contains("材料表")) && !(vs.Name.Contains("未命名")))
                     {
                         WLviewsheets.Add(vs);
@@ -89,7 +91,7 @@ namespace FFETOOLS
                 WLviewsheets.Sort(new ViewSheetComparer());
 
                 foreach (var vs in ALLviewSheets)
-                {             
+                {
                     if (vs.Title.Contains("WD") && !(vs.Name.Contains("材料表")) && !(vs.Name.Contains("未命名")))
                     {
                         WDviewsheets.Add(vs);
@@ -97,24 +99,29 @@ namespace FFETOOLS
                 }
                 WDviewsheets.Sort(new ViewSheetComparer());
 
-               List<DrawingInfoStore> drawingInfoStores = new List<DrawingInfoStore>();                
-                IList<FamilyInstance> titleBlocks=CollectorHelper.TCollector<FamilyInstance>(doc);
-               
+                List<DrawingInfoStore> drawingInfoStores = new List<DrawingInfoStore>();
+                IList<FamilyInstance> titleBlocks = CollectorHelper.TCollector<FamilyInstance>(doc);
+            
                 for (int i = 0; i < WLviewsheets.Count; i++)
                 {
                     FamilyInstance tbInstance = null;
                     foreach (var tb in titleBlocks)
                     {
-                        if (tb.OwnerViewId== WLviewsheets[i].Id)
+                        if (tb.OwnerViewId == WLviewsheets[i].Id)
                         {
                             tbInstance = tb;
                             break;
                         }
                     }
-                    string size=GetDrawingSize(tbInstance);
+                    string size = GetDrawingSize(tbInstance);
 
-                    drawingInfoStores.Add(new DrawingInfoStore() {Code=(i+1).ToString(),Title= proNum.AsString() + "-" + subproNum.AsString() + "-" + WLviewsheets[i].SheetNumber ,
-                    DrawingName = WLviewsheets[i].ViewName,DrawingSize=size});
+                    drawingInfoStores.Add(new DrawingInfoStore()
+                    {
+                        Code = (i + 1).ToString(),
+                        Title = proNum.AsString() + "-" + subproNum.AsString() + "-" + WLviewsheets[i].SheetNumber,
+                        DrawingName = WLviewsheets[i].ViewName,
+                        DrawingSize = size
+                    });
                 }
 
                 for (int i = 0; i < WDviewsheets.Count; i++)
@@ -132,7 +139,7 @@ namespace FFETOOLS
 
                     drawingInfoStores.Add(new DrawingInfoStore()
                     {
-                        Code = (i + 1+WLviewsheets.Count).ToString(),
+                        Code = (i + 1 + WLviewsheets.Count).ToString(),
                         Title = proNum.AsString() + "-" + subproNum.AsString() + "-" + WDviewsheets[i].SheetNumber,
                         DrawingName = WDviewsheets[i].ViewName,
                         DrawingSize = size
@@ -184,7 +191,7 @@ namespace FFETOOLS
                 double eltsize = Convert.ToDouble(eltwin.eltNum) * 0.125;
                 int n = eltsize.ToString().Length - eltsize.ToString().IndexOf(".") - 1;
                 excelWorksheet.Cells[totalNum + 5, 5].Value = eltsize;
-                excelWorksheet.Cells[totalNum + 5, 5].Style.Font.Size =16;
+                excelWorksheet.Cells[totalNum + 5, 5].Style.Font.Size = 16;
                 excelWorksheet.Cells[totalNum + 5, 5].Style.Font.Name = "Arial";
                 excelWorksheet.Cells[totalNum + 5, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
@@ -195,7 +202,7 @@ namespace FFETOOLS
                 excelWorksheet.Cells[totalNum + 8, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 excelWorksheet.Cells[totalNum + 8, 4].Style.Font.Name = "Arial";
                 excelWorksheet.Cells[totalNum + 8, 5].Style.Font.Name = "Arial";
-                excelWorksheet.Cells[totalNum + 8, 5].Style.Font.Size =16;
+                excelWorksheet.Cells[totalNum + 8, 5].Style.Font.Size = 16;
                 excelWorksheet.Cells[totalNum + 8, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 if (n == 3)
@@ -257,39 +264,39 @@ namespace FFETOOLS
         {
             string size = "1";
 
-                if (tl.Name.Contains("A0"))
-                {
-                    size="2";
-                }
-                else if (tl.Name == "A1")
-                {
-                    size="1";
-                }
-                else if (tl.Name == "A1.25")
-                {
-                    size="1.25";
-                }
-                else if (tl.Name == "A1.5")
-                {
-                    size="1.5";
-                }
-                else if (tl.Name == "A1.75")
-                {
-                    size="1.75";
-                }
-                else if (tl.Name.Contains("A2"))
-                {
-                    size="0.5";
-                }         
+            if (tl.Name.Contains("A0"))
+            {
+                size = "2";
+            }
+            else if (tl.Name == "A1")
+            {
+                size = "1";
+            }
+            else if (tl.Name == "A1.25")
+            {
+                size = "1.25";
+            }
+            else if (tl.Name == "A1.5")
+            {
+                size = "1.5";
+            }
+            else if (tl.Name == "A1.75")
+            {
+                size = "1.75";
+            }
+            else if (tl.Name.Contains("A2"))
+            {
+                size = "0.5";
+            }
             return size;
         }
     }
     public class DrawingInfoStore
     {
-       public string Code { get; set; }
-       public string Title { get; set; }
-       public string DrawingName { get; set; }
-      public string DrawingSize { get; set; }
+        public string Code { get; set; }
+        public string Title { get; set; }
+        public string DrawingName { get; set; }
+        public string DrawingSize { get; set; }
 
     }
     public class ViewSheetComparer : IComparer<ViewSheet>

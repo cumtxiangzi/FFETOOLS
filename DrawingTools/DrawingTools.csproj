@@ -39,10 +39,6 @@
     <Reference Include="EPPlus">
       <HintPath>..\..\..\..\..\Revit二开常用DLL\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\FFETOOLS-2018.6.13-修改-自用不发布\FFETOOLS\NPOI 2.3.0.0\dotnet4\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
