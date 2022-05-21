@@ -67,6 +67,10 @@
     <Compile Include="CommonClass\Generics.cs" />
     <Compile Include="CommonClass\Geometry.cs" />
     <Compile Include="CommonClass\TrackBall.cs" />
+    <Compile Include="CreatWalByGrid\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreatWalByGrid\CreatWallByGrid.cs" />
     <Compile Include="PumpStation\CreatGrids\CreateGridsData.cs" />
     <Compile Include="PumpStation\CreatGrids\CreateOrthogonalGridsData.cs" />
     <Compile Include="PumpStation\CreatGrids\EnumsAndValues.cs" />
@@ -97,6 +101,10 @@
     <Compile Include="WaterPool\WaterPool.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="CreatWalByGrid\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WaterPool\WaterPool.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -138,5 +146,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

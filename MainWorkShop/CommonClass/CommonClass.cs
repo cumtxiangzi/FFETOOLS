@@ -830,6 +830,21 @@ namespace FFETOOLS
             return true;
         }
     }
+    public class GridFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element elem)
+        {
+            if (elem is Grid)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool AllowReference(Reference reference, XYZ position)
+        {
+            return true;
+        }
+    }
     #endregion
     public class FailuresPreprocessor : IFailuresPreprocessor
     {

@@ -862,6 +862,27 @@ namespace FFETOOLS
             return true;
         }
     }
+    //给排水机械设备的过滤条件
+    public class WMechanicalSelectionFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element e)
+        {
+            if ((e.Category.Name == "机械设备" && (e as FamilyInstance).Symbol.FamilyName.Contains("给排水")) ||
+                e.Category.Name == "轴网")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool AllowReference(Reference r, XYZ p)
+        {
+            return true;
+        }
+    }
     //常规模型的过滤条件
     public class GenericModelSelectionFilter : ISelectionFilter
     {
@@ -959,7 +980,21 @@ namespace FFETOOLS
             return true;
         }
     }
-
+    public class GridFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element elem)
+        {
+            if (elem is Grid)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool AllowReference(Reference reference, XYZ position)
+        {
+            return true;
+        }
+    }
     public static class IndependentTagHelper
     {
         /// <summary>

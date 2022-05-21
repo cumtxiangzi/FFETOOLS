@@ -44,6 +44,7 @@ namespace FFETOOLS
             catch (Exception e)
             {
                 messages = e.Message;
+                //throw e;
                 return Result.Failed;
             }
             return Result.Succeeded;
@@ -111,6 +112,20 @@ namespace FFETOOLS
            
 
             View view = doc.ActiveView;
+            if (doc.ActiveView.ViewType == ViewType.Section)
+            {
+                Plane plane = Plane.CreateByNormalAndOrigin(doc.ActiveView.ViewDirection, doc.ActiveView.Origin);
+                SketchPlane sp = SketchPlane.Create(doc, plane);
+                doc.ActiveView.SketchPlane = sp;
+                doc.ActiveView.ShowActiveWorkPlane();
+            }
+
+           
+
+            //IList<SketchPlane> planes = CollectorHelper.TCollector<SketchPlane>(doc);
+            //SketchPlane sp=planes.FirstOrDefault(x=> x.Name.Contains("0.000"));
+            //view.SketchPlane = sp;
+          
             IList<Reference> instanceReferences = new List<Reference>();
             ReferenceArray referenceArray = new ReferenceArray();
 
@@ -167,7 +182,9 @@ namespace FFETOOLS
 
             if (ref1 != null && ref2 != null)
             {
-                XYZ selPoint = uidoc.Selection.PickPoint(ObjectSnapTypes.None, "选择尺寸定位位置");
+                XYZ selPoint = uidoc.Selection.PickPoint(ObjectSnapTypes.Points, "选择尺寸定位位置");
+
+
                 XYZ lineDir = referenceLine.Direction.CrossProduct(new XYZ(0, 0, 1));
                 XYZ point_s = referenceLine.GetEndPoint(0);
                 XYZ point_e = referenceLine.GetEndPoint(1);
@@ -180,6 +197,8 @@ namespace FFETOOLS
                 XYZ offsetDir = point_e - point_s;
                 double lenght = dimType.get_Parameter(BuiltInParameter.TEXT_SIZE).AsDouble();
                 Line line_o = Line.CreateUnbound(selPoint, lineDir);
+
+                //Line line_o = Line.CreateUnbound(new XYZ(0,0,0), new XYZ(10,0,0));
 
                 Dimension autoDimension = doc.Create.NewDimension(view, line_o, referenceArray, dimType);
             }

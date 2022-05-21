@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 
-4-48624247
+51803175342
 
-24528440981
+26568630100
 19-1789720340
-WaterPool\WaterPool.xaml;PumpGroup\PumpSelectForm.xaml;PumpStation\PumpStationForm.xaml;PumpGroup\PumpGroupForm.xaml;
+CreatWalByGrid\MainWindow.xaml;WaterPool\WaterPool.xaml;PumpGroup\PumpSelectForm.xaml;PumpStation\PumpStationForm.xaml;PumpGroup\PumpGroupForm.xaml;
 
-True
+False
 
