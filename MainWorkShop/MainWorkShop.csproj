@@ -67,8 +67,8 @@
     <Compile Include="CommonClass\Generics.cs" />
     <Compile Include="CommonClass\Geometry.cs" />
     <Compile Include="CommonClass\TrackBall.cs" />
-    <Compile Include="CreatWalByGrid\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="CreatWalByGrid\CreatWallByGridForm.xaml.cs">
+      <DependentUpon>CreatWallByGridForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="CreatWalByGrid\CreatWallByGrid.cs" />
     <Compile Include="PumpStation\CreatGrids\CreateGridsData.cs" />
@@ -101,7 +101,7 @@
     <Compile Include="WaterPool\WaterPool.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="CreatWalByGrid\MainWindow.xaml">
+    <Page Include="CreatWalByGrid\CreatWallByGridForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

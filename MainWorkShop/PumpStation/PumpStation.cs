@@ -436,9 +436,9 @@ namespace FFETOOLS
                     MessageBox.Show("请在平面视图中操作", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
-            catch (Exception e)
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
-                throw e;
+               
             }
         }
         public string GetName()

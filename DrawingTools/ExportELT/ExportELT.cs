@@ -167,7 +167,14 @@ namespace FFETOOLS
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
                                     excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + pipeInfo.PipeSize;
-                                    excelWorksheet.Cells[rowNum, 6].Value = pipeInfo.PipeQulity;
+                                    if (pipeInfo.PipeQulity=="0 m")
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = "1 m";
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeInfo.PipeQulity;
+                                    }                                 
                                     rowNum++;
                                 }
 
@@ -1023,8 +1030,8 @@ namespace FFETOOLS
             for (int i = 0; i < mergeRowIndexs.Rank; i++)
             {
                 sheet.Cells[mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 1], mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 2]].Merge = true;
-                sheet.Cells[mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 1], mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 2]].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheet.Cells[mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 1], mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 2]].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                sheet.Cells[mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 1], mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 2]].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                sheet.Cells[mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 1], mergeRowIndexs[i, 0] + startRowIndex, mergeRowIndexs[i, 2]].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
             }
         }
     }
