@@ -45,6 +45,8 @@ namespace FFETOOLS
                 Parameter subproName = pro.LookupParameter("子项名称");
                 Parameter name = pro.LookupParameter("作者");
 
+                string subproNumOnly = subproNum.AsString();
+
                 string projectName = proNum.AsString() + "-" + proName.AsString();
                 string subProjectName = subproNum.AsString() + "-" + subproName.AsString();
                 string footerName = proNum.AsString() + "-" + subproNum.AsString() + "-" + "WD-ELT";
@@ -86,6 +88,7 @@ namespace FFETOOLS
                             //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             List<PipeValveInfo> valveList = new List<PipeValveInfo>();
                             List<PipeInfo> pipeList = new List<PipeInfo>();
+                            List<FamilyInstance> outDoorHydrantsUp = new List<FamilyInstance>();
 
                             foreach (string item in pipeSystemList)
                             {
@@ -95,6 +98,29 @@ namespace FFETOOLS
                                 excelWorksheet.Cells[rowNum - 1, 1].Value = item;
                                 excelWorksheet.Cells[rowNum - 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                                 excelWorksheet.Cells[rowNum - 1, 1].Style.Font.Bold = true;
+
+                                //地上式消火栓写入
+                                outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_消防设备_室外地上式消火栓");
+                                foreach (var hydrant in outDoorHydrantsUp)
+                                {
+                                    excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                    excelWorksheet.Cells[rowNum, 2].Value = "FZ" + valveCode.ToString().PadLeft(2, '0');
+                                    excelWorksheet.Cells[rowNum, 4].Value = "室外地上式消火栓";
+                                    excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                    excelWorksheet.Cells[rowNum, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
+                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "型号:" + "SSF100/65-1.6";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "进水口:" + "DN100";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "出水口:" + "DN100, DN65";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + "1.6MPa";
+                                    rowNum++;
+                                    valveCode++;
+                                    break;
+                                }
 
                                 valveList = GetPipeSystemValve(doc, item, subproNum.AsString(), valveCode);
                                 pipeList = GetPipeSystemPipe(doc, item, subproNum.AsString(), 1);
@@ -152,7 +178,7 @@ namespace FFETOOLS
                                     {
 
                                     }
-                                    else if(pipeInfo.PipeName.Contains("HDPE"))
+                                    else if (pipeInfo.PipeName.Contains("HDPE"))
                                     {
                                         excelWorksheet.Cells[rowNum, 4].Value = "环刚度:≥8kN/m2";
                                         rowNum++;
@@ -167,14 +193,14 @@ namespace FFETOOLS
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
                                     excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeInfo.PipeSize;
-                                    if (pipeInfo.PipeQulity=="0 m")
+                                    if (pipeInfo.PipeQulity == "0 m")
                                     {
                                         excelWorksheet.Cells[rowNum, 6].Value = "1 m";
                                     }
                                     else
                                     {
                                         excelWorksheet.Cells[rowNum, 6].Value = pipeInfo.PipeQulity;
-                                    }                                 
+                                    }
                                     rowNum++;
                                 }
 
@@ -186,7 +212,14 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
                                     if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "90°镀锌弯头";
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式90°弯头";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "90°镀锌弯头";
+                                        }
                                     }
                                     else
                                     {
@@ -223,7 +256,14 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
                                     if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "60°镀锌弯头";
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式60°弯头";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "60°镀锌弯头";
+                                        }
                                     }
                                     else
                                     {
@@ -260,7 +300,14 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
                                     if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "45°镀锌弯头";
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式45°弯头";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "45°镀锌弯头";
+                                        }
                                     }
                                     else
                                     {
@@ -298,7 +345,14 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
                                     if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "30°镀锌弯头";
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式30°弯头";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "30°镀锌弯头";
+                                        }
                                     }
                                     else
                                     {
@@ -336,7 +390,14 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
                                     if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "22.5°镀锌弯头";
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式22.5°弯头";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "22.5°镀锌弯头";
+                                        }
                                     }
                                     else
                                     {
@@ -375,7 +436,14 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeTeeInfo.PipeTeeAbb;
                                     if (pipeTeeInfo.PipeTeeName.Contains("镀锌"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "镀锌三通";
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式三通";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "镀锌三通";
+                                        }
                                     }
                                     else
                                     {
@@ -412,7 +480,14 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeReduceInfo.PipeReduceAbb;
                                     if (pipeReduceInfo.PipeReduceName.Contains("镀锌"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "镀锌异径";
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式异径";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "镀锌异径";
+                                        }
                                     }
                                     else
                                     {
@@ -442,9 +517,104 @@ namespace FFETOOLS
                                     rowNum++;
                                 }
 
+                                //法兰写入只针对沟槽式消防连接
+                                if (item.Contains("消防") && !(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = "OX" + elbowNum.ToString().PadLeft(2, '0');
+                                    excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式法兰";
+                                    elbowNum++;
+                                    rowNum++;
 
+                                    foreach (PipeValveInfo valveInfo in valveList)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + valveInfo.ValvePressure;
+                                        rowNum++;
+                                        break;
+                                    }
 
+                                    foreach (PipeValveInfo valveInfo in valveList)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
+                                        excelWorksheet.Cells[rowNum, 6].Value = (int.Parse(valveInfo.ValveQulity) * 2).ToString();
+                                        rowNum++;
+                                    }
+                                }
 
+                                //卡箍写入只针对沟槽式消防连接
+                                if (item.Contains("消防") && !(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = "OX" + elbowNum.ToString().PadLeft(2, '0');
+                                    excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽卡箍";
+                                    elbowNum++;
+                                    rowNum++;
+
+                                    foreach (PipeInfo pipeInfo in pipeList)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeInfo.PipePressure;
+                                        rowNum++;
+                                        break;
+                                    }
+
+                                    foreach (PipeInfo pipeInfo in pipeList)
+                                    {
+                                        int totalNum = 0;
+                                        totalNum += int.Parse(pipeInfo.PipeQulity.Replace(" m", "")) / 6;
+
+                                        foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
+                                        {
+                                            if (pipeElbowInfo.PipeElbowSize.Contains(pipeInfo.PipeSize))
+                                            {
+                                                totalNum += int.Parse(pipeElbowInfo.PipeElbowQulity) * 2;
+                                            }
+                                        }
+
+                                        foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
+                                        {
+                                            if (pipeElbowInfo.PipeElbowSize.Contains(pipeInfo.PipeSize))
+                                            {
+                                                totalNum += int.Parse(pipeElbowInfo.PipeElbowQulity) * 2;
+                                            }
+                                        }
+
+                                        foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
+                                        {
+                                            if (pipeElbowInfo.PipeElbowSize.Contains(pipeInfo.PipeSize))
+                                            {
+                                                totalNum += int.Parse(pipeElbowInfo.PipeElbowQulity) * 2;
+                                            }
+                                        }
+
+                                        foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
+                                        {
+                                            if (pipeTeeInfo.PipeTeeSize.Contains(pipeInfo.PipeSize))
+                                            {
+                                                totalNum += int.Parse(pipeTeeInfo.PipeTeeQulity) * 2;
+                                            }
+
+                                            if (pipeTeeInfo.PipeTeeSize.Replace(pipeInfo.PipeSize, "").Replace("X", "").Contains(pipeInfo.PipeSize.Replace("DN", "")))
+                                            {
+                                                totalNum += int.Parse(pipeTeeInfo.PipeTeeQulity);
+                                            }
+                                        }
+
+                                        foreach (PipeReduceInfo pipeReduceInfo in pipeReduceList)
+                                        {
+                                            if (pipeReduceInfo.PipeReduceSize.Contains(pipeInfo.PipeSize))
+                                            {
+                                                totalNum += int.Parse(pipeReduceInfo.PipeReduceQulity);
+                                            }
+
+                                            if (pipeReduceInfo.PipeReduceSize.Replace(pipeInfo.PipeSize, "").Replace("X", "").Contains(pipeInfo.PipeSize.Replace("DN", "")))
+                                            {
+                                                totalNum += int.Parse(pipeReduceInfo.PipeReduceQulity);
+                                            }
+                                        }
+
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeInfo.PipeSize;
+                                        excelWorksheet.Cells[rowNum, 6].Value = totalNum.ToString();
+                                        rowNum++;
+                                    }
+                                }
 
                             }
 
@@ -546,6 +716,34 @@ namespace FFETOOLS
                 }
             }
         }
+        public List<FamilyInstance> GetEquipmentsHaveCon(Document doc, string pipeSystemName, string equipmentName)
+        {
+            List<FamilyInstance> list = new List<FamilyInstance>();
+            IList<FamilyInstance> allInstances = CollectorHelper.TCollector<FamilyInstance>(doc);
+            IList<PipingSystem> allPipingSys = CollectorHelper.TCollector<PipingSystem>(doc);
+
+            foreach (var sys in allPipingSys)
+            {
+                PipingSystemType psType = doc.GetElement(sys.GetTypeId()) as PipingSystemType;
+
+                if (psType.Name.Replace("管道", "").Contains(pipeSystemName))
+                {
+                    ElementSet elements = sys.PipingNetwork;
+                    foreach (var ele in elements)
+                    {
+                        FamilyInstance instance = ele as FamilyInstance;
+                        if (instance != null)
+                        {
+                            if (instance.Symbol.FamilyName.Contains(equipmentName))
+                            {
+                                list.Add(instance);
+                            }
+                        }
+                    }
+                }
+            }
+            return list;
+        }
         public List<string> GetPipeSystemType(UIDocument uiDoc, string profession)
         {
             // 获取当前视图管道系统名称列表
@@ -596,6 +794,38 @@ namespace FFETOOLS
                 {
                     sl.Add(7, item);
                 }
+                if (item == "压力污水系统")
+                {
+                    sl.Add(8, item);
+                }
+                if (item == "压力废水系统")
+                {
+                    sl.Add(9, item);
+                }
+                if (item == "废水系统")
+                {
+                    sl.Add(10, item);
+                }
+                if (item == "热水给水系统")
+                {
+                    sl.Add(11, item);
+                }
+                if (item == "排泥系统")
+                {
+                    sl.Add(12, item);
+                }
+                if (item == "消毒剂系统")
+                {
+                    sl.Add(13, item);
+                }
+                if (item == "混凝剂系统")
+                {
+                    sl.Add(14, item);
+                }
+                if (item == "水质稳定剂系统")
+                {
+                    sl.Add(15, item);
+                }
             }
 
             List<string> orderedList = new List<string>();
@@ -635,7 +865,7 @@ namespace FFETOOLS
                         }
                         string[] sArray = valveTable.ElementAt(3).Split('-');
 
-                        if (valveTable.ElementAt(1).Contains("阀门")&& !(valveTable.ElementAt(1).Contains("便器")))
+                        if (valveTable.ElementAt(1).Contains("阀门") && !(valveTable.ElementAt(1).Contains("便器")))
                         {
                             PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "VA" + valveCode.ToString().PadLeft(2, '0'), StringHelper.FilterCH(valveTable.ElementAt(1).Replace("给排水_阀门_", "")),
                           StringHelper.FilterEN(valveTable.ElementAt(1).Replace("给排水_阀门_", "")), "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), valveTable.ElementAt(5));
@@ -681,9 +911,26 @@ namespace FFETOOLS
                             pipeTable.Add(str);
                         }
                         //string[] sArray = pipeTable.ElementAt(3).Split('-');
+                        string pipeSize = "";
+                        if (subProjectNum.Contains("G19") || subProjectNum.Contains("91"))
+                        {
+                            if (pipeTable.ElementAt(1).Contains("焊接") || pipeTable.ElementAt(1).Contains("镀锌")
+                                || (pipeTable.ElementAt(1).Contains("PE") && !(pipeTable.ElementAt(1).Contains("HD"))) || pipeTable.ElementAt(1).Contains("钢丝网骨架"))
+                            {
+                                pipeSize = PipeSizeHaveThick(pipeTable.ElementAt(3), pipeTable.ElementAt(1));
+                            }
+                            else
+                            {
+                                pipeSize = pipeTable.ElementAt(3);
+                            }
+                        }
+                        else
+                        {
+                            pipeSize = pipeTable.ElementAt(3);
+                        }
 
-                        PipeInfo pipeInfo = new PipeInfo(pipeTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "QX" + pipeCode.ToString().PadLeft(2, '0'), pipeTable.ElementAt(1).Replace("给排水_", ""),
-                                                                         pipeTable.ElementAt(3), pipeTable.ElementAt(2), pipeTable.ElementAt(6), pipeTable.ElementAt(7));
+                        PipeInfo pipeInfo = new PipeInfo(pipeTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "QX" + pipeCode.ToString().PadLeft(2, '0'), pipeTable.ElementAt(1).Replace("给排水_", "").Replace("_厂区", ""),
+                                                                          pipeSize, pipeTable.ElementAt(2), pipeTable.ElementAt(6), pipeTable.ElementAt(7));
                         pipeNameList.Add(pipeInfo);
 
                         string ss = pipeInfo.PipeSystem + "\n" + pipeInfo.ProjectNum + "\n" + pipeInfo.PipeAbb + "\n" + pipeInfo.PipeName
@@ -731,8 +978,26 @@ namespace FFETOOLS
                             string[] sArray = pipeElbowTable.ElementAt(4).Split('-');
                             string[] sAngle = pipeElbowTable.ElementAt(2).Split('.');
 
+                            string pipeSize = "";
+                            if (subProjectNum.Contains("G19") || subProjectNum.Contains("91"))
+                            {
+                                if (pipeElbowTable.ElementAt(1).Contains("焊接") || pipeElbowTable.ElementAt(1).Contains("镀锌")
+                                    || (pipeElbowTable.ElementAt(1).Contains("PE") && !(pipeElbowTable.ElementAt(1).Contains("HD"))) || pipeElbowTable.ElementAt(1).Contains("钢丝网骨架"))
+                                {
+                                    pipeSize = PipeSizeHaveThick("DN" + sArray.ElementAt(0), pipeElbowTable.ElementAt(1));
+                                }
+                                else
+                                {
+                                    pipeSize = "DN" + sArray.ElementAt(0);
+                                }
+                            }
+                            else
+                            {
+                                pipeSize = "DN" + sArray.ElementAt(0);
+                            }
+
                             PipeElbowInfo pipeElbowInfo = new PipeElbowInfo(pipeElbowTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeElbowCode.ToString().PadLeft(2, '0'),
-                                                                      sAngle.ElementAt(0) + "°" + pipeElbowTable.ElementAt(1).Replace("给排水_管件_", ""), "DN" + sArray.ElementAt(0), pipeElbowTable.ElementAt(3), pipeElbowTable.ElementAt(5));
+                                                                      sAngle.ElementAt(0) + "°" + pipeElbowTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""), pipeSize, pipeElbowTable.ElementAt(3), pipeElbowTable.ElementAt(5));
                             pipeElbowNameList.Add(pipeElbowInfo);
                             pipeElbowCode++;
                         }
@@ -777,7 +1042,7 @@ namespace FFETOOLS
                         {
                             string[] sArray = pipeTeeTable.ElementAt(4).Split('-');
                             PipeTeeInfo pipeTeeInfo = new PipeTeeInfo(pipeTeeTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeTeeCode.ToString().PadLeft(2, '0'),
-                                                                   pipeTeeTable.ElementAt(1).Replace("给排水_管件_", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(2), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
+                                                                   pipeTeeTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(2), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
                             pipeTeeNameList.Add(pipeTeeInfo);
                             pipeTeeCode++;
                         }
@@ -822,7 +1087,7 @@ namespace FFETOOLS
                         {
                             string[] sArray = pipeReduceTable.ElementAt(4).Split('-');
                             PipeReduceInfo pipeReduceInfo = new PipeReduceInfo(pipeReduceTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeReduceCode.ToString().PadLeft(2, '0'),
-                                                                   pipeReduceTable.ElementAt(1).Replace("给排水_管件_", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(1), pipeReduceTable.ElementAt(3), pipeReduceTable.ElementAt(5));
+                                                                   pipeReduceTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(1), pipeReduceTable.ElementAt(3), pipeReduceTable.ElementAt(5));
                             pipeReduceNameList.Add(pipeReduceInfo);
                             pipeReduceCode++;
                         }
@@ -833,6 +1098,312 @@ namespace FFETOOLS
                 }
             }
             return pipeReduceNameList;
+        }
+        public string PipeSizeHaveThick(string pipeSize, string pipeMaterial)
+        {
+            string str = "";
+
+            if (pipeMaterial.Contains("焊接"))
+            {
+                if (pipeSize == "DN15")
+                {
+                    str = "DN15";
+                }
+                else if (pipeSize == "DN20")
+                {
+                    str = "DN20";
+                }
+                else if (pipeSize == "DN25")
+                {
+                    str = "DN25";
+                }
+                else if (pipeSize == "DN32")
+                {
+                    str = "DN32";
+                }
+                else if (pipeSize == "DN40")
+                {
+                    str = "DN40";
+                }
+                else if (pipeSize == "DN50")
+                {
+                    str = "DN50(D57X3.5)";
+                }
+                else if (pipeSize == "DN65")
+                {
+                    str = "DN65(D76X3.5)";
+                }
+                else if (pipeSize == "DN80")
+                {
+                    str = "DN80(D89X4.0)";
+                }
+                else if (pipeSize == "DN100")
+                {
+                    str = "DN100(D108X4.0)";
+                }
+                else if (pipeSize == "DN125")
+                {
+                    str = "DN125(D133X4.0)";
+                }
+                else if (pipeSize == "DN150")
+                {
+                    str = "DN150(D159X4.5)";
+                }
+                else if (pipeSize == "DN200")
+                {
+                    str = "DN200(D219X6.0)";
+                }
+                else if (pipeSize == "DN250")
+                {
+                    str = "DN250(D273X8.0)";
+                }
+                else if (pipeSize == "DN300")
+                {
+                    str = "DN300(D325X8.0)";
+                }
+                else if (pipeSize == "DN350")
+                {
+                    str = "DN350(D377X9.0)";
+                }
+                else if (pipeSize == "DN400")
+                {
+                    str = "DN400(D426X9.0)";
+                }
+                else if (pipeSize == "DN450")
+                {
+                    str = "DN450(D480X9.0)";
+                }
+                else if (pipeSize == "DN500")
+                {
+                    str = "DN500(D530X9.0)";
+                }
+                else if (pipeSize == "DN600")
+                {
+                    str = "DN600(D630X9.0)";
+                }
+                else if (pipeSize == "DN700")
+                {
+                    str = "DN700(D720X9.0)";
+                }
+            }
+
+            if (pipeMaterial.Contains("镀锌"))
+            {
+                if (pipeSize == "DN15")
+                {
+                    str = "DN15";
+                }
+                else if (pipeSize == "DN20")
+                {
+                    str = "DN20";
+                }
+                else if (pipeSize == "DN25")
+                {
+                    str = "DN25";
+                }
+                else if (pipeSize == "DN32")
+                {
+                    str = "DN32";
+                }
+                else if (pipeSize == "DN40")
+                {
+                    str = "DN40";
+                }
+                else if (pipeSize == "DN50")
+                {
+                    str = "DN50(D60.3X3.8)";
+                }
+                else if (pipeSize == "DN65")
+                {
+                    str = "DN65(D76.1X4.0)";
+                }
+                else if (pipeSize == "DN80")
+                {
+                    str = "DN80(D88.9X4.0)";
+                }
+                else if (pipeSize == "DN100")
+                {
+                    str = "DN100(D114.3X4.0)";
+                }
+                else if (pipeSize == "DN125")
+                {
+                    str = "DN125(D139.7X4.0)";
+                }
+                else if (pipeSize == "DN150")
+                {
+                    str = "DN150(D168.3X4.5)";
+                }
+                else if (pipeSize == "DN200")
+                {
+                    str = "DN200(D219.1X6.5)";
+                }
+                else if (pipeSize == "DN250")
+                {
+                    str = "DN250(D273X10.5)";
+                }
+                else if (pipeSize == "DN300")
+                {
+                    str = "DN300(D325X10.0)";
+                }
+                else if (pipeSize == "DN350")
+                {
+                    str = "DN350(D377X10.0)";
+                }
+            }
+
+            if (pipeMaterial.Contains("PE") && !(pipeMaterial.Contains("HD")))//此数据来源于亚太管道,压力为PN10，1.0Mpa
+            {
+                if (pipeSize == "DN15")
+                {
+                    str = "DN15";
+                }
+                else if (pipeSize == "DN20")
+                {
+                    str = "DN20";
+                }
+                else if (pipeSize == "DN25")
+                {
+                    str = "DN25";
+                }
+                else if (pipeSize == "DN32")
+                {
+                    str = "DN32(De40X2.4)";
+                }
+                else if (pipeSize == "DN40")
+                {
+                    str = "DN40(De50X3.0)";
+                }
+                else if (pipeSize == "DN50")
+                {
+                    str = "DN50(De63X3.8)";
+                }
+                else if (pipeSize == "DN65")
+                {
+                    str = "DN65(De75X4.5)";
+                }
+                else if (pipeSize == "DN80")
+                {
+                    str = "DN80(De90X5.4)";
+                }
+                else if (pipeSize == "DN100")
+                {
+                    str = "DN100(De110X6.6)";
+                }
+                else if (pipeSize == "DN125")
+                {
+                    str = "DN125(De140X8.3)";
+                }
+                else if (pipeSize == "DN150")
+                {
+                    str = "DN150(De160X9.5)";
+                }
+                else if (pipeSize == "DN200")
+                {
+                    str = "DN200(De225X13.4)";
+                }
+                else if (pipeSize == "DN250")
+                {
+                    str = "DN250(De250X14.8)";
+                }
+                else if (pipeSize == "DN300")
+                {
+                    str = "DN300(De315X18.7)";
+                }
+                else if (pipeSize == "DN350")
+                {
+                    str = "DN350(De355X21.1)";
+                }
+                else if (pipeSize == "DN400")
+                {
+                    str = "DN400(De400X23.7)";
+                }
+                else if (pipeSize == "DN450")
+                {
+                    str = "DN450(De450X26.7)";
+                }
+                else if (pipeSize == "DN500")
+                {
+                    str = "DN500(De500X29.7)";
+                }
+            }
+
+            if (pipeMaterial.Contains("钢丝网骨架"))//此数据来源于CJT189-2007钢丝网骨架塑料（聚乙烯）复合管材及管件，压力等级为1.6Mpa
+            {
+                if (pipeSize == "DN15")
+                {
+                    str = "DN15";
+                }
+                else if (pipeSize == "DN20")
+                {
+                    str = "DN20";
+                }
+                else if (pipeSize == "DN25")
+                {
+                    str = "DN25";
+                }
+                else if (pipeSize == "DN32")
+                {
+                    str = "DN32(De40X2.4)";
+                }
+                else if (pipeSize == "DN40")
+                {
+                    str = "DN40(De50X4.5)";
+                }
+                else if (pipeSize == "DN50")
+                {
+                    str = "DN50(De63X4.5)";
+                }
+                else if (pipeSize == "DN65")
+                {
+                    str = "DN65(De75X5.0)";
+                }
+                else if (pipeSize == "DN80")
+                {
+                    str = "DN80(De90X5.5)";
+                }
+                else if (pipeSize == "DN100")
+                {
+                    str = "DN100(De110X7.0)";
+                }
+                else if (pipeSize == "DN125")
+                {
+                    str = "DN125(De140X8.0)";
+                }
+                else if (pipeSize == "DN150")
+                {
+                    str = "DN150(De160X9.0)";
+                }
+                else if (pipeSize == "DN200")
+                {
+                    str = "DN200(De225X10.0)";
+                }
+                else if (pipeSize == "DN250")
+                {
+                    str = "DN250(De250X12.0)";
+                }
+                else if (pipeSize == "DN300")
+                {
+                    str = "DN300(De315X13.0)";
+                }
+                else if (pipeSize == "DN350")
+                {
+                    str = "DN350(De355X14.0)";
+                }
+                else if (pipeSize == "DN400")
+                {
+                    str = "DN400(De400X15.0)";
+                }
+                else if (pipeSize == "DN450")
+                {
+                    str = "DN450(De450X16.0)";
+                }
+                else if (pipeSize == "DN500")
+                {
+                    str = "DN500(De500X18.0)";
+                }
+            }
+
+            return str;
         }
     }
     public class PipeValveInfo
