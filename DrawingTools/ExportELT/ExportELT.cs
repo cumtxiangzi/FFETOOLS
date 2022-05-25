@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,11 +39,11 @@ namespace FFETOOLS
                 Document doc = uidoc.Document;
 
                 ProjectInfo pro = doc.ProjectInformation;
-                Parameter proNum = pro.LookupParameter("¹¤³Ì´úºÅ");
-                Parameter proName = pro.LookupParameter("¹¤³ÌÃû³Æ");
-                Parameter subproNum = pro.LookupParameter("×ÓÏî´úºÅ");
-                Parameter subproName = pro.LookupParameter("×ÓÏîÃû³Æ");
-                Parameter name = pro.LookupParameter("×÷Õß");
+                Parameter proNum = pro.LookupParameter("å·¥ç¨‹ä»£å·");
+                Parameter proName = pro.LookupParameter("å·¥ç¨‹åç§°");
+                Parameter subproNum = pro.LookupParameter("å­é¡¹ä»£å·");
+                Parameter subproName = pro.LookupParameter("å­é¡¹åç§°");
+                Parameter name = pro.LookupParameter("ä½œè€…");
 
                 string subproNumOnly = subproNum.AsString();
 
@@ -66,9 +66,9 @@ namespace FFETOOLS
                             string path = @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\ExcelTemplate\CNTemplate-ELT.xlsx";
                             ExcelPackage package = helper.OpenExcel(path);
 
-                            //Ö¸¶¨ĞèÒªĞ´ÈëµÄsheetÃû
+                            //æŒ‡å®šéœ€è¦å†™å…¥çš„sheetå
                             ExcelWorksheet excelWorksheet = package.Workbook.Worksheets["sheet1"];
-                            string footPage = "&\"Arial\"" + "&16" + " " + "µÚ" + "&P" + "Ò³£¬" + "¹²" + "&N" + "Ò³";
+                            string footPage = "&\"Arial\"" + "&16" + " " + "ç¬¬" + "&P" + "é¡µï¼Œ" + "å…±" + "&N" + "é¡µ";
 
                             excelWorksheet.HeaderFooter.differentOddEven = false;
                             excelWorksheet.HeaderFooter.OddFooter.LeftAlignedText = excelFooterName;
@@ -76,14 +76,14 @@ namespace FFETOOLS
 
                             excelWorksheet.Cells[1, 4].Value = projectName;
                             excelWorksheet.Cells[2, 4].Value = subProjectName;
-                            excelWorksheet.Cells[3, 4].Value = "Ê©¹¤Í¼";
+                            excelWorksheet.Cells[3, 4].Value = "æ–½å·¥å›¾";
                             excelWorksheet.Cells[1, 4].Style.Font.Name = "Arial";
                             excelWorksheet.Cells[2, 4].Style.Font.Name = "Arial";
                             excelWorksheet.Cells[3, 4].Style.Font.Name = "Arial";
 
                             int rowNum = 7;
-                            int valveCode = 1;  //Éè±¸±àºÅ¼ÆÊı
-                            List<string> pipeSystemList = GetPipeSystemType(uidoc, "¸øÅÅË®");
+                            int valveCode = 1;  //è®¾å¤‡ç¼–å·è®¡æ•°
+                            List<string> pipeSystemList = GetPipeSystemType(uidoc, "ç»™æ’æ°´");
                             //string ss = String.Join("\n", pipeSystemList.ToArray());
                             //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             List<PipeValveInfo> valveList = new List<PipeValveInfo>();
@@ -93,30 +93,174 @@ namespace FFETOOLS
                             foreach (string item in pipeSystemList)
                             {
                                 rowNum++;
-                                int[,] mergeRowIndexs = { { rowNum - 2, 1, 11 }, { rowNum - 2, 1, 11 } };  //ºÏ²¢µ¥Ôª¸ñ
+                                int[,] mergeRowIndexs = { { rowNum - 2, 1, 11 }, { rowNum - 2, 1, 11 } };  //åˆå¹¶å•å…ƒæ ¼
                                 ExcelHelper.MergeRowCells(excelWorksheet, 1, mergeRowIndexs);
                                 excelWorksheet.Cells[rowNum - 1, 1].Value = item;
                                 excelWorksheet.Cells[rowNum - 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                                 excelWorksheet.Cells[rowNum - 1, 1].Style.Font.Bold = true;
 
-                                //µØÉÏÊ½Ïû»ğË¨Ğ´Èë
-                                outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "¸øÅÅË®_Ïû·ÀÉè±¸_ÊÒÍâµØÉÏÊ½Ïû»ğË¨");
+                                //ç§»åŠ¨å¼æ½œæ°´æ³µå†™å…¥
+                                outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "ç»™æ’æ°´_æ°´æ³µ_æ½œæ°´æ³µ(ç§»åŠ¨å¼å®‰è£…)");
+                                foreach (var hydrant in outDoorHydrantsUp)
+                                {
+                                    excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                    excelWorksheet.Cells[rowNum, 2].Value = "PU" + valveCode.ToString().PadLeft(2, '0');
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ½œæ°´æ³µ";
+                                    excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                    excelWorksheet.Cells[rowNum, 9].Value = "é…å¥—é™„ä»¶åŠå®‰è£…è¯¦è§08S305-17";
+                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 1, 9].Value = "é…ç”µæ§ç®±ï¼Œæ¥æ”¶ä¿¡å·ï¼›è‡ªåŠ¨å¯åœ";
+                                    excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 2, 9].Value = "é«˜æ°´ä½å·¥ä½œï¼Œä½æ°´ä½åœæ³µã€‚";
+                                    excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:" + "50QW-10-15-1.5";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æµé‡:" + "10mÂ³/h";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ‰¬ç¨‹:" + "15m";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "è½¬é€Ÿ:" + "2900r/min";
+                                    rowNum++;
+
+                                    excelWorksheet.Cells[rowNum, 3].Value = "MT01";
+                                    excelWorksheet.Cells[rowNum, 4].Value = "ç”µæœº";
+                                    excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                    excelWorksheet.Cells[rowNum, 7].Value = "1.5";
+                                    excelWorksheet.Cells[rowNum, 7].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "åŠŸç‡:" + "1.5kW";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "ç”µå‹:" + "380V";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ˜¯å¦å˜é¢‘:" + "éå˜é¢‘";
+                                    rowNum++;
+
+                                    valveCode++;
+                                    //break;
+                                }
+
+                                //åœ°ä¸Šå¼æ¶ˆç«æ “å†™å…¥
+                                outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "ç»™æ’æ°´_æ¶ˆé˜²è®¾å¤‡_å®¤å¤–åœ°ä¸Šå¼æ¶ˆç«æ “");
                                 foreach (var hydrant in outDoorHydrantsUp)
                                 {
                                     excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
                                     excelWorksheet.Cells[rowNum, 2].Value = "FZ" + valveCode.ToString().PadLeft(2, '0');
-                                    excelWorksheet.Cells[rowNum, 4].Value = "ÊÒÍâµØÉÏÊ½Ïû»ğË¨";
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å®¤å¤–åœ°ä¸Šå¼æ¶ˆç«æ “";
                                     excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                    excelWorksheet.Cells[rowNum, 9].Value = "Åä¶ÔÓ¦·¨À¼¡¢ÂİË¨¡¢ÂİÄ¸¡¢µæÆ¬µÈ";
+                                    excelWorksheet.Cells[rowNum, 9].Value = "é…å¯¹åº”æ³•å…°ã€èºæ “ã€èºæ¯ã€å«ç‰‡ç­‰";
                                     excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                     rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "ĞÍºÅ:" + "SSF100/65-1.6";
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:" + "SSF100/65-1.6";
                                     rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "½øË®¿Ú:" + "DN100";
+                                    excelWorksheet.Cells[rowNum, 4].Value = "è¿›æ°´å£:" + "DN100";
                                     rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "³öË®¿Ú:" + "DN100, DN65";
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å‡ºæ°´å£:" + "DN100, DN65";
                                     rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + "1.6MPa";
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + "1.6MPa";
+                                    rowNum++;
+                                    valveCode++;
+                                    break;
+                                }
+
+                                //å®¤å†…æ¶ˆç«æ “å†™å…¥
+                                outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "ç»™æ’æ°´_æ¶ˆé˜²è®¾å¤‡_å®¤å†…æ¶ˆç«æ “ç®±");
+                                foreach (var hydrant in outDoorHydrantsUp)
+                                {
+                                    excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                    excelWorksheet.Cells[rowNum, 2].Value = "FZ" + valveCode.ToString().PadLeft(2, '0');
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å®¤å†…æ¶ˆç«æ “";
+                                    excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+
+                                    excelWorksheet.Cells[rowNum, 9].Value = "é…ä¹™å‹å•æ “å®¤å†…æ¶ˆç«æ “ç®±Ã—" + (outDoorHydrantsUp.Count - 1).ToString();
+                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 1, 9].Value = "ç®±å†…é…ç½®æ¶ˆé˜²æŒ‰é’®";
+                                    excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 2, 9].Value = "è¯¦è§15S202-9é¡µ";
+                                    excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 3, 9].Value = "é…å±‹é¡¶è¯•éªŒç”¨æ¶ˆç«æ “ç®±Ã—1";
+                                    excelWorksheet.Cells[rowNum + 3, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 4, 9].Value = "ç®±å†…é…ç½®å‹åŠ›è¡¨";
+                                    excelWorksheet.Cells[rowNum + 4, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 5, 9].Value = "è¯¦è§15S202-54é¡µ";
+                                    excelWorksheet.Cells[rowNum + 5, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:" + "SN65";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + "DN65";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + "1.0MPa";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ¥å£å‹å¼:" + "å†…å£å¼";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ°´æªå‹å·:" + "QZ19";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ°´é¾™å¸¦:" + "DN65,25m";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ°´é¾™å¸¦æ¥å£:" + "KD65å‹2ä¸ª";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆç«æ “ç®±:" + "800x650x240mm";
+                                    rowNum++;
+                                    valveCode++;
+                                    break;
+                                }
+
+                                //åœ°ä¸‹å¼æ°´æ³µæ¥åˆå™¨å†™å…¥
+                                outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "ç»™æ’æ°´_æ¶ˆé˜²è®¾å¤‡_åœ°ä¸‹å¼æ°´æ³µæ¥åˆå™¨");
+                                foreach (var hydrant in outDoorHydrantsUp)
+                                {
+                                    excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                    excelWorksheet.Cells[rowNum, 2].Value = "FZ" + valveCode.ToString().PadLeft(2, '0');
+                                    excelWorksheet.Cells[rowNum, 4].Value = "åœ°ä¸‹å¼æ¶ˆé˜²æ°´æ³µæ¥åˆå™¨";
+                                    excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                    excelWorksheet.Cells[rowNum, 9].Value = "ä¹™å‹é…å¥—æ­¢å›é˜€ã€å®‰å…¨é˜€ã€é—¸é˜€ç­‰";
+                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 1, 9].Value = "é…å¥—æ³•å…°ã€å«ç‰‡ã€èºæ “åŠèºæ¯";
+                                    excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 2, 9].Value = "è¯¦è§99S203-17é¡µ";
+                                    excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                                    rowNum++;
+                                    if (hydrant.Name.Contains("DN100"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:" + "SQX-100-A";
+                                    }
+                                    else if (hydrant.Name.Contains("DN150"))
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:" + "SQX-150-A";
+                                    }
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + hydrant.Name;
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + "1.0MPa";
+                                    rowNum++;
+                                    valveCode++;
+                                    break;
+                                }
+
+                                //å¢™å£å¼æ°´æ³µæ¥åˆå™¨å†™å…¥
+                                outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "ç»™æ’æ°´_æ¶ˆé˜²è®¾å¤‡_å¢™å£å¼æ°´æ³µæ¥åˆå™¨");
+                                foreach (var hydrant in outDoorHydrantsUp)
+                                {
+                                    excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                    excelWorksheet.Cells[rowNum, 2].Value = "FZ" + valveCode.ToString().PadLeft(2, '0');
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å¢™å£å¼æ¶ˆé˜²æ°´æ³µæ¥åˆå™¨";
+                                    excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                    excelWorksheet.Cells[rowNum, 9].Value = "ä¹™å‹é…å¥—æ­¢å›é˜€ã€å®‰å…¨é˜€ã€é—¸é˜€ç­‰";
+                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 1, 9].Value = "é…å¥—æ³•å…°ã€å«ç‰‡ã€èºæ “åŠèºæ¯";
+                                    excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                    excelWorksheet.Cells[rowNum + 2, 9].Value = "è¯¦è§99S203-5é¡µ";
+                                    excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:" + "SQX150-A";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + "DN150";
+                                    rowNum++;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + "1.0MPa";
                                     rowNum++;
                                     valveCode++;
                                     break;
@@ -125,31 +269,94 @@ namespace FFETOOLS
                                 valveList = GetPipeSystemValve(doc, item, subproNum.AsString(), valveCode);
                                 pipeList = GetPipeSystemPipe(doc, item, subproNum.AsString(), 1);
 
-                                //·§ÃÅĞ´Èë
+                                //é˜€é—¨å†™å…¥
                                 foreach (PipeValveInfo valveInfo in valveList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
-                                    excelWorksheet.Cells[rowNum, 2].Value = valveInfo.ValveAbb;
-                                    excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
-                                    excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
-                                    excelWorksheet.Cells[rowNum, 9].Value = valveInfo.ValveNote;
-                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                    rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "ĞÍºÅ:" + valveInfo.ValveModel;
-                                    rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + valveInfo.ValvePressure;
-                                    rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + valveInfo.ValveSize;
-                                    rowNum++;
-                                    valveCode++;
+                                    if (valveInfo.ValveName.Contains("ç”µåŠ¨"))
+                                    {
+                                        for (int i = 0; i < int.Parse(valveInfo.ValveQulity); i++)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
+                                            excelWorksheet.Cells[rowNum, 2].Value = "VA"+valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1";
+
+                                            if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("è¶é˜€") || valveInfo.ValveName.Contains("æ­¢å›é˜€")
+                                                || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("æ¶²å‹æ°´ä½æ§åˆ¶é˜€") || valveInfo.ValveName.Contains("æ³„å‹é˜€"))
+                                            {
+                                                excelWorksheet.Cells[rowNum, 9].Value = "é…ç½®å¯¹åº”æ³•å…°ã€èºæ “ã€èºæ¯ã€å«ç‰‡";
+                                            }
+                                            else
+                                            {
+                                                excelWorksheet.Cells[rowNum, 9].Value = "";
+                                            }
+
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:" + valveInfo.ValveModel;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + valveInfo.ValvePressure;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + valveInfo.ValveSize;
+                                            rowNum++;
+
+                                            excelWorksheet.Cells[rowNum, 3].Value = "MT01";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "ç”µåŠ¨æ‰§è¡Œæœºæ„";
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                            excelWorksheet.Cells[rowNum, 8].Value = "0.18";
+                                            excelWorksheet.Cells[rowNum, 9].Value = "æ™®é€šå¼€å…³å‹";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "æœ€å¤§è¾“å‡ºè½¬çŸ©:" + "600N.m";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "90Â°æ—‹è½¬æ—¶é—´:" + "15s";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "è¾“å…¥è¾“å‡ºä¿¡å·:" + "å¼€å…³é‡ä¿¡å·";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "ç”µæœºåŠŸç‡:" + "0.18kW";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "ç”µå‹:" + "220V";
+                                            rowNum++;
+                                            valveCode++;
+                                        }                                                                          
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
+                                        excelWorksheet.Cells[rowNum, 2].Value = valveInfo.ValveAbb;
+                                        excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
+                                        excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
+
+                                        if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("è¶é˜€") || valveInfo.ValveName.Contains("æ­¢å›é˜€")
+                                            || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("æ¶²å‹æ°´ä½æ§åˆ¶é˜€") || valveInfo.ValveName.Contains("æ³„å‹é˜€"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 9].Value = "é…ç½®å¯¹åº”æ³•å…°ã€èºæ “ã€èºæ¯ã€å«ç‰‡";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 9].Value = "";
+                                        }
+
+                                        excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å‹å·:" + valveInfo.ValveModel;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + valveInfo.ValvePressure;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + valveInfo.ValveSize;
+                                        rowNum++;
+                                        valveCode++;
+                                    }
+
                                 }
 
-                                //¹ÜµÀĞ´Èë
+                                //ç®¡é“å†™å…¥
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
                                     excelWorksheet.Cells[rowNum, 1].Value = pipeInfo.ProjectNum;
                                     excelWorksheet.Cells[rowNum, 2].Value = "PP" + valveCode.ToString().PadLeft(2, '0');
-                                    excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeSystem + "¹ÜµÀ¼°¹Ü¼ş";
+                                    excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeSystem + "ç®¡é“åŠç®¡ä»¶";
                                     rowNum++;
                                     valveCode++;
                                     break;
@@ -157,13 +364,13 @@ namespace FFETOOLS
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeInfo.PipeAbb;
-                                    if (pipeInfo.PipeName.Contains("¶ÆĞ¿"))
+                                    if (pipeInfo.PipeName.Contains("é•€é”Œ"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "Ë«ÃæÈÈ½ş¶ÆĞ¿¸Ö¹Ü";
+                                        excelWorksheet.Cells[rowNum, 4].Value = "åŒé¢çƒ­æµ¸é•€é”Œé’¢ç®¡";
                                     }
                                     else if (pipeInfo.PipeName.Contains("HDPE"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "HDPEË«±Ú²¨ÎÆ¹Ü";
+                                        excelWorksheet.Cells[rowNum, 4].Value = "HDPEåŒå£æ³¢çº¹ç®¡";
                                     }
                                     else
                                     {
@@ -180,45 +387,73 @@ namespace FFETOOLS
                                     }
                                     else if (pipeInfo.PipeName.Contains("HDPE"))
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "»·¸Õ¶È:¡İ8kN/m2";
+                                        excelWorksheet.Cells[rowNum, 4].Value = "ç¯åˆšåº¦:â‰¥8kN/mÂ²";
                                         rowNum++;
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeInfo.PipePressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeInfo.PipePressure;
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + pipeInfo.PipeSize;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + pipeInfo.PipeSize;
                                     if (pipeInfo.PipeQulity == "0 m")
                                     {
-                                        excelWorksheet.Cells[rowNum, 6].Value = "1 m";
+                                        if (pipeList.Count == 1)
+                                        {
+                                            if (pipeInfo.PipeName.Contains("UPVC"))
+                                            {
+                                                excelWorksheet.Cells[rowNum - 1, 6].Value = "1 m";
+                                            }
+                                            else
+                                            {
+                                                excelWorksheet.Cells[rowNum - 2, 6].Value = "1 m";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1 m";
+                                        }
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 6].Value = pipeInfo.PipeQulity;
+                                        if (pipeList.Count == 1)
+                                        {
+                                            if (pipeInfo.PipeName.Contains("UPVC"))
+                                            {
+                                                excelWorksheet.Cells[rowNum - 1, 6].Value = pipeInfo.PipeQulity;
+                                            }
+                                            else
+                                            {
+                                                excelWorksheet.Cells[rowNum - 2, 6].Value = pipeInfo.PipeQulity;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 6].Value = pipeInfo.PipeQulity;
+                                        }
                                     }
                                     rowNum++;
                                 }
 
-                                //90¡ãÍäÍ·Ğ´Èë
+                                //90Â°å¼¯å¤´å†™å…¥
                                 int elbowNum = 2;
                                 List<PipeElbowInfo> pipeElbowList90 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "90");
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("¶ÆĞ¿"))
+                                    if (pipeElbowInfo.PipeElbowName.Contains("é•€é”Œ"))
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²ÛÊ½90¡ãÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¼90Â°å¼¯å¤´";
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "90¡ã¶ÆĞ¿ÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "90Â°é•€é”Œå¼¯å¤´";
                                         }
                                     }
                                     else
@@ -237,32 +472,47 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeElbowInfo.PipeElbowPressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeElbowInfo.PipeElbowPressure;
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + pipeElbowInfo.PipeElbowSize;
-                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + pipeElbowInfo.PipeElbowSize;
+
+                                    if (pipeElbowList90.Count == 1)
+                                    {
+                                        if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
+                                        {
+                                            excelWorksheet.Cells[rowNum - 1, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum - 2, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    }
                                     rowNum++;
                                 }
 
-                                //60¡ãÍäÍ·Ğ´Èë
+                                //60Â°å¼¯å¤´å†™å…¥
                                 List<PipeElbowInfo> pipeElbowList60 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "60");
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("¶ÆĞ¿"))
+                                    if (pipeElbowInfo.PipeElbowName.Contains("é•€é”Œ"))
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²ÛÊ½60¡ãÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¼60Â°å¼¯å¤´";
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "60¡ã¶ÆĞ¿ÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "60Â°é•€é”Œå¼¯å¤´";
                                         }
                                     }
                                     else
@@ -281,32 +531,39 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeElbowInfo.PipeElbowPressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeElbowInfo.PipeElbowPressure;
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + pipeElbowInfo.PipeElbowSize;
-                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + pipeElbowInfo.PipeElbowSize;
+                                    if (pipeElbowList60.Count == 1)
+                                    {
+                                        excelWorksheet.Cells[rowNum - 2, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    }
                                     rowNum++;
                                 }
 
-                                //45¡ãÍäÍ·Ğ´Èë
+                                //45Â°å¼¯å¤´å†™å…¥
                                 List<PipeElbowInfo> pipeElbowList45 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "45");
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("¶ÆĞ¿"))
+                                    if (pipeElbowInfo.PipeElbowName.Contains("é•€é”Œ"))
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²ÛÊ½45¡ãÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¼45Â°å¼¯å¤´";
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "45¡ã¶ÆĞ¿ÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "45Â°é•€é”Œå¼¯å¤´";
                                         }
                                     }
                                     else
@@ -326,32 +583,46 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeElbowInfo.PipeElbowPressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeElbowInfo.PipeElbowPressure;
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + pipeElbowInfo.PipeElbowSize;
-                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + pipeElbowInfo.PipeElbowSize;
+                                    if (pipeElbowList45.Count == 1)
+                                    {
+                                        if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
+                                        {
+                                            excelWorksheet.Cells[rowNum - 1, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum - 2, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    }
                                     rowNum++;
                                 }
 
-                                //30¡ãÍäÍ·Ğ´Èë
+                                //30Â°å¼¯å¤´å†™å…¥
                                 List<PipeElbowInfo> pipeElbowList30 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "30");
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("¶ÆĞ¿"))
+                                    if (pipeElbowInfo.PipeElbowName.Contains("é•€é”Œ"))
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²ÛÊ½30¡ãÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¼30Â°å¼¯å¤´";
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "30¡ã¶ÆĞ¿ÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "30Â°é•€é”Œå¼¯å¤´";
                                         }
                                     }
                                     else
@@ -371,32 +642,39 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeElbowInfo.PipeElbowPressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeElbowInfo.PipeElbowPressure;
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + pipeElbowInfo.PipeElbowSize;
-                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + pipeElbowInfo.PipeElbowSize;
+                                    if (pipeElbowList30.Count == 1)
+                                    {
+                                        excelWorksheet.Cells[rowNum - 2, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    }
                                     rowNum++;
                                 }
 
-                                //22.5¡ãÍäÍ·Ğ´Èë
+                                //22.5Â°å¼¯å¤´å†™å…¥
                                 List<PipeElbowInfo> pipeElbowList225 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "22");
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("¶ÆĞ¿"))
+                                    if (pipeElbowInfo.PipeElbowName.Contains("é•€é”Œ"))
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²ÛÊ½22.5¡ãÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¼22.5Â°å¼¯å¤´";
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "22.5¡ã¶ÆĞ¿ÍäÍ·";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "22.5Â°é•€é”Œå¼¯å¤´";
                                         }
                                     }
                                     else
@@ -416,7 +694,7 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeElbowInfo.PipeElbowPressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeElbowInfo.PipeElbowPressure;
                                         rowNum++;
                                     }
 
@@ -424,25 +702,41 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + pipeElbowInfo.PipeElbowSize;
-                                    excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + pipeElbowInfo.PipeElbowSize;
+
+                                    if (pipeElbowList225.Count == 1)
+                                    {
+                                        if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
+                                        {
+                                            excelWorksheet.Cells[rowNum - 1, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum - 2, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeElbowInfo.PipeElbowQulity;
+                                    }
+
                                     rowNum++;
                                 }
 
-                                //ÈıÍ¨Ğ´Èë
+                                //ä¸‰é€šå†™å…¥
                                 List<PipeTeeInfo> pipeTeeList = GetPipeSystemPipeTee(doc, item, subproNum.AsString(), elbowNum);
                                 foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeTeeInfo.PipeTeeAbb;
-                                    if (pipeTeeInfo.PipeTeeName.Contains("¶ÆĞ¿"))
+                                    if (pipeTeeInfo.PipeTeeName.Contains("é•€é”Œ"))
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²ÛÊ½ÈıÍ¨";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¼ä¸‰é€š";
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "¶ÆĞ¿ÈıÍ¨";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "é•€é”Œä¸‰é€š";
                                         }
                                     }
                                     else
@@ -461,32 +755,47 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeTeeInfo.PipeTeePressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeTeeInfo.PipeTeePressure;
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹æ¸ñ:" + pipeTeeInfo.PipeTeeSize;
-                                    excelWorksheet.Cells[rowNum, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "è§„æ ¼:" + pipeTeeInfo.PipeTeeSize;
+
+                                    if (pipeTeeList.Count == 1)
+                                    {
+                                        if (pipeTeeInfo.PipeTeeName.Contains("UPVC"))
+                                        {
+                                            excelWorksheet.Cells[rowNum - 1, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum - 2, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                    }
                                     rowNum++;
                                 }
 
-                                //Òì¾¶Ğ´Èë
+                                //å¼‚å¾„å†™å…¥
                                 List<PipeReduceInfo> pipeReduceList = GetPipeSystemPipeReduce(doc, item, subproNum.AsString(), elbowNum);
                                 foreach (PipeReduceInfo pipeReduceInfo in pipeReduceList)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeReduceInfo.PipeReduceAbb;
-                                    if (pipeReduceInfo.PipeReduceName.Contains("¶ÆĞ¿"))
+                                    if (pipeReduceInfo.PipeReduceName.Contains("é•€é”Œ"))
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²ÛÊ½Òì¾¶";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¼å¼‚å¾„";
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "¶ÆĞ¿Òì¾¶";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "é•€é”Œå¼‚å¾„";
                                         }
                                     }
                                     else
@@ -505,52 +814,67 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeReduceInfo.PipeReducePressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeReduceInfo.PipeReducePressure;
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeReduceInfo pipeReduceInfo in pipeReduceList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "¹æ¸ñ:" + pipeReduceInfo.PipeReduceSize;
-                                    excelWorksheet.Cells[rowNum, 6].Value = pipeReduceInfo.PipeReduceQulity;
+                                    excelWorksheet.Cells[rowNum, 4].Value = "è§„æ ¼:" + pipeReduceInfo.PipeReduceSize;
+
+                                    if (pipeReduceList.Count == 1)
+                                    {
+                                        if (pipeReduceInfo.PipeReduceName.Contains("UPVC"))
+                                        {
+                                            excelWorksheet.Cells[rowNum - 1, 6].Value = pipeReduceInfo.PipeReduceQulity;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum - 2, 6].Value = pipeReduceInfo.PipeReduceQulity;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeReduceInfo.PipeReduceQulity;
+                                    }
                                     rowNum++;
                                 }
 
-                                //·¨À¼Ğ´ÈëÖ»Õë¶Ô¹µ²ÛÊ½Ïû·ÀÁ¬½Ó
-                                if (item.Contains("Ïû·À") && !(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                //æ³•å…°å†™å…¥åªé’ˆå¯¹æ²Ÿæ§½å¼æ¶ˆé˜²è¿æ¥
+                                if (item.Contains("æ¶ˆé˜²") && !(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = "OX" + elbowNum.ToString().PadLeft(2, '0');
-                                    excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²ÛÊ½·¨À¼";
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¼æ³•å…°";
                                     elbowNum++;
                                     rowNum++;
 
                                     foreach (PipeValveInfo valveInfo in valveList)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + valveInfo.ValvePressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + valveInfo.ValvePressure;
                                         rowNum++;
                                         break;
                                     }
 
                                     foreach (PipeValveInfo valveInfo in valveList)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + valveInfo.ValveSize;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + valveInfo.ValveSize;
                                         excelWorksheet.Cells[rowNum, 6].Value = (int.Parse(valveInfo.ValveQulity) * 2).ToString();
                                         rowNum++;
                                     }
                                 }
 
-                                //¿¨¹¿Ğ´ÈëÖ»Õë¶Ô¹µ²ÛÊ½Ïû·ÀÁ¬½Ó
-                                if (item.Contains("Ïû·À") && !(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                //å¡ç®å†™å…¥åªé’ˆå¯¹æ²Ÿæ§½å¼æ¶ˆé˜²è¿æ¥
+                                if (item.Contains("æ¶ˆé˜²") && !(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = "OX" + elbowNum.ToString().PadLeft(2, '0');
-                                    excelWorksheet.Cells[rowNum, 4].Value = "Ïû·À¹µ²Û¿¨¹¿";
+                                    excelWorksheet.Cells[rowNum, 4].Value = "æ¶ˆé˜²æ²Ÿæ§½å¡ç®";
                                     elbowNum++;
                                     rowNum++;
 
                                     foreach (PipeInfo pipeInfo in pipeList)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÑ¹Á¦:" + pipeInfo.PipePressure;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°å‹åŠ›:" + pipeInfo.PipePressure;
                                         rowNum++;
                                         break;
                                     }
@@ -610,7 +934,7 @@ namespace FFETOOLS
                                             }
                                         }
 
-                                        excelWorksheet.Cells[rowNum, 4].Value = "¹«³ÆÖ±¾¶:" + pipeInfo.PipeSize;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "å…¬ç§°ç›´å¾„:" + pipeInfo.PipeSize;
                                         excelWorksheet.Cells[rowNum, 6].Value = totalNum.ToString();
                                         rowNum++;
                                     }
@@ -622,26 +946,26 @@ namespace FFETOOLS
                             string dltName = proNum.AsString() + "-" + subproNum.AsString().Replace("/", " ") + "-" + "WD" + "-" + "ELT" + "." + "xlsx";
 
                             SaveFileDialog sfd = new SaveFileDialog();
-                            sfd.Title = "Éè±¸±íµ¼³ö";
+                            sfd.Title = "è®¾å¤‡è¡¨å¯¼å‡º";
                             sfd.FileName = dltName;
-                            sfd.Filter = "Excel ¹¤×÷±¡£¨*.xlsx£©|*.xlsx";
-                            //sfd.FilterIndex = 1;//ÉèÖÃÄ¬ÈÏÎÄ¼şÀàĞÍÏÔÊ¾Ë³Ğò
+                            sfd.Filter = "Excel å·¥ä½œè–„ï¼ˆ*.xlsxï¼‰|*.xlsx";
+                            //sfd.FilterIndex = 1;//è®¾ç½®é»˜è®¤æ–‡ä»¶ç±»å‹æ˜¾ç¤ºé¡ºåº
 
                             if (sfd.ShowDialog() == DialogResult.OK)
                             {
-                                localFilePath = sfd.FileName.ToString();//»ñµÃÎÄ¼şÂ·¾¶
+                                localFilePath = sfd.FileName.ToString();//è·å¾—æ–‡ä»¶è·¯å¾„
 
-                                fileName = localFilePath.Substring(localFilePath.LastIndexOf("\\") + 1);   //»ñÈ¡ÎÄ¼şÃû£¬²»´øÂ·¾¶
+                                fileName = localFilePath.Substring(localFilePath.LastIndexOf("\\") + 1);   //è·å–æ–‡ä»¶åï¼Œä¸å¸¦è·¯å¾„
 
-                                filePath = localFilePath.Substring(0, localFilePath.LastIndexOf("\\"));//»ñÈ¡ÎÄ¼şÂ·¾¶£¬²»´øÎÄ¼şÃû 
+                                filePath = localFilePath.Substring(0, localFilePath.LastIndexOf("\\"));//è·å–æ–‡ä»¶è·¯å¾„ï¼Œä¸å¸¦æ–‡ä»¶å 
 
-                                newFileName = DateTime.Now.ToString("yyyymmdd") + fileName;   //¸øÎÄ¼şÃûÇ°¼ÓÉÏÊ±¼ä
+                                newFileName = DateTime.Now.ToString("yyyymmdd") + fileName;   //ç»™æ–‡ä»¶åå‰åŠ ä¸Šæ—¶é—´
 
-                                sfd.FileName.Insert(1, "abc");//ÔÚÎÄ¼şÃûÀï²åÈë×Ö·û 
+                                sfd.FileName.Insert(1, "abc");//åœ¨æ–‡ä»¶åé‡Œæ’å…¥å­—ç¬¦ 
 
                                 helper.saveExcel(package, localFilePath);
-                                System.Windows.Forms.MessageBox.Show("Éè±¸±íµ¼³ö³É¹¦!", "GPSBIM", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                Process.Start(localFilePath);//´ò¿ªÉè±¸±í
+                                System.Windows.Forms.MessageBox.Show("è®¾å¤‡è¡¨å¯¼å‡ºæˆåŠŸ!", "GPSBIM", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                Process.Start(localFilePath);//æ‰“å¼€è®¾å¤‡è¡¨
                             }
                         }
                     }
@@ -652,7 +976,7 @@ namespace FFETOOLS
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("ÇëÔÚÆ½Ãæ»òÈıÎ¬ÊÓÍ¼ÖĞ½øĞĞ²Ù×÷!", "GPSBIM", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    System.Windows.Forms.MessageBox.Show("è¯·åœ¨å¹³é¢æˆ–ä¸‰ç»´è§†å›¾ä¸­è¿›è¡Œæ“ä½œ!", "GPSBIM", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 return Result.Succeeded;
             }
@@ -663,20 +987,20 @@ namespace FFETOOLS
         }
         public void ReplaceViewSchedule(Document doc, Parameter name)
         {
-            //Transaction trans = new Transaction(doc, "´«µİÏîÄ¿±ê×¼ÊµÀı");
+            //Transaction trans = new Transaction(doc, "ä¼ é€’é¡¹ç›®æ ‡å‡†å®ä¾‹");
             //trans.Start();
-            //ÊµÀı»¯¸´ÖÆÕ³ÌùÑ¡Ïî,ÕâÀïÊµÀı»¯¾ÍĞĞ
+            //å®ä¾‹åŒ–å¤åˆ¶ç²˜è´´é€‰é¡¹,è¿™é‡Œå®ä¾‹åŒ–å°±è¡Œ
             //CopyPasteOptions option = new CopyPasteOptions();
-            //ÓÉÓÚ²ÄÁÏĞÅÏ¢ÓëÎ»ÒÆÎŞ¹Ø,ËùÒÔÎ»ÒÆÎªnull,Èç¹ûÊÇ×åÊµÀı»òÕßÆäËûÓëÎ»ÖÃÓĞ¹ØµÄ,Õâ¸öµØ·½¾ÍĞèÒªË¼¿¼ÏÂÉèÖÃÁË
+            //ç”±äºææ–™ä¿¡æ¯ä¸ä½ç§»æ— å…³,æ‰€ä»¥ä½ç§»ä¸ºnull,å¦‚æœæ˜¯æ—å®ä¾‹æˆ–è€…å…¶ä»–ä¸ä½ç½®æœ‰å…³çš„,è¿™ä¸ªåœ°æ–¹å°±éœ€è¦æ€è€ƒä¸‹è®¾ç½®äº†
             //ElementTransformUtils.CopyElements(document, copyIds, doc, null, option);
             //trans.Commit();
-            //±£´æ¹Ø±ÕĞŞ¸ÄºóµÄÎÄµµ
+            //ä¿å­˜å…³é—­ä¿®æ”¹åçš„æ–‡æ¡£
             // doc.Save();
             // doc.Close(false);
-            // ÔÚºóÌ¨´ò¿ªÎÄ¼ş£¬UIÉÏ²»»áÏÔÊ¾£¬²¢ÇÒ°ÑÎÄ¼şÖĞÇ½µÄÊıÁ¿ÏÔÊ¾³öÀ´¡£
+            // åœ¨åå°æ‰“å¼€æ–‡ä»¶ï¼ŒUIä¸Šä¸ä¼šæ˜¾ç¤ºï¼Œå¹¶ä¸”æŠŠæ–‡ä»¶ä¸­å¢™çš„æ•°é‡æ˜¾ç¤ºå‡ºæ¥ã€‚
             if (name.AsString() != "1")
             {
-                using (Transaction trans = new Transaction(doc, "Ã÷Ï¸±íÌæ»»"))
+                using (Transaction trans = new Transaction(doc, "æ˜ç»†è¡¨æ›¿æ¢"))
                 {
                     trans.Start();
                     name.Set("1");
@@ -687,14 +1011,14 @@ namespace FFETOOLS
                     ICollection<ElementId> deletIds = new Collection<ElementId>();
                     foreach (ViewSchedule v in viewScheduleList)
                     {
-                        if (v.Name.Contains("¸øÅÅË®"))
+                        if (v.Name.Contains("ç»™æ’æ°´"))
                         {
                             deletIds.Add(v.Id);
                         }
                     }
                     doc.Delete(deletIds);
 
-                    string filepath = @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\¸øÅÅË®ÏîÄ¿±ê×¼.rvt";
+                    string filepath = @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\ç»™æ’æ°´é¡¹ç›®æ ‡å‡†.rvt";
                     Document newdoc = doc.Application.OpenDocumentFile(filepath);
                     FilteredElementCollector fec = new FilteredElementCollector(newdoc);
                     fec.OfCategory(BuiltInCategory.OST_Schedules);
@@ -702,7 +1026,7 @@ namespace FFETOOLS
                     ICollection<ElementId> copyIds = new Collection<ElementId>();
                     foreach (ViewSchedule v in fecList)
                     {
-                        if (v.Name.Contains("¸øÅÅË®"))
+                        if (v.Name.Contains("ç»™æ’æ°´"))
                         {
                             copyIds.Add(v.Id);
                         }
@@ -726,7 +1050,7 @@ namespace FFETOOLS
             {
                 PipingSystemType psType = doc.GetElement(sys.GetTypeId()) as PipingSystemType;
 
-                if (psType.Name.Replace("¹ÜµÀ", "").Contains(pipeSystemName))
+                if (psType.Name.Replace("ç»™æ’æ°´_", "").Replace("ç®¡é“", "") == pipeSystemName)
                 {
                     ElementSet elements = sys.PipingNetwork;
                     foreach (var ele in elements)
@@ -746,7 +1070,7 @@ namespace FFETOOLS
         }
         public List<string> GetPipeSystemType(UIDocument uiDoc, string profession)
         {
-            // »ñÈ¡µ±Ç°ÊÓÍ¼¹ÜµÀÏµÍ³Ãû³ÆÁĞ±í
+            // è·å–å½“å‰è§†å›¾ç®¡é“ç³»ç»Ÿåç§°åˆ—è¡¨
             FilteredElementCollector viewCollector = new FilteredElementCollector(uiDoc.Document, uiDoc.ActiveView.Id);
             viewCollector.OfCategory(BuiltInCategory.OST_PipingSystem);
             IList<Element> pipesystems = viewCollector.ToElements();
@@ -757,7 +1081,7 @@ namespace FFETOOLS
                 PipingSystem ps = e as PipingSystem;
                 if (ps.get_Parameter(BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM).AsValueString().Contains(profession))
                 {
-                    string pipeSystemName = ps.get_Parameter(BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM).AsValueString().Replace("¹ÜµÀÏµÍ³: ¸øÅÅË®_", "").Replace("¹ÜµÀ", "");
+                    string pipeSystemName = ps.get_Parameter(BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM).AsValueString().Replace("ç®¡é“ç³»ç»Ÿ: ç»™æ’æ°´_", "").Replace("ç®¡é“", "");
                     pipesystemname.Add(pipeSystemName);
                 }
             }
@@ -766,63 +1090,63 @@ namespace FFETOOLS
             SortedList sl = new SortedList();
             foreach (string item in newList)
             {
-                if (item == "Ë®Ô´ÊäË®ÏµÍ³")
+                if (item == "æ°´æºè¾“æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(1, item);
                 }
-                if (item == "Ñ­»·¸øË®ÏµÍ³")
+                if (item == "å¾ªç¯ç»™æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(2, item);
                 }
-                if (item == "Ñ­»·»ØË®ÏµÍ³")
+                if (item == "å¾ªç¯å›æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(3, item);
                 }
-                if (item == "Ïû·À¸øË®ÏµÍ³")
+                if (item == "æ¶ˆé˜²ç»™æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(4, item);
                 }
-                if (item == "Éú»î¸øË®ÏµÍ³")
+                if (item == "ç”Ÿæ´»ç»™æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(5, item);
                 }
-                if (item == "ÖĞË®ÏµÍ³")
+                if (item == "ä¸­æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(6, item);
                 }
-                if (item == "ÎÛË®ÏµÍ³")
+                if (item == "æ±¡æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(7, item);
                 }
-                if (item == "Ñ¹Á¦ÎÛË®ÏµÍ³")
+                if (item == "å‹åŠ›æ±¡æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(8, item);
                 }
-                if (item == "Ñ¹Á¦·ÏË®ÏµÍ³")
+                if (item == "å‹åŠ›åºŸæ°´ç³»ç»Ÿ")
                 {
                     sl.Add(9, item);
                 }
-                if (item == "·ÏË®ÏµÍ³")
+                if (item == "åºŸæ°´ç³»ç»Ÿ")
                 {
                     sl.Add(10, item);
                 }
-                if (item == "ÈÈË®¸øË®ÏµÍ³")
+                if (item == "çƒ­æ°´ç»™æ°´ç³»ç»Ÿ")
                 {
                     sl.Add(11, item);
                 }
-                if (item == "ÅÅÄàÏµÍ³")
+                if (item == "æ’æ³¥ç³»ç»Ÿ")
                 {
                     sl.Add(12, item);
                 }
-                if (item == "Ïû¶¾¼ÁÏµÍ³")
+                if (item == "æ¶ˆæ¯’å‰‚ç³»ç»Ÿ")
                 {
                     sl.Add(13, item);
                 }
-                if (item == "»ìÄı¼ÁÏµÍ³")
+                if (item == "æ··å‡å‰‚ç³»ç»Ÿ")
                 {
                     sl.Add(14, item);
                 }
-                if (item == "Ë®ÖÊÎÈ¶¨¼ÁÏµÍ³")
+                if (item == "æ°´è´¨ç¨³å®šå‰‚ç³»ç»Ÿ")
                 {
                     sl.Add(15, item);
                 }
@@ -844,7 +1168,7 @@ namespace FFETOOLS
 
             foreach (ViewSchedule v in viewScheduleList)
             {
-                if (v.Name.Contains("¹ÜÂ·¸½¼ş") && v.Name.Contains(pipeSystemName.Replace("ÏµÍ³", "")) && !(v.Name.Contains("ÎÛË®")))
+                if (v.Name.Contains("ç®¡è·¯é™„ä»¶") && v.Name.Replace("ç»™æ’æ°´_", "").Replace("ç®¡è·¯é™„ä»¶æ˜ç»†è¡¨", "") == pipeSystemName.Replace("ç³»ç»Ÿ", ""))
                 {
                     TableData td = v.GetTableData();
                     TableSectionData tdb = td.GetSectionData(SectionType.Header);
@@ -865,16 +1189,26 @@ namespace FFETOOLS
                         }
                         string[] sArray = valveTable.ElementAt(3).Split('-');
 
-                        if (valveTable.ElementAt(1).Contains("·§ÃÅ") && !(valveTable.ElementAt(1).Contains("±ãÆ÷")))
+                        if (valveTable.ElementAt(1).Contains("é˜€é—¨") && !(valveTable.ElementAt(1).Contains("ä¾¿å™¨")))
                         {
-                            PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("¸øÅÅË®_", "").Replace("¹ÜµÀ", ""), subProjectNum, "VA" + valveCode.ToString().PadLeft(2, '0'), StringHelper.FilterCH(valveTable.ElementAt(1).Replace("¸øÅÅË®_·§ÃÅ_", "")),
-                          StringHelper.FilterEN(valveTable.ElementAt(1).Replace("¸øÅÅË®_·§ÃÅ_", "")), "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), valveTable.ElementAt(5));
+                            PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("ç»™æ’æ°´_", "").Replace("ç®¡é“", ""), subProjectNum, "VA" + valveCode.ToString().PadLeft(2, '0'), StringHelper.FilterCH(valveTable.ElementAt(1).Replace("ç»™æ’æ°´_é˜€é—¨_", "")),
+                          StringHelper.FilterEN(valveTable.ElementAt(1).Replace("ç»™æ’æ°´_é˜€é—¨_", "")), "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), valveTable.ElementAt(5));
                             valveNameList.Add(valveInfo);
 
                             //string ss = valveInfo.ValvePipeSystem + "\n" + valveInfo.ProjectNum + "\n" + valveInfo.ValveAbb + "\n" + valveInfo.ValveName + "\n" + valveInfo.ValveModel
                             //+ "\n" + valveInfo.ValveSize + "\n" + valveInfo.ValvePressure + "\n" + valveInfo.ValveQulity + "\n" + valveInfo.ValveNote;
                             //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            valveCode++;
+                            if (valveInfo.ValveName.Contains("ç”µåŠ¨"))
+                            {
+                                for (int k = 0; k < int.Parse(valveInfo.ValveQulity); k++)
+                                {
+                                    valveCode++;
+                                }
+                            }
+                            else
+                            {
+                                valveCode++;
+                            }                         
                         }
                         valveTable.Clear();
                     }
@@ -891,7 +1225,7 @@ namespace FFETOOLS
 
             foreach (ViewSchedule v in viewScheduleList)
             {
-                if (v.Name.Contains("¹ÜµÀ") && v.Name.Contains(pipeSystemName.Replace("ÏµÍ³", "")))
+                if (v.Name.Contains("ç®¡é“") && v.Name.Replace("ç»™æ’æ°´_", "").Replace("ç®¡é“æ˜ç»†è¡¨", "") == pipeSystemName.Replace("ç³»ç»Ÿ", ""))
                 {
                     TableData td = v.GetTableData();
                     TableSectionData tdb = td.GetSectionData(SectionType.Header);
@@ -914,8 +1248,8 @@ namespace FFETOOLS
                         string pipeSize = "";
                         if (subProjectNum.Contains("G19") || subProjectNum.Contains("91"))
                         {
-                            if (pipeTable.ElementAt(1).Contains("º¸½Ó") || pipeTable.ElementAt(1).Contains("¶ÆĞ¿")
-                                || (pipeTable.ElementAt(1).Contains("PE") && !(pipeTable.ElementAt(1).Contains("HD"))) || pipeTable.ElementAt(1).Contains("¸ÖË¿Íø¹Ç¼Ü"))
+                            if (pipeTable.ElementAt(1).Contains("ç„Šæ¥") || pipeTable.ElementAt(1).Contains("é•€é”Œ")
+                                || (pipeTable.ElementAt(1).Contains("PE") && !(pipeTable.ElementAt(1).Contains("HD"))) || pipeTable.ElementAt(1).Contains("é’¢ä¸ç½‘éª¨æ¶"))
                             {
                                 pipeSize = PipeSizeHaveThick(pipeTable.ElementAt(3), pipeTable.ElementAt(1));
                             }
@@ -929,7 +1263,7 @@ namespace FFETOOLS
                             pipeSize = pipeTable.ElementAt(3);
                         }
 
-                        PipeInfo pipeInfo = new PipeInfo(pipeTable.ElementAt(0).Replace("¸øÅÅË®_", "").Replace("¹ÜµÀ", ""), subProjectNum, "QX" + pipeCode.ToString().PadLeft(2, '0'), pipeTable.ElementAt(1).Replace("¸øÅÅË®_", "").Replace("_³§Çø", ""),
+                        PipeInfo pipeInfo = new PipeInfo(pipeTable.ElementAt(0).Replace("ç»™æ’æ°´_", "").Replace("ç®¡é“", ""), subProjectNum, "QX" + pipeCode.ToString().PadLeft(2, '0'), pipeTable.ElementAt(1).Replace("ç»™æ’æ°´_", "").Replace("_å‚åŒº", ""),
                                                                           pipeSize, pipeTable.ElementAt(2), pipeTable.ElementAt(6), pipeTable.ElementAt(7));
                         pipeNameList.Add(pipeInfo);
 
@@ -953,7 +1287,7 @@ namespace FFETOOLS
 
             foreach (ViewSchedule v in viewScheduleList)
             {
-                if (v.Name.Contains("¹Ü¼ş") && v.Name.Contains(pipeSystemName.Replace("ÏµÍ³", "")))
+                if (v.Name.Contains("ç®¡ä»¶") && v.Name.Replace("ç»™æ’æ°´_", "").Replace("ç®¡ä»¶æ˜ç»†è¡¨", "") == pipeSystemName.Replace("ç³»ç»Ÿ", ""))
                 {
                     TableData td = v.GetTableData();
                     TableSectionData tdb = td.GetSectionData(SectionType.Header);
@@ -973,7 +1307,7 @@ namespace FFETOOLS
                             pipeElbowTable.Add(str);
                         }
 
-                        if (pipeElbowTable.ElementAt(1).Contains("ÍäÍ·") && pipeElbowTable.ElementAt(2).Contains(pipeElbowAngle))
+                        if (pipeElbowTable.ElementAt(1).Contains("å¼¯å¤´") && pipeElbowTable.ElementAt(2).Contains(pipeElbowAngle))
                         {
                             string[] sArray = pipeElbowTable.ElementAt(4).Split('-');
                             string[] sAngle = pipeElbowTable.ElementAt(2).Split('.');
@@ -981,8 +1315,8 @@ namespace FFETOOLS
                             string pipeSize = "";
                             if (subProjectNum.Contains("G19") || subProjectNum.Contains("91"))
                             {
-                                if (pipeElbowTable.ElementAt(1).Contains("º¸½Ó") || pipeElbowTable.ElementAt(1).Contains("¶ÆĞ¿")
-                                    || (pipeElbowTable.ElementAt(1).Contains("PE") && !(pipeElbowTable.ElementAt(1).Contains("HD"))) || pipeElbowTable.ElementAt(1).Contains("¸ÖË¿Íø¹Ç¼Ü"))
+                                if (pipeElbowTable.ElementAt(1).Contains("é’¢åˆ¶") || pipeElbowTable.ElementAt(1).Contains("é•€é”Œ")
+                                    || (pipeElbowTable.ElementAt(1).Contains("PE") && !(pipeElbowTable.ElementAt(1).Contains("HD"))) || pipeElbowTable.ElementAt(1).Contains("é’¢ä¸ç½‘éª¨æ¶"))
                                 {
                                     pipeSize = PipeSizeHaveThick("DN" + sArray.ElementAt(0), pipeElbowTable.ElementAt(1));
                                 }
@@ -996,8 +1330,8 @@ namespace FFETOOLS
                                 pipeSize = "DN" + sArray.ElementAt(0);
                             }
 
-                            PipeElbowInfo pipeElbowInfo = new PipeElbowInfo(pipeElbowTable.ElementAt(0).Replace("¸øÅÅË®_", "").Replace("¹ÜµÀ", ""), subProjectNum, "OX" + pipeElbowCode.ToString().PadLeft(2, '0'),
-                                                                      sAngle.ElementAt(0) + "¡ã" + pipeElbowTable.ElementAt(1).Replace("¸øÅÅË®_¹Ü¼ş_", "").Replace("_³§Çø", ""), pipeSize, pipeElbowTable.ElementAt(3), pipeElbowTable.ElementAt(5));
+                            PipeElbowInfo pipeElbowInfo = new PipeElbowInfo(pipeElbowTable.ElementAt(0).Replace("ç»™æ’æ°´_", "").Replace("ç®¡é“", ""), subProjectNum, "OX" + pipeElbowCode.ToString().PadLeft(2, '0'),
+                                                                      sAngle.ElementAt(0) + "Â°" + pipeElbowTable.ElementAt(1).Replace("ç»™æ’æ°´_ç®¡ä»¶_", "").Replace("_å‚åŒº", ""), pipeSize, pipeElbowTable.ElementAt(3), pipeElbowTable.ElementAt(5));
                             pipeElbowNameList.Add(pipeElbowInfo);
                             pipeElbowCode++;
                         }
@@ -1018,7 +1352,7 @@ namespace FFETOOLS
 
             foreach (ViewSchedule v in viewScheduleList)
             {
-                if (v.Name.Contains("¹Ü¼ş") && v.Name.Contains(pipeSystemName.Replace("ÏµÍ³", "")))
+                if (v.Name.Contains("ç®¡ä»¶") && v.Name.Replace("ç»™æ’æ°´_", "").Replace("ç®¡ä»¶æ˜ç»†è¡¨", "") == pipeSystemName.Replace("ç³»ç»Ÿ", ""))
                 {
                     TableData td = v.GetTableData();
                     TableSectionData tdb = td.GetSectionData(SectionType.Header);
@@ -1038,11 +1372,11 @@ namespace FFETOOLS
                             pipeTeeTable.Add(str);
                         }
 
-                        if (pipeTeeTable.ElementAt(1).Contains("ÈıÍ¨"))
+                        if (pipeTeeTable.ElementAt(1).Contains("ä¸‰é€š"))
                         {
                             string[] sArray = pipeTeeTable.ElementAt(4).Split('-');
-                            PipeTeeInfo pipeTeeInfo = new PipeTeeInfo(pipeTeeTable.ElementAt(0).Replace("¸øÅÅË®_", "").Replace("¹ÜµÀ", ""), subProjectNum, "OX" + pipeTeeCode.ToString().PadLeft(2, '0'),
-                                                                   pipeTeeTable.ElementAt(1).Replace("¸øÅÅË®_¹Ü¼ş_", "").Replace("_³§Çø", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(2), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
+                            PipeTeeInfo pipeTeeInfo = new PipeTeeInfo(pipeTeeTable.ElementAt(0).Replace("ç»™æ’æ°´_", "").Replace("ç®¡é“", ""), subProjectNum, "OX" + pipeTeeCode.ToString().PadLeft(2, '0'),
+                                                                   pipeTeeTable.ElementAt(1).Replace("ç»™æ’æ°´_ç®¡ä»¶_", "").Replace("_å‚åŒº", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(2), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
                             pipeTeeNameList.Add(pipeTeeInfo);
                             pipeTeeCode++;
                         }
@@ -1063,7 +1397,7 @@ namespace FFETOOLS
 
             foreach (ViewSchedule v in viewScheduleList)
             {
-                if (v.Name.Contains("¹Ü¼ş") && v.Name.Contains(pipeSystemName.Replace("ÏµÍ³", "")))
+                if (v.Name.Contains("ç®¡ä»¶") && v.Name.Replace("ç»™æ’æ°´_", "").Replace("ç®¡ä»¶æ˜ç»†è¡¨", "") == pipeSystemName.Replace("ç³»ç»Ÿ", ""))
                 {
                     TableData td = v.GetTableData();
                     TableSectionData tdb = td.GetSectionData(SectionType.Header);
@@ -1083,11 +1417,11 @@ namespace FFETOOLS
                             pipeReduceTable.Add(str);
                         }
 
-                        if (pipeReduceTable.ElementAt(1).Contains("Òì¾¶"))
+                        if (pipeReduceTable.ElementAt(1).Contains("å¼‚å¾„"))
                         {
                             string[] sArray = pipeReduceTable.ElementAt(4).Split('-');
-                            PipeReduceInfo pipeReduceInfo = new PipeReduceInfo(pipeReduceTable.ElementAt(0).Replace("¸øÅÅË®_", "").Replace("¹ÜµÀ", ""), subProjectNum, "OX" + pipeReduceCode.ToString().PadLeft(2, '0'),
-                                                                   pipeReduceTable.ElementAt(1).Replace("¸øÅÅË®_¹Ü¼ş_", "").Replace("_³§Çø", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(1), pipeReduceTable.ElementAt(3), pipeReduceTable.ElementAt(5));
+                            PipeReduceInfo pipeReduceInfo = new PipeReduceInfo(pipeReduceTable.ElementAt(0).Replace("ç»™æ’æ°´_", "").Replace("ç®¡é“", ""), subProjectNum, "OX" + pipeReduceCode.ToString().PadLeft(2, '0'),
+                                                                   pipeReduceTable.ElementAt(1).Replace("ç»™æ’æ°´_ç®¡ä»¶_", "").Replace("_å‚åŒº", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(1), pipeReduceTable.ElementAt(3), pipeReduceTable.ElementAt(5));
                             pipeReduceNameList.Add(pipeReduceInfo);
                             pipeReduceCode++;
                         }
@@ -1103,7 +1437,7 @@ namespace FFETOOLS
         {
             string str = "";
 
-            if (pipeMaterial.Contains("º¸½Ó"))
+            if (pipeMaterial.Contains("ç„Šæ¥") || pipeMaterial.Contains("é’¢åˆ¶"))
             {
                 if (pipeSize == "DN15")
                 {
@@ -1187,7 +1521,7 @@ namespace FFETOOLS
                 }
             }
 
-            if (pipeMaterial.Contains("¶ÆĞ¿"))
+            if (pipeMaterial.Contains("é•€é”Œ"))
             {
                 if (pipeSize == "DN15")
                 {
@@ -1251,7 +1585,7 @@ namespace FFETOOLS
                 }
             }
 
-            if (pipeMaterial.Contains("PE") && !(pipeMaterial.Contains("HD")))//´ËÊı¾İÀ´Ô´ÓÚÑÇÌ«¹ÜµÀ,Ñ¹Á¦ÎªPN10£¬1.0Mpa
+            if (pipeMaterial.Contains("PE") && !(pipeMaterial.Contains("HD")))//æ­¤æ•°æ®æ¥æºäºäºšå¤ªç®¡é“,å‹åŠ›ä¸ºPN10ï¼Œ1.0Mpa
             {
                 if (pipeSize == "DN15")
                 {
@@ -1327,7 +1661,7 @@ namespace FFETOOLS
                 }
             }
 
-            if (pipeMaterial.Contains("¸ÖË¿Íø¹Ç¼Ü"))//´ËÊı¾İÀ´Ô´ÓÚCJT189-2007¸ÖË¿Íø¹Ç¼ÜËÜÁÏ£¨¾ÛÒÒÏ©£©¸´ºÏ¹Ü²Ä¼°¹Ü¼ş£¬Ñ¹Á¦µÈ¼¶Îª1.6Mpa
+            if (pipeMaterial.Contains("é’¢ä¸ç½‘éª¨æ¶"))//æ­¤æ•°æ®æ¥æºäºCJT189-2007é’¢ä¸ç½‘éª¨æ¶å¡‘æ–™ï¼ˆèšä¹™çƒ¯ï¼‰å¤åˆç®¡æåŠç®¡ä»¶ï¼Œå‹åŠ›ç­‰çº§ä¸º1.6Mpa
             {
                 if (pipeSize == "DN15")
                 {
@@ -1405,12 +1739,40 @@ namespace FFETOOLS
 
             return str;
         }
+        public bool SewageHaveSteelElbow(Document doc)
+        {
+            bool haveSteel = false;
+
+            IList<PipingSystem> allPipingSys = CollectorHelper.TCollector<PipingSystem>(doc);
+            foreach (var sys in allPipingSys)
+            {
+                PipingSystemType psType = doc.GetElement(sys.GetTypeId()) as PipingSystemType;
+
+                if (psType.Name == "ç»™æ’æ°´_æ±¡æ°´ç®¡é“ç³»ç»Ÿ")
+                {
+                    ElementSet elements = sys.PipingNetwork;
+                    foreach (var ele in elements)
+                    {
+                        FamilyInstance instance = ele as FamilyInstance;
+                        if (instance != null)
+                        {
+                            if (instance.Symbol.FamilyName.Contains("ç®¡è·¯é™„ä»¶"))
+                            {
+                                haveSteel = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return haveSteel;
+        }
     }
     public class PipeValveInfo
     {
         public string ProjectNum { get; set; }
         public string ValvePipeSystem { get; set; }
-        public string ValveAbb { get; set; }//·§ÃÅËõĞ´
+        public string ValveAbb { get; set; }//é˜€é—¨ç¼©å†™
         public string ValveName { get; set; }
         public string ValveModel { get; set; }
         public string ValveSize { get; set; }
@@ -1439,7 +1801,7 @@ namespace FFETOOLS
     {
         public string ProjectNum { get; set; }
         public string PipeSystem { get; set; }
-        public string PipeAbb { get; set; }//¹ÜµÀËõĞ´
+        public string PipeAbb { get; set; }//ç®¡é“ç¼©å†™
         public string PipeName { get; set; }
         public string PipeSize { get; set; }
         public string PipePressure { get; set; }
@@ -1466,7 +1828,7 @@ namespace FFETOOLS
     {
         public string ProjectNum { get; set; }
         public string PipeElbowSystem { get; set; }
-        public string PipeElbowAbb { get; set; }//ÍäÍ·ËõĞ´
+        public string PipeElbowAbb { get; set; }//å¼¯å¤´ç¼©å†™
         public string PipeElbowName { get; set; }
         public string PipeElbowSize { get; set; }
         public string PipeElbowPressure { get; set; }
@@ -1491,7 +1853,7 @@ namespace FFETOOLS
     {
         public string ProjectNum { get; set; }
         public string PipeTeeSystem { get; set; }
-        public string PipeTeeAbb { get; set; }//ÈıÍ¨ËõĞ´
+        public string PipeTeeAbb { get; set; }//ä¸‰é€šç¼©å†™
         public string PipeTeeName { get; set; }
         public string PipeTeeSize { get; set; }
         public string PipeTeePressure { get; set; }
@@ -1516,7 +1878,7 @@ namespace FFETOOLS
     {
         public string ProjectNum { get; set; }
         public string PipeReduceSystem { get; set; }
-        public string PipeReduceAbb { get; set; }//Òì¾¶ËõĞ´
+        public string PipeReduceAbb { get; set; }//å¼‚å¾„ç¼©å†™
         public string PipeReduceName { get; set; }
         public string PipeReduceSize { get; set; }
         public string PipeReducePressure { get; set; }
@@ -1541,7 +1903,7 @@ namespace FFETOOLS
     {
         public string ProjectNum { get; set; }
         public string PipeReduceSystem { get; set; }
-        public string PipeReduceAbb { get; set; }//Òì¾¶ËõĞ´
+        public string PipeReduceAbb { get; set; }//å¼‚å¾„ç¼©å†™
         public string PipeReduceName { get; set; }
         public string PipeReduceSize { get; set; }
         public string PipeReducePressure { get; set; }
@@ -1563,15 +1925,15 @@ namespace FFETOOLS
         }
     }
     /// <summary>
-    /// »ùÓÚEPPlusµÄexcel²Ù×÷Àà,½öÖ§³Öxlsx¸ñÊ½µÄexcelÎÄ¼ş
+    /// åŸºäºEPPlusçš„excelæ“ä½œç±»,ä»…æ”¯æŒxlsxæ ¼å¼çš„excelæ–‡ä»¶
     /// </summary>
     class ExcelHelper
     {
         /// <summary>
-        /// ´ò¿ªexcelÎÄ¼ş
+        /// æ‰“å¼€excelæ–‡ä»¶
         /// </summary>
-        /// <param name="openPath">excelÎÄ¼şÂ·¾¶</param>
-        /// <returns>excel¶ÔÏó</returns>
+        /// <param name="openPath">excelæ–‡ä»¶è·¯å¾„</param>
+        /// <returns>excelå¯¹è±¡</returns>
         public ExcelPackage OpenExcel(string openPath)
         {
             FileStream excelFile = new FileStream(openPath, FileMode.Open, FileAccess.Read);
@@ -1579,23 +1941,23 @@ namespace FFETOOLS
             return package;
         }
         /// <summary>
-        /// Áí´æexcelÎÄ¼ş
+        /// å¦å­˜excelæ–‡ä»¶
         /// </summary>
-        /// <param name="package">excelÎÄ¼ş¶ÔÏó</param>
-        /// <param name="savePath">±£´æÂ·¾¶</param>
+        /// <param name="package">excelæ–‡ä»¶å¯¹è±¡</param>
+        /// <param name="savePath">ä¿å­˜è·¯å¾„</param>
         public void saveExcel(ExcelPackage package, string savePath)
         {
             FileStream excelFile = new FileStream(savePath, FileMode.Create);
             package.SaveAs(excelFile);
             excelFile.Dispose();
-            package.Dispose();   //ÊÍ·Å×ÊÔ´£¬Ò»°ãÒ²¿É²ÉÓÃusingÓï¾ä         
+            package.Dispose();   //é‡Šæ”¾èµ„æºï¼Œä¸€èˆ¬ä¹Ÿå¯é‡‡ç”¨usingè¯­å¥         
         }
         /// <summary>
-        /// ºÏ²¢ĞĞ
+        /// åˆå¹¶è¡Œ
         /// </summary>
         /// <param name="sheet"></param>
         /// <param name="startRowIndex"></param>
-        /// <param name="mergeRowIndexs">ºÏ²¢ĞĞµÄĞĞÊı£¬ÆğÊ¼Î»ÖÃ£¬ÖÕÖ¹Î»ÖÃ</param>
+        /// <param name="mergeRowIndexs">åˆå¹¶è¡Œçš„è¡Œæ•°ï¼Œèµ·å§‹ä½ç½®ï¼Œç»ˆæ­¢ä½ç½®</param>
         public static void MergeRowCells(ExcelWorksheet sheet, int startRowIndex, int[,] mergeRowIndexs)
         {
             for (int i = 0; i < mergeRowIndexs.Rank; i++)
@@ -1609,10 +1971,10 @@ namespace FFETOOLS
     class StringHelper
     {
         /// <summary>
-        /// ¹ıÂËÌØÊâ×Ö·û£¬±£ÁôÖĞÎÄ£¬×ÖÄ¸£¬Êı×Ö£¬ºÍ-
+        /// è¿‡æ»¤ç‰¹æ®Šå­—ç¬¦ï¼Œä¿ç•™ä¸­æ–‡ï¼Œå­—æ¯ï¼Œæ•°å­—ï¼Œå’Œ-
         /// </summary>
-        /// <param name="inputValue">ÊäÈë×Ö·û´®</param>
-        /// <remarks>´øÓĞ-µÄÌØÊâ×Ö·û²»ĞèÒª¹ıÂËµô</remarks>
+        /// <param name="inputValue">è¾“å…¥å­—ç¬¦ä¸²</param>
+        /// <remarks>å¸¦æœ‰-çš„ç‰¹æ®Šå­—ç¬¦ä¸éœ€è¦è¿‡æ»¤æ‰</remarks>
         /// <returns></returns>
         public static string FilterCH(string inputValue)
         {
