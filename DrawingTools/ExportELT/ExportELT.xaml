@@ -33,6 +33,9 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+
+        <CheckBox x:Name="OnlyPipe" Content="仅导出管材管件" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="12,5,0,5" FontSize="13"/>
+        
     </Grid>
 </Window>
 
