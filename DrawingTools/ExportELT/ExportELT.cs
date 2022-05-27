@@ -30,6 +30,9 @@ namespace FFETOOLS
     [Transaction(TransactionMode.Manual)]
     public class ExportELT : IExternalCommand
     {
+        public bool languageCH;
+        public bool languageEN;
+        public bool languageCHEN;
         public Result Execute(ExternalCommandData commandData, ref string messages, ElementSet elements)
         {
             try
@@ -63,7 +66,25 @@ namespace FFETOOLS
                         if (mainfrm.clicked == 1)
                         {
                             ExcelHelper helper = new ExcelHelper();
-                            string path = @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\ExcelTemplate\CNTemplate-ELT.xlsx";
+
+                            string path = "";
+                            languageCH = (bool)mainfrm.CH_Button.IsChecked;
+                            languageEN = (bool)mainfrm.EN_Button.IsChecked;
+                            languageCHEN = (bool)mainfrm.CH_EN_Button.IsChecked;
+
+                            if (languageCH)
+                            {
+                                path = @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\ExcelTemplate\CNTemplate-ELT.xlsx";
+                            }
+                            else if (languageEN)
+                            {
+                                path = @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\ExcelTemplate\ENTemplate-ELT.xlsx";
+                            }
+                            else if (languageCHEN)
+                            {
+                                path = @"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\ExcelTemplate\CHENTemplate-ELT.xlsx";
+                            }
+
                             ExcelPackage package = helper.OpenExcel(path);
 
                             //指定需要写入的sheet名
@@ -74,14 +95,53 @@ namespace FFETOOLS
                             excelWorksheet.HeaderFooter.OddFooter.LeftAlignedText = excelFooterName;
                             excelWorksheet.HeaderFooter.OddFooter.RightAlignedText = footPage;
 
-                            excelWorksheet.Cells[1, 4].Value = projectName;
-                            excelWorksheet.Cells[2, 4].Value = subProjectName;
-                            excelWorksheet.Cells[3, 4].Value = "施工图";
-                            excelWorksheet.Cells[1, 4].Style.Font.Name = "Arial";
-                            excelWorksheet.Cells[2, 4].Style.Font.Name = "Arial";
-                            excelWorksheet.Cells[3, 4].Style.Font.Name = "Arial";
+                            if (languageCHEN)
+                            {
+                                excelWorksheet.Cells[1, 4].Value = projectName;
+                                excelWorksheet.Cells[3, 4].Value = subProjectName;
+                            }
+                            else
+                            {
+                                excelWorksheet.Cells[1, 4].Value = projectName;
+                                excelWorksheet.Cells[2, 4].Value = subProjectName;
+                            }
+
+                            if (languageCH)
+                            {
+                                excelWorksheet.Cells[3, 4].Value = "施工图";
+                            }
+                            else if (languageEN)
+                            {
+                                excelWorksheet.Cells[3, 4].Value = "DETAIL DESIGN";
+                            }
+                            else if (languageCHEN)
+                            {
+                                excelWorksheet.Cells[5, 4].Value = "DETAIL DESIGN";
+                            }
+
+                            if (languageCHEN)
+                            {
+                                excelWorksheet.Cells[1, 4].Style.Font.Name = "Arial";
+                                excelWorksheet.Cells[3, 4].Style.Font.Name = "Arial";
+                                excelWorksheet.Cells[5, 4].Style.Font.Name = "Arial";
+                            }
+                            else
+                            {
+                                excelWorksheet.Cells[1, 4].Style.Font.Name = "Arial";
+                                excelWorksheet.Cells[2, 4].Style.Font.Name = "Arial";
+                                excelWorksheet.Cells[3, 4].Style.Font.Name = "Arial";
+                            }
 
                             int rowNum = 7;
+                            if (languageEN)
+                            {
+                                rowNum = 6;
+                            }
+                            else if (languageCHEN)
+                            {
+                                rowNum = 9;
+                            }
+
                             int valveCode = 1;  //设备编号计数
                             List<string> pipeSystemList = GetPipeSystemType(uidoc, "给排水");
                             //string ss = String.Join("\n", pipeSystemList.ToArray());
@@ -101,47 +161,144 @@ namespace FFETOOLS
                                     rowNum++;
                                     int[,] mergeRowIndexs = { { rowNum - 2, 1, 11 }, { rowNum - 2, 1, 11 } };  //合并单元格
                                     ExcelHelper.MergeRowCells(excelWorksheet, 1, mergeRowIndexs);
-                                    excelWorksheet.Cells[rowNum - 1, 1].Value = item;
+
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum - 1, 1].Value = item;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum - 1, 1].Value = GetPipeSystemNameEN(item);
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum - 1, 1].Value = GetPipeSystemNameCHEN(item);
+                                    }
                                     excelWorksheet.Cells[rowNum - 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                                     excelWorksheet.Cells[rowNum - 1, 1].Style.Font.Bold = true;
 
                                     //立式管道泵写入
                                     outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_水泵_立式管道泵");
-                                    foreach (var hydrant in outDoorHydrantsUp)
+                                    if (languageCH)
                                     {
-                                        excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                        excelWorksheet.Cells[rowNum, 2].Value = "PU" + valveCode.ToString().PadLeft(2, '0');
-                                        excelWorksheet.Cells[rowNum, 4].Value = "立式管道泵";
-                                        excelWorksheet.Cells[rowNum, 6].Value = "1";
-                                        excelWorksheet.Cells[rowNum, 7].Value = "23";
-                                        excelWorksheet.Cells[rowNum, 9].Value = "配套对应法兰，螺栓，螺母，垫片";
-                                        excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                        excelWorksheet.Cells[rowNum + 1, 9].Value = "一用一备";
-                                        excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "PU" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "立式管道泵";
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                            excelWorksheet.Cells[rowNum, 7].Value = "23";
+                                            excelWorksheet.Cells[rowNum, 9].Value = "配套对应法兰，螺栓，螺母，垫片";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "一用一备";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                                        rowNum++;
-                                        excelWorksheet.Cells[rowNum, 4].Value = "型号:" + "ADL1x7";
-                                        rowNum++;
-                                        excelWorksheet.Cells[rowNum, 4].Value = "流量:" + "1.0m³/h";
-                                        rowNum++;
-                                        excelWorksheet.Cells[rowNum, 4].Value = "扬程:" + "39m";
-                                        rowNum++;
-                                        excelWorksheet.Cells[rowNum, 4].Value = "转速:" + "2900r/min";
-                                        rowNum++;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "型号:" + "ADL1x7";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "流量:" + "1.0m³/h";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "扬程:" + "39m";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "转速:" + "2900r/min";
+                                            rowNum++;
 
-                                        excelWorksheet.Cells[rowNum, 3].Value = "MT01";
-                                        excelWorksheet.Cells[rowNum, 4].Value = "电机";
-                                        excelWorksheet.Cells[rowNum, 6].Value = "1";
-                                        excelWorksheet.Cells[rowNum, 8].Value = "0.37";
-                                        excelWorksheet.Cells[rowNum, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                                        rowNum++;
-                                        excelWorksheet.Cells[rowNum, 4].Value = "功率:" + "0.37kW";
-                                        rowNum++;
-                                        excelWorksheet.Cells[rowNum, 4].Value = "电压:" + "380V";
-                                        rowNum++;
-                                        excelWorksheet.Cells[rowNum, 4].Value = "是否变频:" + "非变频";
-                                        rowNum++;
-                                        valveCode++;
+                                            excelWorksheet.Cells[rowNum, 3].Value = "MT01";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "电机";
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                            excelWorksheet.Cells[rowNum, 8].Value = "0.37";
+                                            excelWorksheet.Cells[rowNum, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "功率:" + "0.37kW";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "电压:" + "380V";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "是否变频:" + "非变频";
+                                            rowNum++;
+                                            valveCode++;
+                                        }
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "PU" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Vertical Pipeline Pump";
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                            excelWorksheet.Cells[rowNum, 7].Value = "23";
+                                            excelWorksheet.Cells[rowNum, 9].Value = "Mating flange, bolt, nut, shim, etc.";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "One use,one standby";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Model:" + "ADL1x7";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Flow:" + "1.0m³/h";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Lift:" + "39m";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Rotating Speed:" + "2900r/min";
+                                            rowNum++;
+
+                                            excelWorksheet.Cells[rowNum, 3].Value = "MT01";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Motor";
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                            excelWorksheet.Cells[rowNum, 8].Value = "0.37";
+                                            excelWorksheet.Cells[rowNum, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Power:" + "0.37kW";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Voltage:" + "380V";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Frequency Conversion:" + "No";
+                                            rowNum++;
+                                            valveCode++;
+                                        }
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "PU" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Vertical Pipeline Pump(立式管道泵)";
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                            excelWorksheet.Cells[rowNum, 7].Value = "23";
+                                            excelWorksheet.Cells[rowNum, 9].Value = "Mating flange, bolt, nut, shim, etc.";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "配套对应法兰，螺栓，螺母，垫片";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 2, 9].Value = "One use,one standby(一用一备)";
+                                            excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + "ADL1x7";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Flow(流量):" + "1.0m³/h";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Lift(扬程):" + "39m";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Rotating Speed(转速):" + "2900r/min";
+                                            rowNum++;
+
+                                            excelWorksheet.Cells[rowNum, 3].Value = "MT01";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Motor(电机)";
+                                            excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                            excelWorksheet.Cells[rowNum, 8].Value = "0.37";
+                                            excelWorksheet.Cells[rowNum, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Power(功率):" + "0.37kW";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Voltage(电压):" + "380V";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Frequency Conversion(是否变频):" + "No(非变频)";
+                                            rowNum++;
+                                            valveCode++;
+                                        }
                                     }
 
                                     //固定式潜水泵写入
@@ -196,6 +353,7 @@ namespace FFETOOLS
                                         excelWorksheet.Cells[rowNum, 4].Value = "潜水泵";
                                         excelWorksheet.Cells[rowNum, 6].Value = "1";
                                         excelWorksheet.Cells[rowNum, 7].Value = "35";
+                                        excelWorksheet.Cells[rowNum, 7].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                                         excelWorksheet.Cells[rowNum, 9].Value = "配套附件及安装详见08S305-17";
                                         excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                         excelWorksheet.Cells[rowNum + 1, 9].Value = "配电控箱，接收信号；自动启停";
@@ -277,7 +435,7 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 9].Value = "";
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "型号:"+ "DVE";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "型号:" + "DVE";
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "储水容积:" + "200L";
                                             rowNum++;
@@ -597,15 +755,172 @@ namespace FFETOOLS
                                     {
                                         if (valveInfo.ValveName.Contains("电动"))
                                         {
-                                            for (int i = 0; i < int.Parse(valveInfo.ValveQulity); i++)
+                                            if (languageCH)
                                             {
-                                                excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
-                                                excelWorksheet.Cells[rowNum, 2].Value = "VA" + valveCode.ToString().PadLeft(2, '0');
-                                                excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
-                                                excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                                for (int i = 0; i < int.Parse(valveInfo.ValveQulity); i++)
+                                                {
+                                                    excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
+                                                    excelWorksheet.Cells[rowNum, 2].Value = "VA" + valveCode.ToString().PadLeft(2, '0');
+                                                    excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
+                                                    excelWorksheet.Cells[rowNum, 6].Value = "1";
 
+                                                    if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("蝶阀") || valveInfo.ValveName.Contains("止回阀")
+                                                        || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("液压水位控制阀") || valveInfo.ValveName.Contains("泄压阀"))
+                                                    {
+                                                        excelWorksheet.Cells[rowNum, 9].Value = "配置对应法兰、螺栓、螺母、垫片";
+                                                    }
+                                                    else
+                                                    {
+                                                        excelWorksheet.Cells[rowNum, 9].Value = "";
+                                                    }
+
+                                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "型号:" + valveInfo.ValveModel;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + valveInfo.ValvePressure;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
+                                                    rowNum++;
+
+                                                    excelWorksheet.Cells[rowNum, 3].Value = "MT01";
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "电动执行机构";
+                                                    excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                                    excelWorksheet.Cells[rowNum, 8].Value = "0.18";
+                                                    excelWorksheet.Cells[rowNum, 9].Value = "普通开关型";
+                                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "型号:";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "最大输出转矩:" + "600N.m";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "90°旋转时间:" + "15s";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "输入输出信号:" + "开关量信号";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "电机功率:" + "0.18kW";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "电压:" + "220V";
+                                                    rowNum++;
+                                                    valveCode++;
+                                                }
+                                            }
+                                            else if (languageEN)
+                                            {
+                                                for (int i = 0; i < int.Parse(valveInfo.ValveQulity); i++)
+                                                {
+                                                    excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
+                                                    excelWorksheet.Cells[rowNum, 2].Value = "VA" + valveCode.ToString().PadLeft(2, '0');
+                                                    excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
+                                                    excelWorksheet.Cells[rowNum, 6].Value = "1";
+
+                                                    if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("蝶阀") || valveInfo.ValveName.Contains("止回阀")
+                                                        || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("液压水位控制阀") || valveInfo.ValveName.Contains("泄压阀"))
+                                                    {
+                                                        excelWorksheet.Cells[rowNum, 9].Value = "Mating flange, bolt, nut, shim, etc.";
+                                                        excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        excelWorksheet.Cells[rowNum, 9].Value = "";
+                                                    }
+
+                                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Model:" + valveInfo.ValveModel;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + valveInfo.ValvePressure;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + valveInfo.ValveSize;
+                                                    rowNum++;
+
+                                                    excelWorksheet.Cells[rowNum, 3].Value = "MT01";
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Motorized Actuators";
+                                                    excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                                    excelWorksheet.Cells[rowNum, 8].Value = "0.18";
+                                                    excelWorksheet.Cells[rowNum, 9].Value = "Switch type";
+                                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Model:";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Max Output Torque:" + "600N.m";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "90 ° Rotation Time:" + "15s";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Input And Output Signal:" + "Switch Signal";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Power:" + "0.18kW";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Voltage:" + "220V";
+                                                    rowNum++;
+                                                    valveCode++;
+                                                }
+                                            }
+                                            else if (languageCHEN)
+                                            {
+                                                for (int i = 0; i < int.Parse(valveInfo.ValveQulity); i++)
+                                                {
+                                                    excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
+                                                    excelWorksheet.Cells[rowNum, 2].Value = "VA" + valveCode.ToString().PadLeft(2, '0');
+                                                    excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
+                                                    excelWorksheet.Cells[rowNum, 6].Value = "1";
+
+                                                    if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("蝶阀") || valveInfo.ValveName.Contains("止回阀")
+                                                        || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("液压水位控制阀") || valveInfo.ValveName.Contains("泄压阀"))
+                                                    {
+                                                        excelWorksheet.Cells[rowNum, 9].Value = "Mating flange, bolt, nut, shim, etc.";
+                                                        excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                                        excelWorksheet.Cells[rowNum + 1, 9].Value = "配置对应法兰、螺栓、螺母、垫片";
+                                                    }
+                                                    else
+                                                    {
+                                                        excelWorksheet.Cells[rowNum, 9].Value = "";
+                                                    }
+
+                                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + valveInfo.ValveModel;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + valveInfo.ValvePressure;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + valveInfo.ValveSize;
+                                                    rowNum++;
+
+                                                    excelWorksheet.Cells[rowNum, 3].Value = "MT01";
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Motorized Actuators(电动执行机构)";
+                                                    excelWorksheet.Cells[rowNum, 6].Value = "1";
+                                                    excelWorksheet.Cells[rowNum, 8].Value = "0.18";
+                                                    excelWorksheet.Cells[rowNum, 9].Value = "Switch type(普通开关型)";
+                                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Max Output Torque(最大输出转矩):" + "600N.m";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "90 ° Rotation Time(90°旋转时间):" + "15s";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Input And Output Signal(输入输出信号):" + "Switch Signal(开关量信号)";
+                                                    excelWorksheet.Cells[rowNum, 4].Style.WrapText = true;
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Power(电机功率):" + "0.18kW";
+                                                    rowNum++;
+                                                    excelWorksheet.Cells[rowNum, 4].Value = "Voltage(电压):" + "220V";
+                                                    rowNum++;
+                                                    valveCode++;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
+                                            excelWorksheet.Cells[rowNum, 2].Value = valveInfo.ValveAbb;
+                                            excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
+                                            excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
+
+                                            if (languageCH)
+                                            {
                                                 if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("蝶阀") || valveInfo.ValveName.Contains("止回阀")
-                                                    || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("液压水位控制阀") || valveInfo.ValveName.Contains("泄压阀"))
+                                                || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("液压水位控制阀") || valveInfo.ValveName.Contains("泄压阀"))
                                                 {
                                                     excelWorksheet.Cells[rowNum, 9].Value = "配置对应法兰、螺栓、螺母、垫片";
                                                 }
@@ -622,57 +937,56 @@ namespace FFETOOLS
                                                 rowNum++;
                                                 excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
                                                 rowNum++;
+                                                valveCode++;
+                                            }
+                                            else if (languageEN)
+                                            {
+                                                if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("蝶阀") || valveInfo.ValveName.Contains("止回阀")
+                                               || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("液压水位控制阀") || valveInfo.ValveName.Contains("泄压阀"))
+                                                {
+                                                    excelWorksheet.Cells[rowNum, 9].Value = "Mating flange, bolt, nut, shim, etc.";
+                                                    excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                                }
+                                                else
+                                                {
+                                                    excelWorksheet.Cells[rowNum, 9].Value = "";
+                                                }
 
-                                                excelWorksheet.Cells[rowNum, 3].Value = "MT01";
-                                                excelWorksheet.Cells[rowNum, 4].Value = "电动执行机构";
-                                                excelWorksheet.Cells[rowNum, 6].Value = "1";
-                                                excelWorksheet.Cells[rowNum, 8].Value = "0.18";
-                                                excelWorksheet.Cells[rowNum, 9].Value = "普通开关型";
                                                 excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                                 rowNum++;
-                                                excelWorksheet.Cells[rowNum, 4].Value = "型号:";
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Model:" + valveInfo.ValveModel;
                                                 rowNum++;
-                                                excelWorksheet.Cells[rowNum, 4].Value = "最大输出转矩:" + "600N.m";
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + valveInfo.ValvePressure;
                                                 rowNum++;
-                                                excelWorksheet.Cells[rowNum, 4].Value = "90°旋转时间:" + "15s";
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + valveInfo.ValveSize;
                                                 rowNum++;
-                                                excelWorksheet.Cells[rowNum, 4].Value = "输入输出信号:" + "开关量信号";
+                                                valveCode++;
+                                            }
+                                            else if (languageCHEN)
+                                            {
+                                                if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("蝶阀") || valveInfo.ValveName.Contains("止回阀")
+                                               || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("液压水位控制阀") || valveInfo.ValveName.Contains("泄压阀"))
+                                                {
+                                                    excelWorksheet.Cells[rowNum, 9].Value = "Mating flange, bolt, nut, shim, etc.";
+                                                    excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                                    excelWorksheet.Cells[rowNum + 1, 9].Value = "配置对应法兰、螺栓、螺母、垫片";
+                                                }
+                                                else
+                                                {
+                                                    excelWorksheet.Cells[rowNum, 9].Value = "";
+                                                }
+
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                                 rowNum++;
-                                                excelWorksheet.Cells[rowNum, 4].Value = "电机功率:" + "0.18kW";
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + valveInfo.ValveModel;
                                                 rowNum++;
-                                                excelWorksheet.Cells[rowNum, 4].Value = "电压:" + "220V";
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + valveInfo.ValvePressure;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + valveInfo.ValveSize;
                                                 rowNum++;
                                                 valveCode++;
                                             }
                                         }
-                                        else
-                                        {
-                                            excelWorksheet.Cells[rowNum, 1].Value = valveInfo.ProjectNum;
-                                            excelWorksheet.Cells[rowNum, 2].Value = valveInfo.ValveAbb;
-                                            excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
-                                            excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
-
-                                            if (valveInfo.ValveModel.Contains("Z45") || valveInfo.ValveName.Contains("蝶阀") || valveInfo.ValveName.Contains("止回阀")
-                                                || valveInfo.ValveModel.Contains("Z945") || valveInfo.ValveName.Contains("液压水位控制阀") || valveInfo.ValveName.Contains("泄压阀"))
-                                            {
-                                                excelWorksheet.Cells[rowNum, 9].Value = "配置对应法兰、螺栓、螺母、垫片";
-                                            }
-                                            else
-                                            {
-                                                excelWorksheet.Cells[rowNum, 9].Value = "";
-                                            }
-
-                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "型号:" + valveInfo.ValveModel;
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + valveInfo.ValvePressure;
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
-                                            rowNum++;
-                                            valveCode++;
-                                        }
-
                                     }
 
                                     //Y型过滤器与挠性橡胶接头写入
@@ -695,6 +1009,21 @@ namespace FFETOOLS
 
                                     if (item.Contains("生活给水"))
                                     {
+                                        //洗脸盆写入
+                                        outDoorHydrantsUp = GetEquipmentsNoCon(doc, "洗脸盆");
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "洗脸盆";
+                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-41";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rowNum++;
+                                            valveCode++;
+                                            break;
+                                        }
+
                                         //坐便器写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "坐便器");
                                         foreach (var hydrant in outDoorHydrantsUp)
@@ -705,11 +1034,105 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
                                             excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-68";
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;                                                                                  
+                                            rowNum++;
                                             valveCode++;
                                             break;
                                         }
-                                    }                               
+
+                                        //蹲便器写入
+                                        outDoorHydrantsUp = GetEquipmentsNoCon(doc, "蹲式大便器");
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "蹲式大便器";
+                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-84";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "冲洗方式:" + "自闭式冲洗阀";
+                                            rowNum++;
+                                            valveCode++;
+                                            break;
+                                        }
+
+                                        //小便器写入
+                                        outDoorHydrantsUp = GetEquipmentsNoCon(doc, "小便器");
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "小便器";
+                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-100";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "冲洗方式:" + "自闭式冲洗阀";
+                                            rowNum++;
+                                            valveCode++;
+                                            break;
+                                        }
+
+                                        //拖布盆写入
+                                        outDoorHydrantsUp = GetEquipmentsNoCon(doc, "拖布盆");
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "拖布池";
+                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-24";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rowNum++;
+                                            valveCode++;
+                                            break;
+                                        }
+
+                                        //淋浴器写入
+                                        outDoorHydrantsUp = GetEquipmentsNoCon(doc, "淋浴器");
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "单柄混合阀淋浴器";
+                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-128";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rowNum++;
+                                            valveCode++;
+                                            break;
+                                        }
+
+                                        //洗眼器写入
+                                        outDoorHydrantsUp = GetEquipmentsNoCon(doc, "洗眼器");
+                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                            excelWorksheet.Cells[rowNum, 4].Value = "洗眼器";
+                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                            excelWorksheet.Cells[rowNum, 9].Value = "洗眼喷头带高密度过滤网";
+                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "冲淋器采用拉杆开关";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 2, 9].Value = "洗眼器采用手推柄开关";
+                                            excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 3, 9].Value = "附给排水配件,见09S304-18";
+                                            excelWorksheet.Cells[rowNum + 3, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "淋浴流量:" + "2L/s";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "洗眼流量:" + "0.2L/s";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "工作压力:" + "0.2~0.4MPa";
+                                            rowNum++;
+                                            excelWorksheet.Cells[rowNum, 4].Value = "材质:" + "SS304";
+                                            rowNum++;
+                                            valveCode++;
+                                            break;
+                                        }
+
+                                    }
 
                                 }
 
@@ -719,7 +1142,23 @@ namespace FFETOOLS
                                 {
                                     excelWorksheet.Cells[rowNum, 1].Value = pipeInfo.ProjectNum;
                                     excelWorksheet.Cells[rowNum, 2].Value = "PP" + valveCode.ToString().PadLeft(2, '0');
-                                    excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeSystem + "管道及管件";
+
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeSystem + "管道及管件";
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = GetPipeSystemNameEN(pipeInfo.PipeSystem) + " Pipe And Pipe Fittings";
+                                        excelWorksheet.Cells[rowNum, 4].Style.Font.Size = 12;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = GetPipeSystemNameEN(pipeInfo.PipeSystem) + " Pipe And Pipe Fittings" +
+                                         "\n" + "(" + pipeInfo.PipeSystem + "管道及管件)";
+                                        excelWorksheet.Cells[rowNum, 4].Style.Font.Size = 12;
+                                        excelWorksheet.Cells[rowNum, 4].Style.WrapText = true;
+                                    }
                                     rowNum++;
                                     valveCode++;
                                     break;
@@ -727,42 +1166,127 @@ namespace FFETOOLS
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeInfo.PipeAbb;
-                                    if (pipeInfo.PipeName.Contains("镀锌"))
+
+                                    if (languageCH)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "双面热浸镀锌钢管";
+                                        if (pipeInfo.PipeName.Contains("镀锌"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "双面热浸镀锌钢管";
+                                        }
+                                        else if (pipeInfo.PipeName.Contains("HDPE"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "HDPE双壁波纹管";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeName;
+                                        }
                                     }
-                                    else if (pipeInfo.PipeName.Contains("HDPE"))
+                                    else if (languageEN)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "HDPE双壁波纹管";
+                                        if (pipeInfo.PipeName.Contains("镀锌"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Steel Pipe";
+                                        }
+                                        else if (pipeInfo.PipeName.Contains("HDPE"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "HDPE Pipe";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = GetPipeNameEN(pipeInfo.PipeName);
+                                        }
                                     }
-                                    else
+                                    else if (languageCHEN)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = pipeInfo.PipeName;
+                                        if (pipeInfo.PipeName.Contains("镀锌"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Steel Pipe(双面热浸镀锌钢管)";
+                                        }
+                                        else if (pipeInfo.PipeName.Contains("HDPE"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "HDPE Pipe(HDPE双壁波纹管)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = GetPipeNameCHEN(pipeInfo.PipeName);
+                                        }
                                     }
+
                                     rowNum++;
                                     break;
                                 }
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
-                                    if (pipeInfo.PipeName.Contains("UPVC"))
+                                    if (languageCH)
                                     {
+                                        if (pipeInfo.PipeName.Contains("UPVC"))
+                                        {
 
+                                        }
+                                        else if (pipeInfo.PipeName.Contains("HDPE"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "环刚度:≥8kN/m²";
+                                            rowNum++;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeInfo.PipePressure;
+                                            rowNum++;
+                                        }
                                     }
-                                    else if (pipeInfo.PipeName.Contains("HDPE"))
+                                    else if (languageEN)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "环刚度:≥8kN/m²";
-                                        rowNum++;
+                                        if (pipeInfo.PipeName.Contains("UPVC"))
+                                        {
+
+                                        }
+                                        else if (pipeInfo.PipeName.Contains("HDPE"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Ring stiffness:≥8kN/m²";
+                                            rowNum++;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeInfo.PipePressure;
+                                            rowNum++;
+                                        }
                                     }
-                                    else
+                                    else if (languageCHEN)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeInfo.PipePressure;
-                                        rowNum++;
+                                        if (pipeInfo.PipeName.Contains("UPVC"))
+                                        {
+
+                                        }
+                                        else if (pipeInfo.PipeName.Contains("HDPE"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Ring stiffness(环刚度):≥8kN/m²";
+                                            rowNum++;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeInfo.PipePressure;
+                                            rowNum++;
+                                        }
                                     }
                                     break;
                                 }
                                 foreach (PipeInfo pipeInfo in pipeList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeInfo.PipeSize;
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeInfo.PipeSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + pipeInfo.PipeSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + pipeInfo.PipeSize;
+                                        excelWorksheet.Cells[rowNum, 4].Style.Font.Size = 14;
+                                    }
+
                                     if (pipeInfo.PipeQulity == "0 m")
                                     {
                                         if (pipeList.Count == 1)
@@ -802,13 +1326,52 @@ namespace FFETOOLS
                                     rowNum++;
                                 }
 
-                                //90°弯头写入
+                                //潜水泵橡胶软管写入
                                 int elbowNum = 2;
+                                if (item == "污水系统" && GetEquipmentsHaveCon(doc, item, "给排水_水泵_潜水泵(移动式安装)").Count != 0)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = "QX02";
+
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "织物增强橡胶软管";
+                                        excelWorksheet.Cells[rowNum, 6].Value = GetEquipmentsHaveCon(doc, item, "给排水_水泵_潜水泵(移动式安装)").Count.ToString() + "m";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + "0.6MPa";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "胶管内径:" + "ΦA=51";
+                                        rowNum++;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Rubber Hose";
+                                        excelWorksheet.Cells[rowNum, 6].Value = GetEquipmentsHaveCon(doc, item, "给排水_水泵_潜水泵(移动式安装)").Count.ToString() + "m";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + "0.6MPa";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Inner Diameter:" + "ΦA=51";
+                                        rowNum++;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Rubber Hose(织物增强橡胶软管)";
+                                        excelWorksheet.Cells[rowNum, 6].Value = GetEquipmentsHaveCon(doc, item, "给排水_水泵_潜水泵(移动式安装)").Count.ToString() + "m";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + "0.6MPa";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Inner Diameter(胶管内径):" + "ΦA=51";
+                                        rowNum++;
+                                    }
+                                    elbowNum++;
+                                }
+
+                                //90°弯头写入                             
                                 List<PipeElbowInfo> pipeElbowList90 = GetPipeSystemPipeElbow(doc, item, subproNum.AsString(), elbowNum, "90");
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌") && languageCH)
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
@@ -817,6 +1380,28 @@ namespace FFETOOLS
                                         else
                                         {
                                             excelWorksheet.Cells[rowNum, 4].Value = "90°镀锌弯头";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "90°Grooved Elbow";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "90°Galvanized Elbow";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "90°Grooved Elbow(消防沟槽式90°弯头)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "90°Galvanized Elbow(90°镀锌弯头)";
                                         }
                                     }
                                     else
@@ -835,14 +1420,37 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeElbowInfo.PipeElbowPressure;
+                                        }
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList90)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + pipeElbowInfo.PipeElbowSize;
+                                        excelWorksheet.Cells[rowNum, 4].Style.Font.Size = 14;
+                                    }
 
                                     if (pipeElbowList90.Count == 1)
                                     {
@@ -867,7 +1475,8 @@ namespace FFETOOLS
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌") && languageCH)
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
@@ -876,6 +1485,28 @@ namespace FFETOOLS
                                         else
                                         {
                                             excelWorksheet.Cells[rowNum, 4].Value = "60°镀锌弯头";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "60°Grooved Elbow";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "60°Galvanized Elbow";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "60°Grooved Elbow(消防沟槽式60°弯头)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "60°Galvanized Elbow(60°镀锌弯头)";
                                         }
                                     }
                                     else
@@ -894,14 +1525,38 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeElbowInfo.PipeElbowPressure;
+                                        }
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList60)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + pipeElbowInfo.PipeElbowSize;
+                                        excelWorksheet.Cells[rowNum, 4].Style.Font.Size = 14;
+                                    }
+
                                     if (pipeElbowList60.Count == 1)
                                     {
                                         excelWorksheet.Cells[rowNum - 2, 6].Value = pipeElbowInfo.PipeElbowQulity;
@@ -918,7 +1573,8 @@ namespace FFETOOLS
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌") && languageCH)
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
@@ -927,6 +1583,28 @@ namespace FFETOOLS
                                         else
                                         {
                                             excelWorksheet.Cells[rowNum, 4].Value = "45°镀锌弯头";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "45°Grooved Elbow";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "45°Galvanized Elbow";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "45°Grooved Elbow(消防沟槽式45°弯头)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "45°Galvanized Elbow(45°镀锌弯头)";
                                         }
                                     }
                                     else
@@ -946,14 +1624,38 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeElbowInfo.PipeElbowPressure;
+                                        }
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList45)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + pipeElbowInfo.PipeElbowSize;
+                                        excelWorksheet.Cells[rowNum, 4].Style.Font.Size = 14;
+                                    }
+
                                     if (pipeElbowList45.Count == 1)
                                     {
                                         if (pipeElbowInfo.PipeElbowName.Contains("UPVC"))
@@ -977,7 +1679,8 @@ namespace FFETOOLS
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌") && languageCH)
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
@@ -986,6 +1689,28 @@ namespace FFETOOLS
                                         else
                                         {
                                             excelWorksheet.Cells[rowNum, 4].Value = "30°镀锌弯头";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "30°Grooved Elbow";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "30°Galvanized Elbow";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "30°Grooved Elbow(消防沟槽式30°弯头)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "30°Galvanized Elbow(30°镀锌弯头)";
                                         }
                                     }
                                     else
@@ -1005,14 +1730,38 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeElbowInfo.PipeElbowPressure;
+                                        }
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList30)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + pipeElbowInfo.PipeElbowSize;
+                                        excelWorksheet.Cells[rowNum, 4].Style.Font.Size = 14;
+                                    }
+
                                     if (pipeElbowList30.Count == 1)
                                     {
                                         excelWorksheet.Cells[rowNum - 2, 6].Value = pipeElbowInfo.PipeElbowQulity;
@@ -1029,7 +1778,8 @@ namespace FFETOOLS
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeElbowInfo.PipeElbowAbb;
-                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌"))
+
+                                    if (pipeElbowInfo.PipeElbowName.Contains("镀锌") && languageCH)
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
@@ -1038,6 +1788,28 @@ namespace FFETOOLS
                                         else
                                         {
                                             excelWorksheet.Cells[rowNum, 4].Value = "22.5°镀锌弯头";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "22.5°Grooved Elbow";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "22.5°Galvanized Elbow";
+                                        }
+                                    }
+                                    else if (pipeElbowInfo.PipeElbowName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "22.5°Grooved Elbow(消防沟槽式22.5°弯头)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "22.5°Galvanized Elbow(22.5°镀锌弯头)";
                                         }
                                     }
                                     else
@@ -1057,7 +1829,18 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeElbowInfo.PipeElbowPressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeElbowInfo.PipeElbowPressure;
+                                        }
                                         rowNum++;
                                     }
 
@@ -1065,7 +1848,19 @@ namespace FFETOOLS
                                 }
                                 foreach (PipeElbowInfo pipeElbowInfo in pipeElbowList225)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + pipeElbowInfo.PipeElbowSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + pipeElbowInfo.PipeElbowSize;
+                                        excelWorksheet.Cells[rowNum, 4].Style.Font.Size = 14;
+                                    }
 
                                     if (pipeElbowList225.Count == 1)
                                     {
@@ -1091,7 +1886,7 @@ namespace FFETOOLS
                                 foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeTeeInfo.PipeTeeAbb;
-                                    if (pipeTeeInfo.PipeTeeName.Contains("镀锌"))
+                                    if (pipeTeeInfo.PipeTeeName.Contains("镀锌") && languageCH)
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
@@ -1100,6 +1895,28 @@ namespace FFETOOLS
                                         else
                                         {
                                             excelWorksheet.Cells[rowNum, 4].Value = "镀锌三通";
+                                        }
+                                    }
+                                    else if (pipeTeeInfo.PipeTeeName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Grooved Tee";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Steel Tee";
+                                        }
+                                    }
+                                    else if (pipeTeeInfo.PipeTeeName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Grooved Tee(消防沟槽式三通)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Steel Tee(镀锌三通)";
                                         }
                                     }
                                     else
@@ -1118,14 +1935,37 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeTeeInfo.PipeTeePressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeTeeInfo.PipeTeePressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeTeeInfo.PipeTeePressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeTeeInfo.PipeTeePressure;
+                                        }
+
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeTeeInfo pipeTeeInfo in pipeTeeList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "规格:" + pipeTeeInfo.PipeTeeSize;
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "规格:" + pipeTeeInfo.PipeTeeSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Specification:" + pipeTeeInfo.PipeTeeSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Specification(规格):" + pipeTeeInfo.PipeTeeSize;
+                                    }
 
                                     if (pipeTeeList.Count == 1)
                                     {
@@ -1150,7 +1990,7 @@ namespace FFETOOLS
                                 foreach (PipeReduceInfo pipeReduceInfo in pipeReduceList)
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = pipeReduceInfo.PipeReduceAbb;
-                                    if (pipeReduceInfo.PipeReduceName.Contains("镀锌"))
+                                    if (pipeReduceInfo.PipeReduceName.Contains("镀锌") && languageCH)
                                     {
                                         if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                         {
@@ -1159,6 +1999,28 @@ namespace FFETOOLS
                                         else
                                         {
                                             excelWorksheet.Cells[rowNum, 4].Value = "镀锌异径";
+                                        }
+                                    }
+                                    else if (pipeReduceInfo.PipeReduceName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Grooved Reducer";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Reducer";
+                                        }
+                                    }
+                                    else if (pipeReduceInfo.PipeReduceName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Grooved Reducer(消防沟槽式异径)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Reducer(镀锌异径)";
                                         }
                                     }
                                     else
@@ -1177,14 +2039,37 @@ namespace FFETOOLS
                                     }
                                     else
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeReduceInfo.PipeReducePressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeReduceInfo.PipeReducePressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal pressure:" + pipeReduceInfo.PipeReducePressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal pressure(公称压力):" + pipeReduceInfo.PipeReducePressure;
+                                        }
+
                                         rowNum++;
                                     }
                                     break;
                                 }
                                 foreach (PipeReduceInfo pipeReduceInfo in pipeReduceList)
                                 {
-                                    excelWorksheet.Cells[rowNum, 4].Value = "规格:" + pipeReduceInfo.PipeReduceSize;
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "规格:" + pipeReduceInfo.PipeReduceSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Specification:" + pipeReduceInfo.PipeReduceSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Specification(规格):" + pipeReduceInfo.PipeReduceSize;
+                                    }
 
                                     if (pipeReduceList.Count == 1)
                                     {
@@ -1212,7 +2097,20 @@ namespace FFETOOLS
                                     excelWorksheet.Cells[rowNum, 4].Value = valveInfo.ValveName;
                                     excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
                                     rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
+
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + valveInfo.ValveSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + valveInfo.ValveSize;
+                                    }
+
                                     rowNum++;
                                     elbowNum++;
                                 }
@@ -1221,13 +2119,37 @@ namespace FFETOOLS
                                 if (item.Contains("消防") && !(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = "OX" + elbowNum.ToString().PadLeft(2, '0');
-                                    excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式法兰";
+
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式法兰";
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Grooved Flange";
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Grooved Flange(消防沟槽式法兰)";
+                                    }
                                     elbowNum++;
                                     rowNum++;
 
                                     foreach (PipeValveInfo valveInfo in valveList)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + valveInfo.ValvePressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + valveInfo.ValvePressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + valveInfo.ValvePressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + valveInfo.ValvePressure;
+                                        }
+
                                         rowNum++;
                                         break;
                                     }
@@ -1237,7 +2159,19 @@ namespace FFETOOLS
                                         if (!(valveInfo.ValveSize == "DN20") && !(valveInfo.ValveSize == "DN25") && !(valveInfo.ValveSize == "DN32") &&
                                             !(valveInfo.ValveSize == "DN40") && !(valveInfo.ValveSize == "DN50") && !(valveInfo.ValveSize == "DN15"))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
+                                            if (languageCH)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + valveInfo.ValveSize;
+                                            }
+                                            else if (languageEN)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + valveInfo.ValveSize;
+                                            }
+                                            else if (languageCHEN)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + valveInfo.ValveSize;
+                                            }
+
                                             if (valveList.Count == 2)
                                             {
                                                 excelWorksheet.Cells[rowNum - 2, 6].Value = (int.Parse(valveInfo.ValveQulity) * 2).ToString();
@@ -1255,13 +2189,35 @@ namespace FFETOOLS
                                 if (item.Contains("消防") && !(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
                                 {
                                     excelWorksheet.Cells[rowNum, 3].Value = "OX" + elbowNum.ToString().PadLeft(2, '0');
-                                    excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽卡箍";
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽卡箍";
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Grooved Clamp";
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Grooved Clamp(消防沟槽卡箍)";
+                                    }
                                     elbowNum++;
                                     rowNum++;
 
                                     foreach (PipeInfo pipeInfo in pipeList)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeInfo.PipePressure;
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeInfo.PipePressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeInfo.PipePressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeInfo.PipePressure;
+                                        }
                                         rowNum++;
                                         break;
                                     }
@@ -1324,7 +2280,18 @@ namespace FFETOOLS
                                         if (!(pipeInfo.PipeSize == "DN20") && !(pipeInfo.PipeSize == "DN25") && !(pipeInfo.PipeSize == "DN32") &&
                                            !(pipeInfo.PipeSize == "DN40") && !(pipeInfo.PipeSize == "DN50") && !(pipeInfo.PipeSize == "DN15"))
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeInfo.PipeSize;
+                                            if (languageCH)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeInfo.PipeSize;
+                                            }
+                                            else if (languageEN)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + pipeInfo.PipeSize;
+                                            }
+                                            else if (languageCHEN)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + pipeInfo.PipeSize;
+                                            }
                                             excelWorksheet.Cells[rowNum, 6].Value = totalNum.ToString();
                                             rowNum++;
                                         }
@@ -1337,31 +2304,190 @@ namespace FFETOOLS
                             {
                                 //手提干粉灭火器写入
                                 outDoorHydrantsUp = GetEquipmentsNoCon(doc, "给排水_消防设备_手提干粉灭火器");
-                                foreach (var item in outDoorHydrantsUp)
+                                if (languageCH)
                                 {
-                                    excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                    excelWorksheet.Cells[rowNum, 2].Value = "FN" + valveCode.ToString().PadLeft(2, '0');
-                                    excelWorksheet.Cells[rowNum, 4].Value = "手提式灭火器";
-                                    excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                    excelWorksheet.Cells[rowNum, 9].Value = "灭火剂为磷酸铵盐";
-                                    excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                    rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "型号:" + "MF/ABC4";
-                                    rowNum++;
-                                    excelWorksheet.Cells[rowNum, 4].Value = "灭火剂量:" + "4Kg";
-                                    rowNum++;
+                                    foreach (var item in outDoorHydrantsUp)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                        excelWorksheet.Cells[rowNum, 2].Value = "FN" + valveCode.ToString().PadLeft(2, '0');
+                                        excelWorksheet.Cells[rowNum, 4].Value = "手提式灭火器";
+                                        excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                        excelWorksheet.Cells[rowNum, 9].Value = "灭火剂为磷酸铵盐";
+                                        excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "型号:" + "MF/ABC4";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "灭火剂量:" + "4Kg";
+                                        rowNum++;
 
-                                    if (subproName.AsString().Contains("电力室"))
-                                    {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "灭火级别:" + "55B";
+                                        if (subproName.AsString().Contains("电力室"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "灭火级别:" + "55B";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "灭火级别:" + "2A";
+                                        }
+                                        rowNum++;
+                                        valveCode++;
+                                        break;
                                     }
-                                    else
+                                }
+                                else if (languageEN)
+                                {
+                                    foreach (var item in outDoorHydrantsUp)
                                     {
-                                        excelWorksheet.Cells[rowNum, 4].Value = "灭火级别:" + "2A";
+                                        excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                        excelWorksheet.Cells[rowNum, 2].Value = "FN" + valveCode.ToString().PadLeft(2, '0');
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Portable Extinguisher";
+                                        excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                        excelWorksheet.Cells[rowNum, 9].Value = "Fire extinguishing agent is ammonium phosphate";
+                                        excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Model:" + "MF/ABC4";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Extinguishing Dose:" + "4Kg";
+                                        rowNum++;
+
+                                        if (subproName.AsString().Contains("电力室"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Fire Rating:" + "55B";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Fire Rating:" + "2A";
+                                        }
+                                        rowNum++;
+                                        valveCode++;
+                                        break;
                                     }
-                                    rowNum++;
-                                    valveCode++;
-                                    break;
+                                }
+                                else if (languageCHEN)
+                                {
+                                    foreach (var item in outDoorHydrantsUp)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                        excelWorksheet.Cells[rowNum, 2].Value = "FN" + valveCode.ToString().PadLeft(2, '0');
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Portable Extinguisher(手提式灭火器)";
+                                        excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                        excelWorksheet.Cells[rowNum, 9].Value = "Fire extinguishing agent is ammonium phosphate";
+                                        excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                        excelWorksheet.Cells[rowNum + 1, 9].Value = "灭火剂为磷酸铵盐";
+                                        excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "型号:" + "MF/ABC4";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Extinguishing Dose(灭火剂量):" + "4Kg";
+                                        rowNum++;
+
+                                        if (subproName.AsString().Contains("电力室"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Fire Rating(灭火级别):" + "55B";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Fire Rating(灭火级别):" + "2A";
+                                        }
+                                        rowNum++;
+                                        valveCode++;
+                                        break;
+                                    }
+                                }
+
+                                //推车式干粉灭火器写入
+                                outDoorHydrantsUp = GetEquipmentsNoCon(doc, "给排水_消防设备_推车式干粉灭火器");
+                                if (languageCH)
+                                {
+                                    foreach (var item in outDoorHydrantsUp)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                        excelWorksheet.Cells[rowNum, 2].Value = "FN" + valveCode.ToString().PadLeft(2, '0');
+                                        excelWorksheet.Cells[rowNum, 4].Value = "推车式灭火器";
+                                        excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                        excelWorksheet.Cells[rowNum, 9].Value = "灭火剂为磷酸铵盐";
+                                        excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "型号:" + "MFT/ABC50";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "灭火剂量:" + "50Kg";
+                                        rowNum++;
+
+                                        if (subproName.AsString().Contains("电力室"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "灭火级别:" + "297B";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "灭火级别:" + "8A";
+                                        }
+                                        rowNum++;
+                                        valveCode++;
+                                        break;
+                                    }
+                                }
+                                else if (languageEN)
+                                {
+                                    foreach (var item in outDoorHydrantsUp)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                        excelWorksheet.Cells[rowNum, 2].Value = "FN" + valveCode.ToString().PadLeft(2, '0');
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Wheeled Extinguisher";
+                                        excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                        excelWorksheet.Cells[rowNum, 9].Value = "Fire extinguishing agent is ammonium phosphate";
+                                        excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Model:" + "MFT/ABC50";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Extinguishing Dose:" + "50Kg";
+                                        rowNum++;
+
+                                        if (subproName.AsString().Contains("电力室"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Fire Rating:" + "297B";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Fire Rating:" + "8A";
+                                        }
+                                        rowNum++;
+                                        valveCode++;
+                                        break;
+                                    }
+                                }
+                                else if (languageCHEN)
+                                {
+                                    foreach (var item in outDoorHydrantsUp)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                        excelWorksheet.Cells[rowNum, 2].Value = "FN" + valveCode.ToString().PadLeft(2, '0');
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Wheeled Extinguisher(推车式灭火器)";
+                                        excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                        excelWorksheet.Cells[rowNum, 9].Value = "Fire extinguishing agent is ammonium phosphate";
+                                        excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
+                                        excelWorksheet.Cells[rowNum + 1, 9].Value = "灭火剂为磷酸铵盐";
+                                        excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + "MFT/ABC50";
+                                        rowNum++;
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Extinguishing Dose(灭火剂量):" + "50Kg";
+                                        rowNum++;
+
+                                        if (subproName.AsString().Contains("电力室"))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Fire Rating(灭火级别):" + "297B";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Fire Rating(灭火级别):" + "8A";
+                                        }
+                                        rowNum++;
+                                        valveCode++;
+                                        break;
+                                    }
                                 }
                             }
 
@@ -1838,8 +2964,22 @@ namespace FFETOOLS
 
                         if (valveTable.ElementAt(1).Contains("阀门") && !(valveTable.ElementAt(1).Contains("便器")))
                         {
-                            PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "VA" + valveCode.ToString().PadLeft(2, '0'), StringHelper.FilterCH(valveTable.ElementAt(1).Replace("给排水_阀门_", "")),
-                          StringHelper.FilterEN(valveTable.ElementAt(1).Replace("给排水_阀门_", "")), "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), valveTable.ElementAt(5));
+                            string valveName = "";
+                            if (languageCH)
+                            {
+                                valveName = StringHelper.FilterCH(valveTable.ElementAt(1).Replace("给排水_阀门_", ""));
+                            }
+                            else if (languageEN)
+                            {
+                                valveName = GetValveNameEN(StringHelper.FilterCH(valveTable.ElementAt(1).Replace("给排水_阀门_", "")));
+                            }
+                            else if (languageCHEN)
+                            {
+                                valveName = GetValveNameCHEN(StringHelper.FilterCH(valveTable.ElementAt(1).Replace("给排水_阀门_", "")));
+                            }
+
+                            PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "VA" + valveCode.ToString().PadLeft(2, '0'), valveName,
+                            StringHelper.FilterEN(valveTable.ElementAt(1).Replace("给排水_阀门_", "")), "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), valveTable.ElementAt(5));
                             valveNameList.Add(valveInfo);
 
                             //string ss = valveInfo.ValvePipeSystem + "\n" + valveInfo.ProjectNum + "\n" + valveInfo.ValveAbb + "\n" + valveInfo.ValveName + "\n" + valveInfo.ValveModel
@@ -1977,8 +3117,22 @@ namespace FFETOOLS
                                 pipeSize = "DN" + sArray.ElementAt(0);
                             }
 
+                            string elbowName = "";
+                            if (languageCH)
+                            {
+                                elbowName = pipeElbowTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", "");
+                            }
+                            else if (languageEN)
+                            {
+                                elbowName = GetPipeElbowNameEN(pipeElbowTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""));
+                            }
+                            else if (languageCHEN)
+                            {
+                                elbowName = GetPipeElbowNameCHEN(pipeElbowTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""), (sAngle.ElementAt(0) + "°"));
+                            }
+
                             PipeElbowInfo pipeElbowInfo = new PipeElbowInfo(pipeElbowTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeElbowCode.ToString().PadLeft(2, '0'),
-                                                                      sAngle.ElementAt(0) + "°" + pipeElbowTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""), pipeSize, pipeElbowTable.ElementAt(3), pipeElbowTable.ElementAt(5));
+                                                                      sAngle.ElementAt(0) + "°" + elbowName, pipeSize, pipeElbowTable.ElementAt(3), pipeElbowTable.ElementAt(5));
                             pipeElbowNameList.Add(pipeElbowInfo);
                             pipeElbowCode++;
                         }
@@ -2022,8 +3176,22 @@ namespace FFETOOLS
                         if (pipeTeeTable.ElementAt(1).Contains("三通"))
                         {
                             string[] sArray = pipeTeeTable.ElementAt(4).Split('-');
+                            string teeName = "";
+                            if (languageCH)
+                            {
+                                teeName = pipeTeeTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", "");
+                            }
+                            else if (languageEN)
+                            {
+                                teeName = GetPipeTeeNameEN(pipeTeeTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""));
+                            }
+                            else if (languageCHEN)
+                            {
+                                teeName = GetPipeTeeNameCHEN(pipeTeeTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""));
+                            }
+
                             PipeTeeInfo pipeTeeInfo = new PipeTeeInfo(pipeTeeTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeTeeCode.ToString().PadLeft(2, '0'),
-                                                                   pipeTeeTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(2), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
+                                                                   teeName, "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(2), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
                             pipeTeeNameList.Add(pipeTeeInfo);
                             pipeTeeCode++;
                         }
@@ -2067,8 +3235,22 @@ namespace FFETOOLS
                         if (pipeReduceTable.ElementAt(1).Contains("异径"))
                         {
                             string[] sArray = pipeReduceTable.ElementAt(4).Split('-');
+                            string reducerName = "";
+                            if (languageCH)
+                            {
+                                reducerName = pipeReduceTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", "");
+                            }
+                            else if (languageEN)
+                            {
+                                reducerName = GetPipeReducerNameEN(pipeReduceTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""));
+                            }
+                            else if (languageCHEN)
+                            {
+                                reducerName = GetPipeReducerNameCHEN(pipeReduceTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""));
+                            }
+
                             PipeReduceInfo pipeReduceInfo = new PipeReduceInfo(pipeReduceTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeReduceCode.ToString().PadLeft(2, '0'),
-                                                                   pipeReduceTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""), "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(1), pipeReduceTable.ElementAt(3), pipeReduceTable.ElementAt(5));
+                                                          reducerName, "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(1), pipeReduceTable.ElementAt(3), pipeReduceTable.ElementAt(5));
                             pipeReduceNameList.Add(pipeReduceInfo);
                             pipeReduceCode++;
                         }
@@ -2079,6 +3261,522 @@ namespace FFETOOLS
                 }
             }
             return pipeReduceNameList;
+        }
+        public string GetPipeSystemNameEN(string item)
+        {
+            string str = "";
+
+            if (item == "水源输水系统")
+            {
+                str = "Raw Water System";
+            }
+            if (item == "循环给水系统")
+            {
+                str = "Circulating Water Supply System";
+            }
+            if (item == "循环回水系统")
+            {
+                str = "Circulating Water Return System";
+            }
+            if (item == "消防给水系统")
+            {
+                str = "Fire-fighting Water Supply System";
+            }
+            if (item == "生活给水系统")
+            {
+                str = "Domestic Water Supply System";
+            }
+            if (item == "中水系统")
+            {
+                str = "Reclaimed Water System";
+            }
+            if (item == "污水系统")
+            {
+                str = "Sewage Water System";
+            }
+            if (item == "压力污水系统")
+            {
+                str = "Pressure Sewage Water System";
+            }
+            if (item == "压力废水系统")
+            {
+                str = "Pressure Waste Water System";
+            }
+            if (item == "废水系统")
+            {
+                str = "Waste Water System";
+            }
+            if (item == "热水给水系统")
+            {
+                str = "Hot Water Supply System";
+            }
+            if (item == "排泥系统")
+            {
+                str = "Sludge Discharge System";
+            }
+            if (item == "消毒剂系统")
+            {
+                str = "Disinfectant System";
+            }
+            if (item == "混凝剂系统")
+            {
+                str = "Coagulant System";
+            }
+            if (item == "水质稳定剂系统")
+            {
+                str = "Water Quality Stabilizer System";
+            }
+
+            return str;
+        }
+        public string GetPipeSystemNameCHEN(string item)
+        {
+            string str = "";
+
+            if (item == "水源输水系统")
+            {
+                str = "Raw Water System(水源输水系统)";
+            }
+            if (item == "循环给水系统")
+            {
+                str = "Circulating Water Supply System(循环给水系统)";
+            }
+            if (item == "循环回水系统")
+            {
+                str = "Circulating Water Return System(循环回水系统)";
+            }
+            if (item == "消防给水系统")
+            {
+                str = "Fire-fighting Water Supply System(消防给水系统)";
+            }
+            if (item == "生活给水系统")
+            {
+                str = "Domestic Water Supply System(生活给水系统)";
+            }
+            if (item == "中水系统")
+            {
+                str = "Reclaimed Water System(中水系统)";
+            }
+            if (item == "污水系统")
+            {
+                str = "Sewage Water System(污水系统)";
+            }
+            if (item == "压力污水系统")
+            {
+                str = "Pressure Sewage Water System(压力污水系统)";
+            }
+            if (item == "压力废水系统")
+            {
+                str = "Pressure Waste Water System(压力废水系统)";
+            }
+            if (item == "废水系统")
+            {
+                str = "Waste Water System(废水系统)";
+            }
+            if (item == "热水给水系统")
+            {
+                str = "Hot Water Supply System(热水给水系统)";
+            }
+            if (item == "排泥系统")
+            {
+                str = "Sludge Discharge System(排泥系统)";
+            }
+            if (item == "消毒剂系统")
+            {
+                str = "Disinfectant System(消毒剂系统)";
+            }
+            if (item == "混凝剂系统")
+            {
+                str = "Coagulant System(混凝剂系统)";
+            }
+            if (item == "水质稳定剂系统")
+            {
+                str = "Water Quality Stabilizer System(水质稳定剂系统)";
+            }
+
+            return str;
+        }
+        public string GetPipeNameEN(string item)
+        {
+            string str = "";
+
+            if (item == "焊接钢管")
+            {
+                str = "Welded Steel Pipe";
+            }
+            if (item == "PE管")
+            {
+                str = "PE Pipe";
+            }
+            if (item == "PPR管")
+            {
+                str = "PPR Pipe";
+            }
+            if (item == "UPVC管")
+            {
+                str = "UPVC Pipe";
+            }
+            if (item == "PVC管")
+            {
+                str = "PVC Pipe";
+            }
+
+            return str;
+        }
+        public string GetPipeNameCHEN(string item)
+        {
+            string str = "";
+
+            if (item == "焊接钢管")
+            {
+                str = "Welded Steel Pipe(焊接钢管)";
+            }
+            if (item == "PE管")
+            {
+                str = "PE Pipe(PE管)";
+            }
+            if (item == "PPR管")
+            {
+                str = "PPR Pipe(PPR管)";
+            }
+            if (item == "UPVC管")
+            {
+                str = "UPVC Pipe(UPVC管)";
+            }
+            if (item == "PVC管")
+            {
+                str = "PVC Pipe(PVC管)";
+            }
+
+            return str;
+        }
+        public string GetPipeElbowNameEN(string item)
+        {
+            string str = "";
+
+            if (item == "钢制弯头")
+            {
+                str = "Steel Elbow";
+            }
+            if (item == "镀锌弯头")
+            {
+                str = "Galvanized Elbow";
+            }
+            if (item == "PE弯头")
+            {
+                str = "PE Elbow";
+            }
+            if (item == "PPR弯头")
+            {
+                str = "PPR Elbow";
+            }
+            if (item == "UPVC弯头")
+            {
+                str = "UPVC Elbow";
+            }
+            if (item == "PVC弯头")
+            {
+                str = "PVC Elbow";
+            }
+
+            return str;
+        }
+        public string GetPipeElbowNameCHEN(string item, string angle)
+        {
+            string str = "";
+
+            if (item == "钢制弯头")
+            {
+                str = "Steel Elbow(" + angle + "钢制弯头)";
+            }
+            if (item == "镀锌弯头")
+            {
+                str = "Galvanized Elbow(" + angle + "镀锌弯头)";
+            }
+            if (item == "PE弯头")
+            {
+                str = "PE Elbow(" + angle + "PE弯头)";
+            }
+            if (item == "PPR弯头")
+            {
+                str = "PPR Elbow(" + angle + "PPR弯头)";
+            }
+            if (item == "UPVC弯头")
+            {
+                str = "UPVC Elbow(" + angle + "UPVC弯头)";
+            }
+            if (item == "PVC弯头")
+            {
+                str = "PVC Elbow(" + angle + "PVC弯头)";
+            }
+
+            return str;
+        }
+        public string GetPipeTeeNameEN(string item)
+        {
+            string str = "";
+
+            if (item == "钢制三通")
+            {
+                str = "Steel Tee";
+            }
+            if (item == "镀锌三通")
+            {
+                str = "Galvanized Tee";
+            }
+            if (item == "PE三通")
+            {
+                str = "PE Tee";
+            }
+            if (item == "PPR三通")
+            {
+                str = "PPR Tee";
+            }
+            if (item == "UPVC三通")
+            {
+                str = "UPVC Tee";
+            }
+            if (item == "PVC三通")
+            {
+                str = "PVC Tee";
+            }
+
+            return str;
+        }
+        public string GetPipeTeeNameCHEN(string item)
+        {
+            string str = "";
+
+            if (item == "钢制三通")
+            {
+                str = "Steel Tee(钢制三通)";
+            }
+            if (item == "镀锌三通")
+            {
+                str = "Galvanized Tee(镀锌三通)";
+            }
+            if (item == "PE三通")
+            {
+                str = "PE Tee(PE三通)";
+            }
+            if (item == "PPR三通")
+            {
+                str = "PPR Tee(PPR三通)";
+            }
+            if (item == "UPVC三通")
+            {
+                str = "UPVC Tee(UPVC三通)";
+            }
+            if (item == "PVC三通")
+            {
+                str = "PVC Tee(PVC三通)";
+            }
+
+            return str;
+        }
+        public string GetPipeReducerNameEN(string item)
+        {
+            string str = "";
+
+            if (item == "钢制异径")
+            {
+                str = "Steel Reducer";
+            }
+            if (item == "镀锌异径")
+            {
+                str = "Galvanized Reducer";
+            }
+            if (item == "PE异径")
+            {
+                str = "PE Reducer";
+            }
+            if (item == "PPR异径")
+            {
+                str = "PPR Reducer";
+            }
+            if (item == "UPVC异径")
+            {
+                str = "UPVC Reducer";
+            }
+            if (item == "PVC异径")
+            {
+                str = "PVC Reducer";
+            }
+
+            return str;
+        }
+        public string GetPipeReducerNameCHEN(string item)
+        {
+            string str = "";
+
+            if (item == "钢制异径")
+            {
+                str = "Steel Reducer(钢制异径)";
+            }
+            if (item == "镀锌异径")
+            {
+                str = "Galvanized Reducer(镀锌异径)";
+            }
+            if (item == "PE异径")
+            {
+                str = "PE Reducer(PE异径)";
+            }
+            if (item == "PPR异径")
+            {
+                str = "PPR Reducer(PPR异径)";
+            }
+            if (item == "UPVC异径")
+            {
+                str = "UPVC Reducer(UPVC异径)";
+            }
+            if (item == "PVC异径")
+            {
+                str = "PVC Reducer(PVC异径)";
+            }
+
+            return str;
+        }
+        public string GetValveNameEN(string item)
+        {
+            string str = "";
+
+            if (item == "闸阀")
+            {
+                str = "Gate Valve";
+            }
+            if (item == "蝶阀")
+            {
+                str = "Butterfly Valve";
+            }
+            if (item == "电磁阀")
+            {
+                str = "Solenoid Valve";
+            }
+            if (item == "电动蝶阀")
+            {
+                str = "Electric Butterfly Valve";
+            }
+            if (item == "电动闸阀")
+            {
+                str = "Electric Gate Valve";
+            }
+            if (item == "蝶形止回阀")
+            {
+                str = "Butterfly Check Valve";
+            }
+            if (item == "浮球阀")
+            {
+                str = "Floating Ball Valve";
+            }
+            if (item == "角阀")
+            {
+                str = "Angle Valve";
+            }
+            if (item == "截止阀")
+            {
+                str = "Stop Valve";
+            }
+            if (item == "球阀")
+            {
+                str = "Ball Valve";
+            }
+            if (item == "双联角阀")
+            {
+                str = "Double Angle Valve";
+            }
+            if (item == "微阻缓闭式止回阀")
+            {
+                str = "Check Valve";
+            }
+            if (item == "泄压阀")
+            {
+                str = "Overpressure Relief Valve";
+            }
+            if (item == "液压水位控制阀")
+            {
+                str = "Water Level Control Valve";
+            }
+            if (item == "自动排气阀")
+            {
+                str = "Automatic Exhaust Valve";
+            }
+            if (item == "插板阀")
+            {
+                str = "Slide Gate Valve";
+            }
+
+            return str;
+        }
+        public string GetValveNameCHEN(string item)
+        {
+            string str = "";
+
+            if (item == "闸阀")
+            {
+                str = "Gate Valve(闸阀)";
+            }
+            if (item == "蝶阀")
+            {
+                str = "Butterfly Valve(蝶阀)";
+            }
+            if (item == "电磁阀")
+            {
+                str = "Solenoid Valve(电磁阀)";
+            }
+            if (item == "电动蝶阀")
+            {
+                str = "Electric Butterfly Valve(电动蝶阀)";
+            }
+            if (item == "电动闸阀")
+            {
+                str = "Electric Gate Valve(电动闸阀)";
+            }
+            if (item == "蝶形止回阀")
+            {
+                str = "Butterfly Check Valve(蝶形止回阀)";
+            }
+            if (item == "浮球阀")
+            {
+                str = "Floating Ball Valve(浮球阀)";
+            }
+            if (item == "角阀")
+            {
+                str = "Angle Valve(角阀)";
+            }
+            if (item == "截止阀")
+            {
+                str = "Stop Valve(截止阀)";
+            }
+            if (item == "球阀")
+            {
+                str = "Ball Valve(球阀)";
+            }
+            if (item == "双联角阀")
+            {
+                str = "Double Angle Valve(双联角阀)";
+            }
+            if (item == "微阻缓闭式止回阀")
+            {
+                str = "Check Valve(微阻缓闭式止回阀)";
+            }
+            if (item == "泄压阀")
+            {
+                str = "Overpressure Relief Valve(泄压阀)";
+            }
+            if (item == "液压水位控制阀")
+            {
+                str = "Water Level Control Valve(液压水位控制阀)";
+            }
+            if (item == "自动排气阀")
+            {
+                str = "Automatic Exhaust Valve(自动排气阀)";
+            }
+            if (item == "插板阀")
+            {
+                str = "Slide Gate Valve(插板阀)";
+            }
+
+            return str;
         }
         public string PipeSizeHaveThick(string pipeSize, string pipeMaterial)
         {
