@@ -498,7 +498,7 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 9].Style.WrapText = true;
                                             excelWorksheet.Cells[rowNum + 1, 9].Value = "High water level start, low water level stop.";
                                             excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum+1, 9].Style.WrapText = true;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.WrapText = true;
 
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "Model:" + "50QW-10-15-1.5";
@@ -670,7 +670,7 @@ namespace FFETOOLS
                                                 }
                                                 break;
                                             }
-                                        }                                   
+                                        }
 
                                         //DVE商用电热水器写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "给排水_加热设备_DVE商用电热水炉");
@@ -766,7 +766,7 @@ namespace FFETOOLS
                                                 }
                                                 break;
                                             }
-                                        }                                    
+                                        }
 
                                         //DSE商用电热水器写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "给排水_加热设备_DSE商用电热水炉");
@@ -862,7 +862,7 @@ namespace FFETOOLS
                                                 }
                                                 break;
                                             }
-                                        }                                      
+                                        }
 
                                     }
 
@@ -934,8 +934,8 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = "1";
                                             excelWorksheet.Cells[rowNum, 9].Value = "Mating flange, bolt, nut, shim, etc.";
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum+1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
-                                            excelWorksheet.Cells[rowNum+1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             excelWorksheet.Cells[rowNum + 2, 9].Value = "With local display";
                                             excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             excelWorksheet.Cells[rowNum + 3, 9].Value = "带就地显示并远传";
@@ -955,7 +955,7 @@ namespace FFETOOLS
                                             rowNum++;
                                             valveCode++;
                                         }
-                                    }                                
+                                    }
 
                                     //螺翼式与螺翼式水表写入
                                     meterList = GetPipeSystemMeter(doc, item, subproNum.AsString(), valveCode);
@@ -1009,6 +1009,11 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
                                             excelWorksheet.Cells[rowNum, 9].Value = valveInfo.ValveNote;
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            if (valveInfo.ValveName.Contains("螺翼"))
+                                            {
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            }
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + valveInfo.ValveModel;
                                             rowNum++;
@@ -1018,7 +1023,7 @@ namespace FFETOOLS
                                             rowNum++;
                                             valveCode++;
                                         }
-                                    }                                 
+                                    }
 
                                     //地上式消火栓写入
                                     outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_消防设备_室外地上式消火栓");
@@ -1078,8 +1083,8 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
                                             excelWorksheet.Cells[rowNum, 9].Value = "Mating flange, bolt, nut, shim, etc.";
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum+1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
-                                            excelWorksheet.Cells[rowNum+1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + "SSF100/65-1.6";
                                             rowNum++;
@@ -1092,7 +1097,7 @@ namespace FFETOOLS
                                             valveCode++;
                                             break;
                                         }
-                                    }                                  
+                                    }
 
                                     //室内消火栓写入
                                     outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_消防设备_室内消火栓箱");
@@ -1148,7 +1153,7 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 4].Value = "Indoor Hydrant";
                                             excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
 
-                                            excelWorksheet.Cells[rowNum, 9].Value = "With hydrant box" + outDoorHydrantsUp.Count.ToString();
+                                            excelWorksheet.Cells[rowNum, 9].Value = "With " + outDoorHydrantsUp.Count.ToString() + " hydrant box";
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             excelWorksheet.Cells[rowNum + 1, 9].Value = "";
                                             excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
@@ -1224,7 +1229,7 @@ namespace FFETOOLS
                                             valveCode++;
                                             break;
                                         }
-                                    }                                  
+                                    }
 
                                     //地下式水泵接合器写入
                                     outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_消防设备_地下式水泵接合器");
@@ -1326,7 +1331,7 @@ namespace FFETOOLS
                                             valveCode++;
                                             break;
                                         }
-                                    }                                
+                                    }
 
                                     //墙壁式水泵接合器写入
                                     outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_消防设备_墙壁式水泵接合器");
@@ -1407,7 +1412,7 @@ namespace FFETOOLS
                                             valveCode++;
                                             break;
                                         }
-                                    }                                 
+                                    }
 
                                     //压力表写入
                                     outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_仪表_压力表");
@@ -1467,8 +1472,8 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
                                             excelWorksheet.Cells[rowNum, 9].Value = "With plug valve and bend";
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum+1, 9].Value = "带旋塞阀和表弯";
-                                            excelWorksheet.Cells[rowNum+1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "带旋塞阀和表弯";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + "Y-100";
                                             rowNum++;
@@ -1481,7 +1486,7 @@ namespace FFETOOLS
                                             valveCode++;
                                             break;
                                         }
-                                    }                                 
+                                    }
 
                                     //真空表写入
                                     outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_仪表_真空表");
@@ -1541,8 +1546,8 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
                                             excelWorksheet.Cells[rowNum, 9].Value = "With plug valve and bend";
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum+1, 9].Value = "带旋塞阀和表弯";
-                                            excelWorksheet.Cells[rowNum+1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "带旋塞阀和表弯";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + "YZ-100";
                                             rowNum++;
@@ -1555,7 +1560,7 @@ namespace FFETOOLS
                                             valveCode++;
                                             break;
                                         }
-                                    }                              
+                                    }
 
                                     //温度计写入
                                     outDoorHydrantsUp = GetEquipmentsHaveCon(doc, item, "给排水_仪表_温度计");
@@ -1627,8 +1632,8 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
                                             excelWorksheet.Cells[rowNum, 9].Value = "With short connecting pipe";
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum+1, 9].Value = "带连接短管";
-                                            excelWorksheet.Cells[rowNum+1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "带连接短管";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + "WNY-11 直型(带有金属保护管)";
                                             rowNum++;
@@ -1647,7 +1652,7 @@ namespace FFETOOLS
                                             valveCode++;
                                             break;
                                         }
-                                    }                             
+                                    }
 
                                     //水流视镜写入
                                     visualGlassList = GetPipeSystemVisualGlass(doc, item, subproNum.AsString(), valveCode);
@@ -1697,8 +1702,8 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
                                             excelWorksheet.Cells[rowNum, 9].Value = valveInfo.ValveNote;
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum+1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
-                                            excelWorksheet.Cells[rowNum+1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + valveInfo.ValvePressure;
                                             rowNum++;
@@ -1706,7 +1711,7 @@ namespace FFETOOLS
                                             rowNum++;
                                             valveCode++;
                                         }
-                                    }                                 
+                                    }
 
                                     //阀门写入
                                     valveList = GetPipeSystemValve(doc, item, subproNum.AsString(), valveCode);
@@ -2000,8 +2005,8 @@ namespace FFETOOLS
                                             excelWorksheet.Cells[rowNum, 6].Value = valveInfo.ValveQulity;
                                             excelWorksheet.Cells[rowNum, 9].Value = valveInfo.ValveNote;
                                             excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum+1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
-                                            excelWorksheet.Cells[rowNum+1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "配对应法兰、螺栓、螺母、垫片等";
+                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             rowNum++;
                                             excelWorksheet.Cells[rowNum, 4].Value = "Model(型号):" + valveInfo.ValveModel;
                                             rowNum++;
@@ -2011,131 +2016,414 @@ namespace FFETOOLS
                                             rowNum++;
                                             valveCode++;
                                         }
-                                    }                                  
+                                    }
 
                                     if (item.Contains("生活给水"))
                                     {
                                         //洗脸盆写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "洗脸盆");
-                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        if (languageCH)
                                         {
-                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
-                                            excelWorksheet.Cells[rowNum, 4].Value = "洗脸盆";
-                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-41";
-                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;
-                                            valveCode++;
-                                            break;
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "洗脸盆";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-41";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Wash Basin";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Wash Basin(洗脸盆)";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "附给排水配件";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
                                         }
 
                                         //坐便器写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "坐便器");
-                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        if (languageCH)
                                         {
-                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
-                                            excelWorksheet.Cells[rowNum, 4].Value = "坐式大便器";
-                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-68";
-                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;
-                                            valveCode++;
-                                            break;
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "坐式大便器";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-68";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Toilet Bowl";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Toilet Bowl(坐式大便器)";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "附给排水配件";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
                                         }
 
                                         //蹲便器写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "蹲式大便器");
-                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        if (languageEN)
                                         {
-                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
-                                            excelWorksheet.Cells[rowNum, 4].Value = "蹲式大便器";
-                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-84";
-                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "冲洗方式:" + "自闭式冲洗阀";
-                                            rowNum++;
-                                            valveCode++;
-                                            break;
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Squat Toilet";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Washing Method:" + "Self-closing Flushing Valve";
+                                                excelWorksheet.Cells[rowNum, 4].Style.WrapText = true;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Squat Toilet(蹲式大便器)";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "附给排水配件";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Washing Method(冲洗方式):" + "Self-closing Flushing Valve(自闭式冲洗阀)";
+                                                excelWorksheet.Cells[rowNum, 4].Style.WrapText = true;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageCH)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "蹲式大便器";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-84";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "冲洗方式:" + "自闭式冲洗阀";
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
                                         }
 
                                         //小便器写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "小便器");
-                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        if (languageCH)
                                         {
-                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
-                                            excelWorksheet.Cells[rowNum, 4].Value = "小便器";
-                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-100";
-                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "冲洗方式:" + "自闭式冲洗阀";
-                                            rowNum++;
-                                            valveCode++;
-                                            break;
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "小便器";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-100";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "冲洗方式:" + "自闭式冲洗阀";
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Vertical Urinal";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Washing Method:" + "Self-closing Flushing Valve";
+                                                excelWorksheet.Cells[rowNum, 4].Style.WrapText = true;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Vertical Urinal(小便器)";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "附给排水配件";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Washing Method(冲洗方式):" + "Self-closing Flushing Valve(自闭式冲洗阀)";
+                                                excelWorksheet.Cells[rowNum, 4].Style.WrapText = true;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
                                         }
 
                                         //拖布盆写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "拖布盆");
-                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        if (languageCH)
                                         {
-                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
-                                            excelWorksheet.Cells[rowNum, 4].Value = "拖布池";
-                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-24";
-                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;
-                                            valveCode++;
-                                            break;
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "拖布池";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-24";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Mop pool";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Mop pool(拖布池)";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "附给排水配件";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
                                         }
 
                                         //淋浴器写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "淋浴器");
-                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        if (languageCH)
                                         {
-                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
-                                            excelWorksheet.Cells[rowNum, 4].Value = "单柄混合阀淋浴器";
-                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                            excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-128";
-                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;
-                                            valveCode++;
-                                            break;
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "单柄混合阀淋浴器";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "附给排水配件,见09S304-128";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Shower";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Shower(单柄混合阀淋浴器)";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "附给排水配件,见09S304-128";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
                                         }
 
                                         //洗眼器写入
                                         outDoorHydrantsUp = GetEquipmentsNoCon(doc, "洗眼器");
-                                        foreach (var hydrant in outDoorHydrantsUp)
+                                        if (languageCH)
                                         {
-                                            excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
-                                            excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
-                                            excelWorksheet.Cells[rowNum, 4].Value = "洗眼器";
-                                            excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
-                                            excelWorksheet.Cells[rowNum, 9].Value = "洗眼喷头带高密度过滤网";
-                                            excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum + 1, 9].Value = "冲淋器采用拉杆开关";
-                                            excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum + 2, 9].Value = "洗眼器采用手推柄开关";
-                                            excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            excelWorksheet.Cells[rowNum + 3, 9].Value = "附给排水配件,见09S304-18";
-                                            excelWorksheet.Cells[rowNum + 3, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "淋浴流量:" + "2L/s";
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "洗眼流量:" + "0.2L/s";
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "工作压力:" + "0.2~0.4MPa";
-                                            rowNum++;
-                                            excelWorksheet.Cells[rowNum, 4].Value = "材质:" + "SS304";
-                                            rowNum++;
-                                            valveCode++;
-                                            break;
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "洗眼器";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "洗眼喷头带高密度过滤网";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "冲淋器采用拉杆开关";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 2, 9].Value = "洗眼器采用手推柄开关";
+                                                excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 3, 9].Value = "附给排水配件,见09S304-18";
+                                                excelWorksheet.Cells[rowNum + 3, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "淋浴流量:" + "2L/s";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "洗眼流量:" + "0.2L/s";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "工作压力:" + "0.2~0.4MPa";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "材质:" + "SS304";
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Eyewash";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 2, 9].Value = "";
+                                                excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 3, 9].Value = "";
+                                                excelWorksheet.Cells[rowNum + 3, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Rushing Flow:" + "2L/s";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Eyewash Flow:" + "0.2L/s";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Working Pressure:" + "0.2~0.4MPa";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Material:" + "SS304";
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            foreach (var hydrant in outDoorHydrantsUp)
+                                            {
+                                                excelWorksheet.Cells[rowNum, 1].Value = subproNum.AsString();
+                                                excelWorksheet.Cells[rowNum, 2].Value = "TA" + valveCode.ToString().PadLeft(2, '0');
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Eyewash(洗眼器)";
+                                                excelWorksheet.Cells[rowNum, 6].Value = outDoorHydrantsUp.Count.ToString();
+                                                excelWorksheet.Cells[rowNum, 9].Value = "With water supply and drainage fittings";
+                                                excelWorksheet.Cells[rowNum, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 1, 9].Value = "附给排水配件";
+                                                excelWorksheet.Cells[rowNum + 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 2, 9].Value = "";
+                                                excelWorksheet.Cells[rowNum + 2, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                excelWorksheet.Cells[rowNum + 3, 9].Value = "";
+                                                excelWorksheet.Cells[rowNum + 3, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Rushing Flow(淋浴流量):" + "2L/s";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Eyewash Flow(洗眼流量):" + "0.2L/s";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Working Pressure(工作压力):" + "0.2~0.4MPa";
+                                                rowNum++;
+                                                excelWorksheet.Cells[rowNum, 4].Value = "Material(材质):" + "SS304";
+                                                rowNum++;
+                                                valveCode++;
+                                                break;
+                                            }
                                         }
 
                                     }
@@ -2911,7 +3199,7 @@ namespace FFETOOLS
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Steel Tee";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Tee";
                                         }
                                     }
                                     else if (pipeTeeInfo.PipeTeeName.Contains("Galvanized") && languageCHEN)
@@ -2922,7 +3210,7 @@ namespace FFETOOLS
                                         }
                                         else
                                         {
-                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Steel Tee(镀锌三通)";
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Tee(镀锌三通)";
                                         }
                                     }
                                     else
@@ -2974,6 +3262,110 @@ namespace FFETOOLS
                                     }
 
                                     if (pipeTeeList.Count == 1)
+                                    {
+                                        if (pipeTeeInfo.PipeTeeName.Contains("UPVC"))
+                                        {
+                                            excelWorksheet.Cells[rowNum - 1, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum - 2, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                    }
+                                    rowNum++;
+                                }
+
+                                //四通写入
+                                List<PipeTeeInfo> pipeCrossList = GetPipeSystemPipeCross(doc, item, subproNum.AsString(), elbowNum);
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeCrossList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeTeeInfo.PipeTeeAbb;
+                                    if (pipeTeeInfo.PipeTeeName.Contains("镀锌") && languageCH)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式四通";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "镀锌四通";
+                                        }
+                                    }
+                                    else if (pipeTeeInfo.PipeTeeName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Grooved Cross";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Cross";
+                                        }
+                                    }
+                                    else if (pipeTeeInfo.PipeTeeName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Grooved Cross(消防沟槽式四通)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Cross(镀锌四通)";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeTeeInfo.PipeTeeName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeCrossList)
+                                {
+                                    if (pipeTeeInfo.PipeTeeName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeTeeInfo.PipeTeePressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeTeeInfo.PipeTeePressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeTeeInfo.PipeTeePressure;
+                                        }
+
+                                        rowNum++;
+                                    }
+                                    break;
+                                }
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeCrossList)
+                                {
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "规格:" + pipeTeeInfo.PipeTeeSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Specification:" + pipeTeeInfo.PipeTeeSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Specification(规格):" + pipeTeeInfo.PipeTeeSize;
+                                    }
+
+                                    if (pipeCrossList.Count == 1)
                                     {
                                         if (pipeTeeInfo.PipeTeeName.Contains("UPVC"))
                                         {
@@ -3091,6 +3483,110 @@ namespace FFETOOLS
                                     else
                                     {
                                         excelWorksheet.Cells[rowNum, 6].Value = pipeReduceInfo.PipeReduceQulity;
+                                    }
+                                    rowNum++;
+                                }
+
+                                //盲法兰写入
+                                List<PipeTeeInfo> pipeFlangList = GetPipeSystemPipeFlange(doc, item, subproNum.AsString(), elbowNum);
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeFlangList)
+                                {
+                                    excelWorksheet.Cells[rowNum, 3].Value = pipeTeeInfo.PipeTeeAbb;
+                                    if (pipeTeeInfo.PipeTeeName.Contains("镀锌") && languageCH)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "消防沟槽式盲法兰";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "镀锌盲法兰";
+                                        }
+                                    }
+                                    else if (pipeTeeInfo.PipeTeeName.Contains("Galvanized") && languageEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Grooved Blind Flange";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Blind Flange";
+                                        }
+                                    }
+                                    else if (pipeTeeInfo.PipeTeeName.Contains("Galvanized") && languageCHEN)
+                                    {
+                                        if (!(subproNumOnly.Contains("G19") || subproNumOnly.Contains("91")))
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Grooved Blind Flange(消防沟槽式盲法兰)";
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Galvanized Blind Flange(镀锌盲法兰)";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = pipeTeeInfo.PipeTeeName;
+                                    }
+                                    elbowNum++;
+                                    rowNum++;
+                                    break;
+                                }
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeFlangList)
+                                {
+                                    if (pipeTeeInfo.PipeTeeName.Contains("UPVC"))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        if (languageCH)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "公称压力:" + pipeTeeInfo.PipeTeePressure;
+                                        }
+                                        else if (languageEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure:" + pipeTeeInfo.PipeTeePressure;
+                                        }
+                                        else if (languageCHEN)
+                                        {
+                                            excelWorksheet.Cells[rowNum, 4].Value = "Nominal Pressure(公称压力):" + pipeTeeInfo.PipeTeePressure;
+                                        }
+
+                                        rowNum++;
+                                    }
+                                    break;
+                                }
+                                foreach (PipeTeeInfo pipeTeeInfo in pipeFlangList)
+                                {
+                                    if (languageCH)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "公称直径:" + pipeTeeInfo.PipeTeeSize;
+                                    }
+                                    else if (languageEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter:" + pipeTeeInfo.PipeTeeSize;
+                                    }
+                                    else if (languageCHEN)
+                                    {
+                                        excelWorksheet.Cells[rowNum, 4].Value = "Nominal Diameter(公称直径):" + pipeTeeInfo.PipeTeeSize;
+                                    }
+
+                                    if (pipeFlangList.Count == 1)
+                                    {
+                                        if (pipeTeeInfo.PipeTeeName.Contains("UPVC"))
+                                        {
+                                            excelWorksheet.Cells[rowNum - 1, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                        }
+                                        else
+                                        {
+                                            excelWorksheet.Cells[rowNum - 2, 6].Value = pipeTeeInfo.PipeTeeQulity;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        excelWorksheet.Cells[rowNum, 6].Value = pipeTeeInfo.PipeTeeQulity;
                                     }
                                     rowNum++;
                                 }
@@ -3267,6 +3763,19 @@ namespace FFETOOLS
                                             if (pipeTeeInfo.PipeTeeSize.Replace(pipeInfo.PipeSize, "").Replace("X", "").Contains(pipeInfo.PipeSize.Replace("DN", "")))
                                             {
                                                 totalNum += int.Parse(pipeTeeInfo.PipeTeeQulity);
+                                            }
+                                        }
+
+                                        foreach (PipeTeeInfo pipeTeeInfo in pipeCrossList)
+                                        {
+                                            if (pipeTeeInfo.PipeTeeSize.Contains(pipeInfo.PipeSize))
+                                            {
+                                                totalNum += int.Parse(pipeTeeInfo.PipeTeeQulity) * 2;
+                                            }
+
+                                            if (pipeTeeInfo.PipeTeeSize.Replace(pipeInfo.PipeSize, "").Replace("X", "").Contains(pipeInfo.PipeSize.Replace("DN", "")))
+                                            {
+                                                totalNum += int.Parse(pipeTeeInfo.PipeTeeQulity) * 2;
                                             }
                                         }
 
@@ -3783,11 +4292,11 @@ namespace FFETOOLS
                                 {
                                     name = "Type Y Filter(Y型过滤器)";
                                     note = "Mating flange, bolt, nut, shim, etc.";
-                                }                               
+                                }
                             }
                             else if (valveTable.ElementAt(1).Contains("挠性橡胶接头"))
                             {
-                                abb = "JE";                            
+                                abb = "JE";
                                 model = "K-XT-3";
 
                                 if (languageCH)
@@ -3804,7 +4313,7 @@ namespace FFETOOLS
                                 {
                                     name = "Flexible Rubber Joint(可曲挠橡胶接头)";
                                     note = "Mating flange, bolt, nut, shim, etc.";
-                                }                             
+                                }
                             }
 
                             PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, abb + valveCode.ToString().PadLeft(2, '0'), name,
@@ -3914,8 +4423,21 @@ namespace FFETOOLS
                         {
                             string model = "LX";
                             string note = "";
+                            string name = "";
+                            if(languageCH)
+                            {
+                                name = valveTable.ElementAt(1).Replace("给排水_排水设备附件_", "");
+                            }
+                            else if(languageEN)
+                            {
+                                name = GetAccessoryWNameEN(valveTable.ElementAt(1).Replace("给排水_排水设备附件_", ""));
+                            }
+                            else if(languageCHEN)
+                            {
+                                name = GetAccessoryWNameCHEN(valveTable.ElementAt(1).Replace("给排水_排水设备附件_", ""));
+                            }
 
-                            PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + valveCode.ToString().PadLeft(2, '0'), valveTable.ElementAt(1).Replace("给排水_排水设备附件_", ""),
+                            PipeValveInfo valveInfo = new PipeValveInfo(valveTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + valveCode.ToString().PadLeft(2, '0'), name,
                             model, "DN" + sArray.FirstOrDefault(), valveTable.ElementAt(2), valveTable.ElementAt(4), note);
                             valveNameList.Add(valveInfo);
                             valveCode++;
@@ -3980,18 +4502,20 @@ namespace FFETOOLS
                             else
                             {
                                 model = "LXL-" + sArray.FirstOrDefault();
-                                note = "配套法兰、垫片、螺栓及螺母";
                                 if (languageCH)
                                 {
                                     meterName = "螺翼式水表";
+                                    note = "配套法兰、垫片、螺栓及螺母";
                                 }
                                 else if (languageEN)
                                 {
                                     meterName = "Water Meter";
+                                    note = "Mating flange, bolt, nut, shim, etc.";
                                 }
                                 else if (languageCHEN)
                                 {
                                     meterName = "Water Meter(螺翼式水表)";
+                                    note = "Mating flange, bolt, nut, shim, etc.";
                                 }
                             }
 
@@ -4336,6 +4860,123 @@ namespace FFETOOLS
             }
             return pipeReduceNameList;
         }
+        public List<PipeTeeInfo> GetPipeSystemPipeCross(Document doc, string pipeSystemName, string subProjectNum, int pipeTeeCode)
+        {
+            FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
+            viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
+            IList<Element> viewScheduleList = viewCollector.ToElements();
+            List<PipeTeeInfo> pipeTeeNameList = new List<PipeTeeInfo>();
+
+            foreach (ViewSchedule v in viewScheduleList)
+            {
+                if (v.Name.Contains("管件") && v.Name.Replace("给排水_", "").Replace("管件明细表", "") == pipeSystemName.Replace("系统", ""))
+                {
+                    TableData td = v.GetTableData();
+                    TableSectionData tdb = td.GetSectionData(SectionType.Header);
+                    string head = v.GetCellText(SectionType.Header, 0, 0);
+
+                    TableSectionData tdd = td.GetSectionData(SectionType.Body);
+                    int c = tdd.NumberOfColumns;
+                    int r = tdd.NumberOfRows;
+                    List<string> pipeTeeTable = new List<string>();
+
+                    for (int i = 1; i < r; i++)
+                    {
+                        for (int j = 0; j < c; j++)
+                        {
+                            CellType ctype = tdd.GetCellType(i, j);
+                            string str = v.GetCellText(SectionType.Body, i, j);
+                            pipeTeeTable.Add(str);
+                        }
+
+                        if (pipeTeeTable.ElementAt(1).Contains("四通"))
+                        {
+                            string[] sArray = pipeTeeTable.ElementAt(4).Split('-');
+                            string teeName = "";
+                            if (languageCH)
+                            {
+                                teeName = pipeTeeTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", "");
+                            }
+                            else if (languageEN)
+                            {
+                                teeName = GetPipeTeeNameEN(pipeTeeTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""));
+                            }
+                            else if (languageCHEN)
+                            {
+                                teeName = GetPipeTeeNameCHEN(pipeTeeTable.ElementAt(1).Replace("给排水_管件_", "").Replace("_厂区", ""));
+                            }
+
+                            PipeTeeInfo pipeTeeInfo = new PipeTeeInfo(pipeTeeTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeTeeCode.ToString().PadLeft(2, '0'),
+                                                                   teeName, "DN" + sArray.ElementAt(0) + "X" + sArray.ElementAt(2), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
+                            pipeTeeNameList.Add(pipeTeeInfo);
+                            pipeTeeCode++;
+                        }
+
+                        //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);                    
+                        pipeTeeTable.Clear();
+                    }
+                }
+            }
+            return pipeTeeNameList;
+        }
+        public List<PipeTeeInfo> GetPipeSystemPipeFlange(Document doc, string pipeSystemName, string subProjectNum, int pipeTeeCode)
+        {
+            FilteredElementCollector viewCollector = new FilteredElementCollector(doc);
+            viewCollector.OfCategory(BuiltInCategory.OST_Schedules);
+            IList<Element> viewScheduleList = viewCollector.ToElements();
+            List<PipeTeeInfo> pipeTeeNameList = new List<PipeTeeInfo>();
+
+            foreach (ViewSchedule v in viewScheduleList)
+            {
+                if (v.Name.Contains("管件") && v.Name.Replace("给排水_", "").Replace("管件明细表", "") == pipeSystemName.Replace("系统", ""))
+                {
+                    TableData td = v.GetTableData();
+                    TableSectionData tdb = td.GetSectionData(SectionType.Header);
+                    string head = v.GetCellText(SectionType.Header, 0, 0);
+
+                    TableSectionData tdd = td.GetSectionData(SectionType.Body);
+                    int c = tdd.NumberOfColumns;
+                    int r = tdd.NumberOfRows;
+                    List<string> pipeTeeTable = new List<string>();
+
+                    for (int i = 1; i < r; i++)
+                    {
+                        for (int j = 0; j < c; j++)
+                        {
+                            CellType ctype = tdd.GetCellType(i, j);
+                            string str = v.GetCellText(SectionType.Body, i, j);
+                            pipeTeeTable.Add(str);
+                        }
+
+                        if (pipeTeeTable.ElementAt(1).Contains("盲法兰"))
+                        {
+                            string teeName = "";
+                            if (languageCH)
+                            {
+                                teeName = "钢盲法兰";
+                            }
+                            else if (languageEN)
+                            {
+                                teeName = "Steel Blind Flange";
+                            }
+                            else if (languageCHEN)
+                            {
+                                teeName = "Steel Blind Flange(钢盲法兰)";
+                            }
+
+                            PipeTeeInfo pipeTeeInfo = new PipeTeeInfo(pipeTeeTable.ElementAt(0).Replace("给排水_", "").Replace("管道", ""), subProjectNum, "OX" + pipeTeeCode.ToString().PadLeft(2, '0'),
+                                                                   teeName, "DN" + pipeTeeTable.ElementAt(4), pipeTeeTable.ElementAt(3), pipeTeeTable.ElementAt(5));
+                            pipeTeeNameList.Add(pipeTeeInfo);
+                            pipeTeeCode++;
+                        }
+
+                        //System.Windows.Forms.MessageBox.Show(ss, "", MessageBoxButtons.OK, MessageBoxIcon.Information);                    
+                        pipeTeeTable.Clear();
+                    }
+                }
+            }
+            return pipeTeeNameList;
+        }
         public string GetPipeSystemNameEN(string item)
         {
             string str = "";
@@ -4606,13 +5247,38 @@ namespace FFETOOLS
             {
                 str = "PPR Tee";
             }
-            if (item == "UPVC三通")
+            if (item == "UPVC顺水三通")
             {
                 str = "UPVC Tee";
             }
             if (item == "PVC三通")
             {
                 str = "PVC Tee";
+            }
+
+            if (item == "钢制四通")
+            {
+                str = "Steel Cross";
+            }
+            if (item == "镀锌四通")
+            {
+                str = "Galvanized Cross";
+            }
+            if (item == "PE四通")
+            {
+                str = "PE Cross(PE四通)";
+            }
+            if (item == "PPR四通")
+            {
+                str = "PPR Cross";
+            }
+            if (item == "UPVC顺水四通")
+            {
+                str = "UPVC Cross";
+            }
+            if (item == "PVC四通")
+            {
+                str = "PVC Cross";
             }
 
             return str;
@@ -4637,13 +5303,38 @@ namespace FFETOOLS
             {
                 str = "PPR Tee(PPR三通)";
             }
-            if (item == "UPVC三通")
+            if (item == "UPVC顺水三通")
             {
-                str = "UPVC Tee(UPVC三通)";
+                str = "UPVC Tee(UPVC顺水三通)";
             }
             if (item == "PVC三通")
             {
                 str = "PVC Tee(PVC三通)";
+            }
+
+            if (item == "钢制四通")
+            {
+                str = "Steel Cross(钢制四通)";
+            }
+            if (item == "镀锌四通")
+            {
+                str = "Galvanized Cross(镀锌四通)";
+            }
+            if (item == "PE四通")
+            {
+                str = "PE Cross(PE四通)";
+            }
+            if (item == "PPR四通")
+            {
+                str = "PPR Cross(PPR四通)";
+            }
+            if (item == "UPVC顺水四通")
+            {
+                str = "UPVC Cross(UPVC顺水四通)";
+            }
+            if (item == "PVC四通")
+            {
+                str = "PVC Cross(PVC四通)";
             }
 
             return str;
@@ -4848,6 +5539,52 @@ namespace FFETOOLS
             if (item == "插板阀")
             {
                 str = "Slide Gate Valve(插板阀)";
+            }
+
+            return str;
+        }
+        public string GetAccessoryWNameEN(string item)
+        {
+            string str = "";
+
+            if (item == "圆形地漏")
+            {
+                str = "Floor Drain";
+            }
+            if (item == "通气帽")
+            {
+                str = "Vent Cap";
+            }
+            if (item == "清扫口")
+            {
+                str = "Cleanout";
+            }
+            if (item == "检查口")
+            {
+                str = "Check Hole";
+            }
+           
+            return str;
+        }
+        public string GetAccessoryWNameCHEN(string item)
+        {
+            string str = "";
+
+            if (item == "圆形地漏")
+            {
+                str = "Floor Drain(圆形地漏)";
+            }
+            if (item == "通气帽")
+            {
+                str = "Vent Cap(通气帽)";
+            }
+            if (item == "清扫口")
+            {
+                str = "Cleanout(清扫口)";
+            }
+            if (item == "检查口")
+            {
+                str = "Check Hole(检查口)";
             }
 
             return str;
