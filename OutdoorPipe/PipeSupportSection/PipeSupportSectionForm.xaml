@@ -45,13 +45,20 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <RadioButton x:Name="TypeA_Button"  Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="A型支架"/>
-                <RadioButton x:Name="TypeB_Button" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="B型支架"/>
-                <RadioButton x:Name="TypeC_Button" Grid.Column="2" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="C型支架"/>
-                <RadioButton x:Name="TypeD_Button"  Grid.Column="3" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="D型支架"/>
-                <RadioButton x:Name="TypeE_Button" Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="E型支架"/>
-                <RadioButton x:Name="TypeF_Button" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="F型支架"/>
-                <RadioButton x:Name="TypeG_Button" Grid.Column="2" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="G型支架"/>
+                <RadioButton x:Name="TypeA_Button"  Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="A型支架"
+                             Checked="TypeA_Button_Checked"/>
+                <RadioButton x:Name="TypeB_Button" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="B型支架"
+                             Checked="TypeB_Button_Checked"/>
+                <RadioButton x:Name="TypeC_Button" Grid.Column="2" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="C型支架"
+                             Checked="TypeC_Button_Checked" Unchecked="TypeC_Button_Unchecked"/>
+                <RadioButton x:Name="TypeD_Button"  Grid.Column="3" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="D型支架"
+                             Checked="TypeD_Button_Checked"/>
+                <RadioButton x:Name="TypeE_Button" Grid.Column="0" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="E型支架"
+                             Checked="TypeE_Button_Checked"/>
+                <RadioButton x:Name="TypeF_Button" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="F型支架"
+                             Checked="TypeF_Button_Checked"/>
+                <RadioButton x:Name="TypeG_Button" Grid.Column="2" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="G型支架"
+                             Checked="TypeG_Button_Checked"/>
 
             </Grid>
         </GroupBox>
@@ -70,6 +77,84 @@
                 <RadioButton x:Name="ThreeFloor" Grid.Column="2" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道三层" Click="ThreeFloor_Click"/>
                 <RadioButton x:Name="FourFloor"  Grid.Column="3" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道四层" Click="FourFloor_Click"/>
 
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="OneFloorGroupBoxLeft" Header="一层左侧管道参数" BorderBrush="Gray" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="5" >
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="OneFloorLeftPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="OneFloorLeftPipe1_Checked"  Unchecked="OneFloorLeftPipe1_Unchecked"/>
+                <CheckBox x:Name="OneFloorLeftPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="OneFloorLeftPipe2_Checked"  Unchecked="OneFloorLeftPipe2_Unchecked"/>
+
+                <ComboBox x:Name="OneFloorLeftPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="OneFloorLeftPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+
+                <ComboBox x:Name="OneFloorLeftPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="OneFloorLeftPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+
+
+                <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Button  x:Name="OneFloorLeftSelectButton" Content="全选"  Grid.Column="0" Grid.Row="0" Margin="8,8,8,2" Cursor="Hand" Click="OneFloorLeftSelectButton_Click">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFDDDDDD</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox x:Name="OneFloorGroupBoxRight" Header="一层右侧管道参数" BorderBrush="Gray" Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="3" Margin="5" >
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="OneFloorRightPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="OneFloorRightPipe1_Checked"  Unchecked="OneFloorRightPipe1_Unchecked"/>
+                <CheckBox x:Name="OneFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="OneFloorRightPipe2_Checked"  Unchecked="OneFloorRightPipe2_Unchecked"/>
+
+                <ComboBox x:Name="OneFloorRightPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="OneFloorRightPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+
+                <ComboBox x:Name="OneFloorRightPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="OneFloorRightPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+
+
+                <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Button  x:Name="OneFloorRightSelectButton" Content="全选"  Grid.Column="0" Grid.Row="0" Margin="8,8,8,2" Cursor="Hand" Click="OneFloorRightSelectButton_Click">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFDDDDDD</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </Grid>
         </GroupBox>
 
@@ -116,6 +201,84 @@
             </Grid>
         </GroupBox>
 
+        <GroupBox x:Name="TwoFloorGroupBoxLeft" Header="二层左侧管道参数" BorderBrush="Gray" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="5" >
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="TwoFloorLeftPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="TwoFloorLeftPipe1_Checked"  Unchecked="TwoFloorLeftPipe1_Unchecked"/>
+                <CheckBox x:Name="TwoFloorLeftPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="TwoFloorLeftPipe2_Checked"  Unchecked="TwoFloorLeftPipe2_Unchecked"/>
+
+                <ComboBox x:Name="TwoFloorLeftPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="TwoFloorLeftPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+
+                <ComboBox x:Name="TwoFloorLeftPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="TwoFloorLeftPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+
+
+                <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Button  x:Name="TwoFloorLeftSelectButton" Content="全选"  Grid.Column="0" Grid.Row="0" Margin="8,8,8,2" Cursor="Hand" Click="TwoFloorLeftSelectButton_Click">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFDDDDDD</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="TwoFloorGroupBoxRight" Header="二层右侧管道参数" BorderBrush="Gray" Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="3" Margin="5" >
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="TwoFloorRightPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="TwoFloorRightPipe1_Checked"  Unchecked="TwoFloorRightPipe1_Unchecked"/>
+                <CheckBox x:Name="TwoFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="OneFloorRightPipe2_Checked_1"  Unchecked="OneFloorRightPipe2_Unchecked_1"/>
+
+                <ComboBox x:Name="TwoFloorRightPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="TwoFloorRightPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+
+                <ComboBox x:Name="TwoFloorRightPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="TwoFloorRightPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+
+
+                <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Button  x:Name="TwoFloorRightSelectButton" Content="全选"  Grid.Column="0" Grid.Row="0" Margin="8,8,8,2" Cursor="Hand" Click="OneFloorRightSelectButton_Click">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFDDDDDD</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </GroupBox>
+
         <GroupBox x:Name="TwoFloorGroupBox" Header="二层管道参数" BorderBrush="Gray" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="6" Margin="5" >
             <Grid Margin="0">
                 <Grid.ColumnDefinitions>
@@ -147,6 +310,84 @@
                 <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <Button  x:Name="TwoFloorSelectButton" Content="全选"  Grid.Column="0" Grid.Row="0" Margin="8,8,8,2" Cursor="Hand" Click="TwoFloorSelectButton_Click">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFDDDDDD</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="ThreeFloorGroupBoxLeft" Header="三层左侧管道参数" BorderBrush="Gray" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" Margin="5" >
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="ThreeFloorLeftPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="ThreeFloorLeftPipe1_Checked"  Unchecked="ThreeFloorLeftPipe1_Unchecked"/>
+                <CheckBox x:Name="ThreeFloorLeftPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="ThreeFloorLeftPipe2_Checked"  Unchecked="ThreeFloorLeftPipe2_Unchecked"/>
+
+                <ComboBox x:Name="ThreeFloorLeftPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="ThreeFloorLeftPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+
+                <ComboBox x:Name="ThreeFloorLeftPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="ThreeFloorLeftPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+
+
+                <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Button  x:Name="ThreeFloorLeftSelectButton" Content="全选"  Grid.Column="0" Grid.Row="0" Margin="8,8,8,2" Cursor="Hand" Click="ThreeFloorLeftSelectButton_Click">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>#FFDDDDDD</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="ThreeFloorGroupBoxRight" Header="三层右侧管道参数" BorderBrush="Gray" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="3" Margin="5" >
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="ThreeFloorRightPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="ThreeFloorRightPipe1_Checked"  Unchecked="ThreeFloorRightPipe1_Unchecked"/>
+                <CheckBox x:Name="ThreeFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="ThreeFloorRightPipe2_Checked"  Unchecked="ThreeFloorRightPipe2_Unchecked"/>
+
+                <ComboBox x:Name="ThreeFloorRightPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="ThreeFloorRightPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+
+                <ComboBox x:Name="ThreeFloorRightPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="ThreeFloorRightPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+
+
+                <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Button  x:Name="ThreeFloorRightSelectButton" Content="全选"  Grid.Column="0" Grid.Row="0" Margin="8,8,8,2" Cursor="Hand" Click="ThreeFloorRightSelectButton_Click">
                     <Button.Template >
                         <ControlTemplate TargetType="{x:Type Button}" >
                             <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">

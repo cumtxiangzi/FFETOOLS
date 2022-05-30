@@ -43,6 +43,9 @@ namespace FFETOOLS
             TwoFloor.IsChecked = true;
             ThreeFloorGroupBox.IsEnabled = false;
             FourFloorGroupBox.IsEnabled = false;
+            ThreeFloorGroupBoxLeft.IsEnabled = false;
+            ThreeFloorGroupBoxRight.IsEnabled = false;
+
             OneFloorPipe1.IsChecked = true;
             OneFloorPipe2.IsChecked = true;
             TwoFloorPipe1.IsChecked = true;
@@ -110,10 +113,72 @@ namespace FFETOOLS
             FourFloorPipe2_Size.SelectedIndex = 13;
             FourFloorPipe2_Abb.SelectedIndex = 1;
 
-            if (TypeC_Button.IsChecked == true)
-            {
-                SupportCode.Text = "C1详图";
-            }
+            OneFloorLeftPipe1_Size.ItemsSource = pipeSizeList;
+            OneFloorLeftPipe1_Abb.ItemsSource = pipeAbbList;
+            OneFloorLeftPipe2_Size.ItemsSource = pipeSizeList;
+            OneFloorLeftPipe2_Abb.ItemsSource = pipeAbbList;
+            OneFloorLeftPipe1_Size.SelectedIndex = 13;
+            OneFloorLeftPipe1_Abb.SelectedIndex = 1;
+            OneFloorLeftPipe2_Size.SelectedIndex = 13;
+            OneFloorLeftPipe2_Abb.SelectedIndex = 1;
+
+            TwoFloorLeftPipe1_Size.ItemsSource = pipeSizeList;
+            TwoFloorLeftPipe1_Abb.ItemsSource = pipeAbbList;
+            TwoFloorLeftPipe2_Size.ItemsSource = pipeSizeList;
+            TwoFloorLeftPipe2_Abb.ItemsSource = pipeAbbList;
+            TwoFloorLeftPipe1_Size.SelectedIndex = 13;
+            TwoFloorLeftPipe1_Abb.SelectedIndex = 1;
+            TwoFloorLeftPipe2_Size.SelectedIndex = 13;
+            TwoFloorLeftPipe2_Abb.SelectedIndex = 1;
+
+            ThreeFloorLeftPipe1_Size.ItemsSource = pipeSizeList;
+            ThreeFloorLeftPipe1_Abb.ItemsSource = pipeAbbList;
+            ThreeFloorLeftPipe2_Size.ItemsSource = pipeSizeList;
+            ThreeFloorLeftPipe2_Abb.ItemsSource = pipeAbbList;
+            ThreeFloorLeftPipe1_Size.SelectedIndex = 13;
+            ThreeFloorLeftPipe1_Abb.SelectedIndex = 1;
+            ThreeFloorLeftPipe2_Size.SelectedIndex = 13;
+            ThreeFloorLeftPipe2_Abb.SelectedIndex = 1;
+
+            OneFloorRightPipe1_Size.ItemsSource = pipeSizeList;
+            OneFloorRightPipe1_Abb.ItemsSource = pipeAbbList;
+            OneFloorRightPipe2_Size.ItemsSource = pipeSizeList;
+            OneFloorRightPipe2_Abb.ItemsSource = pipeAbbList;
+            OneFloorRightPipe1_Size.SelectedIndex = 13;
+            OneFloorRightPipe1_Abb.SelectedIndex = 1;
+            OneFloorRightPipe2_Size.SelectedIndex = 13;
+            OneFloorRightPipe2_Abb.SelectedIndex = 1;
+
+            TwoFloorRightPipe1_Size.ItemsSource = pipeSizeList;
+            TwoFloorRightPipe1_Abb.ItemsSource = pipeAbbList;
+            TwoFloorRightPipe2_Size.ItemsSource = pipeSizeList;
+            TwoFloorRightPipe2_Abb.ItemsSource = pipeAbbList;
+            TwoFloorRightPipe1_Size.SelectedIndex = 13;
+            TwoFloorRightPipe1_Abb.SelectedIndex = 1;
+            TwoFloorRightPipe2_Size.SelectedIndex = 13;
+            TwoFloorRightPipe2_Abb.SelectedIndex = 1;
+
+            ThreeFloorRightPipe1_Size.ItemsSource = pipeSizeList;
+            ThreeFloorRightPipe1_Abb.ItemsSource = pipeAbbList;
+            ThreeFloorRightPipe2_Size.ItemsSource = pipeSizeList;
+            ThreeFloorRightPipe2_Abb.ItemsSource = pipeAbbList;
+            ThreeFloorRightPipe1_Size.SelectedIndex = 13;
+            ThreeFloorRightPipe1_Abb.SelectedIndex = 1;
+            ThreeFloorRightPipe2_Size.SelectedIndex = 13;
+            ThreeFloorRightPipe2_Abb.SelectedIndex = 1;
+
+            OneFloorGroupBox.Visibility = Visibility.Visible;
+            TwoFloorGroupBox.Visibility = Visibility.Visible;
+            ThreeFloorGroupBox.Visibility = Visibility.Visible;
+            FourFloorGroupBox.Visibility = Visibility.Visible;
+
+            OneFloorGroupBoxLeft.Visibility = Visibility.Collapsed;
+            OneFloorGroupBoxRight.Visibility = Visibility.Collapsed;
+            TwoFloorGroupBoxLeft.Visibility = Visibility.Collapsed;
+            TwoFloorGroupBoxRight.Visibility = Visibility.Collapsed;
+            ThreeFloorGroupBoxLeft.Visibility = Visibility.Collapsed;
+            ThreeFloorGroupBoxRight.Visibility = Visibility.Collapsed;
+            SupportCode.Text = "C1详图";
 
             excCreatPipeSupportSection = new ExecuteEventPipeSupportSection();
             eventHandlerPipeSupportSection = Autodesk.Revit.UI.ExternalEvent.Create(excCreatPipeSupportSection);
@@ -146,7 +211,17 @@ namespace FFETOOLS
                 TwoFloorGroupBox.IsEnabled = false;
                 ThreeFloorGroupBox.IsEnabled = false;
                 FourFloorGroupBox.IsEnabled = false;
-                PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架一层.jpg", UriKind.Relative));
+
+                TwoFloorGroupBoxLeft.IsEnabled = false;
+                ThreeFloorGroupBoxLeft.IsEnabled = false;
+                TwoFloorGroupBoxRight.IsEnabled = false;
+                ThreeFloorGroupBoxRight.IsEnabled = false;
+
+                if (TypeC_Button.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架一层.jpg", UriKind.Relative));
+                }
+
             }
         }
 
@@ -158,7 +233,19 @@ namespace FFETOOLS
                 TwoFloorGroupBox.IsEnabled = true;
                 ThreeFloorGroupBox.IsEnabled = false;
                 FourFloorGroupBox.IsEnabled = false;
-                PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架两层.jpg", UriKind.Relative));
+
+                OneFloorGroupBoxLeft.IsEnabled = true;
+                TwoFloorGroupBoxLeft.IsEnabled = true;
+                ThreeFloorGroupBoxLeft.IsEnabled = false;
+
+                OneFloorGroupBoxRight.IsEnabled = true;
+                TwoFloorGroupBoxRight.IsEnabled = true;
+                ThreeFloorGroupBoxRight.IsEnabled = false;
+
+                if (TypeC_Button.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架两层.jpg", UriKind.Relative));
+                }
             }
         }
 
@@ -170,6 +257,14 @@ namespace FFETOOLS
                 TwoFloorGroupBox.IsEnabled = true;
                 ThreeFloorGroupBox.IsEnabled = true;
                 FourFloorGroupBox.IsEnabled = false;
+
+                OneFloorGroupBoxLeft.IsEnabled = true;
+                TwoFloorGroupBoxLeft.IsEnabled = true;
+                ThreeFloorGroupBoxLeft.IsEnabled = true;
+
+                OneFloorGroupBoxRight.IsEnabled = true;
+                TwoFloorGroupBoxRight.IsEnabled = true;
+                ThreeFloorGroupBoxRight.IsEnabled = true;
             }
         }
 
@@ -356,6 +451,213 @@ namespace FFETOOLS
             FourFloorPipe2_Abb.IsEnabled = false;
         }
 
+        private void OneFloorLeftPipe1_Checked(object sender, RoutedEventArgs e)
+        {
 
+        }
+
+        private void OneFloorLeftPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorLeftPipe2_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorLeftPipe2_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorLeftSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TypeC_Button_Checked(object sender, RoutedEventArgs e)
+        {
+            OneFloorGroupBox.Visibility = Visibility.Visible;
+            TwoFloorGroupBox.Visibility = Visibility.Visible;
+            ThreeFloorGroupBox.Visibility = Visibility.Visible;
+            FourFloorGroupBox.Visibility = Visibility.Visible;
+
+            OneFloorGroupBoxLeft.Visibility = Visibility.Collapsed;
+            OneFloorGroupBoxRight.Visibility = Visibility.Collapsed;
+            TwoFloorGroupBoxLeft.Visibility = Visibility.Collapsed;
+            TwoFloorGroupBoxRight.Visibility = Visibility.Collapsed;
+            ThreeFloorGroupBoxLeft.Visibility = Visibility.Collapsed;
+            ThreeFloorGroupBoxRight.Visibility = Visibility.Collapsed;
+
+            FourFloor.Visibility = Visibility.Visible;
+            SupportCode.Text = "C1详图";
+        }
+
+        private void TypeC_Button_Unchecked(object sender, RoutedEventArgs e)
+        {
+            OneFloorGroupBox.Visibility = Visibility.Collapsed;
+            TwoFloorGroupBox.Visibility = Visibility.Collapsed;
+            ThreeFloorGroupBox.Visibility = Visibility.Collapsed;
+            FourFloorGroupBox.Visibility = Visibility.Collapsed;
+
+            OneFloorGroupBoxLeft.Visibility = Visibility.Visible;
+            OneFloorGroupBoxRight.Visibility = Visibility.Visible;
+            TwoFloorGroupBoxLeft.Visibility = Visibility.Visible;
+            TwoFloorGroupBoxRight.Visibility = Visibility.Visible;
+            ThreeFloorGroupBoxLeft.Visibility = Visibility.Visible;
+            ThreeFloorGroupBoxRight.Visibility = Visibility.Visible;
+
+            FourFloor.Visibility = Visibility.Collapsed;         
+        }
+        private void TypeA_Button_Checked(object sender, RoutedEventArgs e)
+        {
+            SupportCode.Text = "A1详图";
+        }
+
+        private void TypeB_Button_Checked(object sender, RoutedEventArgs e)
+        {
+            SupportCode.Text = "B1详图";
+        }
+
+        private void TypeD_Button_Checked(object sender, RoutedEventArgs e)
+        {
+            SupportCode.Text = "D1详图";
+        }
+
+        private void TypeE_Button_Checked(object sender, RoutedEventArgs e)
+        {
+            SupportCode.Text = "E1详图";
+        }
+
+        private void TypeF_Button_Checked(object sender, RoutedEventArgs e)
+        {
+            SupportCode.Text = "F1详图";
+        }
+
+        private void TypeG_Button_Checked(object sender, RoutedEventArgs e)
+        {
+            SupportCode.Text = "G1详图";
+        }
+        private void OneFloorRightPipe1_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorRightPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorRightPipe2_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorRightPipe2_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorRightSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TwoFloorLeftPipe1_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TwoFloorLeftPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TwoFloorLeftPipe2_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TwoFloorLeftPipe2_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TwoFloorLeftSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TwoFloorRightPipe1_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TwoFloorRightPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorRightPipe2_Checked_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OneFloorRightPipe2_Unchecked_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorLeftPipe1_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorLeftPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorLeftPipe2_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorLeftPipe2_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorLeftSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorRightPipe1_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorRightPipe1_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorRightPipe2_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorRightPipe2_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThreeFloorRightSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
     }
 }
