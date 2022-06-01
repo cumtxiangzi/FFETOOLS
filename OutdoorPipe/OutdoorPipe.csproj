@@ -183,7 +183,9 @@
   <ItemGroup>
     <Resource Include="Resources\C型支架一层.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\C型支架四层.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Y型过滤器.jpg" />
   </ItemGroup>
@@ -570,6 +572,36 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\壁挂式电热水器.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\C型支架三层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\A型支架二层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\A型支架一层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\B型支架二层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\B型支架二层带桥架.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\B型支架三层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\B型支架一层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\B型支架一层带桥架.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\A型支架二层带桥架.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\A型支架一层带桥架.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

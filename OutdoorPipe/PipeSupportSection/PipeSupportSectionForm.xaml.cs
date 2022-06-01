@@ -186,13 +186,12 @@ namespace FFETOOLS
         private void OK_Button_Click(object sender, RoutedEventArgs e)
         {
             eventHandlerPipeSupportSection.Raise();
-            if (TypeC_Button.IsChecked == true)
-            {
-                string result = Regex.Replace(SupportCode.Text, @"[^0-9]+", ""); //只保留数字
-                name = SupportCode.Text.Replace(result, "");
-                clickNum = Convert.ToInt32(result);
-                SupportCode.Text = name.Insert(1, clickNum.ToString());
-            }
+
+            string result = Regex.Replace(SupportCode.Text, @"[^0-9]+", ""); //只保留数字
+            name = SupportCode.Text.Replace(result, "");
+            clickNum = Convert.ToInt32(result);
+            SupportCode.Text = name.Insert(1, clickNum.ToString());
+
             clickNum++;
             Hide();
         }
@@ -217,6 +216,24 @@ namespace FFETOOLS
                 TwoFloorGroupBoxRight.IsEnabled = false;
                 ThreeFloorGroupBoxRight.IsEnabled = false;
 
+                OneFloorPipe2.IsChecked = true;
+                TwoFloorPipe2.IsChecked = true;
+
+                if (TypeA_Button.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架一层.jpg", UriKind.Relative));
+                }
+                if (TypeB_Button.IsChecked == true)
+                {
+                    if (CableTray.IsChecked == true)
+                    {
+                        PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架一层带桥架.jpg", UriKind.Relative));
+                    }
+                    else
+                    {
+                        PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架一层.jpg", UriKind.Relative));
+                    }
+                }
                 if (TypeC_Button.IsChecked == true)
                 {
                     PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架一层.jpg", UriKind.Relative));
@@ -242,6 +259,24 @@ namespace FFETOOLS
                 TwoFloorGroupBoxRight.IsEnabled = true;
                 ThreeFloorGroupBoxRight.IsEnabled = false;
 
+                OneFloorPipe2.IsChecked = true;
+                TwoFloorPipe2.IsChecked = true;
+
+                if (TypeA_Button.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架二层.jpg", UriKind.Relative));
+                }
+                if (TypeB_Button.IsChecked == true)
+                {
+                    if (CableTray.IsChecked == true)
+                    {
+                        PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架二层带桥架.jpg", UriKind.Relative));
+                    }
+                    else
+                    {
+                        PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架二层.jpg", UriKind.Relative));
+                    }
+                }
                 if (TypeC_Button.IsChecked == true)
                 {
                     PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架两层.jpg", UriKind.Relative));
@@ -265,6 +300,18 @@ namespace FFETOOLS
                 OneFloorGroupBoxRight.IsEnabled = true;
                 TwoFloorGroupBoxRight.IsEnabled = true;
                 ThreeFloorGroupBoxRight.IsEnabled = true;
+
+                OneFloorPipe2.IsChecked = false;
+                TwoFloorPipe2.IsChecked = false;
+
+                if (TypeB_Button.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架三层.jpg", UriKind.Relative));
+                }
+                if (TypeC_Button.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架三层.jpg", UriKind.Relative));
+                }
             }
         }
 
@@ -276,6 +323,14 @@ namespace FFETOOLS
                 TwoFloorGroupBox.IsEnabled = true;
                 ThreeFloorGroupBox.IsEnabled = true;
                 FourFloorGroupBox.IsEnabled = true;
+
+                OneFloorPipe2.IsChecked = false;
+                TwoFloorPipe2.IsChecked = false;
+
+                if (TypeC_Button.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/C型支架四层.jpg", UriKind.Relative));
+                }
             }
         }
 
@@ -508,11 +563,39 @@ namespace FFETOOLS
             ThreeFloorGroupBoxLeft.Visibility = Visibility.Visible;
             ThreeFloorGroupBoxRight.Visibility = Visibility.Visible;
 
-            FourFloor.Visibility = Visibility.Collapsed;         
+            FourFloor.Visibility = Visibility.Collapsed;
         }
         private void TypeA_Button_Checked(object sender, RoutedEventArgs e)
         {
             SupportCode.Text = "A1详图";
+            ThreeFloor.Visibility = Visibility.Collapsed;
+
+            if (OneFloor.IsChecked == true)
+            {
+                if (CableTray.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架一层带桥架.jpg", UriKind.Relative));
+                }
+                else
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架一层.jpg", UriKind.Relative));
+                }             
+            }
+            if (TwoFloor.IsChecked == true)
+            {
+                if (CableTray.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架二层带桥架.jpg", UriKind.Relative));
+                }
+                else
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架二层.jpg", UriKind.Relative));
+                }
+            }      
+        }
+        private void TypeA_Button_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ThreeFloor.Visibility = Visibility.Visible;
         }
 
         private void TypeB_Button_Checked(object sender, RoutedEventArgs e)
@@ -658,6 +741,61 @@ namespace FFETOOLS
         {
 
         }
-        
+
+        private void CableTray_Checked(object sender, RoutedEventArgs e)
+        {
+            if (TypeA_Button.IsChecked == true)
+            {
+                if (OneFloor.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架一层带桥架.jpg", UriKind.Relative));
+                }
+                if (TwoFloor.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架二层带桥架.jpg", UriKind.Relative));
+                }
+            }
+
+            if (TypeB_Button.IsChecked == true)
+            {
+                if (OneFloor.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架一层带桥架.jpg", UriKind.Relative));
+                }
+                if (TwoFloor.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架二层带桥架.jpg", UriKind.Relative));
+                }
+            }
+        }
+
+        private void CableTray_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (TypeA_Button.IsChecked == true)
+            {
+                if (OneFloor.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架一层.jpg", UriKind.Relative));
+                }
+                if (TwoFloor.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/A型支架二层.jpg", UriKind.Relative));
+                }
+            }
+
+            if (TypeB_Button.IsChecked == true)
+            {
+                if (OneFloor.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架一层.jpg", UriKind.Relative));
+                }
+                if (TwoFloor.IsChecked == true)
+                {
+                    PipeSectionImage.Source = new BitmapImage(new Uri(@"/OutdoorPipe;component/Resources/B型支架二层.jpg", UriKind.Relative));
+                }
+            }
+        }
+
+
     }
 }

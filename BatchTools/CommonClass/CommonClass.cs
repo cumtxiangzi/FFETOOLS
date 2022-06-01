@@ -974,6 +974,24 @@ namespace FFETOOLS
             return true;
         }
     }
+    
+    //尺寸标注及标高标注的过滤条件
+    public class DimensionAndElevationSelectionFilter : ISelectionFilter
+    {
+        public bool AllowElement(Element e)
+        {
+            if (e.Category.Name == "尺寸标注" || e.Category.Name =="高程点")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool AllowReference(Reference r, XYZ p)
+        {
+            return true;
+        }
+    }
     public class GridFilter : ISelectionFilter
     {
         public bool AllowElement(Element elem)

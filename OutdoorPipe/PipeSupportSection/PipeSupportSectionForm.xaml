@@ -46,7 +46,7 @@
                 </Grid.RowDefinitions>
 
                 <RadioButton x:Name="TypeA_Button"  Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="A型支架"
-                             Checked="TypeA_Button_Checked"/>
+                             Checked="TypeA_Button_Checked" Unchecked="TypeA_Button_Unchecked"/>
                 <RadioButton x:Name="TypeB_Button" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="B型支架"
                              Checked="TypeB_Button_Checked"/>
                 <RadioButton x:Name="TypeC_Button" Grid.Column="2" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="C型支架"
@@ -58,7 +58,7 @@
                 <RadioButton x:Name="TypeF_Button" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="F型支架"
                              Checked="TypeF_Button_Checked"/>
                 <RadioButton x:Name="TypeG_Button" Grid.Column="2" Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="G型支架"
-                             Checked="TypeG_Button_Checked"/>
+                             Checked="TypeG_Button_Checked" Visibility="Collapsed"/>
 
             </Grid>
         </GroupBox>
@@ -500,7 +500,8 @@
             <TextBox x:Name="SupportCode" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,10,5" VerticalContentAlignment="Center"/>
 
             <CheckBox x:Name="Insulation"  Content="管道保温" Grid.Column="0" Grid.Row="3" Margin="25,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            <CheckBox x:Name="CableTray"  Content="电缆桥架" Grid.Column="1" Grid.Row="3" Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <CheckBox x:Name="CableTray"  Content="电缆桥架" Grid.Column="1" Grid.Row="3" Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Center"
+                      Checked="CableTray_Checked" Unchecked="CableTray_Unchecked"/>
 
             <Button x:Name="OK_Button" Content="确定"  Grid.Column="2" Grid.Row="3" Margin="17,2,17,5" Cursor="Hand" Click="OK_Button_Click">
                 <Button.Template >

@@ -83,7 +83,12 @@ namespace FFETOOLS
         {
             XYZ pickpoint = sel.PickPoint("请选择插入点");
 
+            FamilyInstance typeA_Section = null;
+            FamilyInstance typeB_Section = null;
             FamilyInstance typeC_Section = null;
+            FamilyInstance typeD_Section = null;
+            FamilyInstance typeE_Section = null;
+            FamilyInstance typeF_Section = null;
 
             TransactionGroup tg = new TransactionGroup(doc, "创建管道支架详图");
             tg.Start();
@@ -91,7 +96,33 @@ namespace FFETOOLS
             using (Transaction trans = new Transaction(doc, "载入支架详图族"))
             {
                 trans.Start();
-                DetailDrawingFamilyLoad(doc, "C型支架");
+
+                if (PipeSupportSection.mainfrm.TypeA_Button.IsChecked == true)
+                {
+                    DetailDrawingFamilyLoad(doc, "A型支架");
+                }
+                else if (PipeSupportSection.mainfrm.TypeB_Button.IsChecked == true)
+                {
+                    DetailDrawingFamilyLoad(doc, "B型支架");
+                }
+                else if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
+                {
+                    DetailDrawingFamilyLoad(doc, "C型支架");
+                    DetailDrawingFamilyLoad(doc, "C型支架三四层");
+                }
+                else if (PipeSupportSection.mainfrm.TypeD_Button.IsChecked == true)
+                {
+                    DetailDrawingFamilyLoad(doc, "D型支架");
+                }
+                else if (PipeSupportSection.mainfrm.TypeE_Button.IsChecked == true)
+                {
+                    DetailDrawingFamilyLoad(doc, "E型支架");
+                }
+                else if (PipeSupportSection.mainfrm.TypeF_Button.IsChecked == true)
+                {
+                    DetailDrawingFamilyLoad(doc, "F型支架");
+                }
+
                 DetailDrawingTitleLoad(doc, "图名");
                 DetailDrawingTitleLoad(doc, "支架剖面管道标注");
 
@@ -100,13 +131,54 @@ namespace FFETOOLS
             using (Transaction trans = new Transaction(doc, "布置支架详图族"))
             {
                 trans.Start();
-                if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
+
+                if (PipeSupportSection.mainfrm.TypeA_Button.IsChecked == true)
+                {
+                    FamilySymbol typeA_SectionSymbol = null;
+                    typeA_SectionSymbol = PipeSupportSectionSymbol(doc, PipeSupportSection.mainfrm.TypeA_Button.Content.ToString());
+                    typeA_SectionSymbol.Activate();
+                    typeA_Section = doc.Create.NewFamilyInstance(pickpoint, typeA_SectionSymbol, doc.ActiveView);
+                    //ModifyParameter(typeA_Section);
+                }
+                else if (PipeSupportSection.mainfrm.TypeB_Button.IsChecked == true)
+                {
+                    FamilySymbol typeB_SectionSymbol = null;
+                    typeB_SectionSymbol = PipeSupportSectionSymbol(doc, PipeSupportSection.mainfrm.TypeB_Button.Content.ToString());
+                    typeB_SectionSymbol.Activate();
+                    typeB_Section = doc.Create.NewFamilyInstance(pickpoint, typeB_SectionSymbol, doc.ActiveView);
+                    //ModifyParameter(typeB_Section);
+                }
+                else if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
                 {
                     FamilySymbol typeC_SectionSymbol = null;
                     typeC_SectionSymbol = PipeSupportSectionSymbol(doc, PipeSupportSection.mainfrm.TypeC_Button.Content.ToString());
                     typeC_SectionSymbol.Activate();
                     typeC_Section = doc.Create.NewFamilyInstance(pickpoint, typeC_SectionSymbol, doc.ActiveView);
-                    ModifyParameter(typeC_Section);
+                    TypeC_ModifyParameter(typeC_Section);
+                }
+                else if (PipeSupportSection.mainfrm.TypeD_Button.IsChecked == true)
+                {
+                    FamilySymbol typeD_SectionSymbol = null;
+                    typeD_SectionSymbol = PipeSupportSectionSymbol(doc, PipeSupportSection.mainfrm.TypeD_Button.Content.ToString());
+                    typeD_SectionSymbol.Activate();
+                    typeD_Section = doc.Create.NewFamilyInstance(pickpoint, typeD_SectionSymbol, doc.ActiveView);
+                    //ModifyParameter(typeD_Section);
+                }
+                else if (PipeSupportSection.mainfrm.TypeE_Button.IsChecked == true)
+                {
+                    FamilySymbol typeE_SectionSymbol = null;
+                    typeE_SectionSymbol = PipeSupportSectionSymbol(doc, PipeSupportSection.mainfrm.TypeE_Button.Content.ToString());
+                    typeE_SectionSymbol.Activate();
+                    typeE_Section = doc.Create.NewFamilyInstance(pickpoint, typeE_SectionSymbol, doc.ActiveView);
+                    //ModifyParameter(typeE_Section);
+                }
+                else if (PipeSupportSection.mainfrm.TypeF_Button.IsChecked == true)
+                {
+                    FamilySymbol typeF_SectionSymbol = null;
+                    typeF_SectionSymbol = PipeSupportSectionSymbol(doc, PipeSupportSection.mainfrm.TypeF_Button.Content.ToString());
+                    typeF_SectionSymbol.Activate();
+                    typeF_Section = doc.Create.NewFamilyInstance(pickpoint, typeF_SectionSymbol, doc.ActiveView);
+                    //ModifyParameter(typeF_Section);
                 }
 
                 trans.Commit();
@@ -172,10 +244,11 @@ namespace FFETOOLS
             }
 
             tg.Assimilate();
+
             PipeSupportSection.mainfrm.SupportCode.Text = PipeSupportSection.mainfrm.name.Insert(1, PipeSupportSection.mainfrm.clickNum.ToString());
             PipeSupportSection.mainfrm.Show();
         }
-        public void ModifyParameter(FamilyInstance sectionInstance) //修改参数
+        public void TypeC_ModifyParameter(FamilyInstance sectionInstance) //C型支架修改参数
         {
             sectionInstance.LookupParameter("支柱名称").Set(PipeSupportSection.mainfrm.WorkshopGridName.Text);
             sectionInstance.LookupParameter("支架底部标高").Set(PipeSupportSection.mainfrm.LevelValue.Text);

@@ -136,14 +136,47 @@
   <data name="90弯头" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\90弯头.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="A型支架一层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\A型支架一层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="A型支架一层带桥架" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\A型支架一层带桥架.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="A型支架二层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\A型支架二层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="A型支架二层带桥架" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\A型支架二层带桥架.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="B型支架一层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\B型支架一层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="B型支架一层带桥架" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\B型支架一层带桥架.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="B型支架三层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\B型支架三层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="B型支架二层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\B型支架二层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="B型支架二层带桥架" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\B型支架二层带桥架.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="COD检测仪" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\COD检测仪.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="C型支架一层" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\C型支架一层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="C型支架三层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\C型支架三层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="C型支架两层" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\C型支架两层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="C型支架四层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\C型支架四层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DSE商用热水器" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DSE商用热水器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
