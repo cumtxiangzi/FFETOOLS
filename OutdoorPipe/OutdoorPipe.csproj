@@ -178,12 +178,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\C型支架两层.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\C型支架一层.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\C型支架四层.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -602,6 +596,27 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\A型支架一层带桥架.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\D型支架二层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\D型支架一层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\E型支架二层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\E型支架一层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\F型支架.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\C型支架二层.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\C型支架一层.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

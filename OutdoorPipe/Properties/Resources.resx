@@ -172,8 +172,8 @@
   <data name="C型支架三层" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\C型支架三层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="C型支架两层" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\C型支架两层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="C型支架二层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\C型支架二层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="C型支架四层" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\C型支架四层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -183,6 +183,21 @@
   </data>
   <data name="DVE商用热水器" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DVE商用热水器.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="D型支架一层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\D型支架一层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="D型支架二层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\D型支架二层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="E型支架一层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E型支架一层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="E型支架二层" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E型支架二层.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="F型支架" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\F型支架.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IG541瓶组" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IG541瓶组.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
