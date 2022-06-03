@@ -318,7 +318,7 @@ namespace FFETOOLS
             string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString().Replace("DN", "");
             string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString().Replace("DN", "");
             string oneFloorRightPipe1_Size = PipeSupportSection.mainfrm.OneFloorRightPipe1_Size.SelectedItem.ToString().Replace("DN", "");
-            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString().Replace("DN", "");
+            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString().Replace("DN", "");                    
 
             bool oneFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe1.IsChecked;
             bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
@@ -466,6 +466,7 @@ namespace FFETOOLS
 
                     sectionInstance.LookupParameter("二层左侧管道1与支柱壁间距").SetValueString(PipeDistance(oneFloorLeftPipe1_Size).Item1.ToString());
                     sectionInstance.LookupParameter("二层左侧横撑长度L").SetValueString((PipeDistance(oneFloorLeftPipe1_Size).Item3 + PipeDistance(oneFloorLeftPipe1_Size).Item1).ToString());
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString(GetFloorHeight(Convert.ToInt32(oneFloorLeftPipe1_Size)).ToString());
                 }
                 if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
                 {
@@ -478,6 +479,7 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层右侧管道1与支柱壁间距").SetValueString(PipeDistance(oneFloorRightPipe1_Size).Item1.ToString());
                     sectionInstance.LookupParameter("二层右侧横撑长度L").SetValueString((PipeDistance(oneFloorRightPipe1_Size).Item3 + 
                         PipeDistance(oneFloorRightPipe1_Size).Item1).ToString());
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString(GetFloorHeight(Convert.ToInt32(oneFloorRightPipe1_Size)).ToString());
                 }
 
                 if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
@@ -495,6 +497,14 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层左侧横撑长度L").SetValueString((PipeDistance(oneFloorLeftPipe2_Size).Item3
                         + PipeDistance(oneFloorLeftPipe1_Size).Item1+PipeDistance(oneFloorLeftPipe1_Size).Item2 / 2 +
                         PipeDistance(oneFloorLeftPipe2_Size).Item2 / 2).ToString());
+
+                    List<int> pipeSizeList = new List<int>();
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe1_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe2_Size));
+                    pipeSizeList.Sort();
+                    int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
+                    int floorHeight = GetFloorHeight(maxPipeSize);
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
                 {
@@ -510,6 +520,14 @@ namespace FFETOOLS
                         + PipeDistance(oneFloorLeftPipe1_Size).Item1).ToString());
                     sectionInstance.LookupParameter("二层右侧横撑长度L").SetValueString((PipeDistance(oneFloorRightPipe1_Size).Item3
                       + PipeDistance(oneFloorRightPipe1_Size).Item1).ToString());
+
+                    List<int> pipeSizeList = new List<int>();
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe1_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
+                    pipeSizeList.Sort();
+                    int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
+                    int floorHeight = GetFloorHeight(maxPipeSize);
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
                 {
@@ -526,6 +544,14 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层右侧横撑长度L").SetValueString((PipeDistance(oneFloorRightPipe2_Size).Item3
                         + PipeDistance(oneFloorRightPipe1_Size).Item1 + PipeDistance(oneFloorRightPipe1_Size).Item2 / 2 +
                         PipeDistance(oneFloorRightPipe2_Size).Item2 / 2).ToString());
+                    
+                    List<int> pipeSizeList = new List<int>();
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
+                    pipeSizeList.Sort();
+                    int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
+                    int floorHeight = GetFloorHeight(maxPipeSize);
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
 
                 if (oneFloorRightPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
@@ -545,6 +571,15 @@ namespace FFETOOLS
                         PipeDistance(oneFloorLeftPipe2_Size).Item2 / 2).ToString());
                     sectionInstance.LookupParameter("二层右侧横撑长度L").SetValueString((PipeDistance(oneFloorRightPipe1_Size).Item3
                      + PipeDistance(oneFloorRightPipe1_Size).Item1).ToString());
+
+                    List<int> pipeSizeList = new List<int>();
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe1_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe2_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
+                    pipeSizeList.Sort();
+                    int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
+                    int floorHeight = GetFloorHeight(maxPipeSize);
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (oneFloorRightPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
                 {
@@ -563,6 +598,15 @@ namespace FFETOOLS
                         PipeDistance(oneFloorRightPipe2_Size).Item2 / 2).ToString());
                     sectionInstance.LookupParameter("二层左侧横撑长度L").SetValueString((PipeDistance(oneFloorLeftPipe1_Size).Item3
                      + PipeDistance(oneFloorLeftPipe1_Size).Item1).ToString());
+
+                    List<int> pipeSizeList = new List<int>();
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe1_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
+                    pipeSizeList.Sort();
+                    int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
+                    int floorHeight = GetFloorHeight(maxPipeSize);
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
 
                 if (oneFloorRightPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
@@ -585,6 +629,16 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层右侧横撑长度L").SetValueString((PipeDistance(oneFloorRightPipe1_Size).Item3
                      + PipeDistance(oneFloorRightPipe1_Size).Item1+ PipeDistance(oneFloorRightPipe1_Size).Item2 / 2 +
                         PipeDistance(oneFloorRightPipe2_Size).Item2 / 2).ToString());
+
+                    List<int> pipeSizeList = new List<int>();
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe1_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe2_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
+                    pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
+                    pipeSizeList.Sort();
+                    int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
+                    int floorHeight = GetFloorHeight(maxPipeSize);
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
             }        
 
@@ -2698,6 +2752,32 @@ namespace FFETOOLS
 
             Tuple<int, int, int> tup = new Tuple<int, int, int>(distance1, distance2, distance3);
             return tup;
+        }
+        public int GetFloorHeight(int pipeSize)
+        {
+            int height = 500;
+            if(pipeSize == 15 || pipeSize == 20 || pipeSize == 25 || pipeSize == 32 || pipeSize == 40 || pipeSize == 50)
+            {
+                height = 200;
+            }
+            else if(pipeSize == 65 || pipeSize == 80 || pipeSize == 100 || pipeSize == 125 || pipeSize == 150)
+            {
+                height =300;
+            }
+            else if (pipeSize == 200 || pipeSize == 250 )
+            {
+                height = 400;
+            }
+            else if (pipeSize == 300 || pipeSize == 350)
+            {
+                height = 500;
+            }
+            else if (pipeSize == 400 || pipeSize == 450)
+            {
+                height = 600;
+            }
+
+            return height;
         }
         public int GetPipeDistance10(double num)
         {
