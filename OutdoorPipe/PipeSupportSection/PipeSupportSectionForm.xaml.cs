@@ -376,6 +376,11 @@ namespace FFETOOLS
                     ThreeFloorPipe2.IsChecked= false;
                     ThreeFloorPipe2_Size.IsEnabled = false;
                     ThreeFloorPipe2_Abb.IsEnabled = false;
+
+                    OneFloorPipe3.IsChecked = false;
+                    OneFloorPipe4.IsChecked = false;
+                    TwoFloorPipe3.IsChecked = false;
+                    TwoFloorPipe4.IsChecked = false;
                 }
             }
         }
@@ -398,6 +403,11 @@ namespace FFETOOLS
                     FourFloorPipe2.IsChecked=false;
                     FourFloorPipe2_Size.IsEnabled = false;
                     FourFloorPipe2_Abb.IsEnabled = false;
+
+                    OneFloorPipe3.IsChecked = false;
+                    OneFloorPipe4.IsChecked = false;
+                    TwoFloorPipe3.IsChecked = false;
+                    TwoFloorPipe4.IsChecked = false;
                 }
             }
         }

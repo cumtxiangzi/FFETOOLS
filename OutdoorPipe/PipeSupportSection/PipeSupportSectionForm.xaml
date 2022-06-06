@@ -94,15 +94,14 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox x:Name="OneFloorLeftPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="OneFloorLeftPipe1_Checked"  Unchecked="OneFloorLeftPipe1_Unchecked"/>
-                <CheckBox x:Name="OneFloorLeftPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="OneFloorLeftPipe2_Checked"  Unchecked="OneFloorLeftPipe2_Unchecked"/>
+                <CheckBox x:Name="OneFloorLeftPipe1"  Grid.Column="2" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="OneFloorLeftPipe1_Checked"  Unchecked="OneFloorLeftPipe1_Unchecked"/>
+                <CheckBox x:Name="OneFloorLeftPipe2" Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="OneFloorLeftPipe2_Checked"  Unchecked="OneFloorLeftPipe2_Unchecked"/>
 
-                <ComboBox x:Name="OneFloorLeftPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
-                <ComboBox x:Name="OneFloorLeftPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="OneFloorLeftPipe1_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="OneFloorLeftPipe2_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
 
-                <ComboBox x:Name="OneFloorLeftPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
-                <ComboBox x:Name="OneFloorLeftPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
-
+                <ComboBox x:Name="OneFloorLeftPipe1_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="OneFloorLeftPipe2_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
 
                 <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -134,14 +133,13 @@
                 </Grid.RowDefinitions>
 
                 <CheckBox x:Name="OneFloorRightPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="OneFloorRightPipe1_Checked"  Unchecked="OneFloorRightPipe1_Unchecked"/>
-                <CheckBox x:Name="OneFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="OneFloorRightPipe2_Checked"  Unchecked="OneFloorRightPipe2_Unchecked"/>
+                <CheckBox x:Name="OneFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="OneFloorRightPipe2_Checked"  Unchecked="OneFloorRightPipe2_Unchecked"/>
 
                 <ComboBox x:Name="OneFloorRightPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
                 <ComboBox x:Name="OneFloorRightPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
 
                 <ComboBox x:Name="OneFloorRightPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
                 <ComboBox x:Name="OneFloorRightPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
-
 
                 <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -215,15 +213,14 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox x:Name="TwoFloorLeftPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="TwoFloorLeftPipe1_Checked"  Unchecked="TwoFloorLeftPipe1_Unchecked"/>
-                <CheckBox x:Name="TwoFloorLeftPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="TwoFloorLeftPipe2_Checked"  Unchecked="TwoFloorLeftPipe2_Unchecked"/>
+                <CheckBox x:Name="TwoFloorLeftPipe1"  Grid.Column="2" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="TwoFloorLeftPipe1_Checked"  Unchecked="TwoFloorLeftPipe1_Unchecked"/>
+                <CheckBox x:Name="TwoFloorLeftPipe2" Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="TwoFloorLeftPipe2_Checked"  Unchecked="TwoFloorLeftPipe2_Unchecked"/>
 
-                <ComboBox x:Name="TwoFloorLeftPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
-                <ComboBox x:Name="TwoFloorLeftPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="TwoFloorLeftPipe1_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="TwoFloorLeftPipe2_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
 
-                <ComboBox x:Name="TwoFloorLeftPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
-                <ComboBox x:Name="TwoFloorLeftPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
-
+                <ComboBox x:Name="TwoFloorLeftPipe1_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="TwoFloorLeftPipe2_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
 
                 <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -255,7 +252,7 @@
                 </Grid.RowDefinitions>
 
                 <CheckBox x:Name="TwoFloorRightPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="TwoFloorRightPipe1_Checked"  Unchecked="TwoFloorRightPipe1_Unchecked"/>
-                <CheckBox x:Name="TwoFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="TwoFloorRightPipe2_Checked"  Unchecked="TwoFloorRightPipe2_Unchecked"/>
+                <CheckBox x:Name="TwoFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="TwoFloorRightPipe2_Checked"  Unchecked="TwoFloorRightPipe2_Unchecked"/>
 
                 <ComboBox x:Name="TwoFloorRightPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
                 <ComboBox x:Name="TwoFloorRightPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
@@ -336,15 +333,14 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <CheckBox x:Name="ThreeFloorLeftPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="ThreeFloorLeftPipe1_Checked"  Unchecked="ThreeFloorLeftPipe1_Unchecked"/>
-                <CheckBox x:Name="ThreeFloorLeftPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="ThreeFloorLeftPipe2_Checked"  Unchecked="ThreeFloorLeftPipe2_Unchecked"/>
+                <CheckBox x:Name="ThreeFloorLeftPipe1"  Grid.Column="2" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="ThreeFloorLeftPipe1_Checked"  Unchecked="ThreeFloorLeftPipe1_Unchecked"/>
+                <CheckBox x:Name="ThreeFloorLeftPipe2" Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="ThreeFloorLeftPipe2_Checked"  Unchecked="ThreeFloorLeftPipe2_Unchecked"/>
 
-                <ComboBox x:Name="ThreeFloorLeftPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
-                <ComboBox x:Name="ThreeFloorLeftPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="ThreeFloorLeftPipe1_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
+                <ComboBox x:Name="ThreeFloorLeftPipe2_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
 
-                <ComboBox x:Name="ThreeFloorLeftPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
-                <ComboBox x:Name="ThreeFloorLeftPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
-
+                <ComboBox x:Name="ThreeFloorLeftPipe1_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
+                <ComboBox x:Name="ThreeFloorLeftPipe2_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
 
                 <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -376,14 +372,13 @@
                 </Grid.RowDefinitions>
 
                 <CheckBox x:Name="ThreeFloorRightPipe1"  Grid.Column="1" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="管道1" Checked="ThreeFloorRightPipe1_Checked"  Unchecked="ThreeFloorRightPipe1_Unchecked"/>
-                <CheckBox x:Name="ThreeFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="ThreeFloorRightPipe2_Checked"  Unchecked="ThreeFloorRightPipe2_Unchecked"/>
+                <CheckBox x:Name="ThreeFloorRightPipe2" Grid.Column="2" Grid.Row="0" Margin="1,5,1,1" VerticalAlignment="Center"  HorizontalAlignment="Center" Content="管道2" Checked="ThreeFloorRightPipe2_Checked"  Unchecked="ThreeFloorRightPipe2_Unchecked"/>
 
                 <ComboBox x:Name="ThreeFloorRightPipe1_Size"  Grid.Column="1" Grid.Row="1" Margin="7,5,7,5" />
                 <ComboBox x:Name="ThreeFloorRightPipe2_Size"  Grid.Column="2" Grid.Row="1" Margin="7,5,7,5" />
 
                 <ComboBox x:Name="ThreeFloorRightPipe1_Abb"  Grid.Column="1" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
                 <ComboBox x:Name="ThreeFloorRightPipe2_Abb"  Grid.Column="2" Grid.Row="2" Margin="7,5,7,5" IsEditable="True"/>
-
 
                 <Label Content="管道直径:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <Label Content="管道缩写:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
