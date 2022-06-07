@@ -244,6 +244,15 @@ namespace FFETOOLS
                 if (PipeSupportSection.mainfrm.TypeA_Button.IsChecked == true)
                 {
                     CreatTitle(doc, pickpoint, typeA_Section);
+
+                    if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+                    {
+                        TypeA_CreatOneFloorPipeNote(doc, typeA_Section);
+                    }
+                    else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+                    {
+                        TypeA_CreatTwoFloorPipeNote(doc, typeA_Section);
+                    }
                 }
                 else if (PipeSupportSection.mainfrm.TypeB_Button.IsChecked == true)
                 {
@@ -256,6 +265,10 @@ namespace FFETOOLS
                     else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
                     {
                         TypeB_CreatTwoFloorPipeNote(doc, typeB_Section);
+                    }
+                    else if (PipeSupportSection.mainfrm.ThreeFloor.IsChecked == true)
+                    {
+                        TypeB_CreatThreeFloorPipeNote(doc, typeB_Section);
                     }
                 }
                 else if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
@@ -290,15 +303,32 @@ namespace FFETOOLS
                 {
                     CreatTitle(doc, pickpoint, typeD_Section);
 
+                    if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+                    {
+                        TypeD_CreatOneFloorPipeNote(doc, typeD_Section);
+                    }
+                    else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+                    {
+                        TypeD_CreatTwoFloorPipeNote(doc, typeD_Section);
+                    }
                 }
                 else if (PipeSupportSection.mainfrm.TypeE_Button.IsChecked == true)
                 {
                     CreatTitle(doc, pickpoint, typeE_Section);
 
+                    if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+                    {
+                        TypeE_CreatOneFloorPipeNote(doc, typeE_Section);
+                    }
+                    else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+                    {
+                        TypeE_CreatTwoFloorPipeNote(doc, typeE_Section);
+                    }
+
                 }
                 else if (PipeSupportSection.mainfrm.TypeF_Button.IsChecked == true)
                 {
-
+                    TypeF_CreatOneFloorPipeNote(doc, typeF_Section);
                 }
 
                 trans.Commit();
@@ -1874,7 +1904,7 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层左侧管道1与支柱壁间距").SetValueString(PipeDistance(oneFloorLeftPipe1_Size).Item1.ToString());
                     sectionInstance.LookupParameter("二层左侧横撑长度L").SetValueString((PipeDistance(oneFloorLeftPipe1_Size).Item3 + PipeDistance(oneFloorLeftPipe1_Size).Item1).ToString());
 
-                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorLeftPipe1_Size))+100).ToString());
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorLeftPipe1_Size)) + 100).ToString());
                 }
                 if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
                 {
@@ -1888,7 +1918,7 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层右侧横撑长度L").SetValueString((PipeDistance(oneFloorRightPipe1_Size).Item3 +
                         PipeDistance(oneFloorRightPipe1_Size).Item1).ToString());
 
-                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorRightPipe1_Size))+100).ToString());
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorRightPipe1_Size)) + 100).ToString());
                 }
 
                 if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
@@ -1906,13 +1936,13 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层左侧横撑长度L").SetValueString((PipeDistance(oneFloorLeftPipe2_Size).Item3
                         + PipeDistance(oneFloorLeftPipe1_Size).Item1 + PipeDistance(oneFloorLeftPipe1_Size).Item2 / 2 +
                         PipeDistance(oneFloorLeftPipe2_Size).Item2 / 2).ToString());
-                   
+
                     List<int> pipeSizeList = new List<int>();
                     pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe1_Size));
                     pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
@@ -1935,7 +1965,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
@@ -1953,13 +1983,13 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层右侧横撑长度L").SetValueString((PipeDistance(oneFloorRightPipe2_Size).Item3
                         + PipeDistance(oneFloorRightPipe1_Size).Item1 + PipeDistance(oneFloorRightPipe1_Size).Item2 / 2 +
                         PipeDistance(oneFloorRightPipe2_Size).Item2 / 2).ToString());
-                    
+
                     List<int> pipeSizeList = new List<int>();
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
 
@@ -1987,7 +2017,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
@@ -2014,7 +2044,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
 
@@ -2046,7 +2076,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
             }
@@ -2064,7 +2094,7 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层左侧管道1与支柱壁间距").SetValueString(PipeDistance(twoFloorLeftPipe1_Size).Item1.ToString());
                     sectionInstance.LookupParameter("二层左侧横撑长度L").SetValueString((PipeDistance(twoFloorLeftPipe1_Size).Item3 + PipeDistance(twoFloorLeftPipe1_Size).Item1).ToString());
 
-                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(twoFloorLeftPipe1_Size))+0).ToString());
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(twoFloorLeftPipe1_Size)) + 0).ToString());
                 }
                 if (!twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
                 {
@@ -2078,7 +2108,7 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("二层右侧横撑长度L").SetValueString((PipeDistance(twoFloorRightPipe1_Size).Item3 +
                         PipeDistance(twoFloorRightPipe1_Size).Item1).ToString());
 
-                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(twoFloorRightPipe1_Size))+0).ToString());
+                    sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(twoFloorRightPipe1_Size)) + 0).ToString());
                 }
 
                 if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
@@ -2102,7 +2132,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(twoFloorLeftPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+0;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 0;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
@@ -2125,7 +2155,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe1_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+0;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 0;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (!twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
@@ -2149,7 +2179,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+0;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 0;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
 
@@ -2177,7 +2207,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe1_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+0;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 0;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
@@ -2204,7 +2234,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+0;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 0;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
 
@@ -2236,7 +2266,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+0;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 0;
                     sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
                 }
 
@@ -2252,7 +2282,7 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("一层左侧管道1与支柱壁间距").SetValueString(PipeDistance(oneFloorLeftPipe1_Size).Item1.ToString());
                     sectionInstance.LookupParameter("一层左侧横撑长度L").SetValueString((PipeDistance(oneFloorLeftPipe1_Size).Item3 + PipeDistance(oneFloorLeftPipe1_Size).Item1).ToString());
 
-                    sectionInstance.LookupParameter("一层与二层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorLeftPipe1_Size))+100).ToString());
+                    sectionInstance.LookupParameter("一层与二层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorLeftPipe1_Size)) + 100).ToString());
                 }
                 if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
                 {
@@ -2266,7 +2296,7 @@ namespace FFETOOLS
                     sectionInstance.LookupParameter("一层右侧横撑长度L").SetValueString((PipeDistance(oneFloorRightPipe1_Size).Item3 +
                         PipeDistance(oneFloorRightPipe1_Size).Item1).ToString());
 
-                    sectionInstance.LookupParameter("一层与二层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorRightPipe1_Size))+100).ToString());
+                    sectionInstance.LookupParameter("一层与二层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorRightPipe1_Size)) + 100).ToString());
                 }
 
                 if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
@@ -2290,7 +2320,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
@@ -2313,7 +2343,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
@@ -2337,7 +2367,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
                 }
 
@@ -2365,7 +2395,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
                 }
                 if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
@@ -2392,7 +2422,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
                 }
 
@@ -2424,7 +2454,7 @@ namespace FFETOOLS
                     pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                     pipeSizeList.Sort();
                     int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                    int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                    int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                     sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
                 }
             }
@@ -2597,8 +2627,8 @@ namespace FFETOOLS
 
                 sectionInstance.LookupParameter("二层左侧管道1与支柱壁间距").SetValueString(PipeDistance(twoFloorLeftPipe1_Size).Item1.ToString());
                 sectionInstance.LookupParameter("二层左侧横撑长度L").SetValueString((PipeDistance(twoFloorLeftPipe1_Size).Item3 + PipeDistance(twoFloorLeftPipe1_Size).Item1).ToString());
-               
-                sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(twoFloorLeftPipe1_Size))+100).ToString());
+
+                sectionInstance.LookupParameter("二层与三层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(twoFloorLeftPipe1_Size)) + 100).ToString());
             }
             if (!twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
             {
@@ -2636,7 +2666,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(twoFloorLeftPipe2_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
             }
             if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
@@ -2659,7 +2689,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe1_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
             }
             if (!twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
@@ -2683,7 +2713,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe2_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
             }
 
@@ -2711,7 +2741,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe1_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
             }
             if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
@@ -2738,7 +2768,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe2_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
             }
 
@@ -2770,7 +2800,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(twoFloorRightPipe2_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("二层与三层间距H").SetValueString(floorHeight.ToString());
             }
 
@@ -2786,7 +2816,7 @@ namespace FFETOOLS
                 sectionInstance.LookupParameter("一层左侧管道1与支柱壁间距").SetValueString(PipeDistance(oneFloorLeftPipe1_Size).Item1.ToString());
                 sectionInstance.LookupParameter("一层左侧横撑长度L").SetValueString((PipeDistance(oneFloorLeftPipe1_Size).Item3 + PipeDistance(oneFloorLeftPipe1_Size).Item1).ToString());
 
-                sectionInstance.LookupParameter("一层与二层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorLeftPipe1_Size))+100).ToString());
+                sectionInstance.LookupParameter("一层与二层间距H").SetValueString((GetFloorHeight(Convert.ToInt32(oneFloorLeftPipe1_Size)) + 100).ToString());
             }
             if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
             {
@@ -2824,7 +2854,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(oneFloorLeftPipe2_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
             }
             if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
@@ -2847,7 +2877,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
 
             }
@@ -2872,7 +2902,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
             }
 
@@ -2900,7 +2930,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe1_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
             }
             if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
@@ -2927,7 +2957,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
             }
 
@@ -2959,7 +2989,7 @@ namespace FFETOOLS
                 pipeSizeList.Add(Convert.ToInt32(oneFloorRightPipe2_Size));
                 pipeSizeList.Sort();
                 int maxPipeSize = pipeSizeList[pipeSizeList.Count - 1];
-                int floorHeight = GetFloorHeight(maxPipeSize)+100;
+                int floorHeight = GetFloorHeight(maxPipeSize) + 100;
                 sectionInstance.LookupParameter("一层与二层间距H").SetValueString(floorHeight.ToString());
             }
 
@@ -4624,7 +4654,7 @@ namespace FFETOOLS
         #endregion
 
         #region 创建支架剖面全部管道信息标注       
-        public void TypeB_CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //B型支架创建一层全部管道信息标注
+        public void TypeA_CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //A型支架创建一层全部管道信息标注
         {
             string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
             string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
@@ -4635,215 +4665,97 @@ namespace FFETOOLS
             bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
             bool oneFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe1.IsChecked;
             bool oneFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe2.IsChecked;
-            bool cableTray_Check = (bool)PipeSupportSection.mainfrm.CableTray.IsChecked;
 
             string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
             string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
             string oneFloorRightPipe1_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe1_Abb.SelectedItem.ToString();
             string oneFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe2_Abb.SelectedItem.ToString();
 
-            if (!cableTray_Check)
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
             {
-                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
-                    double length = typeC_Section.LookupParameter("三层左侧管道D1").AsDouble();
-                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
-                    CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                }
-
-                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与支柱中心间距").AsDouble();
-                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc,leftPipeNote,positionListLeft.ElementAt(0),-900);                 
-
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
-                    double lengthRight = typeC_Section.LookupParameter("三层右侧管道1与支柱中心间距").AsDouble();
-                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-                }
-
-                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与管道2间距").AsDouble();
-
-                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200); 
-                    
-                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
-                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);             
-                    
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
-                    double lengthRight = typeC_Section.LookupParameter("三层右侧管道1与支柱中心间距").AsDouble();
-                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-
-                }
-
-                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与支柱中心间距").AsDouble();
-                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
-
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
-                    double lengthRight1 = typeC_Section.LookupParameter("三层右侧管道1与管道2间距").AsDouble();
-
-                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1* Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-
-                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
-                }
-
-                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与管道2间距").AsDouble();
-
-                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
-
-                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
-                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
-
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
-                    double lengthRight1 = typeC_Section.LookupParameter("三层右侧管道1与管道2间距").AsDouble();
-
-                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-
-                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
-                }
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double length = typeC_Section.LookupParameter("二层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
             }
-            else
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
             {
-                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
-                    double length = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
-                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
-                    AnnotationSymbol leftPipeNote= CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote, positionList.ElementAt(0), -900);
-                }
-                if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
-                    double length = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
-                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
-                    AnnotationSymbol rightPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-                }
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
 
-                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
-
-                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
-
-                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
-                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
-                }
-                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
-                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
-
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
-                    double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
-                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-                }
-                if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
-                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
-
-                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) -350 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-
-                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
-                }
-
-                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
-
-                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350/ 304.8, 0);
-                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
-
-                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
-                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
-
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
-                    double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
-                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-                }
-                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
-                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
-
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
-                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
-
-                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-
-                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
-                }
-
-                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
-                {
-                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
-                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
-
-                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
-                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
-
-                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
-                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
-
-                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
-                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
-
-                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
-
-                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
-                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
-                }
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
             }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
         }
-        public void TypeB_CreatTwoFloorPipeNote(Document doc, FamilyInstance typeC_Section) //B型支架创建二层全部管道信息标注
+        public void TypeA_CreatTwoFloorPipeNote(Document doc, FamilyInstance typeC_Section) //A型支架创建二层全部管道信息标注
         {
             string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
             string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
@@ -4862,7 +4774,6 @@ namespace FFETOOLS
             bool twoFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe2.IsChecked;
             bool twoFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe1.IsChecked;
             bool twoFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe2.IsChecked;
-            bool cableTray_Check = (bool)PipeSupportSection.mainfrm.CableTray.IsChecked;
 
             string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
             string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
@@ -4872,6 +4783,193 @@ namespace FFETOOLS
             string twoFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Abb.SelectedItem.ToString();
             string twoFloorRightPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Abb.SelectedItem.ToString();
             string twoFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Abb.SelectedItem.ToString();
+
+
+            //一层管道修改
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double length = typeC_Section.LookupParameter("一层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            //二层参数修改
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double length = typeC_Section.LookupParameter("二层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+            }
+
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+        }
+        public void TypeB_CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //B型支架创建一层全部管道信息标注
+        {
+            string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
+            string oneFloorRightPipe1_Size = PipeSupportSection.mainfrm.OneFloorRightPipe1_Size.SelectedItem.ToString();
+            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString();
+
+            bool oneFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe1.IsChecked;
+            bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
+            bool oneFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe1.IsChecked;
+            bool oneFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe2.IsChecked;
+            bool cableTray_Check = (bool)PipeSupportSection.mainfrm.CableTray.IsChecked;
+
+            string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string oneFloorRightPipe1_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe1_Abb.SelectedItem.ToString();
+            string oneFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe2_Abb.SelectedItem.ToString();
 
             if (!cableTray_Check)
             {
@@ -5074,6 +5172,821 @@ namespace FFETOOLS
                 }
             }
         }
+        public void TypeB_CreatTwoFloorPipeNote(Document doc, FamilyInstance typeC_Section) //B型支架创建二层全部管道信息标注
+        {
+            string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
+            string oneFloorRightPipe1_Size = PipeSupportSection.mainfrm.OneFloorRightPipe1_Size.SelectedItem.ToString();
+            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString();
+            string twoFloorLeftPipe1_Size = PipeSupportSection.mainfrm.TwoFloorLeftPipe1_Size.SelectedItem.ToString();
+            string twoFloorLeftPipe2_Size = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Size.SelectedItem.ToString();
+            string twoFloorRightPipe1_Size = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Size.SelectedItem.ToString();
+            string twoFloorRightPipe2_Size = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Size.SelectedItem.ToString();
+
+            bool oneFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe1.IsChecked;
+            bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
+            bool oneFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe1.IsChecked;
+            bool oneFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe2.IsChecked;
+            bool twoFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe1.IsChecked;
+            bool twoFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe2.IsChecked;
+            bool twoFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe1.IsChecked;
+            bool twoFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe2.IsChecked;
+            bool cableTray_Check = (bool)PipeSupportSection.mainfrm.CableTray.IsChecked;
+
+            string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string oneFloorRightPipe1_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe1_Abb.SelectedItem.ToString();
+            string oneFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe2_Abb.SelectedItem.ToString();
+            string twoFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string twoFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string twoFloorRightPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Abb.SelectedItem.ToString();
+            string twoFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Abb.SelectedItem.ToString();
+
+            if (!cableTray_Check)
+            {
+                //一层管道修改
+                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double length = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionList.ElementAt(0), -900);
+                }
+                if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double length = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                    AnnotationSymbol rightPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+                }
+
+                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+                }
+                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+                }
+                if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+                }
+
+                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+                }
+                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+                }
+
+                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+                }
+
+                //二层参数修改
+                if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                    double length = typeC_Section.LookupParameter("三层左侧管道D1").AsDouble();
+                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                    CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                }
+
+                if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与支柱中心间距").AsDouble();
+                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
+                    double lengthRight = typeC_Section.LookupParameter("三层右侧管道1与支柱中心间距").AsDouble();
+                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+                }
+
+                if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与管道2间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
+                    double lengthRight = typeC_Section.LookupParameter("三层右侧管道1与支柱中心间距").AsDouble();
+                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                }
+
+                if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与支柱中心间距").AsDouble();
+                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("三层右侧管道1与管道2间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+                }
+
+                if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与管道2间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("三层右侧管道1与管道2间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+                }
+            }
+            else
+            {
+                //一层管道修改
+                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                    double length = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionList.ElementAt(0), -900);
+                }
+                if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                    double length = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                    AnnotationSymbol rightPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+                }
+
+                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+                }
+                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                    double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+                }
+                if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+                }
+
+                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                    double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+                }
+                if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+                }
+
+                if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+                }
+
+                //二层管道修改
+                if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double length = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionList.ElementAt(0), -900);
+                }
+                if (!twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double length = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                    AnnotationSymbol rightPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+                }
+
+                if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+                }
+                if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+                }
+                if (!twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+                }
+
+                if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+                }
+                if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                    XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+                }
+
+                if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+                {
+                    List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                    double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                    MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                    XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                    MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                    List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                    double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                    XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                    XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                    CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+                }
+            }
+        }
+        public void TypeB_CreatThreeFloorPipeNote(Document doc, FamilyInstance typeC_Section) //B型支架创建三层全部管道信息标注
+        {
+            string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
+            string oneFloorRightPipe1_Size = PipeSupportSection.mainfrm.OneFloorRightPipe1_Size.SelectedItem.ToString();
+            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString();
+            string twoFloorLeftPipe1_Size = PipeSupportSection.mainfrm.TwoFloorLeftPipe1_Size.SelectedItem.ToString();
+            string twoFloorLeftPipe2_Size = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Size.SelectedItem.ToString();
+            string twoFloorRightPipe1_Size = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Size.SelectedItem.ToString();
+            string twoFloorRightPipe2_Size = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Size.SelectedItem.ToString();
+            string threeFloorLeftPipe1_Size = PipeSupportSection.mainfrm.ThreeFloorLeftPipe1_Size.SelectedItem.ToString();
+            string threeFloorLeftPipe2_Size = PipeSupportSection.mainfrm.ThreeFloorLeftPipe2_Size.SelectedItem.ToString();
+            string threeFloorRightPipe1_Size = PipeSupportSection.mainfrm.ThreeFloorRightPipe1_Size.SelectedItem.ToString();
+            string threeFloorRightPipe2_Size = PipeSupportSection.mainfrm.ThreeFloorRightPipe2_Size.SelectedItem.ToString();
+
+            bool oneFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe1.IsChecked;
+            bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
+            bool oneFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe1.IsChecked;
+            bool oneFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe2.IsChecked;
+            bool twoFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe1.IsChecked;
+            bool twoFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe2.IsChecked;
+            bool twoFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe1.IsChecked;
+            bool twoFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe2.IsChecked;
+            bool threeFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.ThreeFloorLeftPipe1.IsChecked;
+            bool threeFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.ThreeFloorLeftPipe2.IsChecked;
+            bool threeFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.ThreeFloorRightPipe1.IsChecked;
+            bool threeFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.ThreeFloorRightPipe2.IsChecked;
+
+            string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string oneFloorRightPipe1_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe1_Abb.SelectedItem.ToString();
+            string oneFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe2_Abb.SelectedItem.ToString();
+            string twoFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string twoFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string twoFloorRightPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Abb.SelectedItem.ToString();
+            string twoFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Abb.SelectedItem.ToString();
+            string threeFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.ThreeFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string threeFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.ThreeFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string threeFloorRightPipe1_Abb = PipeSupportSection.mainfrm.ThreeFloorRightPipe1_Abb.SelectedItem.ToString();
+            string threeFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.ThreeFloorRightPipe2_Abb.SelectedItem.ToString();
+
+            //一层管道修改
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double length = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionList.ElementAt(0), -900);
+            }
+            if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double length = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                AnnotationSymbol rightPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+            }
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+            }
+            if (!oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+            }
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            //二层管道修改
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double length = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionList.ElementAt(0), -900);
+            }
+            if (!twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double length = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                AnnotationSymbol rightPipeNote = CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+            }
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+            }
+            if (!twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+            }
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与支柱壁间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+
+            //三层参数修改
+            if (threeFloorLeftPipe1_Check && !threeFloorLeftPipe2_Check && !threeFloorRightPipe1_Check && !threeFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                double length = typeC_Section.LookupParameter("三层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, threeFloorLeftPipe1_Abb + "-" + threeFloorLeftPipe1_Size, PipeWeight(threeFloorLeftPipe1_Size));
+            }
+
+            if (threeFloorLeftPipe1_Check && !threeFloorLeftPipe2_Check && threeFloorRightPipe1_Check && !threeFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与支柱中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, threeFloorLeftPipe1_Abb + "-" + threeFloorLeftPipe1_Size, PipeWeight(threeFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("三层右侧管道1与支柱中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, threeFloorRightPipe1_Abb + "-" + threeFloorRightPipe1_Size, PipeWeight(threeFloorRightPipe1_Size));
+            }
+
+            if (threeFloorLeftPipe1_Check && threeFloorLeftPipe2_Check && threeFloorRightPipe1_Check && !threeFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, threeFloorLeftPipe1_Abb + "-" + threeFloorLeftPipe1_Size, PipeWeight(threeFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, threeFloorLeftPipe2_Abb + "-" + threeFloorLeftPipe2_Size, PipeWeight(threeFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("三层右侧管道1与支柱中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, threeFloorRightPipe1_Abb + "-" + threeFloorRightPipe1_Size, PipeWeight(threeFloorRightPipe1_Size));
+
+            }
+
+            if (threeFloorLeftPipe1_Check && !threeFloorLeftPipe2_Check && threeFloorRightPipe1_Check && threeFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与支柱中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, threeFloorLeftPipe1_Abb + "-" + threeFloorLeftPipe1_Size, PipeWeight(threeFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("三层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, threeFloorRightPipe1_Abb + "-" + threeFloorRightPipe1_Size, PipeWeight(threeFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, threeFloorRigthPipe2_Abb + "-" + threeFloorRightPipe2_Size, PipeWeight(threeFloorRightPipe2_Size));
+            }
+
+            if (threeFloorLeftPipe1_Check && threeFloorLeftPipe2_Check && threeFloorRightPipe1_Check && threeFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("三层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft1, typeC_Section, threeFloorLeftPipe1_Abb + "-" + threeFloorLeftPipe1_Size, PipeWeight(threeFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft2, typeC_Section, threeFloorLeftPipe2_Abb + "-" + threeFloorLeftPipe2_Size, PipeWeight(threeFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "三层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("三层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, threeFloorRightPipe1_Abb + "-" + threeFloorRightPipe1_Size, PipeWeight(threeFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, threeFloorRigthPipe2_Abb + "-" + threeFloorRightPipe2_Size, PipeWeight(threeFloorRightPipe2_Size));
+            }
+
+        }
         public void TypeC_CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //C型支架创建一层全部管道信息标注
         {
 
@@ -5216,6 +6129,684 @@ namespace FFETOOLS
                 CreatPipeNote(doc, positionList4.ElementAt(0), instancePoint4, typeC_Section, fourFloorPipe1_Abb + "-" + fourFloorPipe1_Size, PipeWeight(fourFloorPipe1_Size));
             }
         }
+        public void TypeD_CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //D型支架创建一层全部管道信息标注
+        {
+            string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
+            string oneFloorRightPipe1_Size = PipeSupportSection.mainfrm.OneFloorRightPipe1_Size.SelectedItem.ToString();
+            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString();
+
+            bool oneFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe1.IsChecked;
+            bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
+            bool oneFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe1.IsChecked;
+            bool oneFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe2.IsChecked;
+
+            string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string oneFloorRightPipe1_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe1_Abb.SelectedItem.ToString();
+            string oneFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe2_Abb.SelectedItem.ToString();
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double length = typeC_Section.LookupParameter("一层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+        }
+        public void TypeD_CreatTwoFloorPipeNote(Document doc, FamilyInstance typeC_Section) //D型支架创建二层全部管道信息标注
+        {
+            string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
+            string oneFloorRightPipe1_Size = PipeSupportSection.mainfrm.OneFloorRightPipe1_Size.SelectedItem.ToString();
+            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString();
+            string twoFloorLeftPipe1_Size = PipeSupportSection.mainfrm.TwoFloorLeftPipe1_Size.SelectedItem.ToString();
+            string twoFloorLeftPipe2_Size = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Size.SelectedItem.ToString();
+            string twoFloorRightPipe1_Size = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Size.SelectedItem.ToString();
+            string twoFloorRightPipe2_Size = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Size.SelectedItem.ToString();
+
+            bool oneFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe1.IsChecked;
+            bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
+            bool oneFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe1.IsChecked;
+            bool oneFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe2.IsChecked;
+            bool twoFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe1.IsChecked;
+            bool twoFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe2.IsChecked;
+            bool twoFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe1.IsChecked;
+            bool twoFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe2.IsChecked;
+
+            string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string oneFloorRightPipe1_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe1_Abb.SelectedItem.ToString();
+            string oneFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe2_Abb.SelectedItem.ToString();
+            string twoFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string twoFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string twoFloorRightPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Abb.SelectedItem.ToString();
+            string twoFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Abb.SelectedItem.ToString();
+
+
+            //一层管道修改
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double length = typeC_Section.LookupParameter("一层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) +120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) +0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            //二层参数修改
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double length = typeC_Section.LookupParameter("二层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y -lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+            }
+
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+        }
+        public void TypeE_CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //E型支架创建一层全部管道信息标注
+        {
+            string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
+            string oneFloorRightPipe1_Size = PipeSupportSection.mainfrm.OneFloorRightPipe1_Size.SelectedItem.ToString();
+            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString();
+
+            bool oneFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe1.IsChecked;
+            bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
+            bool oneFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe1.IsChecked;
+            bool oneFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe2.IsChecked;
+
+            string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string oneFloorRightPipe1_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe1_Abb.SelectedItem.ToString();
+            string oneFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe2_Abb.SelectedItem.ToString();
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double length = typeC_Section.LookupParameter("一层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+        }
+        public void TypeE_CreatTwoFloorPipeNote(Document doc, FamilyInstance typeC_Section) //E型支架创建二层全部管道信息标注
+        {
+            string oneFloorLeftPipe1_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Size.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Size = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Size.SelectedItem.ToString();
+            string oneFloorRightPipe1_Size = PipeSupportSection.mainfrm.OneFloorRightPipe1_Size.SelectedItem.ToString();
+            string oneFloorRightPipe2_Size = PipeSupportSection.mainfrm.OneFloorRightPipe2_Size.SelectedItem.ToString();
+            string twoFloorLeftPipe1_Size = PipeSupportSection.mainfrm.TwoFloorLeftPipe1_Size.SelectedItem.ToString();
+            string twoFloorLeftPipe2_Size = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Size.SelectedItem.ToString();
+            string twoFloorRightPipe1_Size = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Size.SelectedItem.ToString();
+            string twoFloorRightPipe2_Size = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Size.SelectedItem.ToString();
+
+            bool oneFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe1.IsChecked;
+            bool oneFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorLeftPipe2.IsChecked;
+            bool oneFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe1.IsChecked;
+            bool oneFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorRightPipe2.IsChecked;
+            bool twoFloorLeftPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe1.IsChecked;
+            bool twoFloorLeftPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorLeftPipe2.IsChecked;
+            bool twoFloorRightPipe1_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe1.IsChecked;
+            bool twoFloorRightPipe2_Check = (bool)PipeSupportSection.mainfrm.TwoFloorRightPipe2.IsChecked;
+
+            string oneFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string oneFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.OneFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string oneFloorRightPipe1_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe1_Abb.SelectedItem.ToString();
+            string oneFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.OneFloorRightPipe2_Abb.SelectedItem.ToString();
+            string twoFloorLeftPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe1_Abb.SelectedItem.ToString();
+            string twoFloorLeftPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorLeftPipe2_Abb.SelectedItem.ToString();
+            string twoFloorRightPipe1_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe1_Abb.SelectedItem.ToString();
+            string twoFloorRigthPipe2_Abb = PipeSupportSection.mainfrm.TwoFloorRightPipe2_Abb.SelectedItem.ToString();
+
+            //一层管道修改
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && !oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double length = typeC_Section.LookupParameter("一层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y - length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && !oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180)- 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("一层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y - lengthRight * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+            }
+
+            if (oneFloorLeftPipe1_Check && !oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            if (oneFloorLeftPipe1_Check && oneFloorLeftPipe2_Check && oneFloorRightPipe1_Check && oneFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("一层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorLeftPipe1_Abb + "-" + oneFloorLeftPipe1_Size, PipeWeight(oneFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y - lengthLeft * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorLeftPipe2_Abb + "-" + oneFloorLeftPipe2_Size, PipeWeight(oneFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("一层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, oneFloorRightPipe1_Abb + "-" + oneFloorRightPipe1_Size, PipeWeight(oneFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y - lengthRight1 * Math.Tan(60 * Math.PI / 180) - 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, oneFloorRigthPipe2_Abb + "-" + oneFloorRightPipe2_Size, PipeWeight(oneFloorRightPipe2_Size));
+            }
+
+            //二层参数修改
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && !twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double length = typeC_Section.LookupParameter("二层左侧管道D1").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -900);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && !twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight = typeC_Section.LookupParameter("二层右侧管道1与中心间距").AsDouble();
+                XYZ instancePointRight = new XYZ(positionListRight.ElementAt(0).X + lengthRight, positionListRight.ElementAt(0).Y + lengthRight * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+            }
+
+            if (twoFloorLeftPipe1_Check && !twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与中心间距").AsDouble();
+                XYZ instancePointLeft = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 120 / 304.8, 0);
+                AnnotationSymbol leftPipeNote = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote, positionListLeft.ElementAt(0), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+
+            if (twoFloorLeftPipe1_Check && twoFloorLeftPipe2_Check && twoFloorRightPipe1_Check && twoFloorRightPipe2_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层左侧管道");
+                double lengthLeft = typeC_Section.LookupParameter("二层左侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, twoFloorLeftPipe1_Abb + "-" + twoFloorLeftPipe1_Size, PipeWeight(twoFloorLeftPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, twoFloorLeftPipe2_Abb + "-" + twoFloorLeftPipe2_Size, PipeWeight(twoFloorLeftPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                List<XYZ> positionListRight = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "二层右侧管道");
+                double lengthRight1 = typeC_Section.LookupParameter("二层右侧管道1与管道2间距").AsDouble();
+
+                XYZ instancePointRight1 = new XYZ(positionListRight.ElementAt(0).X + lengthRight1, positionListRight.ElementAt(0).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(0), instancePointRight1, typeC_Section, twoFloorRightPipe1_Abb + "-" + twoFloorRightPipe1_Size, PipeWeight(twoFloorRightPipe1_Size));
+
+                XYZ instancePointRight2 = new XYZ(positionListRight.ElementAt(1).X + lengthRight1, positionListRight.ElementAt(1).Y + lengthRight1 * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                CreatPipeNote(doc, positionListRight.ElementAt(1), instancePointRight2, typeC_Section, twoFloorRigthPipe2_Abb + "-" + twoFloorRightPipe2_Size, PipeWeight(twoFloorRightPipe2_Size));
+            }
+        }
+        public void TypeF_CreatOneFloorPipeNote(Document doc, FamilyInstance typeC_Section) //F型支架创建一层全部管道信息标注
+        {
+            string oneFloorPipe1_Size = PipeSupportSection.mainfrm.OneFloorPipe1_Size.SelectedItem.ToString();
+            string oneFloorPipe2_Size = PipeSupportSection.mainfrm.OneFloorPipe2_Size.SelectedItem.ToString();
+            string oneFloorPipe3_Size = PipeSupportSection.mainfrm.OneFloorPipe3_Size.SelectedItem.ToString();
+            string oneFloorPipe4_Size = PipeSupportSection.mainfrm.OneFloorPipe4_Size.SelectedItem.ToString();
+
+            bool oneFloorPipe1_Check = (bool)PipeSupportSection.mainfrm.OneFloorPipe1.IsChecked;
+            bool oneFloorPipe2_Check = (bool)PipeSupportSection.mainfrm.OneFloorPipe2.IsChecked;
+            bool oneFloorPipe3_Check = (bool)PipeSupportSection.mainfrm.OneFloorPipe3.IsChecked;
+            bool oneFloorPipe4_Check = (bool)PipeSupportSection.mainfrm.OneFloorPipe4.IsChecked;
+
+            string oneFloorPipe1_Abb = PipeSupportSection.mainfrm.OneFloorPipe1_Abb.SelectedItem.ToString();
+            string oneFloorPipe2_Abb = PipeSupportSection.mainfrm.OneFloorPipe2_Abb.SelectedItem.ToString();
+            string oneFloorPipe3_Abb = PipeSupportSection.mainfrm.OneFloorPipe3_Abb.SelectedItem.ToString();
+            string oneFloorPipe4_Abb = PipeSupportSection.mainfrm.OneFloorPipe4_Abb.SelectedItem.ToString();
+
+            if (oneFloorPipe1_Check && !oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                List<XYZ> positionList = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层管道");
+                double length = typeC_Section.LookupParameter("管道1与支架左端间距").AsDouble();
+                XYZ instancePoint = new XYZ(positionList.ElementAt(0).X + length, positionList.ElementAt(0).Y + length * Math.Tan(60 * Math.PI / 180), 0);
+                CreatPipeNote(doc, positionList.ElementAt(0), instancePoint, typeC_Section, oneFloorPipe1_Abb + "-" + oneFloorPipe1_Size, PipeWeight(oneFloorPipe1_Size));
+            }
+
+            if (oneFloorPipe1_Check && oneFloorPipe2_Check && !oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层管道");
+                double lengthLeft = typeC_Section.LookupParameter("管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorPipe1_Abb + "-" + oneFloorPipe1_Size, PipeWeight(oneFloorPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorPipe2_Abb + "-" + oneFloorPipe2_Size, PipeWeight(oneFloorPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+            }
+
+            if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && !oneFloorPipe4_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层管道");
+                double lengthLeft = typeC_Section.LookupParameter("管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorPipe1_Abb + "-" + oneFloorPipe1_Size, PipeWeight(oneFloorPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorPipe2_Abb + "-" + oneFloorPipe2_Size, PipeWeight(oneFloorPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft3 = new XYZ(positionListLeft.ElementAt(2).X + lengthLeft, positionListLeft.ElementAt(2).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 700 / 304.8, 0);
+                AnnotationSymbol leftPipeNote3 = CreatPipeNote(doc, positionListLeft.ElementAt(2), instancePointLeft3, typeC_Section, oneFloorPipe3_Abb + "-" + oneFloorPipe3_Size, PipeWeight(oneFloorPipe3_Size));
+                MovePipeNote(doc, leftPipeNote3, positionListLeft.ElementAt(2), -1200);
+            }
+
+            if (oneFloorPipe1_Check && oneFloorPipe2_Check && oneFloorPipe3_Check && oneFloorPipe4_Check)
+            {
+                List<XYZ> positionListLeft = PipeCenterPosition(doc, typeC_Section, doc.ActiveView, "一层管道");
+                double lengthLeft = typeC_Section.LookupParameter("管道1与管道2间距").AsDouble();
+
+                XYZ instancePointLeft1 = new XYZ(positionListLeft.ElementAt(0).X + lengthLeft, positionListLeft.ElementAt(0).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 0 / 304.8, 0);
+                AnnotationSymbol leftPipeNote1 = CreatPipeNote(doc, positionListLeft.ElementAt(0), instancePointLeft1, typeC_Section, oneFloorPipe1_Abb + "-" + oneFloorPipe1_Size, PipeWeight(oneFloorPipe1_Size));
+                MovePipeNote(doc, leftPipeNote1, positionListLeft.ElementAt(0), -1200);
+
+                XYZ instancePointLeft2 = new XYZ(positionListLeft.ElementAt(1).X + lengthLeft, positionListLeft.ElementAt(1).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 350 / 304.8, 0);
+                AnnotationSymbol leftPipeNote2 = CreatPipeNote(doc, positionListLeft.ElementAt(1), instancePointLeft2, typeC_Section, oneFloorPipe2_Abb + "-" + oneFloorPipe2_Size, PipeWeight(oneFloorPipe2_Size));
+                MovePipeNote(doc, leftPipeNote2, positionListLeft.ElementAt(1), -1200);
+
+                XYZ instancePointLeft3 = new XYZ(positionListLeft.ElementAt(2).X + lengthLeft, positionListLeft.ElementAt(2).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 700 / 304.8, 0);
+                AnnotationSymbol leftPipeNote3 = CreatPipeNote(doc, positionListLeft.ElementAt(2), instancePointLeft3, typeC_Section, oneFloorPipe3_Abb + "-" + oneFloorPipe3_Size, PipeWeight(oneFloorPipe3_Size));
+                MovePipeNote(doc, leftPipeNote3, positionListLeft.ElementAt(2), -1200);
+
+                XYZ instancePointLeft4 = new XYZ(positionListLeft.ElementAt(3).X + lengthLeft, positionListLeft.ElementAt(3).Y + lengthLeft * Math.Tan(60 * Math.PI / 180) + 1050 / 304.8, 0);
+                AnnotationSymbol leftPipeNote4 = CreatPipeNote(doc, positionListLeft.ElementAt(3), instancePointLeft4, typeC_Section, oneFloorPipe4_Abb + "-" + oneFloorPipe4_Size, PipeWeight(oneFloorPipe4_Size));
+                MovePipeNote(doc, leftPipeNote4, positionListLeft.ElementAt(3), -1200);
+            }
+        }
+
         #endregion
         public bool HaveBrace(string nominal_Diameter) //单管是否有斜撑
         {
@@ -5393,7 +6984,7 @@ namespace FFETOOLS
             doc.Create.NewDimension(doc.ActiveView, dimLine, refArray, dimType);
         }
         #endregion
-        public void MovePipeNote(Document doc, AnnotationSymbol pipeNote, XYZ centerPoint,double moveLengh)
+        public void MovePipeNote(Document doc, AnnotationSymbol pipeNote, XYZ centerPoint, double moveLengh)
         {
             ElementTransformUtils.MoveElement(doc, pipeNote.Id, new XYZ(moveLengh / 304.8, 0, 0));
             IList<Leader> leadList = pipeNote.GetLeaders();
