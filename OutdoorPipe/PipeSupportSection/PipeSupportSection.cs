@@ -203,10 +203,12 @@ namespace FFETOOLS
                 if (PipeSupportSection.mainfrm.TypeA_Button.IsChecked == true)
                 {
                     TypeA_CreatDimensionX(doc, typeA_Section, pickpoint);
+                    TypeA_CreatDimensionY(doc, typeA_Section, pickpoint);
                 }
                 else if (PipeSupportSection.mainfrm.TypeB_Button.IsChecked == true)
                 {
                     TypeB_CreatDimensionX(doc, typeB_Section, pickpoint);
+                    TypeB_CreatDimensionY(doc, typeB_Section, pickpoint);
                 }
                 else if (PipeSupportSection.mainfrm.TypeC_Button.IsChecked == true)
                 {
@@ -246,15 +248,18 @@ namespace FFETOOLS
                     else if (PipeSupportSection.mainfrm.ThreeFloor.IsChecked == true || PipeSupportSection.mainfrm.FourFloor.IsChecked == true)
                     {
                         TypeC_CreatDimensionX(doc, typeC_Section_UpThree, pickpoint);
+                        TypeC_CreatDimensionY(doc, typeC_Section_UpThree, pickpoint);
                     }
                 }
                 else if (PipeSupportSection.mainfrm.TypeD_Button.IsChecked == true)
                 {
                     TypeD_CreatDimensionX(doc, typeD_Section, pickpoint);
+                    TypeD_CreatDimensionY(doc, typeD_Section, pickpoint);
                 }
                 else if (PipeSupportSection.mainfrm.TypeE_Button.IsChecked == true)
                 {
                     TypeE_CreatDimensionX(doc, typeE_Section, pickpoint);
+                    TypeE_CreatDimensionY(doc, typeE_Section, pickpoint);
                 }
                 else if (PipeSupportSection.mainfrm.TypeF_Button.IsChecked == true)
                 {
@@ -322,7 +327,7 @@ namespace FFETOOLS
                         TypeC_CreatUpThreeFloorPipeNote(doc, typeC_Section_UpThree);
                         typeC_Section_UpThree.LookupParameter("支柱名称").Set(PipeSupportSection.mainfrm.WorkshopGridName.Text);
                         typeC_Section_UpThree.LookupParameter("标高值").Set(PipeSupportSection.mainfrm.LevelValue.Text);
-                        typeC_Section_UpThree.LookupParameter("支柱名称下划线长度").SetValueString((PipeSupportSection.mainfrm.WorkshopGridName.Text.Length * 3.57 + 10).ToString());
+                        typeC_Section_UpThree.LookupParameter("支柱名称下划线长度").SetValueString((PipeSupportSection.mainfrm.WorkshopGridName.Text.Length * 3.57 + 20).ToString());
                     }
                 }
                 else if (PipeSupportSection.mainfrm.TypeD_Button.IsChecked == true)
@@ -340,17 +345,19 @@ namespace FFETOOLS
                 }
                 else if (PipeSupportSection.mainfrm.TypeE_Button.IsChecked == true)
                 {
-                    CreatTitle(doc, pickpoint, typeE_Section);
+                    CreatTitle(doc, pickpoint, typeE_Section);                  
 
                     if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
                     {
-                        TypeE_CreatOneFloorPipeNote(doc, typeE_Section);
+                        TypeE_CreatOneFloorPipeNote(doc, typeE_Section);                     
                     }
                     else if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
                     {
                         TypeE_CreatTwoFloorPipeNote(doc, typeE_Section);
                     }
 
+                    string baseLength = typeE_Section.LookupParameter("基础长度").AsValueString();
+                    typeE_Section.LookupParameter("预埋钢板文字说明").Set("预埋" + baseLength + "X200X10mm钢板");
                 }
                 else if (PipeSupportSection.mainfrm.TypeF_Button.IsChecked == true)
                 {
@@ -6950,6 +6957,7 @@ namespace FFETOOLS
             Reference ref1 = null;
             Reference ref2 = null;
             List<Line> lineList = new List<Line>();
+            List<Line> lineList1 = new List<Line>();
             Line tempLine = null;
             Line dimLine = null;
             XYZ targetPoint = new XYZ();
@@ -7030,7 +7038,8 @@ namespace FFETOOLS
                 //二层管道尺寸标注
                 referenceArray.Clear();
                 lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "二层右侧管道中心线");
-                if (lineList.Count != 0)
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑左侧边界", "二层横撑右侧边界");
+                if (lineList.Count != 0 && lineList1.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
                     tempLine.MakeUnbound();
@@ -7049,17 +7058,15 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("支架左侧内壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("支架右侧内壁");//将实例中弱参照参照平面拿出来
-                    if (ref1 != null && ref2 != null)
-                    {
-                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
-                    }
                     foreach (Line item in lineList)
                     {
                         referenceArray.Append(item.Reference);
                     }
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
                     doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                 }
             }
@@ -7073,12 +7080,14 @@ namespace FFETOOLS
             Reference ref1 = null;
             Reference ref2 = null;
             List<Line> lineList = new List<Line>();
+            List<Line> lineList1 = new List<Line>();
             Line tempLine = null;
             Line dimLine = null;
             XYZ targetPoint = new XYZ();
             XYZ direction = new XYZ();
             XYZ origionPoint = new XYZ();
             double height = 500;
+            double dimensionHeight = 450;
 
             DimensionType dimType = null;
             FilteredElementCollector dimTypeCollector = new FilteredElementCollector(doc);
@@ -7098,7 +7107,8 @@ namespace FFETOOLS
                 if (!cableTray_Check)
                 {
                     lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层左侧管道中心线", "三层右侧管道中心线");
-                    if (lineList.Count != 0)
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑左侧边界", "三层横撑右侧边界");
+                    if (lineList.Count != 0 && lineList1.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
                         tempLine.MakeUnbound();
@@ -7109,14 +7119,11 @@ namespace FFETOOLS
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("三层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        ref2 = section.GetReferenceByName("三层右侧支撑边界");//将实例中弱参照参照平面拿出来
-                        if (ref1 != null && ref2 != null)
-                        {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                            referenceArray.Append(ref2);
-                        }
                         foreach (Line item in lineList)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList1)
                         {
                             referenceArray.Append(item.Reference);
                         }
@@ -7126,7 +7133,7 @@ namespace FFETOOLS
                 else
                 {
                     //一层左侧管道尺寸标注
-                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "");
+                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "二层横撑左侧边界");
                     if (lineList.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
@@ -7138,11 +7145,9 @@ namespace FFETOOLS
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("二层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                         ref2 = section.GetReferenceByName("左侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        if (ref1 != null && ref2 != null)
+                        if (ref2 != null)
                         {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                             referenceArray.Append(ref2);
                         }
                         foreach (Line item in lineList)
@@ -7154,7 +7159,7 @@ namespace FFETOOLS
 
                     //一层右侧管道尺寸标注
                     referenceArray.Clear();
-                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层右侧管道中心线", "");
+                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层右侧管道中心线", "二层横撑右侧边界");
                     if (lineList.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
@@ -7166,11 +7171,9 @@ namespace FFETOOLS
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("二层右侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                         ref2 = section.GetReferenceByName("右侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        if (ref1 != null && ref2 != null)
+                        if (ref2 != null)
                         {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                             referenceArray.Append(ref2);
                         }
                         foreach (Line item in lineList)
@@ -7188,7 +7191,7 @@ namespace FFETOOLS
                 if (!cableTray_Check)
                 {
                     //一层左侧管道尺寸标注
-                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "");
+                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "二层横撑左侧边界");
                     if (lineList.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
@@ -7200,11 +7203,9 @@ namespace FFETOOLS
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("二层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                         ref2 = section.GetReferenceByName("左侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        if (ref1 != null && ref2 != null)
+                        if (ref2 != null)
                         {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                             referenceArray.Append(ref2);
                         }
                         foreach (Line item in lineList)
@@ -7216,7 +7217,7 @@ namespace FFETOOLS
 
                     //一层右侧管道尺寸标注
                     referenceArray.Clear();
-                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层右侧管道中心线", "");
+                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层右侧管道中心线", "二层横撑右侧边界");
                     if (lineList.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
@@ -7228,11 +7229,9 @@ namespace FFETOOLS
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("二层右侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                         ref2 = section.GetReferenceByName("右侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        if (ref1 != null && ref2 != null)
+                        if (ref2 != null)
                         {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                             referenceArray.Append(ref2);
                         }
                         foreach (Line item in lineList)
@@ -7245,7 +7244,7 @@ namespace FFETOOLS
                 else
                 {
                     //一层左侧管道尺寸标注
-                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层左侧管道中心线", "");
+                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层左侧管道中心线", "一层横撑左侧边界");
                     if (lineList.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
@@ -7257,11 +7256,9 @@ namespace FFETOOLS
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("一层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                         ref2 = section.GetReferenceByName("左侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        if (ref1 != null && ref2 != null)
+                        if (ref2 != null)
                         {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                             referenceArray.Append(ref2);
                         }
                         foreach (Line item in lineList)
@@ -7273,7 +7270,7 @@ namespace FFETOOLS
 
                     //一层右侧管道尺寸标注
                     referenceArray.Clear();
-                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层右侧管道中心线", "");
+                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层右侧管道中心线", "一层横撑右侧边界");
                     if (lineList.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
@@ -7285,11 +7282,9 @@ namespace FFETOOLS
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("一层右侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                         ref2 = section.GetReferenceByName("右侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        if (ref1 != null && ref2 != null)
+                        if (ref2 != null)
                         {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                             referenceArray.Append(ref2);
                         }
                         foreach (Line item in lineList)
@@ -7305,7 +7300,8 @@ namespace FFETOOLS
                 if (!cableTray_Check)
                 {
                     lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层左侧管道中心线", "三层右侧管道中心线");
-                    if (lineList.Count != 0)
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑左侧边界", "三层横撑右侧边界");
+                    if (lineList.Count != 0 && lineList1.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
                         tempLine.MakeUnbound();
@@ -7316,14 +7312,11 @@ namespace FFETOOLS
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("三层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        ref2 = section.GetReferenceByName("三层右侧支撑边界");//将实例中弱参照参照平面拿出来
-                        if (ref1 != null && ref2 != null)
-                        {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                            referenceArray.Append(ref2);
-                        }
                         foreach (Line item in lineList)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList1)
                         {
                             referenceArray.Append(item.Reference);
                         }
@@ -7333,23 +7326,22 @@ namespace FFETOOLS
                 else
                 {
                     //二层左侧管道尺寸标注
-                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "");
+                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "二层横撑左侧边界");
                     if (lineList.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
                         tempLine.MakeUnbound();
 
                         height = section.LookupParameter("二层支架高度").AsDouble();
-                        origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height + 450 / 304.8, 0);
+                        dimensionHeight = section.LookupParameter("二层与三层间距H").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height + dimensionHeight + 50 / 304.8, 0);
                         targetPoint = tempLine.Project(origionPoint).XYZPoint;
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("二层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                         ref2 = section.GetReferenceByName("左侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        if (ref1 != null && ref2 != null)
+                        if (ref2 != null)
                         {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                             referenceArray.Append(ref2);
                         }
                         foreach (Line item in lineList)
@@ -7361,23 +7353,22 @@ namespace FFETOOLS
 
                     //二层右侧管道尺寸标注
                     referenceArray.Clear();
-                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层右侧管道中心线", "");
+                    lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层右侧管道中心线", "二层横撑右侧边界");
                     if (lineList.Count != 0)
                     {
                         tempLine = lineList.FirstOrDefault();
                         tempLine.MakeUnbound();
 
                         height = section.LookupParameter("二层支架高度").AsDouble();
-                        origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height + 450 / 304.8, 0);
+                        dimensionHeight = section.LookupParameter("二层与三层间距H").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height + dimensionHeight + 50 / 304.8, 0);
                         targetPoint = tempLine.Project(origionPoint).XYZPoint;
                         direction = (targetPoint - origionPoint).Normalize();
                         dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                        ref1 = section.GetReferenceByName("二层右侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                         ref2 = section.GetReferenceByName("右侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                        if (ref1 != null && ref2 != null)
+                        if (ref2 != null)
                         {
-                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                             referenceArray.Append(ref2);
                         }
                         foreach (Line item in lineList)
@@ -7393,7 +7384,7 @@ namespace FFETOOLS
             {
                 //一层管道尺寸标注
                 //一层左侧管道尺寸标注
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层左侧管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层左侧管道中心线", "一层横撑左侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
@@ -7405,11 +7396,9 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("一层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                     ref2 = section.GetReferenceByName("左侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    if (ref1 != null && ref2 != null)
+                    if (ref2 != null)
                     {
-                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                         referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
@@ -7421,7 +7410,7 @@ namespace FFETOOLS
 
                 //一层右侧管道尺寸标注
                 referenceArray.Clear();
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层右侧管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层右侧管道中心线", "一层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
@@ -7433,11 +7422,9 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("一层右侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                     ref2 = section.GetReferenceByName("右侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    if (ref1 != null && ref2 != null)
+                    if (ref2 != null)
                     {
-                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                         referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
@@ -7450,7 +7437,7 @@ namespace FFETOOLS
                 //二层管道尺寸标注
                 //二层左侧管道尺寸标注
                 referenceArray.Clear();
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "二层横撑左侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
@@ -7462,11 +7449,9 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("二层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                     ref2 = section.GetReferenceByName("左侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    if (ref1 != null && ref2 != null)
+                    if (ref2 != null)
                     {
-                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                         referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
@@ -7478,7 +7463,7 @@ namespace FFETOOLS
 
                 //二层右侧管道尺寸标注
                 referenceArray.Clear();
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层右侧管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层右侧管道中心线", "二层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
@@ -7490,11 +7475,9 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("二层右侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
                     ref2 = section.GetReferenceByName("右侧支柱外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    if (ref1 != null && ref2 != null)
+                    if (ref2 != null)
                     {
-                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
                         referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
@@ -7507,7 +7490,8 @@ namespace FFETOOLS
                 //三层管道尺寸标注
                 referenceArray.Clear();
                 lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层左侧管道中心线", "三层右侧管道中心线");
-                if (lineList.Count != 0)
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑左侧边界", "三层横撑右侧边界");
+                if (lineList.Count != 0 && lineList1.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
                     tempLine.MakeUnbound();
@@ -7518,14 +7502,11 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("三层左侧支撑边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("三层右侧支撑边界");//将实例中弱参照参照平面拿出来
-                    if (ref1 != null && ref2 != null)
-                    {
-                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
-                    }
                     foreach (Line item in lineList)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList1)
                     {
                         referenceArray.Append(item.Reference);
                     }
@@ -7600,7 +7581,7 @@ namespace FFETOOLS
             if (PipeSupportSection.mainfrm.ThreeFloor.IsChecked == true)
             {
                 //一层支架尺寸标注
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层管道中心线", "一层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
@@ -7611,12 +7592,10 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("一层支架右侧边界");//将实例中弱参照参照平面拿出来                 
-                    if (ref1 != null && ref2 != null)
+                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照          
+                    if (ref1 != null)
                     {
                         referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
                     {
@@ -7627,7 +7606,7 @@ namespace FFETOOLS
 
                 //二层支架尺寸标注
                 referenceArray.Clear();
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层管道中心线", "二层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
@@ -7639,12 +7618,10 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("二层支架右侧边界");//将实例中弱参照参照平面拿出来                 
-                    if (ref1 != null && ref2 != null)
+                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照              
+                    if (ref1 != null)
                     {
                         referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
                     {
@@ -7655,24 +7632,22 @@ namespace FFETOOLS
 
                 //三层支架尺寸标注
                 referenceArray.Clear();
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层管道中心线", "三层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
                     tempLine.MakeUnbound();
 
                     height = section.LookupParameter("三层高度").AsDouble();
-                    origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height +450 / 304.8, 0);
+                    origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height + 450 / 304.8, 0);
                     targetPoint = tempLine.Project(origionPoint).XYZPoint;
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("三层支架右侧边界");//将实例中弱参照参照平面拿出来                 
-                    if (ref1 != null && ref2 != null)
+                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照             
+                    if (ref1 != null)
                     {
                         referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
                     {
@@ -7685,7 +7660,7 @@ namespace FFETOOLS
             if (PipeSupportSection.mainfrm.FourFloor.IsChecked == true)
             {
                 //一层支架尺寸标注
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层管道中心线", "一层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
@@ -7696,12 +7671,10 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("一层支架右侧边界");//将实例中弱参照参照平面拿出来                 
-                    if (ref1 != null && ref2 != null)
+                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照                
+                    if (ref1 != null)
                     {
                         referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
                     {
@@ -7712,7 +7685,7 @@ namespace FFETOOLS
 
                 //二层支架尺寸标注
                 referenceArray.Clear();
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层管道中心线", "二层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
@@ -7724,12 +7697,10 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("二层支架右侧边界");//将实例中弱参照参照平面拿出来                 
-                    if (ref1 != null && ref2 != null)
+                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照             
+                    if (ref1 != null)
                     {
                         referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
                     {
@@ -7740,24 +7711,22 @@ namespace FFETOOLS
 
                 //三层支架尺寸标注
                 referenceArray.Clear();
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层管道中心线", "三层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
                     tempLine.MakeUnbound();
 
                     height = section.LookupParameter("四层高度").AsDouble();
-                    origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height -250 / 304.8, 0);
+                    origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height - 250 / 304.8, 0);
                     targetPoint = tempLine.Project(origionPoint).XYZPoint;
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("三层支架右侧边界");//将实例中弱参照参照平面拿出来                 
-                    if (ref1 != null && ref2 != null)
+                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照              
+                    if (ref1 != null)
                     {
                         referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
                     {
@@ -7768,24 +7737,22 @@ namespace FFETOOLS
 
                 //四层支架尺寸标注
                 referenceArray.Clear();
-                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "四层管道中心线", "");
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "四层管道中心线", "四层横撑右侧边界");
                 if (lineList.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
                     tempLine.MakeUnbound();
 
                     height = section.LookupParameter("四层高度").AsDouble();
-                    origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height +450 / 304.8, 0);
+                    origionPoint = new XYZ(pickPoint.X, pickPoint.Y + height + 450 / 304.8, 0);
                     targetPoint = tempLine.Project(origionPoint).XYZPoint;
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("四层支架右侧边界");//将实例中弱参照参照平面拿出来                 
-                    if (ref1 != null && ref2 != null)
+                    ref1 = section.GetReferenceByName("左侧支架边界");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照           
+                    if (ref1 != null)
                     {
                         referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
                     }
                     foreach (Line item in lineList)
                     {
@@ -7918,6 +7885,7 @@ namespace FFETOOLS
             Reference ref1 = null;
             Reference ref2 = null;
             List<Line> lineList = new List<Line>();
+            List<Line> lineList1 = new List<Line>();
             Line tempLine = null;
             Line dimLine = null;
             XYZ targetPoint = new XYZ();
@@ -7940,8 +7908,10 @@ namespace FFETOOLS
 
             if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
             {
+                //一层管道尺寸标注
                 lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层左侧管道中心线", "一层右侧管道中心线");
-                if (lineList.Count != 0)
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑左侧边界", "一层横撑右侧边界");
+                if (lineList.Count != 0&& lineList1.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
                     tempLine.MakeUnbound();
@@ -7951,17 +7921,34 @@ namespace FFETOOLS
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
 
-                    ref1 = section.GetReferenceByName("支架左侧外壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("支架右侧外壁");//将实例中弱参照参照平面拿出来
-                    if (ref1 != null && ref2 != null)
-                    {
-                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
-                    }
                     foreach (Line item in lineList)
                     {
                         referenceArray.Append(item.Reference);
                     }
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+
+                //支墩长度尺寸标注
+                referenceArray.Clear();
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "支墩左侧边界", "支墩右侧边界");
+                if (lineList.Count != 0)
+                {
+                    tempLine = lineList.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    origionPoint = new XYZ(pickPoint.X, pickPoint.Y - 700 / 304.8, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }                  
                     doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                 }
             }
@@ -7998,7 +7985,8 @@ namespace FFETOOLS
                 //二层管道尺寸标注
                 referenceArray.Clear();
                 lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层左侧管道中心线", "二层右侧管道中心线");
-                if (lineList.Count != 0)
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑左侧边界", "二层横撑右侧边界");
+                if (lineList.Count != 0&& lineList1.Count != 0)
                 {
                     tempLine = lineList.FirstOrDefault();
                     tempLine.MakeUnbound();
@@ -8008,14 +7996,31 @@ namespace FFETOOLS
                     targetPoint = tempLine.Project(origionPoint).XYZPoint;
                     direction = (targetPoint - origionPoint).Normalize();
                     dimLine = Line.CreateUnbound(origionPoint, direction);
-
-                    ref1 = section.GetReferenceByName("支架左侧内壁");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
-                    ref2 = section.GetReferenceByName("支架右侧内壁");//将实例中弱参照参照平面拿出来
-                    if (ref1 != null && ref2 != null)
+                  
+                    foreach (Line item in lineList)
                     {
-                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
-                        referenceArray.Append(ref2);
+                        referenceArray.Append(item.Reference);
                     }
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+
+                //支墩长度尺寸标注
+                referenceArray.Clear();
+                lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "支墩左侧边界", "支墩右侧边界");
+                if (lineList.Count != 0)
+                {
+                    tempLine = lineList.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    origionPoint = new XYZ(pickPoint.X, pickPoint.Y - 700 / 304.8, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
                     foreach (Line item in lineList)
                     {
                         referenceArray.Append(item.Reference);
@@ -8082,6 +8087,663 @@ namespace FFETOOLS
 
             referenceArray.Clear();
         }
+        public void TypeA_CreatDimensionY(Document doc, FamilyInstance section, XYZ pickPoint) //A型支架创建Y方向尺寸标注
+        {
+            bool cableTray_Check = (bool)PipeSupportSection.mainfrm.CableTray.IsChecked;
+            ReferenceArray referenceArray = new ReferenceArray();
+            Reference ref1 = null;
+            Reference ref2 = null;
+            List<Line> lineList1 = new List<Line>();
+            List<Line> lineList2 = new List<Line>();
+            List<Line> lineList3 = new List<Line>();
+            Line tempLine = null;
+            Line dimLine = null;
+            XYZ targetPoint = new XYZ();
+            XYZ direction = new XYZ();
+            XYZ origionPoint = new XYZ();
+            XYZ textPosition = new XYZ();
+            double width = 500;
+            Dimension dimension = null;
+
+            DimensionType dimType = null;
+            FilteredElementCollector dimTypeCollector = new FilteredElementCollector(doc);
+            dimTypeCollector.OfClass(typeof(DimensionType));
+            IList<Element> dimTypes = dimTypeCollector.ToElements();
+            foreach (DimensionType item in dimTypes)
+            {
+                if (item.Name.Contains("工艺")) //给排水标注样式调用有问题
+                {
+                    dimType = item;
+                    break;
+                }
+            }
+
+            if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+            {
+                if (!cableTray_Check)
+                {
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部轮廓线");
+                    if (lineList1.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("支架长度").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
+                        if (ref1 != null)
+                        {
+                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                        }
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                        dimension.ValueOverride = "\u200E";
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        VerticalDimensionText(doc, doc.ActiveView, "6000", textPosition);
+                    }
+                }
+                else
+                {
+                    //一层管道尺寸标注
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部轮廓线");
+                    if (lineList1.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("支架长度").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//特别注意中心前后及中心左右的参照平面不能通过名称获取
+                        if (ref1 != null)
+                        {
+                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                        }
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                        dimension.ValueOverride = "\u200E";
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        VerticalDimensionText(doc, doc.ActiveView, "6000", textPosition);
+                    }
+
+                    //二层管道尺寸标注
+                    referenceArray.Clear();
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部轮廓线");
+                    lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑底部轮廓线");
+                    if (lineList1.Count != 0 && lineList2.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("支架长度").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList2)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    }
+                }
+
+            }
+
+            if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+            {
+                if (!cableTray_Check)
+                {
+                    //一层管道尺寸标注
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部轮廓线");
+                    if (lineList1.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("支架长度").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//特别注意中心前后及中心左右的参照平面不能通过名称获取
+                        if (ref1 != null)
+                        {
+                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                        }
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                        dimension.ValueOverride = "\u200E";
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        VerticalDimensionText(doc, doc.ActiveView, "6000", textPosition);
+                    }
+
+                    //二层管道尺寸标注
+                    referenceArray.Clear();
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部轮廓线");
+                    lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑底部轮廓线");
+                    if (lineList1.Count != 0 && lineList2.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("支架长度").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList2)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    }
+
+                }
+                else
+                {
+                    //一层管道尺寸标注
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部轮廓线");
+                    if (lineList1.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("支架长度").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//特别注意中心前后及中心左右的参照平面不能通过名称获取
+                        if (ref1 != null)
+                        {
+                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                        }
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                        dimension.ValueOverride = "\u200E";
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        VerticalDimensionText(doc, doc.ActiveView, "6000", textPosition);
+                    }
+
+                    //二层管道尺寸标注
+                    referenceArray.Clear();
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部轮廓线");
+                    lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑底部轮廓线");
+                    if (lineList1.Count != 0 && lineList2.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("支架长度").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList2)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    }
+
+                    //三层管道尺寸标注
+                    referenceArray.Clear();
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部轮廓线");
+                    lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑底部轮廓线");
+                    if (lineList1.Count != 0 && lineList2.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("支架长度").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList2)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    }
+                }
+            }
+
+            referenceArray.Clear();
+        }
+        public void TypeB_CreatDimensionY(Document doc, FamilyInstance section, XYZ pickPoint) //B型支架创建Y方向尺寸标注
+        {
+            bool cableTray_Check = (bool)PipeSupportSection.mainfrm.CableTray.IsChecked;
+            ReferenceArray referenceArray = new ReferenceArray();
+            Reference ref1 = null;
+            Reference ref2 = null;
+            List<Line> lineList1 = new List<Line>();
+            List<Line> lineList2 = new List<Line>();
+            List<Line> lineList3 = new List<Line>();
+            Line tempLine = null;
+            Line dimLine = null;
+            XYZ targetPoint = new XYZ();
+            XYZ direction = new XYZ();
+            XYZ origionPoint = new XYZ();
+            XYZ textPosition = new XYZ();
+            double width = 500;
+            List<double> widthList = new List<double>();
+            Dimension dimension = null;
+
+            DimensionType dimType = null;
+            FilteredElementCollector dimTypeCollector = new FilteredElementCollector(doc);
+            dimTypeCollector.OfClass(typeof(DimensionType));
+            IList<Element> dimTypes = dimTypeCollector.ToElements();
+            foreach (DimensionType item in dimTypes)
+            {
+                if (item.Name.Contains("工艺")) //给排水标注样式调用有问题
+                {
+                    dimType = item;
+                    break;
+                }
+            }
+
+            if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+            {
+                if (!cableTray_Check)
+                {
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑顶部边界");
+                    if (lineList1.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("三层横撑长度L").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width / 2 - 500 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
+                        if (ref1 != null)
+                        {
+                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                        }
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                        dimension.ValueOverride = "\u200E";
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
+                    }
+                }
+                else
+                {
+                    //一层管道尺寸标注
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                    if (lineList1.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("二层左侧横撑长度L").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//特别注意中心前后及中心左右的参照平面不能通过名称获取
+                        if (ref1 != null)
+                        {
+                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                        }
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                        dimension.ValueOverride = "\u200E";
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
+                    }
+
+                    //二层管道尺寸标注
+                    referenceArray.Clear();
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                    lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "电缆桥架底部边界");
+                    if (lineList1.Count != 0 && lineList2.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = section.LookupParameter("二层左侧横撑长度L").AsDouble();
+                        origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList2)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    }
+                }
+
+            }
+
+            if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+            {
+                if (!cableTray_Check)
+                {
+                    //一层管道尺寸标注
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                    if (lineList1.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        if ((section.LookupParameter("二层左侧横撑长度L").AsDouble() + 100 / 304.8) > section.LookupParameter("三层横撑长度L").AsDouble() / 2)
+                        {
+                            width = section.LookupParameter("二层左侧横撑长度L").AsDouble();
+                        }
+                        else
+                        {
+                            width = section.LookupParameter("三层横撑长度L").AsDouble() / 2;
+                        }
+                        origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
+                        if (ref1 != null)
+                        {
+                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                        }
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                        dimension.ValueOverride = "\u200E";
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
+                    }
+
+                    //二层管道尺寸标注
+                    referenceArray.Clear();
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                    lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑底部边界");
+                    if (lineList1.Count != 0 && lineList2.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        if ((section.LookupParameter("二层左侧横撑长度L").AsDouble() + 100 / 304.8) > section.LookupParameter("三层横撑长度L").AsDouble() / 2)
+                        {
+                            width = section.LookupParameter("二层左侧横撑长度L").AsDouble();
+                        }
+                        else
+                        {
+                            width = section.LookupParameter("三层横撑长度L").AsDouble() / 2;
+                        }
+                        origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList2)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    }
+                }
+                else
+                {
+                    widthList.Add(section.LookupParameter("一层左侧横撑长度L").AsDouble() + 100 / 304.8);
+                    widthList.Add(section.LookupParameter("二层左侧横撑长度L").AsDouble() + 100 / 304.8);
+                    widthList.Add(section.LookupParameter("三层横撑长度L").AsDouble() / 2);
+                    widthList.Sort();
+                    //一层管道尺寸标注
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                    if (lineList1.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = widthList[widthList.Count - 1];
+                        origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//特别注意中心前后及中心左右的参照平面不能通过名称获取
+                        if (ref1 != null)
+                        {
+                            referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                        }
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                        dimension.ValueOverride = "\u200E";
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
+                    }
+
+                    //二层管道尺寸标注
+                    referenceArray.Clear();
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                    lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑底部边界");
+                    if (lineList1.Count != 0 && lineList2.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = widthList[widthList.Count - 1];
+                        origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList2)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    }
+
+                    //三层管道尺寸标注
+                    referenceArray.Clear();
+                    lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                    lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "电缆桥架底部边界");
+                    if (lineList1.Count != 0 && lineList2.Count != 0)
+                    {
+                        tempLine = lineList1.FirstOrDefault();
+                        tempLine.MakeUnbound();
+
+                        width = widthList[widthList.Count - 1];
+                        origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                        targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                        direction = (targetPoint - origionPoint).Normalize();
+                        dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                        foreach (Line item in lineList1)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+                        foreach (Line item in lineList2)
+                        {
+                            referenceArray.Append(item.Reference);
+                        }
+
+                        doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    }
+                }
+            }
+
+            if (PipeSupportSection.mainfrm.ThreeFloor.IsChecked == true)
+            {
+                widthList.Add(section.LookupParameter("一层左侧横撑长度L").AsDouble() + 100 / 304.8);
+                widthList.Add(section.LookupParameter("二层左侧横撑长度L").AsDouble() + 100 / 304.8);
+                widthList.Add(section.LookupParameter("三层横撑长度L").AsDouble() / 2);
+                widthList.Sort();
+
+                //一层管道尺寸标注
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                if (lineList1.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = widthList[widthList.Count - 1];
+                    origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//特别注意中心前后及中心左右的参照平面不能通过名称获取
+                    if (ref1 != null)
+                    {
+                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                    }
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
+                    dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                    dimension.ValueOverride = "\u200E";
+                    textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                    VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
+                }
+
+                //二层管道尺寸标注
+                referenceArray.Clear();
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = widthList[widthList.Count - 1];
+                    origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+
+                //三层管道尺寸标注
+                referenceArray.Clear();
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = widthList[widthList.Count - 1];
+                    origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+            }
+
+            referenceArray.Clear();
+        }
         public void TypeC_CreatDimensionY(Document doc, FamilyInstance section, string supportBoundary, XYZ pickPoint) //创建Y方向尺寸标注
         {
             List<Line> lineList = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, supportBoundary);
@@ -8112,7 +8774,403 @@ namespace FFETOOLS
 
             doc.Create.NewDimension(doc.ActiveView, dimLine, refArray, dimType);
         }
+        public void TypeC_CreatDimensionY(Document doc, FamilyInstance section, XYZ pickPoint) //C型支架创建Y方向尺寸标注用于三四层管道
+        {
+            ReferenceArray referenceArray = new ReferenceArray();
+            Reference ref1 = null;
+            Reference ref2 = null;
+            List<Line> lineList1 = new List<Line>();
+            List<Line> lineList2 = new List<Line>();
+            List<Line> lineList3 = new List<Line>();
+            Line tempLine = null;
+            Line dimLine = null;
+            XYZ targetPoint = new XYZ();
+            XYZ direction = new XYZ();
+            XYZ origionPoint = new XYZ();
+            XYZ textPosition = new XYZ();
+            double width = 500;
+            List<double> widthList = new List<double>();
+            Dimension dimension = null;
 
+            DimensionType dimType = null;
+            FilteredElementCollector dimTypeCollector = new FilteredElementCollector(doc);
+            dimTypeCollector.OfClass(typeof(DimensionType));
+            IList<Element> dimTypes = dimTypeCollector.ToElements();
+            foreach (DimensionType item in dimTypes)
+            {
+                if (item.Name.Contains("工艺")) //给排水标注样式调用有问题
+                {
+                    dimType = item;
+                    break;
+                }
+            }
+
+            if (PipeSupportSection.mainfrm.ThreeFloor.IsChecked == true)
+            {
+                //一层管道尺寸标注
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    origionPoint = new XYZ(pickPoint.X - 350 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+
+                //二层管道尺寸标注
+                referenceArray.Clear();
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    origionPoint = new XYZ(pickPoint.X - 350 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+            }
+           
+            if (PipeSupportSection.mainfrm.FourFloor.IsChecked == true)
+            {
+                //一层管道尺寸标注
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    origionPoint = new XYZ(pickPoint.X - 350 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+
+                //二层管道尺寸标注
+                referenceArray.Clear();
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    origionPoint = new XYZ(pickPoint.X - 350 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+
+                //三层管道尺寸标注
+                referenceArray.Clear();
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "三层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "四层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    origionPoint = new XYZ(pickPoint.X - 350 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+            }
+
+            referenceArray.Clear();
+        }
+        public void TypeD_CreatDimensionY(Document doc, FamilyInstance section, XYZ pickPoint) //D型支架创建Y方向尺寸标注
+        {
+            ReferenceArray referenceArray = new ReferenceArray();
+            Reference ref1 = null;
+            Reference ref2 = null;
+            List<Line> lineList1 = new List<Line>();
+            List<Line> lineList2 = new List<Line>();
+            List<Line> lineList3 = new List<Line>();
+            Line tempLine = null;
+            Line dimLine = null;
+            XYZ targetPoint = new XYZ();
+            XYZ direction = new XYZ();
+            XYZ origionPoint = new XYZ();
+            XYZ textPosition = new XYZ();
+            double width = 500;
+            List<double> widthList = new List<double>();
+            Dimension dimension = null;
+
+            DimensionType dimType = null;
+            FilteredElementCollector dimTypeCollector = new FilteredElementCollector(doc);
+            dimTypeCollector.OfClass(typeof(DimensionType));
+            IList<Element> dimTypes = dimTypeCollector.ToElements();
+            foreach (DimensionType item in dimTypes)
+            {
+                if (item.Name.Contains("工艺")) //给排水标注样式调用有问题
+                {
+                    dimType = item;
+                    break;
+                }
+            }
+
+            if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+            {
+                //一层管道尺寸标注
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                if (lineList1.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = section.LookupParameter("支架长度L").AsDouble()/2;
+                    origionPoint = new XYZ(pickPoint.X -width-400 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
+                    if (ref1 != null)
+                    {
+                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                    }
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }                 
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }             
+            }
+
+            if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+            {
+                //一层管道尺寸标注
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                if (lineList1.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = section.LookupParameter("支架长度L").AsDouble() / 2;
+                    origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    ref1 = section.GetReferences(FamilyInstanceReferenceType.CenterFrontBack).FirstOrDefault();//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
+                    if (ref1 != null)
+                    {
+                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                    }
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+
+                //二层管道尺寸标注
+                referenceArray.Clear();
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = section.LookupParameter("支架长度L").AsDouble() / 2;
+                    origionPoint = new XYZ(pickPoint.X - width - 400 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }           
+            }
+
+            referenceArray.Clear();
+        }
+        public void TypeE_CreatDimensionY(Document doc, FamilyInstance section, XYZ pickPoint) //E型支架创建Y方向尺寸标注
+        {
+            ReferenceArray referenceArray = new ReferenceArray();
+            Reference ref1 = null;
+            Reference ref2 = null;
+            List<Line> lineList1 = new List<Line>();
+            List<Line> lineList2 = new List<Line>();
+            List<Line> lineList3 = new List<Line>();
+            Line tempLine = null;
+            Line dimLine = null;
+            XYZ targetPoint = new XYZ();
+            XYZ direction = new XYZ();
+            XYZ origionPoint = new XYZ();
+            XYZ textPosition = new XYZ();
+            double width = 500;
+            List<double> widthList = new List<double>();
+            Dimension dimension = null;
+
+            DimensionType dimType = null;
+            FilteredElementCollector dimTypeCollector = new FilteredElementCollector(doc);
+            dimTypeCollector.OfClass(typeof(DimensionType));
+            IList<Element> dimTypes = dimTypeCollector.ToElements();
+            foreach (DimensionType item in dimTypes)
+            {
+                if (item.Name.Contains("工艺")) //给排水标注样式调用有问题
+                {
+                    dimType = item;
+                    break;
+                }
+            }
+
+            if (PipeSupportSection.mainfrm.OneFloor.IsChecked == true)
+            {
+                //一层管道尺寸标注
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "支墩顶部边界");
+                if (lineList1.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = section.LookupParameter("支架长度L").AsDouble() / 2;
+                    origionPoint = new XYZ(pickPoint.X - width - 300 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    ref1 = section.GetReferenceByName("室外地坪");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
+                    if (ref1 != null)
+                    {
+                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                    }
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+            }
+
+            if (PipeSupportSection.mainfrm.TwoFloor.IsChecked == true)
+            {
+                //一层管道尺寸标注
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "支墩顶部边界");
+                if (lineList1.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = section.LookupParameter("支架长度L").AsDouble() / 2;
+                    origionPoint = new XYZ(pickPoint.X - width - 300 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    ref1 = section.GetReferenceByName("室外地坪");//将实例中通过参照平面名称获取参照，前提是参照平面必须不能为非参照
+                    if (ref1 != null)
+                    {
+                        referenceArray.Append(ref1);//将获得的中线放入参照平台面内
+                    }
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+
+                //二层管道尺寸标注
+                referenceArray.Clear();
+                lineList1 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "一层横撑顶部边界");
+                lineList2 = GetReferenceOfDetailComponent(doc, section, doc.ActiveView, "二层横撑底部边界");
+                if (lineList1.Count != 0 && lineList2.Count != 0)
+                {
+                    tempLine = lineList1.FirstOrDefault();
+                    tempLine.MakeUnbound();
+
+                    width = section.LookupParameter("支架长度L").AsDouble() / 2;
+                    origionPoint = new XYZ(pickPoint.X - width - 300 / 304.8, pickPoint.Y, 0);
+                    targetPoint = tempLine.Project(origionPoint).XYZPoint;
+                    direction = (targetPoint - origionPoint).Normalize();
+                    dimLine = Line.CreateUnbound(origionPoint, direction);
+
+                    foreach (Line item in lineList1)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+                    foreach (Line item in lineList2)
+                    {
+                        referenceArray.Append(item.Reference);
+                    }
+
+                    doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
+                }
+            }
+
+            referenceArray.Clear();
+        }
         #endregion
         public void MovePipeNote(Document doc, AnnotationSymbol pipeNote, XYZ centerPoint, double moveLengh)
         {
@@ -8120,6 +9178,26 @@ namespace FFETOOLS
             IList<Leader> leadList = pipeNote.GetLeaders();
             Leader lead = leadList[0];
             lead.End = centerPoint;
+        }
+        public TextNote VerticalDimensionText(Document doc, View view, string text, XYZ point)
+        {
+            TextNote textValue = null;
+            TextNoteType type = null;
+            IList<TextNoteType> noteTypes = CollectorHelper.TCollector<TextNoteType>(doc);
+
+            foreach (var item in noteTypes)
+            {
+                if (item.Name.Contains("给排水-字高3.5"))
+                {
+                    type = item;
+                    break;
+                }
+            }
+
+            textValue = TextNote.Create(doc, view.Id, point, text, type.Id);
+            Line zAxis = Line.CreateBound(new XYZ(point.X, point.Y, 0), new XYZ(point.X, point.Y, 1));
+            ElementTransformUtils.RotateElement(doc, textValue.Id, zAxis, -Math.PI / 2);
+            return textValue;
         }
         private static List<Line> GetReferenceOfDetailComponent(Document doc
             , Element element, View view, string supportBoundary, string pipeCenterLine) //获取详图项目尺寸标注参照
