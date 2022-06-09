@@ -80,6 +80,14 @@ namespace FFETOOLS
             else
             {
                 CreatWells(doc, refList);
+                try
+                {
+                   
+                }
+                catch (Exception)
+                {                 
+                    //TaskDialog.Show("警告", "有管道占位符位于坡道上");
+                }             
             }
         }
 
@@ -234,7 +242,7 @@ namespace FFETOOLS
                     Parameter height = wellinstance.LookupParameter("偏移");
                     height.SetValueString(lgh.ToString());
                     Parameter depth = wellinstance.LookupParameter("管中心高");
-                    depth.SetValueString("1500");
+                    depth.SetValueString("1600");
 
                     Parameter code = wellinstance.LookupParameter("标记");
                     code.Set("P" + num.ToString());
@@ -354,15 +362,14 @@ namespace FFETOOLS
             Func<View3D, bool> isNotTemplate = v3 => !(v3.IsTemplate);
             View3D view3D = collector.OfClass(typeof(View3D)).Cast<View3D>().First<View3D>(isNotTemplate);
 
-            FilteredElementCollector TopographCollector = new FilteredElementCollector(doc).OfClass(typeof(TopographySurface)).OfCategory(BuiltInCategory.OST_Topography);
-            IList<Element> topographs = TopographCollector.ToElements();
-            TopographySurface topography = topographs.ElementAt(0) as TopographySurface;
+            IList<TopographySurface> topographys = CollectorHelper.TCollector<TopographySurface>(doc);
+            TopographySurface topography = topographys.FirstOrDefault(x => x.Name.Contains("表面"));
 
             // Project in the negative Z direction down to the floor.特别注意Z值,决定了射线的方向,-1向下,1向上
             XYZ rayDirection = new XYZ(0, 0, 1);
 
             // Look for references to faces where the element is the floor element id.
-            ReferenceIntersector referenceIntersector = new ReferenceIntersector(topography.Id, FindReferenceTarget.Mesh, view3D);
+            ReferenceIntersector referenceIntersector = new ReferenceIntersector(topography.Id, FindReferenceTarget.Mesh ,view3D);
             IList<ReferenceWithContext> references = referenceIntersector.Find(center, rayDirection);
 
             double distance = Double.PositiveInfinity;
@@ -378,8 +385,14 @@ namespace FFETOOLS
                     intersection = reference.GlobalPoint;
                 }
             }
-            // Create line segment from the start point and intersection point.
-            Line result = Line.CreateBound(center, intersection);
+
+            Line result = Line.CreateBound(center, center*0.005);
+            if (intersection != null) //有些地形表面与管道占位符无法获得交点
+            {
+                // Create line segment from the start point and intersection point.
+                result = Line.CreateBound(center, intersection);
+            }    
+            
             return result;
         }
         public bool EqualPoint(XYZ point1, XYZ point2)

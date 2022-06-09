@@ -363,6 +363,17 @@
                     </Button.Template>
                 </Button>
 
+                <Button x:Name="Button29" Content="坐 标 标 注"  Grid.Column="1" Grid.Row="3" Margin="12,10,12,10" Click="Button29_Click"  FontSize="12" Cursor="Hand">
+                    <Button.Template >
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                <Border.Background>LightGray</Border.Background>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center" VerticalAlignment="Center" ></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
             </Grid>
         </GroupBox>
 

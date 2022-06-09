@@ -245,6 +245,11 @@ namespace FFETOOLS
             {
                 CreatDemensionEP(doc, uidoc);
             }
+
+            if (CreatPipeTag.mainfrm.clicked == 29)
+            {
+                CreatSpotNote(doc, uidoc);
+            }
             //tg.Assimilate();
         }
 
@@ -505,7 +510,7 @@ namespace FFETOOLS
 
                             if (activeView.ViewType == ViewType.Section)
                             {
-                                line_i = Line.CreateUnbound(new XYZ(selPoint.X,selPoint.Y,selPoint.Z+ lenght * activeView.Scale * 1.9), lineDir);
+                                line_i = Line.CreateUnbound(new XYZ(selPoint.X, selPoint.Y, selPoint.Z + lenght * activeView.Scale * 1.9), lineDir);
                             }
 
                             if (grids.Count > 2)
@@ -568,6 +573,46 @@ namespace FFETOOLS
                 return false;
             }
             return true;
+        }
+        public bool CreatSpotNote(Document doc, UIDocument uidoc)//创建坐标存在改进空间，坐标标注样式有些出入
+        {
+            try
+            {
+                SpotDimensionType type = null;
+                type = CollectorHelper.TCollector<SpotDimensionType>(doc).FirstOrDefault(x => x.Name == "给排水_XY坐标");
+                if (type != null)
+                {
+                    uidoc.PostRequestForElementTypePlacement(type);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("不存在给排水_XY坐标标注样式"+"\n"+"请传递项目标注予以解决!","警告",MessageBoxButton.OK,MessageBoxImage.Information);
+                }
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
+        }
+        public SpotDimensionType CreatSpotDimensionType(Document doc)//坐标标注样式不好修改，暂时不做
+        {
+            IList<SpotDimensionType> noteTypes = CollectorHelper.TCollector<SpotDimensionType>(doc);
+            SpotDimensionType existType = noteTypes.FirstOrDefault();
+
+            SpotDimensionType duplicatedtextType = null;
+            duplicatedtextType = existType.Duplicate("给排水-XY坐标") as SpotDimensionType;
+
+            duplicatedtextType.LookupParameter("北/南指示器").Set("Y");
+            duplicatedtextType.LookupParameter("东/西指示器").Set("X");
+            duplicatedtextType.LookupParameter("文字字体").Set("Arial");
+            duplicatedtextType.LookupParameter("文字背景").Set(1);
+            duplicatedtextType.LookupParameter("下划线").Set(0);
+            duplicatedtextType.LookupParameter("粗体").Set(0);
+            duplicatedtextType.LookupParameter("斜体").Set(0);
+            duplicatedtextType.LookupParameter("引线箭头").Set(new ElementId(-1));//箭头设置为无的办法
+
+            return duplicatedtextType;
         }
         public bool CreatSupportSectionNote(Document doc, UIDocument uidoc)
         {

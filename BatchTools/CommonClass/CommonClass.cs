@@ -1030,4 +1030,140 @@ namespace FFETOOLS
             return FailureProcessingResult.ProceedWithCommit;
         }
     }
+    public static class TemUtils
+    {
+        public static List<Face> Getupfaces(this Solid solid)
+        {
+            var upfaces = new List<Face>();
+            var faces = solid.Faces;
+            foreach (Face face in faces)
+            {
+                var normal = face.ComputeNormal(new UV());
+                if (normal.IsSameDirection(XYZ.BasisZ))
+                {
+                    upfaces.Add(face);
+                }
+            }
+            return upfaces;
+        }
+        public static List<Face> Getupfaces(this GeometryObject geoele)
+        {
+            var solids = geoele.Getsolids();
+            var upfaces = new List<Face>();
+            foreach (var solid in solids)
+            {
+                var temupfaces = solid.Getupfaces();
+                if (temupfaces.Count > 0)
+                {
+                    upfaces.AddRange(temupfaces);
+                }
+            }
+            return upfaces;
+        }
+        public static List<Solid> Getsolids(this GeometryObject geoobj)
+        {
+            var solids = new List<Solid>();
+            if (geoobj is Solid solid)
+            {
+                solids.Add(solid);
+            }
+            else if (geoobj is GeometryInstance geoInstance)
+            {
+                var transform = geoInstance.Transform;
+                var symbolgeometry = geoInstance.SymbolGeometry;
+                var enu = symbolgeometry.GetEnumerator();
+                while (enu.MoveNext())
+                {
+                    var temgeoobj = enu.Current as GeometryObject;
+                    solids.AddRange(Getsolids(temgeoobj));
+                }
+            }
+            else if (geoobj is GeometryElement geoElement)
+            {
+                var enu = geoElement.GetEnumerator();
+                while (enu.MoveNext())
+                {
+                    var temgeoobj = enu.Current as GeometryObject;
+                    solids.AddRange(Getsolids(temgeoobj));
+                }
+            }
+            return solids;
+        }
+        public static List<Solid> Getsolids(this GeometryObject geoobj, Transform trs)
+        {
+            var solids = new List<Solid>();
+            if (geoobj is Solid solid)
+            {
+                if (trs != null || trs != Transform.Identity)
+                {
+                    solid = SolidUtils.CreateTransformed(solid, trs);
+                }
+                solids.Add(solid);
+            }
+            else if (geoobj is GeometryInstance geoInstance)
+            {
+                var transform = geoInstance.Transform;
+                var symbolgeometry = geoInstance.SymbolGeometry;
+                var enu = symbolgeometry.GetEnumerator();
+                while (enu.MoveNext())
+                {
+                    var temgeoobj = enu.Current as GeometryObject;
+                    solids.AddRange(Getsolids(temgeoobj, transform));
+                }
+            }
+            else if (geoobj is GeometryElement geoElement)
+            {
+                var enu = geoElement.GetEnumerator();
+                while (enu.MoveNext())
+                {
+                    var temgeoobj = enu.Current as GeometryObject;
+                    solids.AddRange(Getsolids(temgeoobj, trs));
+                }
+            }
+            return solids;
+        }
+        public static List<GeometryObject> Getsolids(this Element element)
+        {
+            var result = new List<GeometryObject>();
+            var geometryEle = element.get_Geometry(new Options() { DetailLevel = ViewDetailLevel.Fine });
+            var enu = geometryEle.GetEnumerator();
+            while (enu.MoveNext())
+            {
+                var curGeoobj = enu.Current;
+                result.AddRange(curGeoobj.Getsolids(Transform.Identity));
+            }
+            return result;
+        }
+        public static CurveArray ToCurveArray(this CurveLoop curveloop)
+        {
+            var result = new CurveArray();
+            foreach (Curve c in curveloop)
+            {
+                result.Append(c);
+            }
+            return result;
+        }
+    }
+    public static class Extensions
+    {
+        public static IEnumerable<T> Distinct<T>(
+            this IEnumerable<T> source, Func<T, T, bool> comparer)
+            where T : class
+            => source.Distinct(new DynamicEqualityComparer<T>(comparer));
+
+        private sealed class DynamicEqualityComparer<T> : IEqualityComparer<T>
+            where T : class
+        {
+            private readonly Func<T, T, bool> _func;
+
+            public DynamicEqualityComparer(Func<T, T, bool> func)
+            {
+                _func = func;
+            }
+
+            public bool Equals(T x, T y) => _func(x, y);
+
+            public int GetHashCode(T obj) => 0;
+        }
+    }
 }

@@ -268,6 +268,12 @@ namespace FFETOOLS
             Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
             eventHandlerCreatPipe.Raise();
         }
+        private void Button29_Click(object sender, RoutedEventArgs e)
+        {
+            clicked = 29;
+            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            eventHandlerCreatPipe.Raise();
+        }
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             clicked = 100;
@@ -324,7 +330,6 @@ namespace FFETOOLS
             }
 
         }
-
-        
+     
     }
 }
