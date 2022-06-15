@@ -88,7 +88,7 @@
     <Compile Include="Test\Class2.cs" />
     <Compile Include="Test\Class3.cs" />
     <Compile Include="Others\GridTo2D.cs" />
-    <Compile Include="Test\OpenBimPlate.cs" />
+    <Compile Include="Others\OpenBimPlate.cs" />
     <Compile Include="CommonClass\CommonClass.cs" />
     <Compile Include="Test\CreatFloorOpening.cs" />
     <Compile Include="Test\CreatFloorOpeningByMaual.cs" />
@@ -130,6 +130,8 @@
     <Compile Include="Test\RevitClass13.cs" />
     <Compile Include="Test\RevitClass14.cs" />
     <Compile Include="Test\RevitClass15.cs" />
+    <Compile Include="Test\RevitClass16.cs" />
+    <Compile Include="Test\RevitClass17.cs" />
     <Compile Include="Test\RevitClass2.cs" />
     <Compile Include="Test\RevitClass3.cs" />
     <Compile Include="Test\RevitClass4.cs" />

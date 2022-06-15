@@ -618,5 +618,11 @@
   <ItemGroup>
     <Resource Include="Resources\C型支架一层.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\P型存水弯.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\S型存水弯.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

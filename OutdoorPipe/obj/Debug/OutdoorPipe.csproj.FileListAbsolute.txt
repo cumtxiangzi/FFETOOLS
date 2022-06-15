@@ -516,6 +516,7 @@ D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\F
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\bin\Debug\OutdoorPipe.pdb
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\bin\Debug\EPPlus.dll
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\bin\Debug\Gma.System.MouseKeyHook.dll
+D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\OutdoorPipe.csproj.AssemblyReference.cache
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\CreatOutdoorPipes\CreatOutdoorPipesForm.g.cs
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\CreatOutdoorPipes\CalculateWindow.g.cs
 D:\工作G盘\Favorites\Revit二次开发-2020.3.8\FFETOOLS开发源码\源码\FFETOOLS-GIT\FFETOOLS\OutdoorPipe\obj\Debug\CreatWaterFamily\CreatWaterFamilyForm.g.cs

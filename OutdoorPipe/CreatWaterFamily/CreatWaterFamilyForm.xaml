@@ -243,6 +243,14 @@
                 <Image x:Name="SteelBlindFlange" Source="/OutdoorPipe;component/Resources/钢盲法兰.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="SteelBlindFlange_MouseMove"  MouseDown="SteelBlindFlange_MouseDown" />
             </ListViewItem>
 
+            <ListViewItem Margin="3" >
+                <Image x:Name="TypePTrap" Source="/OutdoorPipe;component/Resources/P型存水弯.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="TypePTrap_MouseMove"  MouseDown="TypePTrap_MouseDown" />
+            </ListViewItem>
+
+            <ListViewItem Margin="3" >
+                <Image x:Name="TypeSTrap" Source="/OutdoorPipe;component/Resources/S型存水弯.jpg"  Width="65" Height="65" Stretch="Fill"  MouseMove="TypeSTrap_MouseMove"  MouseDown="TypeSTrap_MouseDown" />
+            </ListViewItem>
+
         </ListView>
 
         <ListView Name="WaterSupplyEquipment" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" BorderBrush="Gray" VerticalAlignment="Stretch" 

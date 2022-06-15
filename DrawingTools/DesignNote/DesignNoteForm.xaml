@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
-        Title="给排水设计说明" Name="this" Height="650" Width="850" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen"
+        Title="给排水设计说明流程图" Name="this" Height="650" Width="850" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen"
         KeyDown="this_KeyDown"  Loaded="this_Loaded" >
 
     <Grid>
@@ -29,9 +29,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <RadioButton x:Name="Cement_Button"  Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="水泥项目"/>
-                <RadioButton x:Name="GuLiao_Button"  Grid.Column="1" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="骨料项目"/>
-                <RadioButton x:Name="WeiFei_Button"  Grid.Column="2" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="危废项目"/>
+                <RadioButton x:Name="DesignNote_Button"  Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" 
+                             Content="设计说明" />
+                <RadioButton x:Name="FlowDrawing_Button"  Grid.Column="1" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" 
+                             Content="流程图" />
+                <RadioButton x:Name="StructureList_Button"  Grid.Column="2" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" 
+                             Content="构筑物一览表" />
             </Grid>
         </GroupBox>
 

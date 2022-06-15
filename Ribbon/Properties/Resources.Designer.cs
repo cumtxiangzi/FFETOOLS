@@ -123,6 +123,16 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Icon CreatConstructionPlan {
+            get {
+                object obj = ResourceManager.GetObject("CreatConstructionPlan", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Icon CreatDrawing {
             get {
                 object obj = ResourceManager.GetObject("CreatDrawing", resourceCulture);
@@ -133,19 +143,9 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Icon CreatFloorOpening {
+        internal static System.Drawing.Icon CreatOutdoorPipes {
             get {
-                object obj = ResourceManager.GetObject("CreatFloorOpening", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Icon CreatFloorOpeningByMaual {
-            get {
-                object obj = ResourceManager.GetObject("CreatFloorOpeningByMaual", resourceCulture);
+                object obj = ResourceManager.GetObject("CreatOutdoorPipes", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -203,6 +203,16 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Icon CreatSleeveTable {
+            get {
+                object obj = ResourceManager.GetObject("CreatSleeveTable", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Icon CreatTeeFitting {
             get {
                 object obj = ResourceManager.GetObject("CreatTeeFitting", resourceCulture);
@@ -213,9 +223,9 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Icon CreatWallOpening {
+        internal static System.Drawing.Icon CreatWalByGrid {
             get {
-                object obj = ResourceManager.GetObject("CreatWallOpening", resourceCulture);
+                object obj = ResourceManager.GetObject("CreatWalByGrid", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -223,9 +233,9 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Icon CreatWallOpeningByManual {
+        internal static System.Drawing.Icon CreatWaterFamily {
             get {
-                object obj = ResourceManager.GetObject("CreatWallOpeningByManual", resourceCulture);
+                object obj = ResourceManager.GetObject("CreatWaterFamily", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -236,6 +246,16 @@ namespace FFETOOLS.Properties {
         internal static System.Drawing.Icon CreatWorkset {
             get {
                 object obj = ResourceManager.GetObject("CreatWorkset", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon DesignNote {
+            get {
+                object obj = ResourceManager.GetObject("DesignNote", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -263,9 +283,9 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Icon FindMachine {
+        internal static System.Drawing.Icon GridTo2D {
             get {
-                object obj = ResourceManager.GetObject("FindMachine", resourceCulture);
+                object obj = ResourceManager.GetObject("GridTo2D", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -283,16 +303,6 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Icon ImportFamilyImage {
-            get {
-                object obj = ResourceManager.GetObject("ImportFamilyImage", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
-        /// </summary>
         internal static System.Drawing.Icon NotePipes {
             get {
                 object obj = ResourceManager.GetObject("NotePipes", resourceCulture);
@@ -303,9 +313,29 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Icon OutdoorPipes {
+        internal static System.Drawing.Icon OpenBimPlate {
             get {
-                object obj = ResourceManager.GetObject("OutdoorPipes", resourceCulture);
+                object obj = ResourceManager.GetObject("OpenBimPlate", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon OutdoorDrangePipe {
+            get {
+                object obj = ResourceManager.GetObject("OutdoorDrangePipe", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon OverrideDimensions {
+            get {
+                object obj = ResourceManager.GetObject("OverrideDimensions", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -333,9 +363,29 @@ namespace FFETOOLS.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Icon PipeSupportSection {
+            get {
+                object obj = ResourceManager.GetObject("PipeSupportSection", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Icon PumpGroup {
             get {
                 object obj = ResourceManager.GetObject("PumpGroup", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon PumpStation {
+            get {
+                object obj = ResourceManager.GetObject("PumpStation", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -356,6 +406,16 @@ namespace FFETOOLS.Properties {
         internal static System.Drawing.Icon RaiseTeeBranch {
             get {
                 object obj = ResourceManager.GetObject("RaiseTeeBranch", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon ShowAndCloseGridNumber {
+            get {
+                object obj = ResourceManager.GetObject("ShowAndCloseGridNumber", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -416,6 +476,16 @@ namespace FFETOOLS.Properties {
         internal static System.Drawing.Icon WaterPool {
             get {
                 object obj = ResourceManager.GetObject("WaterPool", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon WellPoint {
+            get {
+                object obj = ResourceManager.GetObject("WellPoint", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

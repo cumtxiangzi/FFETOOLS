@@ -136,14 +136,14 @@
   <data name="BreakPipe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BreakPipe.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CreatConstructionPlan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CreatConstructionPlan.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="CreatDrawing" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CreatDrawing.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CreatFloorOpening" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CreatFloorOpening.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CreatFloorOpeningByMaual" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CreatFloorOpeningByMaual.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CreatOutdoorPipes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CreatOutdoorPipes.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CreatPipe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CreatPipe.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -160,17 +160,23 @@
   <data name="CreatSectionBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CreatSectionBox.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CreatSleeveTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CreatSleeveTable.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="CreatTeeFitting" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CreatTeeFitting.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CreatWallOpening" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CreatWallOpening.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CreatWalByGrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CreatWalByGrid.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CreatWallOpeningByManual" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CreatWallOpeningByManual.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CreatWaterFamily" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CreatWaterFamily.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CreatWorkset" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CreatWorkset.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DesignNote" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DesignNote.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ExportDLT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExportDLT.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -178,20 +184,23 @@
   <data name="ExportELT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExportELT.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FindMachine" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FindMachine.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="GridTo2D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GridTo2D.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="HydrantConnect" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HydrantConnect.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ImportFamilyImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ImportFamilyImage.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="NotePipes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NotePipes.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="OutdoorPipes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OutdoorPipes.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OpenBimPlate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OpenBimPlate.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OutdoorDrangePipe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OutdoorDrangePipe.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OverrideDimensions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OverrideDimensions.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PipeAvoid" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PipeAvoid.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -199,14 +208,23 @@
   <data name="PipeShowBold" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PipeShowBold.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="PipeSupportSection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PipeSupportSection.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="PumpGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PumpGroup.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PumpStation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PumpStation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RaisePipes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RaisePipes.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RaiseTeeBranch" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RaiseTeeBranch.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowAndCloseGridNumber" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShowAndCloseGridNumber.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ShowSectionSymbol" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ShowSectionSymbol.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -225,5 +243,8 @@
   </data>
   <data name="WaterPool" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WaterPool.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WellPoint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WellPoint.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

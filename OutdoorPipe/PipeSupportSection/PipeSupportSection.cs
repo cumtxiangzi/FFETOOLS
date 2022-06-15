@@ -70,10 +70,9 @@ namespace FFETOOLS
                 }
 
             }
-            catch (Exception e)
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
-                MessageBox.Show(e.ToString());
-                //Autodesk.Revit.Exceptions.OperationCanceledException
+                //MessageBox.Show(e.ToString());
             }
         }
         public string GetName()

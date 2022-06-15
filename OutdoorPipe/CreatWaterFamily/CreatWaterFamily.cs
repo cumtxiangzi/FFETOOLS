@@ -94,7 +94,7 @@ namespace FFETOOLS
         public FamilySymbol CreatWaterFamilyMethod(Document doc)
         {
             int index = CreatWaterFamily.mainfrm.index;
-            string familyName = CreatWaterFamily.mainfrm.FamilyName.Text;
+            string familyName = CreatWaterFamily.mainfrm.FamilyNameText;
             FamilySymbol familySymbol = null;
             switch (index)
             {
@@ -565,6 +565,14 @@ namespace FFETOOLS
                 case 118:
                     FamilyLoad(doc, "加热设备", familyName);
                     familySymbol = EquipmentSymbol(doc, "加热设备", familyName);
+                    break;
+                case 119:
+                    FamilyLoad(doc, "管件", familyName);
+                    familySymbol = PipeFittingSymbol(doc, "管件", familyName);
+                    break;
+                case 120:
+                    FamilyLoad(doc, "管件", familyName);
+                    familySymbol = PipeFittingSymbol(doc, "管件", familyName);
                     break;
                 default:
                     break;

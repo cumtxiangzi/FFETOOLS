@@ -36,8 +36,9 @@ namespace FFETOOLS
         }
         private void this_Loaded(object sender, RoutedEventArgs e)
         {
-            Cement_Button.IsChecked = true;
+            DesignNote_Button.IsChecked =true;
             CH_Button.IsChecked = true;
+            //WorkShopNameListBox.SelectedIndex=0;
             WorkShopText.Visibility = System.Windows.Visibility.Hidden;
         }
         private void this_KeyDown(object sender, KeyEventArgs e)
@@ -52,5 +53,6 @@ namespace FFETOOLS
             eventHandlerDesignNote.Raise();
             Hide();
         }
+
     }
 }

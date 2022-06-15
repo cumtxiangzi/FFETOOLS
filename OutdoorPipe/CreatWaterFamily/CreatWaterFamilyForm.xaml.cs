@@ -28,6 +28,7 @@ namespace FFETOOLS
         Autodesk.Revit.UI.ExternalEvent eventHandlerCreatWaterFamily = null;
         BindingList<BitmapImage> imgItems = new BindingList<BitmapImage>();
         public int index = 0;
+        public string FamilyNameText = null;
         public CreatWaterFamilyForm()
         {
             InitializeComponent();
@@ -51,7 +52,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Hidden;
-            OtherSymbol.Visibility = Visibility.Hidden; 
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void MainForm_Loaded(object sender, RoutedEventArgs e)
         {
@@ -182,7 +183,7 @@ namespace FFETOOLS
             WaterSupplyComponent.Visibility = Visibility.Hidden;
             FireEquipment.Visibility = Visibility.Hidden;
             AnnotationSymbol.Visibility = Visibility.Visible;
-            OtherSymbol.Visibility = Visibility.Hidden;    
+            OtherSymbol.Visibility = Visibility.Hidden;
         }
         private void OtherButton_Click(object sender, RoutedEventArgs e)
         {
@@ -202,476 +203,605 @@ namespace FFETOOLS
         #region 族名称显示
         private void ButterflyValveWoLun_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "蝶阀D37A1X-10";
             FamilyName.Text = "蝶阀D37A1X-10";
         }
         private void ButterflyValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "蝶阀D7A1X-10";
             FamilyName.Text = "蝶阀D7A1X-10";
         }
         private void GateValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "闸阀Z15T-10";
             FamilyName.Text = "闸阀Z15T-10";
         }
         private void GateValveFaLan_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "闸阀Z45-10";
             FamilyName.Text = "闸阀Z45-10";
         }
         private void StopValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "截止阀";
             FamilyName.Text = "截止阀";
         }
         private void E_ButterflyValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "电动蝶阀D97A1X-10";
             FamilyName.Text = "电动蝶阀D97A1X-10";
         }
         private void E_GateValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "电动闸阀Z945W-10";
             FamilyName.Text = "电动闸阀Z945W-10";
         }
         private void CheckValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "蝶形止回阀H77X-10";
             FamilyName.Text = "蝶形止回阀H77X-10";
         }
         private void CheckValveWeiZu_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "微阻缓闭式止回阀HH44X-10";
             FamilyName.Text = "微阻缓闭式止回阀HH44X-10";
         }
         private void VentValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "自动排气阀ARVX-10";
             FamilyName.Text = "自动排气阀ARVX-10";
         }
         private void PressureValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "泄压阀";
             FamilyName.Text = "泄压阀";
         }
         private void BallValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "球阀";
             FamilyName.Text = "球阀";
         }
         private void ControlValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "液压水位控制阀";
             FamilyName.Text = "液压水位控制阀";
         }
         private void SolenoidValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "电磁阀";
             FamilyName.Text = "电磁阀";
         }
         private void DaBianValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "大便器自闭冲洗阀";
             FamilyName.Text = "大便器自闭冲洗阀";
         }
         private void XiaoBianValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "小便器自闭式冲洗阀";
             FamilyName.Text = "小便器自闭式冲洗阀";
         }
         private void ChaBanValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "插板阀";
             FamilyName.Text = "插板阀";
         }
         private void FuQiuValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "浮球阀";
             FamilyName.Text = "浮球阀";
         }
         private void AngleValve_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "角阀";
             FamilyName.Text = "角阀";
         }
         private void WaterMeterXuanYi_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "旋翼式水表";
             FamilyName.Text = "旋翼式水表";
         }
         private void WaterMeterLuoYi_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "螺翼式水表";
             FamilyName.Text = "螺翼式水表";
         }
         private void FlowMeter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "电磁流量计";
             FamilyName.Text = "电磁流量计";
         }
         private void PressureGauge_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "压力表";
             FamilyName.Text = "压力表";
         }
         private void VacuumMeter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "真空表";
             FamilyName.Text = "真空表";
         }
         private void PressureSensor_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "压力变送器";
             FamilyName.Text = "压力变送器";
         }
         private void TemperatureSensor_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "温度变送器";
             FamilyName.Text = "温度变送器";
         }
         private void Thermometer_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "温度计";
             FamilyName.Text = "温度计";
         }
         private void RubberJoint_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "挠性橡胶接头";
             FamilyName.Text = "挠性橡胶接头";
         }
         private void TypeYFilter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "Y型过滤器";
             FamilyName.Text = "Y型过滤器";
         }
         private void WaterTap_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "水嘴";
             FamilyName.Text = "水嘴";
         }
         private void SuctionBell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "吸水喇叭口";
             FamilyName.Text = "吸水喇叭口";
         }
         private void OverFlowBell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "溢流管喇叭口";
             FamilyName.Text = "溢流管喇叭口";
         }
         private void FloorDrain_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "圆形地漏";
             FamilyName.Text = "圆形地漏";
         }
         private void VentTap_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "通气帽";
             FamilyName.Text = "通气帽";
         }
         private void CleanOut_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "清扫口";
             FamilyName.Text = "清扫口";
         }
         private void CheckOut_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "检查口";
             FamilyName.Text = "检查口";
         }
         private void SinglePump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "卧式单吸泵";
             FamilyName.Text = "卧式单吸泵";
         }
         private void DoublePump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "卧式双吸泵";
             FamilyName.Text = "卧式双吸泵";
         }
         private void DingYaPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "定压补水装置";
             FamilyName.Text = "定压补水装置";
         }
         private void LongShaftPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "立式长轴泵";
             FamilyName.Text = "立式长轴泵";
         }
         private void QianShuiPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "潜水泵(移动式安装)";
             FamilyName.Text = "潜水泵(移动式安装)";
         }
         private void GuDingPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "潜水泵(固定式安装)";
             FamilyName.Text = "潜水泵(固定式安装)";
         }
         private void VerticalPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "立式消防泵";
             FamilyName.Text = "立式消防泵";
         }
         private void ChaiYouPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "柴油消防泵";
             FamilyName.Text = "柴油消防泵";
         }
         private void HengYaPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "恒压变频供水设备";
             FamilyName.Text = "恒压变频供水设备";
         }
         private void DieYaPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "管网叠压供水设备";
             FamilyName.Text = "管网叠压供水设备";
         }
         private void PipePump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "立式管道泵";
             FamilyName.Text = "立式管道泵";
         }
         private void ZiXiPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "自吸泵";
             FamilyName.Text = "自吸泵";
         }
         private void ClSensor_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "余(总)氯在线分析仪";
             FamilyName.Text = "余(总)氯在线分析仪";
         }
         private void NTUSensor_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "在线浊度仪";
             FamilyName.Text = "在线浊度仪";
         }
         private void CODSensor_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "COD在线分析仪";
             FamilyName.Text = "COD在线分析仪";
         }
         private void NH3Sensor_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "NH3-N在线分析仪";
             FamilyName.Text = "NH3-N在线分析仪";
         }
         private void ShaGangFilter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "砂缸过滤器";
             FamilyName.Text = "砂缸过滤器";
         }
         private void PanShiFilter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "盘式过滤器";
             FamilyName.Text = "盘式过滤器";
         }
         private void WuFaFilter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "钢制重力式无阀过滤器";
             FamilyName.Text = "钢制重力式无阀过滤器";
         }
         private void QiFuEquipment_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "气浮溶气装置";
             FamilyName.Text = "气浮溶气装置";
         }
         private void SanDuanShiFilter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "三段式给水处理设备200T";
             FamilyName.Text = "三段式给水处理设备200T";
         }
         private void HunNingJi_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "混凝剂加药装置";
             FamilyName.Text = "混凝剂加药装置";
         }
         private void ShaJunJi_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "杀菌剂加药装置";
             FamilyName.Text = "杀菌剂加药装置";
         }
         private void NaClO_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "NaCLO加药装置";
             FamilyName.Text = "NaCLO加药装置";
         }
         private void ZuGouJi_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "阻垢剂加药装置";
             FamilyName.Text = "阻垢剂加药装置";
         }
         private void SewageTreat1T_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "一体式污水处理设备1T";
             FamilyName.Text = "一体式污水处理设备1T";
         }
         private void SewageTreat3T_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "一体式污水处理设备3T";
             FamilyName.Text = "一体式污水处理设备3T";
         }
         private void SewageTreat5T_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "一体式污水处理设备5T";
             FamilyName.Text = "一体式污水处理设备5T";
         }
         private void SewageTreat10T_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "一体式污水处理设备10T";
             FamilyName.Text = "一体式污水处理设备10T";
         }
         private void SewageTreat15T_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "一体式污水处理设备15T";
             FamilyName.Text = "一体式污水处理设备15T";
         }
         private void WaterTank_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "矩形给水箱";
             FamilyName.Text = "矩形给水箱";
         }
         private void EyeWasher_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "复合式冲淋洗眼器";
             FamilyName.Text = "复合式冲淋洗眼器";
         }
         private void HuiHeTee_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "塑料排水检查井(90°汇合三通井座)";
             FamilyName.Text = "塑料排水检查井(90°汇合三通井座)";
         }
         private void HuiHeCross_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "塑料排水检查井(90°汇合四通井座)";
             FamilyName.Text = "塑料排水检查井(90°汇合四通井座)";
         }
         private void ZhiLiElbow_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "塑料排水检查井(直立90°弯头井座)";
             FamilyName.Text = "塑料排水检查井(直立90°弯头井座)";
         }
         private void ElbowWell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "塑料排水检查井(90°弯头井座)";
             FamilyName.Text = "塑料排水检查井(90°弯头井座)";
         }
         private void ZuoYouTee_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "塑料排水检查井(90°左(右)三通井座)";
             FamilyName.Text = "塑料排水检查井(90°左(右)三通井座)";
         }
         private void ZhiTongTee_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "塑料排水检查井(直通式井座)";
             FamilyName.Text = "塑料排水检查井(直通式井座)";
         }
         private void ZhuanQiValveWell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "砖砌圆形阀门井";
             FamilyName.Text = "砖砌圆形阀门井";
         }
         private void ZhuanQiCheckWell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "砖砌排水检查井";
             FamilyName.Text = "砖砌排水检查井";
         }
         private void ConcretCheckWell_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "钢筋混凝土排水检查井";
             FamilyName.Text = "钢筋混凝土排水检查井";
         }
         private void DrainageDitch_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "室内排水沟";
             FamilyName.Text = "室内排水沟";
         }
         private void ConcretHuaFenChi_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "钢筋混凝土化粪池";
             FamilyName.Text = "钢筋混凝土化粪池";
         }
         private void IndoorHydrant_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "室内消火栓箱(明装)";
             FamilyName.Text = "室内消火栓箱(明装)";
         }
         private void ShouTiExtinguisher_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "手提干粉灭火器";
             FamilyName.Text = "手提干粉灭火器";
         }
         private void TuiCheExtinguisher_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "推车式干粉灭火器";
             FamilyName.Text = "推车式干粉灭火器";
         }
         private void OilTank_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "柴油消防泵油箱";
             FamilyName.Text = "柴油消防泵油箱";
         }
         private void GroundAdapter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "地上式水泵接合器";
             FamilyName.Text = "地上式水泵接合器";
         }
         private void UnderGroundAdapter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "地下式水泵接合器";
             FamilyName.Text = "地下式水泵接合器";
         }
         private void WallAdapter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "墙壁式水泵接合器";
             FamilyName.Text = "墙壁式水泵接合器";
         }
         private void FM200GuiShi_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "柜式预制灭火装置(七氟丙烷)";
             FamilyName.Text = "柜式预制灭火装置(七氟丙烷)";
         }
         private void FM200Cylinder_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "七氟丙烷灭火系统瓶组";
             FamilyName.Text = "七氟丙烷灭火系统瓶组";
         }
         private void UpGasNozzle_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "气体喷头(上喷)";
             FamilyName.Text = "气体喷头(上喷)";
         }
         private void DownGasNozzle_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "气体喷头(下喷)";
             FamilyName.Text = "气体喷头(下喷)";
         }
         private void IG541Cylinder_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "IG541灭火系统瓶组";
             FamilyName.Text = "IG541灭火系统瓶组";
         }
         private void NFPAⅢHydrant_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "NFPA Class III 消火栓箱(明装)";
             FamilyName.Text = "NFPA Class III 消火栓箱(明装)";
         }
         private void NPFAⅡHydrant_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "NFPA Class Ⅱ 消火栓箱(明装)";
             FamilyName.Text = "NFPA Class Ⅱ 消火栓箱(明装)";
         }
         private void WenYaPump_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "稳压装置";
             FamilyName.Text = "稳压装置";
         }
         private void GroundHydrant_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "室外地上式消火栓";
             FamilyName.Text = "室外地上式消火栓";
         }
         private void UnderGroundHydrant_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "室外地下式消火栓";
             FamilyName.Text = "室外地下式消火栓";
         }
         private void ElevationNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "标高";
             FamilyName.Text = "标高";
         }
         private void GroundNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "室内地坪符号";
             FamilyName.Text = "室内地坪符号";
         }
         private void SoilNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "土壤符号";
             FamilyName.Text = "土壤符号";
         }
         private void WaterLevelNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "水位线";
             FamilyName.Text = "水位线";
         }
         private void OnlyArrowNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "纯箭头";
             FamilyName.Text = "纯箭头";
         }
         private void ArrowNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "箭头";
             FamilyName.Text = "箭头";
         }
         private void BreakLineNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "折断线";
             FamilyName.Text = "折断线";
         }
         private void BreakPipeNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "管道折断线";
             FamilyName.Text = "管道折断线";
         }
         private void AxisNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "轴线";
             FamilyName.Text = "轴线";
         }
         private void CompassNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "指北针";
             FamilyName.Text = "指北针";
         }
         private void SleeveNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "刚性防水套管";
             FamilyName.Text = "刚性防水套管";
         }
         private void SectionNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "剖面符号";
             FamilyName.Text = "剖面符号";
         }
         private void ElectricBoxNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "潜水泵控制箱";
             FamilyName.Text = "潜水泵控制箱";
         }
         private void ArrowSlopeNote_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "坡度箭头";
             FamilyName.Text = "坡度箭头";
         }
         private void LouLvAlarm_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "漏氯报警仪";
             FamilyName.Text = "漏氯报警仪";
         }
         private void WaterFlowGlass_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "水流视镜";
             FamilyName.Text = "水流视镜";
         }
         private void PipeMixer_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "管道混合器";
             FamilyName.Text = "管道混合器";
         }
         private void SteelBlindFlange_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "钢盲法兰";
             FamilyName.Text = "钢盲法兰";
         }
         private void DanGuanShower_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "单柄混合阀淋浴器";
             FamilyName.Text = "单柄混合阀淋浴器";
         }
         private void DSEHeater_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "DSE商用电热水炉";
             FamilyName.Text = "DSE商用电热水炉";
         }
         private void DVEHeater_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "DVE商用电热水炉";
             FamilyName.Text = "DVE商用电热水炉";
         }
         private void WallHeater_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            FamilyNameText = "挂壁式电热水器";
             FamilyName.Text = "挂壁式电热水器";
         }
+        private void TypePTrap_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FamilyNameText = "P型存水弯";
+            FamilyName.Text = "P型存水弯";
+        }
+        private void TypeSTrap_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FamilyNameText = "S型存水弯";
+            FamilyName.Text = "S型存水弯";
+        }
+
         #endregion
         private void ButterflyValveWoLun_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1679,7 +1809,7 @@ namespace FFETOOLS
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
             {
-                index =101;
+                index = 101;
                 Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;
@@ -1784,7 +1914,7 @@ namespace FFETOOLS
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;
             }
-        }     
+        }
         private void WaterFlowGlass_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
@@ -1794,7 +1924,7 @@ namespace FFETOOLS
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;
             }
-        }      
+        }
         private void PipeMixer_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
@@ -1804,7 +1934,7 @@ namespace FFETOOLS
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;
             }
-        }      
+        }
         private void SteelBlindFlange_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
@@ -1824,7 +1954,7 @@ namespace FFETOOLS
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;
             }
-        }       
+        }
         private void DSEHeater_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
@@ -1834,7 +1964,7 @@ namespace FFETOOLS
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;
             }
-        }      
+        }
         private void DVEHeater_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
@@ -1844,12 +1974,32 @@ namespace FFETOOLS
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;
             }
-        }      
+        }
         private void WallHeater_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
             {
                 index = 118;
+                Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
+                eventHandlerCreatWaterFamily.Raise();
+                e.Handled = true;
+            }
+        }
+        private void TypePTrap_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
+            {
+                index = 119;
+                Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
+                eventHandlerCreatWaterFamily.Raise();
+                e.Handled = true;
+            }
+        }
+        private void TypeSTrap_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 1)
+            {
+                index = 120;
                 Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, Keys.Escape);
                 eventHandlerCreatWaterFamily.Raise();
                 e.Handled = true;

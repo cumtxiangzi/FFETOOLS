@@ -110,8 +110,6 @@ namespace FFETOOLS
                 foreach (Reference reference in referenceList)
                 {
                     Pipe detailLine = doc.GetElement(reference.ElementId) as Pipe;
-                    //var geometry = detailLine.get_Geometry(opts);
-                    //Line centerline = geometry.First() as Line;
                     pipeList.Add(detailLine);
                 }
 
@@ -156,12 +154,6 @@ namespace FFETOOLS
                             allPipes.Add(p);
                         }
 
-                        //for (int i = 0; i < newPipes.Count - 1; i++)
-                        //{
-                        //    Connector con1 = PipeExtension.EndCon(newPipes.ElementAt(i));
-                        //    Connector con2 = PipeExtension.StartCon(newPipes.ElementAt(i + 1));
-                        //    con1.ConnectTo(con2);
-                        //}
                         doc.Delete(item.Id);
                     }
                 }
@@ -327,72 +319,55 @@ namespace FFETOOLS
                 trans.Commit();
             }
 
-            //using (Transaction trans = new Transaction(doc, "删除管道系统"))
-            //{
-            //    trans.Start();
-
-            //    List<ElementId> elements = new List<ElementId>();
-            //    foreach (Pipe item in allPipes)
-            //    {
-            //        if (item.MEPSystem != null)
-            //        {
-            //            //elements.Add(item.MEPSystem.Id);
-            //        }
-            //    }
-
-            //    if (elements.Count > 0)
-            //    {
-            //        //doc.Delete(elements);
-            //    }
-
-            //    trans.Commit();
-            //}
             MessageBox.Show("排水管网生成完成", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             tg.Assimilate();
         }
 
-        //public void BreakPipeMethod(Document doc, Pipe pipe, XYZ point)
-        //{
-        //    var mep = pipe as MEPCurve;
-        //    PlumbingUtils.BreakCurve(doc, mep.Id, point);
-        //}
         public Line CalculateHeight(Document doc, XYZ center)
         {
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             Func<View3D, bool> isNotTemplate = v3 => !(v3.IsTemplate);
             View3D view3D = collector.OfClass(typeof(View3D)).Cast<View3D>().First<View3D>(isNotTemplate);
 
-            IList<TopographySurface> topographys = CollectorHelper.TCollector<TopographySurface>(doc);
-            TopographySurface topography = topographys.FirstOrDefault(x => x.Name.Contains("表面"));
+            FilteredElementCollector TopographCollector = new FilteredElementCollector(doc).OfClass(typeof(TopographySurface)).OfCategory(BuiltInCategory.OST_Topography);
+            IList<Element> topographs = TopographCollector.ToElements();
+            TopographySurface targetTypography = topographs.FirstOrDefault(x => x.Name == "表面") as TopographySurface;
 
-            // Project in the negative Z direction down to the floor.特别注意Z值,决定了射线的方向,-1向下,1向上
-            XYZ rayDirection = new XYZ(0, 0, 1);
+            var typographyList = new List<TopographySurface>();
+            typographyList.Add(targetTypography);
+            var subRegionIds = targetTypography.GetHostedSubRegionIds();
+            if (subRegionIds != null) typographyList.AddRange(subRegionIds.Select(x => doc.GetElement(x) as TopographySurface));
 
-            // Look for references to faces where the element is the floor element id.
-            ReferenceIntersector referenceIntersector = new ReferenceIntersector(topography.Id, FindReferenceTarget.Mesh ,view3D);
-            IList<ReferenceWithContext> references = referenceIntersector.Find(center, rayDirection);
 
-            double distance = Double.PositiveInfinity;
             XYZ intersection = null;
-            foreach (ReferenceWithContext referenceWithContext in references)
+            Line result = null;
+            foreach (var topography in typographyList)
             {
-                Reference reference = referenceWithContext.GetReference();
-                // Keep the closest matching reference (using the proximity parameter to determine closeness).
-                double proximity = referenceWithContext.Proximity;
-                if (proximity < distance)
+                // Project in the negative Z direction down to the floor.特别注意Z值,决定了射线的方向,-1向下,1向上
+                XYZ rayDirection = new XYZ(0, 0, 1);
+
+                // Look for references to faces where the element is the floor element id.
+                ReferenceIntersector referenceIntersector = new ReferenceIntersector(topography.Id, FindReferenceTarget.Mesh, view3D);
+                IList<ReferenceWithContext> references = referenceIntersector.Find(center, rayDirection);
+
+                double distance = Double.PositiveInfinity;
+                foreach (ReferenceWithContext referenceWithContext in references)
                 {
-                    distance = proximity;
-                    intersection = reference.GlobalPoint;
+                    Reference reference = referenceWithContext.GetReference();
+                    // Keep the closest matching reference (using the proximity parameter to determine closeness).
+                    double proximity = referenceWithContext.Proximity;
+                    if (proximity < distance)
+                    {
+                        distance = proximity;
+                        intersection = reference.GlobalPoint;
+                        if (intersection != null)
+                        {
+                            // Create line segment from the start point and intersection point.
+                            result = Line.CreateBound(center, intersection);
+                        }
+                    }
                 }
             }
-
-            Line result = Line.CreateBound(center, center*0.005);
-            if (intersection != null) //有些地形表面与管道占位符无法获得交点
-            {
-                // Create line segment from the start point and intersection point.
-                result = Line.CreateBound(center, intersection);
-            }    
-            
             return result;
         }
         public bool EqualPoint(XYZ point1, XYZ point2)

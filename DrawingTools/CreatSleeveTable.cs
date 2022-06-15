@@ -101,7 +101,7 @@ namespace FFETOOLS
                         sleeveInfos.Add(info);
                     }
 
-                    sleeveInfos.Sort((a, b) => a.SleeveCode.CompareTo(b.SleeveCode));//排序
+                    sleeveInfos.Sort((a, b) => a.SleeveCode.CompareTo(b.SleeveCode));//排序                 
 
                     List<StoreSleeveInfo> storeInfoList = new List<StoreSleeveInfo>();//根据 SleeveCode分组
                     storeInfoList = sleeveInfos.GroupBy(x => x.SleeveCode)
@@ -198,10 +198,27 @@ namespace FFETOOLS
             }
             return Result.Succeeded;
         }
+        public void DetailDrawingFamilyLoad(Document doc, string categoryName)
+        {
+            IList<Element> familyCollect = new FilteredElementCollector(doc).OfClass(typeof(Family)).ToElements();
+            Family family = null;
+            foreach (Family item in familyCollect)
+            {
+                if (item.Name.Contains(categoryName) && item.Name.Contains("给排水"))
+                {
+                    family = item;
+                    break;
+                }
+            }
+            if (family == null)
+            {
+                doc.LoadFamily(@"C:\ProgramData\Autodesk\Revit\Addins\2018\FFETOOLS\Family\" + "给排水_注释符号_" + categoryName + ".rfa");
+            }
+        }
         public void CreatTitle(Document doc, View view) //创建图名
         {
             XYZ titlePosition = new XYZ(3750 / 304.8, 1800 / 304.8 , 0);
-
+            DetailDrawingFamilyLoad(doc, "绘制视图标题字高5");
             FamilySymbol typeC_TitleSymbol = null;
             FamilyInstance typeC_Title = null;
             typeC_TitleSymbol = TitleSymbol(doc, "绘制视图标题");

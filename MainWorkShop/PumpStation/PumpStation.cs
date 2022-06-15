@@ -104,6 +104,7 @@ namespace FFETOOLS
                     {
                         trans.Start();
                         activeView.Scale = 50;
+                        DeletGrid(doc);
 
                         foreach (var item in RoomSetInfoList)
                         {
@@ -444,6 +445,19 @@ namespace FFETOOLS
         public string GetName()
         {
             return "¥¥Ω®±√’æ";
+        }
+        public void DeletGrid(Document doc)
+        {
+            IList<Grid> existGrids = CollectorHelper.TCollector<Grid>(doc);
+            List<ElementId> newGrids =new List<ElementId>();
+            foreach (Grid grid in existGrids)
+            {
+                if(grid.Name=="A"||grid.Name=="1")
+                {
+                    newGrids.Add(grid.Id);
+                }
+            }
+            doc.Delete(newGrids);
         }
         public List<FamilyInstance> CreatSteelAndHoist(Document doc, List<Wall> walls)
         {

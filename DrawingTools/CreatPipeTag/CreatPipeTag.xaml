@@ -392,7 +392,7 @@
                     <ColumnDefinition Width="0.8*"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox x:Name="TextInputCmb"  Grid.Column="0" Grid.Row="0"  Grid.ColumnSpan="4" Margin="10,10,10,10" 
+                <ComboBox x:Name="TextInputCmb"  Grid.Column="0" Grid.Row="0"  Grid.ColumnSpan="3" Margin="10,10,10,10" 
                           IsEditable="True" FontSize="14" SelectionChanged="TextInputCmb_SelectionChanged"/>
 
                 <Grid  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2" Margin="2">
@@ -451,6 +451,9 @@
 
                 <ComboBox x:Name="LanguageCmb" Grid.Column="2" Grid.Row="1" Margin="12,10,12,10" FontSize="12" 
                           VerticalContentAlignment="Center" SelectionChanged="LanguageCmb_SelectionChanged"/>
+                <ComboBox x:Name="LineNumCmb" Grid.Column="3" Grid.Row="0" Margin="12,10,12,10" FontSize="12" 
+                          VerticalContentAlignment="Center" />
+
 
                 <Button x:Name="OKButton"  Content="确 定"  Grid.Column="4" Grid.Row="1" Margin="12,10,12,10" Click="OKButton_Click"  Cursor="Hand">
                     <Button.Template >

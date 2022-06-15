@@ -33,7 +33,8 @@ namespace FFETOOLS
         "TO INLET OF 216RP07-ROLLER","DRAINAGE TO APROLL SLOPE","SEE DETAIL A","SUMP400X400X400","MANHOLE","STEEL COVER SEE CIVIL DRAWING","LADDER",
         "MOVABLE RAILING","1000X950X20mm STEEL PLATE BE PREFORMED","BUILT WALL AFTER EQUIPMENT INSTALLATION","工-STEEL FOR HOIST","DIVERSION WALL"};
 
-        List<string> LanguageList = new List<string>() { "中文","英文"};
+        List<string> LanguageList = new List<string>() { "中文", "英文" };
+        List<string> LineNumList = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8" };
 
         ExecuteEventCreatPipeTag excCreatPipe = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerCreatPipe = null;
@@ -57,6 +58,8 @@ namespace FFETOOLS
             TextInputCmb.ItemsSource = TextWithLineList;
             LanguageCmb.ItemsSource = LanguageList;
             LanguageCmb.SelectedIndex = 0;
+            LineNumCmb.ItemsSource= LineNumList;
+            LineNumCmb.SelectedIndex = 0;
 
             Button9.Content = "编 号 批 量" + "\n" + "    标 注";
             Button10.Content = "管 道 附 件" + "\n" + "    标 注";
@@ -314,7 +317,7 @@ namespace FFETOOLS
 
         private void LanguageCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (LanguageCmb.SelectedItem.ToString()=="中文")
+            if (LanguageCmb.SelectedItem.ToString() == "中文")
             {
                 TextInputCmb.ItemsSource = TextWithLineList;
             }
@@ -330,6 +333,6 @@ namespace FFETOOLS
             }
 
         }
-     
+
     }
 }

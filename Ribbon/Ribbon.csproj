@@ -75,115 +75,133 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ViewDuplicate.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ShowWorkset.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CreatDrawing.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CreatPipeSystem.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\FindMachine.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\About.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CreatSectionBox.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ExportELT.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CreatFloorOpening.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CreatFloorOpeningByMaual.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CreatWallOpening.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CreatWallOpeningByManual.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ImportFamilyImage.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ShowSectionSymbol.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PipeShowBold.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\OutdoorPipes.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\favicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PumpGroup.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BatchBreakPipes.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RaisePipes.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\BatchCreatPipeElbow.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PipeAvoid.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\RaiseTeeBranch.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BatchCreatTeeFitting.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CreatPipe.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CreatPipeElbow.ico" />
+    <None Include="Resources\BatchExport.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BreakPipe.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CreatTeeFitting.ico" />
+    <None Include="Resources\CreatConstructionPlan.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\UpPipe.ico" />
+    <None Include="Resources\CreatDrawing.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\HydrantConnect.ico" />
+    <None Include="Resources\CreatOutdoorPipes.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CreatPipe.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CreatPipeSystem.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CreatPipeTag.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\NotePipes.ico" />
+    <None Include="Resources\CreatSectionBox.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ExportDLT.ico" />
+    <None Include="Resources\CreatSleeveTable.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BatchExport.ico" />
+    <None Include="Resources\CreatTeeFitting.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CreatWalByGrid.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CreatWaterFamily.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CreatWorkset.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\DesignNote.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExportDLT.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExportELT.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GridTo2D.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HydrantConnect.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NotePipes.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OpenBimPlate.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OutdoorDrangePipe.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OverrideDimensions.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PipeAvoid.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PipeShowBold.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PipeSupportSection.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PumpGroup.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PumpStation.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RaisePipes.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RaiseTeeBranch.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ShowAndCloseGridNumber.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ShowSectionSymbol.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ShowWorkset.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\SwitchBackGround.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\UpPipe.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ViewDuplicate.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\WaterPool.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WellPoint.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CreatPipeElbow.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

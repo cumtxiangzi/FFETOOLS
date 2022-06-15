@@ -586,7 +586,7 @@ namespace FFETOOLS
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("不存在给排水_XY坐标标注样式"+"\n"+"请传递项目标注予以解决!","警告",MessageBoxButton.OK,MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show("不存在给排水_XY坐标标注样式" + "\n" + "请传递项目标注予以解决!", "警告", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)
@@ -1089,7 +1089,7 @@ namespace FFETOOLS
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
                         LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString().Replace(" mm", "");
 
                         XYZ pickPoint = reference.GlobalPoint;
                         XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
@@ -1135,7 +1135,7 @@ namespace FFETOOLS
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
                         LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString().Replace(" mm", "");
 
                         XYZ pickPoint = reference.GlobalPoint;
                         XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
@@ -1181,7 +1181,7 @@ namespace FFETOOLS
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
                         LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString().Replace(" mm", "");
 
                         XYZ pickPoint = reference.GlobalPoint;
                         XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
@@ -1225,7 +1225,7 @@ namespace FFETOOLS
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
                         LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString().Replace(" mm","");
 
                         XYZ pickPoint = reference.GlobalPoint;
                         XYZ projectPickPoint = pipeLocationCurve.Curve.Project(pickPoint).XYZPoint;
@@ -1270,7 +1270,7 @@ namespace FFETOOLS
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
                         LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString().Replace(" mm", "");
                         double verticalPipeZ = (pipeLocationCurve.Curve as Line).Direction.Z;
 
                         XYZ pickPoint = reference.GlobalPoint;
@@ -1308,7 +1308,7 @@ namespace FFETOOLS
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
                         LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString().Replace(" mm", "");
                         double verticalPipeZ = (pipeLocationCurve.Curve as Line).Direction.Z;
 
                         XYZ pickPoint = reference.GlobalPoint;
@@ -1346,7 +1346,7 @@ namespace FFETOOLS
                         Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                         Pipe pipe = doc.GetElement(reference) as Pipe;
                         LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                        string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString().Replace(" mm", "");
                         double verticalPipeZ = (pipeLocationCurve.Curve as Line).Direction.Z;
 
                         XYZ pickPoint = reference.GlobalPoint;
@@ -1567,7 +1567,7 @@ namespace FFETOOLS
                     Reference reference = sel.PickObject(ObjectType.Element, new PipeSelectionFilter(), "请选择管道");
                     Pipe pipe = doc.GetElement(reference) as Pipe;
                     LocationCurve pipeLocationCurve = pipe.Location as LocationCurve;
-                    string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
+                    string pipeSize = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString().Replace(" mm", "");
                     double verticalPipeZ = (pipeLocationCurve.Curve as Line).Direction.Z;
 
                     XYZ pickPoint = reference.GlobalPoint;
@@ -2137,14 +2137,22 @@ namespace FFETOOLS
                     textNoteType = CreatTextWithLineType(doc);
                 }
 
-
+                List<XYZ> lineEndPoints = new List<XYZ>();
                 Selection sel = uidoc.Selection;
-                XYZ pt1 = sel.PickPoint("请选择带线文字箭头位置");
+                for (int i = 0; i < Convert.ToInt32(CreatPipeTag.mainfrm.LineNumCmb.Text); i++)
+                {
+                    XYZ pt1 = sel.PickPoint("请选择带线文字箭头位置");
+                    lineEndPoints.Add(pt1);
+                }             
                 XYZ pt2 = sel.PickPoint("请选择带线文字创建位置");
 
                 //创建文字注释
                 TextNote note = TextNote.Create(doc, doc.ActiveView.Id, pt2, CreatPipeTag.mainfrm.TextInputCmb.Text, textNoteType.Id);
-                note.AddLeader(TextNoteLeaderTypes.TNLT_STRAIGHT_L); //引线方向，一共四种，左直，右直，左弧，右弧
+                foreach (var item in lineEndPoints)
+                {
+                    Leader leader1 = note.AddLeader(TextNoteLeaderTypes.TNLT_STRAIGHT_L); //引线方向，一共四种，左直，右直，左弧，右弧
+                    leader1.End = item;
+                }
                 note.LeaderLeftAttachment = LeaderAtachement.TopLine;//引线的位置，top代表引线位置在第一行文本的位置
 
                 //设置文字为上标
@@ -2153,11 +2161,11 @@ namespace FFETOOLS
                 note.SetFormattedText(formatText);
 
                 //设置箭头终点
-                IList<Leader> leaderList = note.GetLeaders();
-                foreach (Leader leader in leaderList)
-                {
-                    leader.End = pt1;
-                }
+                //IList<Leader> leaderList = note.GetLeaders();
+                //foreach (Leader leader in leaderList)
+                //{
+                //    leader.End = pt1;
+                //}
 
             }
             catch (Autodesk.Revit.Exceptions.OperationCanceledException)

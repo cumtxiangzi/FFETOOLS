@@ -22,7 +22,7 @@ using Quadrant = System.Int32;
 namespace FFETOOLS
 {
     [Transaction(TransactionMode.Manual)]
-    public class CreatPipeAlongGround : IExternalCommand
+    public class CreatPipeAlongGround : IExternalCommand //此算法比射线法效率要低不少,会出现有部分点无法获取的问题废弃
     {
         public Result Execute(ExternalCommandData commandData, ref string messages, ElementSet elements)
         {
@@ -43,24 +43,30 @@ namespace FFETOOLS
                     IList<TopographySurface> topographys = CollectorHelper.TCollector<TopographySurface>(doc);
                     TopographySurface topography = topographys.FirstOrDefault(x => x.Name == "表面");
 
-                    XYZ crossPoint1 = GetIntersectPointOnTopographySurface(topography, realStartPoint);
-                    XYZ crossPoint2 = GetIntersectPointOnTopographySurface(topography, realEndPoint);
-                   // MessageBox.Show(crossPoint1.ToString()+"\n"+realStartPoint.ToString());
+                    XYZ crossPoint1 = GetIntersectPointOnTopographySurface(topography, new XYZ(realStartPoint.X, realStartPoint.Y, 0));
+                    XYZ crossPoint2 = GetIntersectPointOnTopographySurface(topography, new XYZ(realEndPoint.X, realEndPoint.Y, 0));
+                    // MessageBox.Show(crossPoint1.ToString() + "\n" + realStartPoint.ToString());
 
-                    ElementId sys = GetPipeSystemType(doc, "给排水", "污水管道").Id;
-                    ElementId typeHDPE = GetPipeType(doc, "给排水", "HDPE管").Id;
-                    ElementId typeUPVC = GetPipeType(doc, "给排水", "UPVC管").Id;
+                    ElementId sys = GetPipeSystemType(doc, "给排水", "消防给水").Id;
+                    ElementId typeHDPE = GetPipeType(doc, "给排水", "焊接钢管").Id;
                     ElementId level = GetPipeLevel(doc, "0.000").Id;
 
-                    Pipe p = Pipe.Create(doc, sys, typeHDPE, level, crossPoint1, crossPoint2);
-                    ChangePipeSize(p, "300");
+                    if (crossPoint1 != null && crossPoint2 != null)
+                    {
+                        Pipe p = Pipe.Create(doc, sys, typeHDPE, level, crossPoint1, crossPoint2);
+                        ChangePipeSize(p, "250");
+                    }
+                    else
+                    {
+                        MessageBox.Show("点为空");
+                    }
 
                     trans.Commit();
                 }
             }
             catch (Exception e)
             {
-                //throw e;
+                // throw e;
                 messages = e.Message;
                 return Result.Failed;
             }
@@ -68,20 +74,23 @@ namespace FFETOOLS
         }
         public XYZ GetIntersectPointOnTopographySurface(TopographySurface typography, XYZ inputPoint)
         {
-            XYZ resultPoint=null;
+            XYZ resultPoint = null;
             var document = typography.Document;
             var targetTypography = !typography.IsSiteSubRegion ? typography : document.GetElement(typography.AsSiteSubRegion().HostId) as TopographySurface;
             var typographyList = new List<TopographySurface>();
             var meshs = new List<Mesh>();
             var meshTriangles = new List<MeshTriangle>();
             var points = new List<XYZ>();
+
             typographyList.Add(targetTypography);
             var subRegionIds = targetTypography.GetHostedSubRegionIds();
+
             if (subRegionIds != null) typographyList.AddRange(subRegionIds.Select(x => document.GetElement(x) as TopographySurface));
             typographyList.ForEach(x => meshs.AddRange(GetMeshs(x)));
             meshs.ForEach(x => { points.AddRange(x.Vertices); });
             points.Sort((x, y) => (x - XYZ.BasisZ * y.Z).DistanceTo(inputPoint) <= (y - XYZ.BasisZ * y.Z).DistanceTo(inputPoint) ? -1 : 1);
             var firstThreePoints = points.GetRange(0, 3);
+
             Parallel.ForEach(meshs, (mesh) =>
             {
                 for (var i = 0; i < mesh.NumTriangles; i++)
@@ -100,24 +109,19 @@ namespace FFETOOLS
 
             foreach (var meshTriangle in meshTriangles)
             {
-                try
+                var profile = new CurveLoop();
+                for (var j = 0; j < 3; j++)
                 {
-                    var profile = new CurveLoop();
-                    for (var j = 0; j < 3; j++)
-                    {
-                        profile.Append(Line.CreateBound(meshTriangle.get_Vertex(j), meshTriangle.get_Vertex((j + 1) % 3)));
-                    }
-                    var intersectPoint = GetIntersectPointOnCurveloop(new List<CurveLoop> { profile }, inputPoint);
-                    if (intersectPoint != null)
-                    {
-                        resultPoint = intersectPoint;
-                    }
-                    //continue;
-                    //return intersectPoint;
-                    //MessageBox.Show("ss");
+                    profile.Append(Line.CreateBound(meshTriangle.get_Vertex(j), meshTriangle.get_Vertex((j + 1) % 3)));
                 }
-                catch { }
+
+                var intersectPoint = GetIntersectPointOnCurveloop(new List<CurveLoop> { profile }, inputPoint, document);
+                if (intersectPoint != null)
+                {
+                    resultPoint = intersectPoint;
+                }
             }
+
             return resultPoint;
         }
 
@@ -125,7 +129,12 @@ namespace FFETOOLS
         {
             Mesh groundMesh = null;
             List<Mesh> meshList = new List<Mesh>();
-            GeometryElement geometry = surface.get_Geometry(new Options { DetailLevel = ViewDetailLevel.Fine });
+            GeometryElement geometry = surface.get_Geometry(new Options
+            {
+                DetailLevel = ViewDetailLevel.Fine,
+                ComputeReferences = true,
+                IncludeNonVisibleObjects = false
+            });
 
             foreach (var item in geometry)
             {
@@ -137,22 +146,14 @@ namespace FFETOOLS
             }
             return meshList;
         }
-        public XYZ GetIntersectPointOnCurveloop(List<CurveLoop> curveList, XYZ point)
+        public XYZ GetIntersectPointOnCurveloop(List<CurveLoop> curveList, XYZ point, Document doc)
         {
             XYZ resultPoint = null;
-            XYZ tempPoint=new XYZ();
+            XYZ tempPoint = new XYZ();
             List<Curve> faceCur = new List<Curve>();
             List<XYZ> points = new List<XYZ>();
             List<XYZ> notSamePoints = new List<XYZ>();
-            //MessageBox.Show(curveList.FirstOrDefault()..ToString());
-            //Solid newSolid = GeometryCreationUtilities.CreateExtrusionGeometry(curveList, XYZ.BasisZ, 1000 / 304.8);
-            //Face solidFace = newSolid.Getupfaces().FirstOrDefault();
-            //bool pointInFace = solidFace.IsInside(new UV(point.X, point.Y));
-            //if (solidFace.Project(point).XYZPoint != null)
-            //{
-            //    resultPoint = solidFace.Project(point).XYZPoint;
-            //}
-            //MessageBox.Show(solidFace.ToString());
+            List<XYZ> linePoints = new List<XYZ>();
 
             CurveLoopIterator iteraor = curveList.FirstOrDefault().GetCurveLoopIterator();
             while (iteraor.MoveNext())
@@ -167,15 +168,41 @@ namespace FFETOOLS
                 points.Add(p1);
                 points.Add(p2);
             }
+
             notSamePoints = points.Distinct((a, b) => a.X == b.X && a.Y == b.Y && a.Z == b.Z).ToList();
             tempPoint = GetIntersectWithLineAndPlane(point, XYZ.BasisZ, notSamePoints);
-            if(IsPosPlane(notSamePoints, tempPoint))
+            if (IsPosPlane(notSamePoints, tempPoint))
             {
                 resultPoint = tempPoint;
             }
-            //MessageBox.Show(IsPosPlane(notSamePoints,resultPoint).ToString());
+
+            //CreateModelLine(doc, notSamePoints);      
+            //CreateModelLine1(doc, point, tempPoint);
+            //ElementId sys = GetPipeSystemType(doc, "给排水", "污水管道").Id;
+            //ElementId typeHDPE = GetPipeType(doc, "给排水", "HDPE管").Id;
+            //ElementId typeUPVC = GetPipeType(doc, "给排水", "UPVC管").Id;
+            //ElementId level = GetPipeLevel(doc, "0.000").Id;
+            //Pipe p = Pipe.Create(doc, sys, typeHDPE, level, point, tempPoint);
 
             return resultPoint;
+        }
+        public void CreateModelLine(Document doc, List<XYZ> pointList)
+        {
+            Line geoLine1 = Line.CreateBound(pointList[0], pointList[1]);
+            Line geoLine2 = Line.CreateBound(pointList[1], pointList[2]);
+            Line geoLine3 = Line.CreateBound(pointList[2], pointList[0]);
+
+            SketchPlane modelSketch = SketchPlane.Create(doc, Plane.CreateByThreePoints(pointList[0], pointList[1], pointList[2]));
+            ModelCurve modelLine1 = doc.Create.NewModelCurve(geoLine1, modelSketch);
+            ModelCurve modelLine2 = doc.Create.NewModelCurve(geoLine2, modelSketch);
+            ModelCurve modelLine3 = doc.Create.NewModelCurve(geoLine3, modelSketch);
+        }
+        public void CreateModelLine1(Document doc, XYZ point1, XYZ point2)
+        {
+            Line geoLine1 = Line.CreateBound(point1, point2);
+
+            SketchPlane modelSketch = SketchPlane.Create(doc, Plane.CreateByNormalAndOrigin(point2, point1));
+            ModelCurve modelLine1 = doc.Create.NewModelCurve(geoLine1, modelSketch);
         }
 
         /// <summary>
