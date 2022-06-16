@@ -166,7 +166,7 @@
             </Button.Template>
         </Button>
 
-        <Button Content="确定"  Grid.Column="4" Grid.Row="2" Margin="12" Click="OK_Button_Click"  Cursor="Hand">
+        <Button Content="确定"  Grid.Column="5" Grid.Row="2" Margin="12" Click="OK_Button_Click"  Cursor="Hand">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -176,7 +176,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="取消"  Grid.Column="5" Grid.Row="2" Margin="12" Click="Cancel_Button_Click" Cursor="Hand">
+        <Button Content="取消"  Grid.Column="6" Grid.Row="2" Margin="12" Click="Cancel_Button_Click" Cursor="Hand">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -186,7 +186,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="间距计算"  Grid.Column="6" Grid.Row="2" Margin="12" Click="Caculate_Button_Click" Cursor="Hand">
+        <Button Content="间距查询"  Grid.Column="4" Grid.Row="2" Margin="12" Click="Caculate_Button_Click" Cursor="Hand" Visibility="Collapsed">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">

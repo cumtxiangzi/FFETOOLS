@@ -122,7 +122,15 @@ namespace FFETOOLS
                                     if (view.ViewType == ViewType.DraftingView && view.ViewName == plan && (plan.Contains("设计说明") || plan.Contains("WL")))
                                     {
                                         viewOnDrawing = view;
-                                        CreateViewport(doc, drawingSheet, viewOnDrawing.Id, GetPoint(drawingSheet), GetViewPortType(doc));
+                                        if (plan.Contains("设计说明"))
+                                        {
+                                            XYZ designNotePoint = new XYZ(GetPoint(drawingSheet).X-200/304.8, GetPoint(drawingSheet).Y-200/304.8, 0);
+                                            CreateViewport(doc, drawingSheet, viewOnDrawing.Id, designNotePoint, GetViewPortType(doc));
+                                        }
+                                        else
+                                        {
+                                            CreateViewport(doc, drawingSheet, viewOnDrawing.Id, GetPoint(drawingSheet), GetViewPortType(doc));
+                                        }
                                     }
 
                                     if (view.ViewType == ViewType.FloorPlan && view.ViewName == plan && view.ViewType != ViewType.Schedule)

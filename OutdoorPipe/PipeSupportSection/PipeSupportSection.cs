@@ -8145,7 +8145,7 @@ namespace FFETOOLS
 
                         dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                         dimension.ValueOverride = "\u200E";
-                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                         VerticalDimensionText(doc, doc.ActiveView, "6000", textPosition);
                     }
                 }
@@ -8176,7 +8176,7 @@ namespace FFETOOLS
 
                         dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                         dimension.ValueOverride = "\u200E";
-                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                         VerticalDimensionText(doc, doc.ActiveView, "6000", textPosition);
                     }
 
@@ -8239,7 +8239,7 @@ namespace FFETOOLS
 
                         dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                         dimension.ValueOverride = "\u200E";
-                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                         VerticalDimensionText(doc, doc.ActiveView, "6000", textPosition);
                     }
 
@@ -8298,7 +8298,7 @@ namespace FFETOOLS
 
                         dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                         dimension.ValueOverride = "\u200E";
-                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                         VerticalDimensionText(doc, doc.ActiveView, "6000", textPosition);
                     }
 
@@ -8420,7 +8420,7 @@ namespace FFETOOLS
 
                         dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                         dimension.ValueOverride = "\u200E";
-                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                         VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
                     }
                 }
@@ -8451,7 +8451,7 @@ namespace FFETOOLS
 
                         dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                         dimension.ValueOverride = "\u200E";
-                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                         VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
                     }
 
@@ -8521,7 +8521,7 @@ namespace FFETOOLS
 
                         dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                         dimension.ValueOverride = "\u200E";
-                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                         VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
                     }
 
@@ -8590,7 +8590,7 @@ namespace FFETOOLS
 
                         dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                         dimension.ValueOverride = "\u200E";
-                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                        textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                         VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
                     }
 
@@ -8682,7 +8682,7 @@ namespace FFETOOLS
 
                     dimension = doc.Create.NewDimension(doc.ActiveView, dimLine, referenceArray, dimType);
                     dimension.ValueOverride = "\u200E";
-                    textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + 100 / 304.8, 0);
+                    textPosition = new XYZ(dimension.TextPosition.X, dimension.TextPosition.Y + doc.ActiveView.Scale * 3.5 / 304.8, 0);
                     VerticalDimensionText(doc, doc.ActiveView, "3500", textPosition);
                 }
 

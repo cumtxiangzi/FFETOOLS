@@ -364,7 +364,7 @@ namespace FFETOOLS
             {
                 FileInfo existingFile = new FileInfo(fullFielPath);
                 ExcelPackage package = new ExcelPackage(existingFile);
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];//选定 指定页
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];//选定 指定页             
 
                 return WorksheetToTable(worksheet);
             }

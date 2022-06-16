@@ -83,7 +83,10 @@
     <Compile Include="CreateWall\CreateWallForm.designer.cs">
       <DependentUpon>CreateWallForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Others\OverrideDimensions.cs" />
+    <Compile Include="OverrideDimensions\OverrideDimensions.xaml.cs">
+      <DependentUpon>OverrideDimensions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OverrideDimensions\OverrideDimensions.cs" />
     <Compile Include="Test\Class1.cs" />
     <Compile Include="Test\Class2.cs" />
     <Compile Include="Test\Class3.cs" />
@@ -158,6 +161,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ModifyValue\ModifyValue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OverrideDimensions\OverrideDimensions.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -44,6 +44,8 @@ namespace FFETOOLS
                         }
 
                     }
+
+                    MessageBox.Show("平剖面处理完成","GPSBIM",MessageBoxButton.OK,MessageBoxImage.Information);
                     ts.Commit();
                 }
                
