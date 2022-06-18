@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+//using SQLiteDemo;
 
 namespace FFETOOLS
 {
@@ -151,6 +152,8 @@ namespace FFETOOLS
         {
             PumpSelectForm selectForm = new PumpSelectForm();
             selectForm.ShowDialog();
+            //Form1 form = new Form1();
+            //form.ShowDialog();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

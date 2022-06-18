@@ -13,7 +13,7 @@
             <Setter Property="TextAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300*"/>
@@ -42,7 +42,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <TextBlock Text="流量Q(L/s):" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5"/>
                 <TextBox x:Name="Flow" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="14" />
 
@@ -53,14 +53,14 @@
         </GroupBox>
 
         <GroupBox Header="厂家" BorderBrush="Gray" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" >
-            <ComboBox x:Name="PumpManufacture" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
+            <ComboBox x:Name="PumpManufacture" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" SelectionChanged="PumpManufacture_SelectionChanged"/>
         </GroupBox>
 
         <GroupBox Header="水泵型号" BorderBrush="Gray" Grid.Column="1" Grid.Row="2" Margin="5,5,5,5" >
             <ComboBox x:Name="PumpModel" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
         </GroupBox>
-        
-        <Button x:Name="OkButton" Content="开始选型" Margin="25,5,25,10" FontSize="12"  Cursor="Hand" Grid.Row="3" Grid.Column="2" >
+
+        <Button x:Name="OkButton" Content="开始选型" Margin="25,5,25,10" FontSize="12"  Cursor="Hand" Grid.Row="3" Grid.Column="2" Click="OkButton_Click" >
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -70,8 +70,8 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        
-        <Button x:Name="CancelButton" Content="退出" Margin="25,5,25,10" FontSize="12"  Cursor="Hand" Grid.Row="4" Grid.Column="2" >
+
+        <Button x:Name="CancelButton" Content="退出" Margin="25,5,25,10" FontSize="12"  Cursor="Hand" Grid.Row="4" Grid.Column="2" Click="CancelButton_Click">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -84,7 +84,7 @@
 
         <GroupBox Header="型号列表" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,5,5,10" BorderBrush="Gray" FontSize="12">
             <Grid Margin="0,5,0,0">
-                <DataGrid x:Name="RoomSettingGrid" ItemsSource="{Binding}" AutoGenerateColumns="False"  CanUserAddRows="False" VerticalAlignment="Top" CanUserReorderColumns="False" 
+                <DataGrid x:Name="RoomSettingGrid" AutoGenerateColumns="False"  CanUserAddRows="False" VerticalAlignment="Top" CanUserReorderColumns="False" 
                           CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False" >
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType ="DataGridColumnHeader">
@@ -107,11 +107,11 @@
 
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn Header="泵型号" Binding="{Binding Path=PipeCode}" Width="0.5*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
-                        <DataGridTextColumn Header="流量(L/s)" Binding="{Binding Path=PipeHeight}" Width="1*" ElementStyle="{StaticResource TextCenter}"/>
-                        <DataGridTextColumn Header="扬程(m)" Binding="{Binding Path=PipeDistance,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="1*" ElementStyle="{StaticResource TextCenter}"/>
-                        <DataGridTextColumn Header="功率(Kw)" Binding="{Binding Path=PipeDistance,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="1*" ElementStyle="{StaticResource TextCenter}"/>
-                        <DataGridTextColumn Header="重量(Kg)" Binding="{Binding Path=PipeDistance,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="1*" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="泵型号"     Binding="{Binding Path=PumpModel}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="流量(L/s)"  Binding="{Binding Path=PumpFlow}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="扬程(m)"   Binding="{Binding Path=PumpLift}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="功率(Kw)" Binding="{Binding Path=PumpPower}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="重量(Kg)"  Binding="{Binding Path=PumpWeight}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
 
                     </DataGrid.Columns>
 

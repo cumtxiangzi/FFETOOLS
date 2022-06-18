@@ -46,7 +46,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\..\..\..\..\快速弹夹工具\快速扩容弹夹2020_V2022.02.10（试用版）\icon\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
@@ -71,6 +75,8 @@
       <DependentUpon>CreatWallByGridForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="CreatWalByGrid\CreatWallByGrid.cs" />
+    <Compile Include="PumpGroup\PumpData.cs" />
+    <Compile Include="PumpGroup\SQLiteHelper.cs" />
     <Compile Include="PumpStation\CreatGrids\CreateGridsData.cs" />
     <Compile Include="PumpStation\CreatGrids\CreateOrthogonalGridsData.cs" />
     <Compile Include="PumpStation\CreatGrids\EnumsAndValues.cs" />
