@@ -28,13 +28,20 @@ namespace FFETOOLS
         public int HoleLengthValue { get; set; }
         public int HoleWidthValue { get; set; }
         public int HoleSizeValue { get; set; }
+        public int ClickNum { get; set; }
         public string PumpModelValue { get; set; }
+        public List<PumpData> ShuangLunPumpData { get; set; }
+        public List<PumpData> LianChengPumpData { get; set; }
 
         ExecuteEventPumpGroup excPumpGroup = null;
         Autodesk.Revit.UI.ExternalEvent eventHandlerPumpGroup = null;
-        public PumpGroupForm(List<string> pipeSizeList, List<string> pipeTypeList, List<string> pipeSystemList)
+        public PumpGroupForm(List<string> pipeSizeList, List<string> pipeTypeList, List<string> pipeSystemList
+            ,List<PumpData> shuangLun,List<PumpData> lianCheng)
         {
             InitializeComponent();
+
+            ShuangLunPumpData = shuangLun;
+            LianChengPumpData = lianCheng;
 
             InletDiameter.ItemsSource = pipeSizeList;
             OutletDiameter.ItemsSource = pipeSizeList;
@@ -143,6 +150,7 @@ namespace FFETOOLS
             }
             else
             {
+                ClickNum = 1;
                 eventHandlerPumpGroup.Raise();
                 Hide();
             }
@@ -150,10 +158,8 @@ namespace FFETOOLS
 
         private void PumpSelectButton_Click(object sender, RoutedEventArgs e)
         {
-            PumpSelectForm selectForm = new PumpSelectForm();
-            selectForm.ShowDialog();
-            //Form1 form = new Form1();
-            //form.ShowDialog();
+            ClickNum = 2;
+            eventHandlerPumpGroup.Raise();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

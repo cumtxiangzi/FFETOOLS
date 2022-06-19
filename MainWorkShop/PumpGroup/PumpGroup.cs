@@ -18,6 +18,8 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.DB.Architecture;
 using System.Windows.Interop;
+using System.Data.SQLite;
+using System.Data;
 
 namespace FFETOOLS
 {
@@ -25,6 +27,8 @@ namespace FFETOOLS
     public class PumpGroup : IExternalCommand
     {
         public static PumpGroupForm mainfrm;
+        public static List<PumpData> ShuangLun_IS_PumpData = new List<PumpData>();
+        public static List<PumpData> Liancheng_S_PumpData = new List<PumpData>();
         public Result Execute(ExternalCommandData commandData, ref string messages, ElementSet elements)
         {
             try
@@ -34,7 +38,13 @@ namespace FFETOOLS
                 Document doc = uidoc.Document;
                 Selection sel = uidoc.Selection;
 
-                mainfrm = new PumpGroupForm(GetAllPipeSize(doc, "给排水_焊接钢管"), GetPipeType(doc, "给排水"), GetPipeSystemType(doc, "给排水"));
+                string sql = string.Format("SELECT * FROM {0}", "DataIS");
+                ShuangLun_IS_PumpData = GetPumpData(sql);//双轮IS型泵数据获取
+                sql = string.Format("SELECT * FROM {0}", "DataS");
+                Liancheng_S_PumpData = GetPumpData(sql);//连成S型泵数据获取
+
+                mainfrm = new PumpGroupForm(GetAllPipeSize(doc, "给排水_焊接钢管"), GetPipeType(doc, "给排水"), GetPipeSystemType(doc, "给排水")
+                    ,ShuangLun_IS_PumpData,Liancheng_S_PumpData);
                 IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
                 WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
                 helper.Owner = rvtPtr;
@@ -46,6 +56,74 @@ namespace FFETOOLS
                 throw;
             }
             return Result.Succeeded;
+        }
+        public List<PumpData> GetPumpData(string sql)
+        {
+            try
+            {
+                List<PumpData> list = new List<PumpData>();
+                string dataFile = "C:\\ProgramData\\Autodesk\\Revit\\Addins\\2018\\FFETOOLS\\Data\\GPSPumpData.db3";
+                SQLiteConnection conn = new SQLiteConnection();
+                Tuple<bool, DataSet, string> tuple = null;
+
+                SQLiteConnectionStringBuilder conStr = new SQLiteConnectionStringBuilder
+                {
+                    DataSource = dataFile
+                };
+                conn.ConnectionString = conStr.ToString();
+                conn.Open();
+
+
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    try
+                    {
+                        SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter();
+                        DataSet dataSet = new DataSet();
+                        dataAdapter.SelectCommand = cmd;
+                        dataAdapter.Fill(dataSet);
+                        cmd.Parameters.Clear();
+                        dataAdapter.Dispose();
+                        tuple = Tuple.Create(true, dataSet, string.Empty);
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+
+                DataSet dataSetResult = tuple.Item2;
+                if (dataSetResult != null)
+                {
+                    DataTable resultDate = dataSetResult.Tables[0];
+                    foreach (DataRow dataRow in resultDate.Rows)
+                    {
+                        string baseInfo = dataRow["BaseParam"].ToString();
+                        string[] sArray = baseInfo.Split(';');
+
+                        list.Add(new PumpData()
+                        {
+                            Model = dataRow["SPEC"].ToString(),
+                            Flow = dataRow["Volume"].ToString(),
+                            Lift = dataRow["Head"].ToString(),
+                            Power = dataRow["EnginPower"].ToString(),
+                            Weight = dataRow["Weight"].ToString(),
+                            OutletHeight = dataRow["Height"].ToString(),
+                            OutletSize = dataRow["OutPipeDN"].ToString(),
+                            InletSize = dataRow["InPipeDN"].ToString(),
+                            BaseLength = sArray[0]
+                        });
+                    }
+                }
+
+                conn.Close();
+                conn.Dispose();
+                return list;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public static List<string> GetPipeSystemType(Document doc, string profession)
         {
@@ -111,11 +189,22 @@ namespace FFETOOLS
                 UIDocument uidoc = app.ActiveUIDocument;
                 Document doc = app.ActiveUIDocument.Document;
                 Selection sel = app.ActiveUIDocument.Selection;
+                int clickNumber = PumpGroup.mainfrm.ClickNum;
+                PumpSelectForm selectForm = new PumpSelectForm(PumpGroup.mainfrm);
 
                 View view = uidoc.ActiveView;
                 if (view is ViewPlan)
                 {
-                    CreatSingleSuctionPump(doc, sel);
+                    if (clickNumber == 1)//主界面确定点击
+                    {
+                        CreatSingleSuctionPump(doc, sel);
+                    }
+
+                    if (clickNumber == 2)//主界面水泵选型点击
+                    {                     
+                        selectForm.PumpDataSource = PumpGroup.ShuangLun_IS_PumpData;
+                        selectForm.ShowDialog();                     
+                    }
                 }
                 else
                 {
@@ -151,7 +240,7 @@ namespace FFETOOLS
             Pipe outLetPipe3 = null;
             Pipe outLetPipe4 = null;
             Pipe outLetPipe41 = null;
-            
+
             FamilyInstance reducer1 = null;
             FamilyInstance reducer2 = null;
             FamilyInstance elbow = null;
@@ -406,7 +495,7 @@ namespace FFETOOLS
                 outLetPipe4.get_Parameter(BuiltInParameter.RBS_OFFSET_PARAM).Set(offSet);
 
                 XYZ pressureMeterPoint = MiddlePoint(outLetPipe2.LocationLine());
-                FamilySymbol pressureMeterSymbol = PipeMeterSymbol(doc, "压力表");               
+                FamilySymbol pressureMeterSymbol = PipeMeterSymbol(doc, "压力表");
                 pressureMeterSymbol.Activate();
                 pressuerMeter = doc.Create.NewFamilyInstance(pressureMeterPoint, pressureMeterSymbol, doc.ActiveView.GenLevel, StructuralType.NonStructural);
                 double outpipeSize = outLetPipe2.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsDouble();

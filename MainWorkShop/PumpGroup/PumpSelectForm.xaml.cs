@@ -25,22 +25,20 @@ namespace FFETOOLS
     /// </summary>
     public partial class PumpSelectForm : Window
     {
-        List<string> ManufactureList = new List<string>() { "山东双轮泵业", "上海东方泵业", "南方泵业" };
+        List<string> ManufactureList = new List<string>() { "山东双轮泵业", "上海东方泵业", "南方泵业","上海连成泵业" };
         List<string> ModelList = new List<string>() { "IS", "S", "DL" };
+        public PumpGroupForm mainForm { get; set; }
+        public List<PumpData> PumpDataSource = new List<PumpData>();
 
-        List<PumpData> PumpDataSource = new List<PumpData>();
-        ObservableCollection<PumpDataInfo> PumpInfoList = new ObservableCollection<PumpDataInfo>();//DataGrid的数据源    
-
-        public PumpSelectForm()
-        {
+        public PumpSelectForm(PumpGroupForm groupForm)
+        {          
             InitializeComponent();
+            mainForm = groupForm;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            PumpInfoList.Add(new PumpDataInfo() { PumpModel = "IS-100", PumpFlow = "200", PumpLift = "20", PumpPower = "15", PumptWeight = "200" });
-
-            RoomSettingGrid.ItemsSource = PumpInfoList;
+            RoomSettingGrid.ItemsSource = PumpDataSource;
 
             PumpManufacture.ItemsSource = ManufactureList;
             PumpManufacture.SelectedIndex = 0;
@@ -49,20 +47,30 @@ namespace FFETOOLS
             PumpModel.SelectedIndex = 0;
 
             Flow.Focus();
+            Task.Delay(100).ContinueWith(t => LoadWithDelay(), TaskScheduler.FromCurrentSynchronizationContext()); //控件延时显示
         }
-
+        private void LoadWithDelay()
+        {
+            RoomSettingGrid.Visibility = Visibility.Visible;
+        }
         private void PumpManufacture_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (PumpManufacture.SelectedItem.ToString().Contains("双轮"))
+            string manufactureName = PumpManufacture.SelectedItem.ToString();
+            if (manufactureName.Contains("双轮"))
+            {              
+                PumpModel.SelectedIndex = 0;
+                RoomSettingGrid.ItemsSource = mainForm.ShuangLunPumpData;
+            }
+            if(manufactureName.Contains("连成"))
             {
-
+                PumpModel.SelectedIndex = 1;
+                RoomSettingGrid.ItemsSource = mainForm.LianChengPumpData;
             }
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            GetPumpData("双轮");
-
+           
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -70,82 +78,26 @@ namespace FFETOOLS
             Close();
         }
 
-        public void GetPumpData(string manufacture)
+        private void RoomSettingGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            try
+            DataGrid datagrid = sender as DataGrid;
+            Point aP = e.GetPosition(datagrid);
+            IInputElement obj = datagrid.InputHitTest(aP);
+            DependencyObject target = obj as DependencyObject;
+
+            while (target != null)
             {
-                string dataFile = "C:\\ProgramData\\Autodesk\\Revit\\Addins\\2018\\FFETOOLS\\Data\\GPSPumpData.db3";
-                
-                MessageBox.Show("sss");
-                SQLiteConnection conn = new SQLiteConnection();
-                Tuple<bool, DataSet, string> tuple = null;
-               
-                SQLiteConnectionStringBuilder conStr = new SQLiteConnectionStringBuilder
+                if (target is DataGridRow)
                 {
-                    DataSource = dataFile
-                };
-                conn.ConnectionString = conStr.ToString();
-                conn.Open();
-
-               
-                string sql = string.Format("SELECT * FROM {0}", "DataIS");
-                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                {
-                    //if (paramArr != null)
-                    //{
-                    //    cmd.Parameters.AddRange(paramArr);
-                    //}
-                    try
-                    {
-                        SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter();
-                        DataSet dataSet = new DataSet();
-                        dataAdapter.SelectCommand = cmd;
-                        dataAdapter.Fill(dataSet);
-                        cmd.Parameters.Clear();
-                        dataAdapter.Dispose();
-                        tuple = Tuple.Create(true, dataSet, string.Empty);
-                    }
-                    catch (SQLiteException ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
+                    PumpData s = RoomSettingGrid.SelectedItem as PumpData;
+                    MessageBox.Show(s.Model + "\n" + s.Flow + "\n" + s.Lift + "\n" + 
+                        s.Power + "\n" + s.Weight+"\n"+s.InletSize+"\n"+s.OutletSize+ "\n" + s.OutletHeight+"\n" + s.BaseLength);
+                    mainForm.PumpModel.Text = s.Model;
                 }
-
-                DataSet dataSetResult = tuple.Item2;
-                if (dataSetResult != null)
-                {
-                    DataTable resultDate = dataSetResult.Tables[0];
-                    foreach (DataRow dataRow in resultDate.Rows)
-                    {
-                        PumpInfoList.Add(new PumpDataInfo()
-                        {
-                            PumpModel = dataRow["SPEC"].ToString(),
-                            PumpFlow = dataRow["OutPipeDN"].ToString(),
-                            PumpLift = dataRow["Length"].ToString(),
-                            PumpPower = dataRow["EnginPower"].ToString(),
-                            PumptWeight = dataRow["Weight"].ToString()
-                        });
-                    }
-                }
-
-                //SQLiteParameter[] parameter = new SQLiteParameter[]
-                //{
-                //    new SQLiteParameter("address", "济南")
-                //};
-                //string sql = string.Format("SELECT * FROM {0} WHERE address = @address", TextBox_DBTable.Text);
-                //Tuple<bool, string, DataSet> tuple = SQLiteHelpers.ExecuteDataSet(sql, parameter);
-                //if (tuple.Item1)
-                //{
-                //    dataGridView1.DataSource = tuple.Item3.Tables[0];
-                conn.Close();
-                conn.Dispose();
-
+                target = VisualTreeHelper.GetParent(target);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            Close();
         }
-
     }
 }

@@ -85,7 +85,7 @@
         <GroupBox Header="型号列表" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,5,5,10" BorderBrush="Gray" FontSize="12">
             <Grid Margin="0,5,0,0">
                 <DataGrid x:Name="RoomSettingGrid" AutoGenerateColumns="False"  CanUserAddRows="False" VerticalAlignment="Top" CanUserReorderColumns="False" 
-                          CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False" >
+                          CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False" Visibility="Hidden" MouseDoubleClick="RoomSettingGrid_MouseDoubleClick">
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType ="DataGridColumnHeader">
                             <Setter Property ="HorizontalContentAlignment" Value="Center"/>
@@ -107,11 +107,11 @@
 
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn Header="泵型号"     Binding="{Binding Path=PumpModel}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
-                        <DataGridTextColumn Header="流量(L/s)"  Binding="{Binding Path=PumpFlow}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
-                        <DataGridTextColumn Header="扬程(m)"   Binding="{Binding Path=PumpLift}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
-                        <DataGridTextColumn Header="功率(Kw)" Binding="{Binding Path=PumpPower}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
-                        <DataGridTextColumn Header="重量(Kg)"  Binding="{Binding Path=PumpWeight}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="泵型号"     Binding="{Binding Path=Model}" Width="1.5*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="流量(L/s)"  Binding="{Binding Path=Flow}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="扬程(m)"   Binding="{Binding Path=Lift}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="功率(Kw)" Binding="{Binding Path=Power}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="重量(Kg)"  Binding="{Binding Path=Weight}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
 
                     </DataGrid.Columns>
 

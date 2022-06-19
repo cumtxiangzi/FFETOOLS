@@ -73,7 +73,6 @@ namespace FFETOOLS
         {
             if (string.IsNullOrWhiteSpace(PassWord))
             {
-                MessageBox.Show("ssss");
                 SQLiteConnections = OpenConnection(this.DataFile);
             }
             else
