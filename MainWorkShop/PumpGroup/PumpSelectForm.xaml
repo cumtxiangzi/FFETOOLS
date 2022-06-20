@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFETOOLS"
         mc:Ignorable="d"
-        Title="水泵选型" Height="700" Width="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="水泵选型" Height="700" Width="550" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Window.Resources>
         <Style x:Key="TextCenter" TargetType="{x:Type TextBlock}">
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -16,7 +16,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="350*"/>
             <ColumnDefinition Width="150*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
 
         <GroupBox Header="图示" BorderBrush="Gray" Grid.Column="0" Grid.Row="0"  Margin="5,5,5,5" Grid.RowSpan="5" >
-            <Image Margin="5"  />
+            <Image x:Name="PumpSection" Margin="5" />
         </GroupBox>
 
         <GroupBox Header="参数输入" BorderBrush="Gray" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" >
@@ -60,7 +60,7 @@
             <ComboBox x:Name="PumpModel" Margin="5,5,5,5" VerticalAlignment="Center"  FontSize="12" />
         </GroupBox>
 
-        <Button x:Name="OkButton" Content="开始选型" Margin="25,5,25,10" FontSize="12"  Cursor="Hand" Grid.Row="3" Grid.Column="2" Click="OkButton_Click" >
+        <Button x:Name="OkButton" Content="开 始 选 型" Margin="25,5,25,10" FontSize="12"  Cursor="Hand" Grid.Row="3" Grid.Column="2" Click="OkButton_Click" >
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -71,7 +71,7 @@
             </Button.Template>
         </Button>
 
-        <Button x:Name="CancelButton" Content="退出" Margin="25,5,25,10" FontSize="12"  Cursor="Hand" Grid.Row="4" Grid.Column="2" Click="CancelButton_Click">
+        <Button x:Name="CancelButton" Content="数 据 复 原" Margin="25,5,25,10" FontSize="12"  Cursor="Hand" Grid.Row="4" Grid.Column="2" Click="CancelButton_Click">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -111,8 +111,10 @@
                         <DataGridTextColumn Header="流量(L/s)"  Binding="{Binding Path=Flow}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
                         <DataGridTextColumn Header="扬程(m)"   Binding="{Binding Path=Lift}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
                         <DataGridTextColumn Header="功率(Kw)" Binding="{Binding Path=Power}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="转速(r/min)"  Binding="{Binding Path=RotateSpeed}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
+                        <DataGridTextColumn Header="NPSH(m)"  Binding="{Binding Path=NPSH}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
                         <DataGridTextColumn Header="重量(Kg)"  Binding="{Binding Path=Weight}" Width="1*" IsReadOnly="True" ElementStyle="{StaticResource TextCenter}"/>
-
+                        
                     </DataGrid.Columns>
 
                 </DataGrid>

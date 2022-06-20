@@ -43,7 +43,7 @@
             </Grid>
         </GroupBox>
 
-        <Button x:Name="PumpSelectButton" Content="水泵选型" Margin="30,10,30,10" FontSize="12"  Cursor="Hand" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Click="PumpSelectButton_Click">
+        <Button x:Name="PumpSelectButton" Content="水 泵 选 型" Margin="30,10,30,10" FontSize="12"  Cursor="Hand" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Click="PumpSelectButton_Click">
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">
@@ -145,7 +145,7 @@
             </Grid>
         </GroupBox>
 
-        <Button x:Name="OkButton" Content="确定" Margin="5,5,10,10" FontSize="12"  Cursor="Hand" Click="OkButton_Click" Grid.Row="6" Grid.Column="2" >
+        <Button x:Name="OkButton" Content="确  定" Margin="5,5,10,10" FontSize="12"  Cursor="Hand" Click="OkButton_Click" Grid.Row="6" Grid.Column="2" >
             <Button.Template >
                 <ControlTemplate TargetType="{x:Type Button}" >
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="3">

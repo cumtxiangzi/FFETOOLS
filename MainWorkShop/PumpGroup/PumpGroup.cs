@@ -39,12 +39,13 @@ namespace FFETOOLS
                 Selection sel = uidoc.Selection;
 
                 string sql = string.Format("SELECT * FROM {0}", "DataIS");
-                ShuangLun_IS_PumpData = GetPumpData(sql);//双轮IS型泵数据获取
+                ShuangLun_IS_PumpData = GetPumpData(sql).OrderBy(x => Convert.ToDouble(x.Flow)).ThenBy(x => Convert.ToDouble(x.Lift)).ToList();//双轮IS型泵数据获取
+
                 sql = string.Format("SELECT * FROM {0}", "DataS");
-                Liancheng_S_PumpData = GetPumpData(sql);//连成S型泵数据获取
+                Liancheng_S_PumpData = GetPumpData(sql).OrderBy(x => Convert.ToDouble(x.Flow)).ThenBy(x => Convert.ToDouble(x.Lift)).ToList();//连成S型泵数据获取
 
                 mainfrm = new PumpGroupForm(GetAllPipeSize(doc, "给排水_焊接钢管"), GetPipeType(doc, "给排水"), GetPipeSystemType(doc, "给排水")
-                    ,ShuangLun_IS_PumpData,Liancheng_S_PumpData);
+                    , ShuangLun_IS_PumpData, Liancheng_S_PumpData);
                 IntPtr rvtPtr = Process.GetCurrentProcess().MainWindowHandle;
                 WindowInteropHelper helper = new WindowInteropHelper(mainfrm);
                 helper.Owner = rvtPtr;
@@ -107,11 +108,19 @@ namespace FFETOOLS
                             Flow = dataRow["Volume"].ToString(),
                             Lift = dataRow["Head"].ToString(),
                             Power = dataRow["EnginPower"].ToString(),
+                            RotateSpeed = dataRow["RotSpeed"].ToString(),
+                            NPSH = dataRow["NPSH"].ToString(),
                             Weight = dataRow["Weight"].ToString(),
+
                             OutletHeight = dataRow["Height"].ToString(),
-                            OutletSize = dataRow["OutPipeDN"].ToString(),
-                            InletSize = dataRow["InPipeDN"].ToString(),
-                            BaseLength = sArray[0]
+                            OutletSize = "DN" + dataRow["OutPipeDN"].ToString(),
+                            InletSize = "DN" + dataRow["InPipeDN"].ToString(),
+
+                            BaseLength = sArray[0].Replace("L=", ""),
+                            BaseWidth = sArray[3].Replace("B=", ""),
+                            BoltHoleLength = sArray[1].Replace("L1=", ""),
+                            BoltHoleWidth = sArray[4].Replace("B1=", ""),
+                            BoltHoleSize = sArray[7].Replace("LSK=", "")
                         });
                     }
                 }
@@ -201,9 +210,9 @@ namespace FFETOOLS
                     }
 
                     if (clickNumber == 2)//主界面水泵选型点击
-                    {                     
+                    {
                         selectForm.PumpDataSource = PumpGroup.ShuangLun_IS_PumpData;
-                        selectForm.ShowDialog();                     
+                        selectForm.ShowDialog();
                     }
                 }
                 else

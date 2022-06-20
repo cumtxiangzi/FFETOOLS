@@ -59,6 +59,12 @@ namespace FFETOOLS
         public string Lift//扬程
         { get; set; }
 
+        public string NPSH//汽蚀余量
+        { get; set; }
+
+        public string RotateSpeed//转速
+        { get; set; }
+
         public string Power//功率
         { get; set; }
 

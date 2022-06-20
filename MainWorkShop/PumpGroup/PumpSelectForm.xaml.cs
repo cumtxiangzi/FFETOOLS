@@ -25,13 +25,13 @@ namespace FFETOOLS
     /// </summary>
     public partial class PumpSelectForm : Window
     {
-        List<string> ManufactureList = new List<string>() { "山东双轮泵业", "上海东方泵业", "南方泵业","上海连成泵业" };
+        List<string> ManufactureList = new List<string>() { "山东双轮泵业", "南方泵业", "上海东方泵业", "上海连成泵业" };
         List<string> ModelList = new List<string>() { "IS", "S", "DL" };
         public PumpGroupForm mainForm { get; set; }
         public List<PumpData> PumpDataSource = new List<PumpData>();
 
         public PumpSelectForm(PumpGroupForm groupForm)
-        {          
+        {
             InitializeComponent();
             mainForm = groupForm;
         }
@@ -46,7 +46,10 @@ namespace FFETOOLS
             PumpModel.ItemsSource = ModelList;
             PumpModel.SelectedIndex = 0;
 
-            Flow.Focus();
+            PumpSection.Source = new BitmapImage(new Uri(@"/MainWorkShop;component/Resources/IS泵参数图示.jpg", UriKind.Relative));
+
+            Flow.Text = "25";
+            Lift.Text = "20";
             Task.Delay(100).ContinueWith(t => LoadWithDelay(), TaskScheduler.FromCurrentSynchronizationContext()); //控件延时显示
         }
         private void LoadWithDelay()
@@ -57,11 +60,11 @@ namespace FFETOOLS
         {
             string manufactureName = PumpManufacture.SelectedItem.ToString();
             if (manufactureName.Contains("双轮"))
-            {              
+            {
                 PumpModel.SelectedIndex = 0;
                 RoomSettingGrid.ItemsSource = mainForm.ShuangLunPumpData;
             }
-            if(manufactureName.Contains("连成"))
+            if (manufactureName.Contains("连成"))
             {
                 PumpModel.SelectedIndex = 1;
                 RoomSettingGrid.ItemsSource = mainForm.LianChengPumpData;
@@ -69,13 +72,56 @@ namespace FFETOOLS
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
-        {
+        {         
+            string flow=Flow.Text;
+            string lift=Lift.Text;
+            string manufactureName = PumpManufacture.SelectedItem.ToString();
+
+            if (manufactureName.Contains("双轮"))
+            {
+                SelectPumpData(flow,lift, mainForm.ShuangLunPumpData);
+            }
+            if (manufactureName.Contains("连成"))
+            {
+                SelectPumpData(flow, lift, mainForm.LianChengPumpData);
+            }
            
+        }
+        public void SelectPumpData(string flow, string lift,List<PumpData> pumpCheckData)
+        {
+            List<PumpData> checkData = new List<PumpData>();
+            foreach (var data in pumpCheckData)
+            {
+                if (data.Flow == flow && data.Lift == lift)
+                {
+                    checkData.Add(data);
+                }
+            }
+
+            if (checkData.Count != 0)
+            {
+                RoomSettingGrid.ItemsSource = checkData;
+            }
+            else
+            {
+                MessageBox.Show("没有合适型号的水泵!", "GPSBIM", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            //Close();
+            string manufactureName = PumpManufacture.SelectedItem.ToString();
+            if (manufactureName.Contains("双轮"))
+            {
+                PumpModel.SelectedIndex = 0;
+                RoomSettingGrid.ItemsSource = mainForm.ShuangLunPumpData;
+            }
+            if (manufactureName.Contains("连成"))
+            {
+                PumpModel.SelectedIndex = 1;
+                RoomSettingGrid.ItemsSource = mainForm.LianChengPumpData;
+            }
         }
 
         private void RoomSettingGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -90,9 +136,18 @@ namespace FFETOOLS
                 if (target is DataGridRow)
                 {
                     PumpData s = RoomSettingGrid.SelectedItem as PumpData;
-                    MessageBox.Show(s.Model + "\n" + s.Flow + "\n" + s.Lift + "\n" + 
-                        s.Power + "\n" + s.Weight+"\n"+s.InletSize+"\n"+s.OutletSize+ "\n" + s.OutletHeight+"\n" + s.BaseLength);
+                    //MessageBox.Show(s.Model + "\n" + s.Flow + "\n" + s.Lift + "\n" + 
+                    //    s.Power + "\n" + s.Weight+"\n"+s.InletSize+"\n"+s.OutletSize+ "\n" + s.OutletHeight+"\n" + s.BaseLength);
                     mainForm.PumpModel.Text = s.Model;
+                    mainForm.OutletHeight.Text = s.OutletHeight;
+                    mainForm.InletDiameter.Text = s.InletSize;
+                    mainForm.OutletDiameter.Text = s.OutletSize;
+
+                    mainForm.BaseLength.Text = s.BaseLength;
+                    mainForm.BaseWidth.Text = s.BaseWidth;
+                    mainForm.HoleLength.Text = s.BoltHoleLength;
+                    mainForm.HoleWidth.Text = s.BoltHoleWidth;
+                    mainForm.HoleSize.Text = s.BoltHoleSize;
                 }
                 target = VisualTreeHelper.GetParent(target);
             }
