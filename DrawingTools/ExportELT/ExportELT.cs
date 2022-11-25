@@ -4107,6 +4107,7 @@ namespace FFETOOLS
         public List<FamilyInstance> GetEquipmentsHaveCon(Document doc, string pipeSystemName, string equipmentName)
         {
             List<FamilyInstance> list = new List<FamilyInstance>();
+            List<FamilyInstance> newList = new List<FamilyInstance>();
             IList<FamilyInstance> allInstances = CollectorHelper.TCollector<FamilyInstance>(doc);
             IList<PipingSystem> allPipingSys = CollectorHelper.TCollector<PipingSystem>(doc);
 
@@ -4130,7 +4131,10 @@ namespace FFETOOLS
                     }
                 }
             }
-            return list;
+
+            newList = list.GroupBy(x => x.Id).Select(y => y.First()).ToList();
+
+            return newList;
         }
         public List<FamilyInstance> GetEquipmentsNoCon(Document doc, string equipmentName)
         {
@@ -4424,15 +4428,15 @@ namespace FFETOOLS
                             string model = "LX";
                             string note = "";
                             string name = "";
-                            if(languageCH)
+                            if (languageCH)
                             {
                                 name = valveTable.ElementAt(1).Replace("给排水_排水设备附件_", "");
                             }
-                            else if(languageEN)
+                            else if (languageEN)
                             {
                                 name = GetAccessoryWNameEN(valveTable.ElementAt(1).Replace("给排水_排水设备附件_", ""));
                             }
-                            else if(languageCHEN)
+                            else if (languageCHEN)
                             {
                                 name = GetAccessoryWNameCHEN(valveTable.ElementAt(1).Replace("给排水_排水设备附件_", ""));
                             }
@@ -5563,7 +5567,7 @@ namespace FFETOOLS
             {
                 str = "Check Hole";
             }
-           
+
             return str;
         }
         public string GetAccessoryWNameCHEN(string item)
