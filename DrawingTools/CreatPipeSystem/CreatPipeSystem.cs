@@ -456,7 +456,7 @@ namespace FFETOOLS
             view3D.DisplayStyle = DisplayStyle.HLR;
             view3D.DetailLevel = ViewDetailLevel.Fine;
             view3D.OrientTo(orientation);
-            view3D.CropBox = BoundSize(doc, view3D, systemShortName);//裁剪视图
+            //view3D.CropBox = BoundSize(doc, view3D, systemShortName);//裁剪视图
 
             view3D.Name = systemName;
             view3D.get_Parameter(BuiltInParameter.VIEW_DESCRIPTION).Set(drawingName);//设置图纸上的标题

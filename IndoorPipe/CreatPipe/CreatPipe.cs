@@ -209,8 +209,16 @@ namespace FFETOOLS
                     break;
                 }
             }
-           
-            ElementId level = GetPipeLevel(doc, "0.000").Id;
+
+            ElementId level = null;
+            if (doc.ActiveView.ViewType == ViewType.ThreeD)
+            {
+                level = GetPipeLevel(doc, "0.000").Id;
+            }
+            else
+            {
+                level = doc.ActiveView.GenLevel.Id;             
+            }
             Pipe p = Pipe.Create(doc, pipesys.Id, pt.Id, level, new XYZ(0, 0, 0), new XYZ(3 / 304.8, 0, 0));
             IList<ElementId> list = new List<ElementId>();
             list.Add(p.Id);
@@ -272,7 +280,7 @@ namespace FFETOOLS
             levels = levels.WherePasses(levelFilter);
             foreach (Level level in levels)
             {
-                if (level.Name == Levelname)
+                if (level.Name.Contains(Levelname))
                 {
                     newlevel = level;
                     break;

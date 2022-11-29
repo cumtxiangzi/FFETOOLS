@@ -312,8 +312,8 @@ namespace FFETOOLS
         private void TextInputCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             clicked = 100;
-            Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
-            eventHandlerCreatPipe.Raise();
+            //Helper.SendKeys(Autodesk.Windows.ComponentManager.ApplicationWindow, System.Windows.Forms.Keys.Escape);
+            //eventHandlerCreatPipe.Raise();
         }
 
         private void LanguageCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
